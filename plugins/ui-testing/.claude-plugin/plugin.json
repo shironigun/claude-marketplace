@@ -1,0 +1,7 @@
+{
+  "name": "ui-testing",
+  "version": "1.1.0",
+  "description": "UI test case authoring and Playwright script generation for Acme CRM. buggy writes ADO Test Case work items in the team's house style; tester authors cases and generates runnable Playwright + TypeScript UI specs (forward and reverse).",
+  "author": { "name": "shironigun" },
+  "keywords": ["testing", "qa", "ui", "playwright", "test-cases", "azure-devops", "acme-crm"]
+}

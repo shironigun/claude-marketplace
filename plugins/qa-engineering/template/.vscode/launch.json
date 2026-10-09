@@ -1,0 +1,36 @@
+{
+  // Debug the Playwright spec open in the editor. These are node-type configs
+  // that drive the @playwright/test CLI directly — NOT the deprecated
+  // "type": "playwright". Set a breakpoint, open a spec, press F5.
+  // See knowledge/standards/vscode-playwright.md.
+  "version": "0.2.0",
+  "configurations": [
+    {
+      // API specs (contracts / endpoints / workflows) and headless UI runs.
+      "name": "PW: Debug current spec",
+      "type": "node",
+      "request": "launch",
+      "cwd": "${workspaceFolder}",
+      "program": "${workspaceFolder}/node_modules/@playwright/test/cli.js",
+      // ${file} scopes the run to the open spec; Playwright runs whichever
+      // project(s) match it (contracts / endpoints / workflows, or a ui-*
+      // level). Pin one by adding an arg, e.g. "--project=endpoints".
+      "args": ["test", "${file}"],
+      "env": { "AUTOMATION_PROFILE": "default" },
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen"
+    },
+    {
+      // UI specs you want to watch — same as above, but headed.
+      "name": "PW: Debug current spec (headed, UI)",
+      "type": "node",
+      "request": "launch",
+      "cwd": "${workspaceFolder}",
+      "program": "${workspaceFolder}/node_modules/@playwright/test/cli.js",
+      "args": ["test", "${file}", "--headed"],
+      "env": { "AUTOMATION_PROFILE": "default" },
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen"
+    }
+  ]
+}

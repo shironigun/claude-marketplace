@@ -1,0 +1,600 @@
+{
+  "$id": "https://github.com/shironigun/claude-marketplace/plugins/design-studio/schemas/registry.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "app": {
+      "additionalProperties": false,
+      "properties": {
+        "adapter": {
+          "type": "string"
+        },
+        "appRoot": {
+          "type": "string"
+        },
+        "product": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "product",
+        "appRoot",
+        "adapter"
+      ],
+      "type": "object"
+    },
+    "components": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "confidence": {
+            "enum": [
+              "high",
+              "medium",
+              "low"
+            ]
+          },
+          "evidence": {
+            "enum": [
+              "CONFIRMED",
+              "INFERRED"
+            ]
+          },
+          "exportNames": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "families": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "file": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string"
+          },
+          "importers": {
+            "additionalProperties": false,
+            "properties": {
+              "files": {
+                "minimum": 0,
+                "type": "integer"
+              },
+              "modules": {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              }
+            },
+            "required": [
+              "files",
+              "modules"
+            ],
+            "type": "object"
+          },
+          "layer": {
+            "enum": [
+              "core",
+              "recipe",
+              "snowflake"
+            ]
+          },
+          "level": {
+            "enum": [
+              "layout",
+              "atom",
+              "molecule",
+              "organism",
+              "template",
+              "page"
+            ]
+          },
+          "levelReason": {
+            "type": "string"
+          },
+          "line": {
+            "minimum": 0,
+            "type": "integer"
+          },
+          "loc": {
+            "minimum": 0,
+            "type": "integer"
+          },
+          "logic": {
+            "enum": [
+              "presentational",
+              "smart"
+            ]
+          },
+          "module": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "name": {
+            "type": "string"
+          },
+          "promotionCandidate": {
+            "type": "boolean"
+          },
+          "quality": {
+            "additionalProperties": false,
+            "properties": {
+              "rawValues": {
+                "minimum": 0,
+                "type": "integer"
+              },
+              "themeValues": {
+                "minimum": 0,
+                "type": "integer"
+              }
+            },
+            "required": [
+              "rawValues",
+              "themeValues"
+            ],
+            "type": "object"
+          },
+          "shared": {
+            "type": "boolean"
+          },
+          "signals": {
+            "additionalProperties": false,
+            "properties": {
+              "data": {
+                "type": "boolean"
+              },
+              "dataHooks": {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "domainProps": {
+                "type": "boolean"
+              },
+              "pageArea": {
+                "type": "boolean"
+              },
+              "primaryActions": {
+                "minimum": 0,
+                "type": "integer"
+              },
+              "region": {
+                "type": "boolean"
+              },
+              "slots": {
+                "minimum": 0,
+                "type": "integer"
+              },
+              "styledTarget": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            },
+            "required": [
+              "data",
+              "dataHooks",
+              "slots",
+              "region",
+              "primaryActions",
+              "pageArea",
+              "domainProps",
+              "styledTarget"
+            ],
+            "type": "object"
+          },
+          "smells": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "uses": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "wraps": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "file",
+          "line",
+          "loc",
+          "exportNames",
+          "module",
+          "shared",
+          "level",
+          "levelReason",
+          "confidence",
+          "evidence",
+          "smells",
+          "layer",
+          "logic",
+          "wraps",
+          "uses",
+          "importers",
+          "promotionCandidate",
+          "families",
+          "quality",
+          "signals"
+        ],
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "engine": {
+      "type": "string"
+    },
+    "families": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "key": {
+            "type": "string"
+          },
+          "kind": {
+            "enum": [
+              "same-name",
+              "identical-files",
+              "near-duplicate-files",
+              "repeated-style-block",
+              "status-color-map",
+              "cross-feature-import",
+              "dead-shared",
+              "copy-comment"
+            ]
+          },
+          "members": {
+            "items": {
+              "additionalProperties": false,
+              "properties": {
+                "file": {
+                  "type": "string"
+                },
+                "line": {
+                  "type": [
+                    "integer",
+                    "null"
+                  ]
+                },
+                "name": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                }
+              },
+              "required": [
+                "file",
+                "line",
+                "name"
+              ],
+              "type": "object"
+            },
+            "minItems": 1,
+            "type": "array"
+          },
+          "note": {
+            "type": "string"
+          },
+          "size": {
+            "minimum": 0,
+            "type": "integer"
+          }
+        },
+        "required": [
+          "key",
+          "kind",
+          "size",
+          "members",
+          "note"
+        ],
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "inputs": {
+      "additionalProperties": false,
+      "properties": {
+        "files": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "hash": {
+          "pattern": "^[0-9a-f]{40}$",
+          "type": "string"
+        }
+      },
+      "required": [
+        "files",
+        "hash"
+      ],
+      "type": "object"
+    },
+    "metrics": {
+      "additionalProperties": false,
+      "properties": {
+        "byLevel": {
+          "additionalProperties": false,
+          "properties": {
+            "atom": {
+              "minimum": 0,
+              "type": "integer"
+            },
+            "layout": {
+              "minimum": 0,
+              "type": "integer"
+            },
+            "molecule": {
+              "minimum": 0,
+              "type": "integer"
+            },
+            "organism": {
+              "minimum": 0,
+              "type": "integer"
+            },
+            "page": {
+              "minimum": 0,
+              "type": "integer"
+            },
+            "template": {
+              "minimum": 0,
+              "type": "integer"
+            }
+          },
+          "required": [
+            "layout",
+            "atom",
+            "molecule",
+            "organism",
+            "template",
+            "page"
+          ],
+          "type": "object"
+        },
+        "components": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "distinct": {
+          "additionalProperties": false,
+          "properties": {
+            "colors": {
+              "minimum": 0,
+              "type": "integer"
+            },
+            "fontSizes": {
+              "minimum": 0,
+              "type": "integer"
+            },
+            "radii": {
+              "minimum": 0,
+              "type": "integer"
+            },
+            "shadows": {
+              "minimum": 0,
+              "type": "integer"
+            },
+            "spacing": {
+              "minimum": 0,
+              "type": "integer"
+            }
+          },
+          "required": [
+            "colors",
+            "fontSizes",
+            "radii",
+            "spacing",
+            "shadows"
+          ],
+          "type": "object"
+        },
+        "families": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "files": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "samples": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "tokenCoverage": {
+          "maximum": 1,
+          "minimum": 0,
+          "type": [
+            "number",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "files",
+        "components",
+        "byLevel",
+        "samples",
+        "tokenCoverage",
+        "distinct",
+        "families"
+      ],
+      "type": "object"
+    },
+    "modules": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "components": {
+            "minimum": 0,
+            "type": "integer"
+          },
+          "files": {
+            "minimum": 0,
+            "type": "integer"
+          },
+          "i18nCoverage": {
+            "maximum": 1,
+            "minimum": 0,
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "lastCommit": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "loc": {
+            "minimum": 0,
+            "type": "integer"
+          },
+          "module": {
+            "type": "string"
+          },
+          "rawPerKloc": {
+            "minimum": 0,
+            "type": "number"
+          },
+          "samples": {
+            "minimum": 0,
+            "type": "integer"
+          },
+          "testRatio": {
+            "minimum": 0,
+            "type": "number"
+          },
+          "tokenDiscipline": {
+            "maximum": 1,
+            "minimum": 0,
+            "type": [
+              "number",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "module",
+          "files",
+          "loc",
+          "components",
+          "samples",
+          "rawPerKloc",
+          "tokenDiscipline",
+          "i18nCoverage",
+          "testRatio",
+          "lastCommit"
+        ],
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "parseErrors": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "file": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "file",
+          "message"
+        ],
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "primitives": {
+      "additionalProperties": {
+        "additionalProperties": false,
+        "properties": {
+          "count": {
+            "minimum": 0,
+            "type": "integer"
+          },
+          "props": {
+            "additionalProperties": {
+              "additionalProperties": {
+                "minimum": 0,
+                "type": "integer"
+              },
+              "type": "object"
+            },
+            "type": "object"
+          }
+        },
+        "required": [
+          "count",
+          "props"
+        ],
+        "type": "object"
+      },
+      "type": "object"
+    },
+    "schemaVersion": {
+      "const": 1
+    },
+    "theme": {
+      "additionalProperties": false,
+      "properties": {
+        "radiusUnit": {
+          "type": "number"
+        },
+        "source": {
+          "enum": [
+            "static",
+            "default"
+          ]
+        },
+        "spacingUnit": {
+          "type": "number"
+        }
+      },
+      "required": [
+        "spacingUnit",
+        "radiusUnit",
+        "source"
+      ],
+      "type": "object"
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "engine",
+    "app",
+    "inputs",
+    "theme",
+    "metrics",
+    "components",
+    "families",
+    "modules",
+    "primitives",
+    "parseErrors"
+  ],
+  "title": "design-studio inventory registry",
+  "type": "object"
+}

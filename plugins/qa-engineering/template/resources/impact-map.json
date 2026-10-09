@@ -1,0 +1,18 @@
+{
+  "_comment": "Maps changed source paths to the test tags that cover them. Used by `npm run impacted`. Keys are path PREFIXES relative to the repo root; values are the @tags to run. Keep this file honest — an unmapped path silently falls back to smokeTag. Replace these example rows with your own modules.",
+
+  "pathMap": {
+    "src/Orders": ["@orders"],
+    "modules/orders": ["@orders"],
+
+    "src/Shared": ["@smoke"],
+    "common": ["@smoke"]
+  },
+
+  "contractSources": [
+    "src/Orders/Api/Routes",
+    "src/Orders/Api/Models"
+  ],
+
+  "smokeTag": "@smoke"
+}

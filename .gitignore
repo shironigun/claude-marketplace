@@ -1,0 +1,28 @@
+# Local SDD / superpowers framework (not part of the marketplace)
+.superpowers/
+
+# Node dependencies & build output
+node_modules/
+dist/
+build/
+
+# Environment & secrets — never commit
+.env
+.env.*
+!.env.example
+
+# Test / run output
+reports/
+test-results/
+playwright/.auth/
+
+# OS & editor junk
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
+
+# Stray drops at the repo root (e.g. downloaded lead/XML files)
+/index.html
+/*.xml

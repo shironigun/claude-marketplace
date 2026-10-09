@@ -1,0 +1,90 @@
+# ─────────────────────────────────────────────────────────────────────────────
+#  Standalone automation workflow — GitHub Actions.
+#
+#  Move this file to `.github/workflows/automation.yml` at the REPO ROOT
+#  (GitHub only reads workflows from there) and add the secrets it references
+#  under Settings → Secrets and variables → Actions.
+# ─────────────────────────────────────────────────────────────────────────────
+name: automation
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 6 * * 1-5'        # weekday mornings, UTC
+  # push:
+  #   branches: [main]
+  #   paths: ['src/**', 'modules/**', 'common/**']
+
+concurrency:
+  group: automation-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  api-tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    defaults:
+      run:
+        working-directory: .        # the folder holding package.json (set to a subdir if nested)
+
+    env:
+      API_BASE_URL:       ${{ secrets.API_BASE_URL }}
+      AUTH_BASE_URL:      ${{ secrets.AUTH_BASE_URL }}
+      AUTH_USERNAME:      ${{ secrets.AUTH_USERNAME }}
+      AUTH_PASSWORD:      ${{ secrets.AUTH_PASSWORD }}
+      AUTH_TENANT_ID:     ${{ secrets.AUTH_TENANT_ID }}
+      CROSS_TENANT_ID:    ${{ secrets.CROSS_TENANT_ID }}
+      AUTOMATION_PROFILE: default
+      AUTOMATION_ENV:     QA
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2          # so `npm run impacted` can diff HEAD~1
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: package-lock.json
+
+      - run: npm ci
+
+      - run: npx playwright install --with-deps chromium
+
+      # Fails the job fast and legibly when the environment is unreachable.
+      - name: Verify setup
+        run: npm run verify:setup
+
+      # A failed test fails this step, so the job goes red. The publish steps below use
+      # `success() || failure()`: they run after a pass or a fail, but not after a cancel.
+      # Once you add path triggers, swap this step's run for `npm run test:impacted`
+      # to run only the tests the diff can affect (see docs/ci-and-tools.md).
+      - name: Run API tests
+        run: npx playwright test --project=contracts --project=endpoints --project=workflows
+
+      - name: Upload HTML report
+        if: success() || failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: reports/html
+          retention-days: 14
+
+      - name: Upload JUnit results
+        if: success() || failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: junit
+          path: reports/junit.xml
+          retention-days: 14
+
+      - name: Summarize + notify
+        if: success() || failure()
+        continue-on-error: true
+        env:
+          NOTIFY_CHANNEL:     slack
+          NOTIFY_WEBHOOK_URL: ${{ secrets.NOTIFY_WEBHOOK_URL }}
+          NOTIFY_WHEN:        always
+          REPORT_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: npm run report:summarize && npm run notify

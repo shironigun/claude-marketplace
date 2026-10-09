@@ -1,0 +1,137 @@
+{
+  "$id": "https://github.com/shironigun/claude-marketplace/plugins/design-studio/schemas/config.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "adapter": {
+      "enum": [
+        "react-mui"
+      ]
+    },
+    "appRoot": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "density": {
+      "additionalProperties": false,
+      "properties": {
+        "default": {
+          "enum": [
+            "compact",
+            "comfortable"
+          ]
+        }
+      },
+      "type": "object"
+    },
+    "enforcement": {
+      "enum": [
+        "advisory",
+        "ratchet"
+      ]
+    },
+    "exclude": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "legacy": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "libraryHome": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "locales": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "modules": {
+      "additionalProperties": false,
+      "properties": {
+        "roots": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "shared": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        }
+      },
+      "required": [
+        "roots",
+        "shared"
+      ],
+      "type": "object"
+    },
+    "product": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "protectedPaths": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "providersEntry": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "sources": {
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1,
+      "type": "array"
+    },
+    "storybook": {
+      "additionalProperties": false,
+      "properties": {
+        "enableManifests": {
+          "type": "boolean"
+        },
+        "enableMcp": {
+          "type": "boolean"
+        },
+        "port": {
+          "maximum": 65535,
+          "minimum": 1,
+          "type": "integer"
+        }
+      },
+      "type": "object"
+    },
+    "themeEntry": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  },
+  "required": [
+    "product",
+    "appRoot",
+    "adapter",
+    "sources",
+    "libraryHome",
+    "modules"
+  ],
+  "title": "design-studio product config",
+  "type": "object"
+}

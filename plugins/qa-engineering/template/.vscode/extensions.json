@@ -1,0 +1,15 @@
+{
+  // Extensions VS Code offers to install when this workspace is opened.
+  // Neither is required to run tests from the terminal — they make the editor
+  // match the toolkit. See knowledge/standards/vscode-playwright.md.
+  "recommendations": [
+    // Official Microsoft "Playwright Test for VS Code": discovers, runs, and
+    // debugs the suite from the Testing panel, driven by playwright.config.ts.
+    // https://marketplace.visualstudio.com/items?itemName=ms-playwright.playwright
+    "ms-playwright.playwright",
+
+    // ESLint: surfaces the lint rules (including no-floating-promises) inline,
+    // the same rules `npm run lint` enforces.
+    "dbaeumer.vscode-eslint"
+  ]
+}

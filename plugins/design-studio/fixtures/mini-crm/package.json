@@ -1,0 +1,14 @@
+{
+  "name": "mini-crm",
+  "private": true,
+  "dependencies": {
+    "@mui/icons-material": "^7.3.0",
+    "@mui/material": "^7.3.0",
+    "@tanstack/react-query": "^5.90.0",
+    "react": "^19.2.0",
+    "react-i18next": "^15.0.0",
+    "react-router-dom": "^7.9.0",
+    "tss-react": "^4.9.0"
+  },
+  "devDependencies": { "vitest": "^3.2.0" }
+}

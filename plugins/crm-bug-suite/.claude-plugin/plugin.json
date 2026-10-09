@@ -1,0 +1,9 @@
+{
+  "name": "crm-bug-suite",
+  "version": "0.2.0",
+  "description": "Files Bugs (against stories/regression) and Defects (production) and writes ticket comments on the Acme CRM 'Agile Project' Azure DevOps project, in the team's QA house style.",
+  "author": {
+    "name": "shironigun"
+  },
+  "keywords": ["azure-devops", "ado", "qa", "bug", "defect", "acme-crm", "acme-org"]
+}

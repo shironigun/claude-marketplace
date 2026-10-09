@@ -1,0 +1,44 @@
+{
+  "_comment": "Neutral example. Copy to house-profile.json at the framework root and fill the slots. house-profile.json is git-ignored; this example stays tracked. Placeholders only — no real product, org, board, URL, account or secret. Secrets live in .env, never here. See house-profile.md for the contract.",
+  "product": {
+    "name": "Orders",
+    "domainNouns": ["order", "widget", "customer"]
+  },
+  "caseAuthoring": {
+    "voice": "neutral, behavior-driven; one action and one explicit expected result per step",
+    "stepFormat": "Step / Expected columns",
+    "titleConvention": "<module>: <behavior under test>",
+    "tags": ["@orders", "@api", "@ui"]
+  },
+  "defectFormat": {
+    "type": "Bug",
+    "titleConvention": "<module> — <symptom> (<environment>)",
+    "requiredFields": ["Repro steps", "Expected", "Actual", "Environment", "Severity"],
+    "severityScale": ["1-Critical", "2-High", "3-Medium", "4-Low"]
+  },
+  "tracker": {
+    "kind": "azure-devops",
+    "org": "YOUR_ORG",
+    "project": "YOUR_PROJECT",
+    "team": "Team A",
+    "areaPath": "YOUR_PROJECT\\Team A",
+    "iterationPath": "YOUR_PROJECT\\Sprint N",
+    "boards": ["Team A"]
+  },
+  "testPlan": {
+    "planName": "Plan Name",
+    "planId": null,
+    "suiteName": "Suite Name",
+    "suiteId": null
+  },
+  "identity": {
+    "author": "Your Name",
+    "assignTo": "Your Name",
+    "ccHandles": ["Teammate A", "Teammate B"]
+  },
+  "env": {
+    "envFile": ".env",
+    "buildProfile": "default",
+    "note": "The target system is whatever .env points at; no URL or credential lives in this file."
+  }
+}

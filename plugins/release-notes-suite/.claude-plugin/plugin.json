@@ -1,0 +1,7 @@
+{
+  "name": "release-notes-suite",
+  "version": "0.1.0",
+  "description": "Two-stage release pipeline for Acme CRM / Acme Notify (Acme). harvester builds the complete engineering release inventory (every shipped story/defect across both boards plus non-ticketed PR/commit deployments); releaser turns an inventory or technical draft into client-facing release notes in the support-team house style, with Acme Notify and Acme CRM brand variants.",
+  "author": { "name": "shironigun" },
+  "keywords": ["release-notes", "acme-crm", "acme-notify", "changelog", "azure-devops", "crm"]
+}

@@ -1,0 +1,1025 @@
+{
+  "app": {
+    "adapter": "react-mui",
+    "appRoot": ".",
+    "product": "Mini CRM"
+  },
+  "components": [
+    {
+      "confidence": "medium",
+      "evidence": "INFERRED",
+      "exportNames": [
+        "App"
+      ],
+      "families": [],
+      "file": "src/app.tsx",
+      "id": "src/app.tsx#App",
+      "importers": {
+        "files": 0,
+        "modules": []
+      },
+      "layer": "snowflake",
+      "level": "organism",
+      "levelReason": "wraps a molecule-level component; raised to organism by its children",
+      "line": 5,
+      "loc": 7,
+      "logic": "presentational",
+      "module": null,
+      "name": "App",
+      "promotionCandidate": false,
+      "quality": {
+        "rawValues": 0,
+        "themeValues": 0
+      },
+      "shared": false,
+      "signals": {
+        "data": false,
+        "dataHooks": [],
+        "domainProps": false,
+        "pageArea": false,
+        "primaryActions": 0,
+        "region": false,
+        "slots": 0,
+        "styledTarget": null
+      },
+      "smells": [],
+      "uses": [
+        "src/routes/Routes.tsx#AppRoutes"
+      ],
+      "wraps": [
+        "mui:ThemeProvider"
+      ]
+    },
+    {
+      "confidence": "high",
+      "evidence": "CONFIRMED",
+      "exportNames": [
+        "default"
+      ],
+      "families": [],
+      "file": "src/common/components/page-title.tsx",
+      "id": "src/common/components/page-title.tsx#PageTitle",
+      "importers": {
+        "files": 1,
+        "modules": [
+          "leads"
+        ]
+      },
+      "layer": "core",
+      "level": "atom",
+      "levelReason": "wraps a single primitive",
+      "line": 3,
+      "loc": 3,
+      "logic": "presentational",
+      "module": "shared",
+      "name": "PageTitle",
+      "promotionCandidate": false,
+      "quality": {
+        "rawValues": 1,
+        "themeValues": 1
+      },
+      "shared": true,
+      "signals": {
+        "data": false,
+        "dataHooks": [],
+        "domainProps": false,
+        "pageArea": false,
+        "primaryActions": 0,
+        "region": false,
+        "slots": 0,
+        "styledTarget": null
+      },
+      "smells": [],
+      "uses": [],
+      "wraps": [
+        "mui:Typography"
+      ]
+    },
+    {
+      "confidence": "high",
+      "evidence": "CONFIRMED",
+      "exportNames": [
+        "PanelToolbar"
+      ],
+      "families": [],
+      "file": "src/common/components/panel-toolbar.tsx",
+      "id": "src/common/components/panel-toolbar.tsx#PanelToolbar",
+      "importers": {
+        "files": 1,
+        "modules": [
+          "leads"
+        ]
+      },
+      "layer": "core",
+      "level": "molecule",
+      "levelReason": "2+ atoms combined for one job",
+      "line": 6,
+      "loc": 9,
+      "logic": "presentational",
+      "module": "shared",
+      "name": "PanelToolbar",
+      "promotionCandidate": false,
+      "quality": {
+        "rawValues": 0,
+        "themeValues": 2
+      },
+      "shared": true,
+      "signals": {
+        "data": false,
+        "dataHooks": [],
+        "domainProps": false,
+        "pageArea": false,
+        "primaryActions": 1,
+        "region": false,
+        "slots": 0,
+        "styledTarget": null
+      },
+      "smells": [],
+      "uses": [],
+      "wraps": [
+        "icon:Close",
+        "mui:Button",
+        "mui:IconButton",
+        "mui:Toolbar",
+        "mui:Typography"
+      ]
+    },
+    {
+      "confidence": "high",
+      "evidence": "CONFIRMED",
+      "exportNames": [
+        "StatusTag"
+      ],
+      "families": [],
+      "file": "src/common/components/status-tag.tsx",
+      "id": "src/common/components/status-tag.tsx#StatusTag",
+      "importers": {
+        "files": 1,
+        "modules": [
+          "leads"
+        ]
+      },
+      "layer": "core",
+      "level": "atom",
+      "levelReason": "wraps a single primitive",
+      "line": 5,
+      "loc": 3,
+      "logic": "presentational",
+      "module": "shared",
+      "name": "StatusTag",
+      "promotionCandidate": false,
+      "quality": {
+        "rawValues": 2,
+        "themeValues": 1
+      },
+      "shared": true,
+      "signals": {
+        "data": false,
+        "dataHooks": [],
+        "domainProps": false,
+        "pageArea": false,
+        "primaryActions": 0,
+        "region": false,
+        "slots": 0,
+        "styledTarget": null
+      },
+      "smells": [],
+      "uses": [],
+      "wraps": [
+        "mui:Chip"
+      ]
+    },
+    {
+      "confidence": "high",
+      "evidence": "CONFIRMED",
+      "exportNames": [
+        "UnusedCard"
+      ],
+      "families": [
+        "dead-shared:all"
+      ],
+      "file": "src/common/components/unused-card.tsx",
+      "id": "src/common/components/unused-card.tsx#UnusedCard",
+      "importers": {
+        "files": 0,
+        "modules": []
+      },
+      "layer": "core",
+      "level": "atom",
+      "levelReason": "wraps a single primitive",
+      "line": 3,
+      "loc": 7,
+      "logic": "presentational",
+      "module": "shared",
+      "name": "UnusedCard",
+      "promotionCandidate": false,
+      "quality": {
+        "rawValues": 0,
+        "themeValues": 1
+      },
+      "shared": true,
+      "signals": {
+        "data": false,
+        "dataHooks": [],
+        "domainProps": false,
+        "pageArea": false,
+        "primaryActions": 0,
+        "region": false,
+        "slots": 0,
+        "styledTarget": null
+      },
+      "smells": [],
+      "uses": [],
+      "wraps": [
+        "mui:Card",
+        "mui:CardContent",
+        "mui:Typography"
+      ]
+    },
+    {
+      "confidence": "high",
+      "evidence": "CONFIRMED",
+      "exportNames": [
+        "DealsPanel"
+      ],
+      "families": [
+        "cross-feature-import:deals->settings",
+        "repeated-style-block:e30c88a12898"
+      ],
+      "file": "src/components/deals/DealsPanel.tsx",
+      "id": "src/components/deals/DealsPanel.tsx#DealsPanel",
+      "importers": {
+        "files": 0,
+        "modules": []
+      },
+      "layer": "snowflake",
+      "level": "organism",
+      "levelReason": "renders a region (dialog, drawer, table, nav…)",
+      "line": 6,
+      "loc": 8,
+      "logic": "presentational",
+      "module": "deals",
+      "name": "DealsPanel",
+      "promotionCandidate": false,
+      "quality": {
+        "rawValues": 3,
+        "themeValues": 2
+      },
+      "shared": false,
+      "signals": {
+        "data": false,
+        "dataHooks": [],
+        "domainProps": false,
+        "pageArea": false,
+        "primaryActions": 0,
+        "region": true,
+        "slots": 0,
+        "styledTarget": null
+      },
+      "smells": [],
+      "uses": [
+        "src/components/settings/StatusChip.tsx#StatusChip"
+      ],
+      "wraps": [
+        "mui:Drawer",
+        "mui:Typography"
+      ]
+    },
+    {
+      "confidence": "high",
+      "evidence": "CONFIRMED",
+      "exportNames": [
+        "StatusChip"
+      ],
+      "families": [
+        "copy-comment:all",
+        "same-name:StatusChip",
+        "status-color-map:all"
+      ],
+      "file": "src/components/deals/StatusChip.tsx",
+      "id": "src/components/deals/StatusChip.tsx#StatusChip",
+      "importers": {
+        "files": 0,
+        "modules": []
+      },
+      "layer": "snowflake",
+      "level": "atom",
+      "levelReason": "wraps a single primitive",
+      "line": 6,
+      "loc": 3,
+      "logic": "presentational",
+      "module": "deals",
+      "name": "StatusChip",
+      "promotionCandidate": false,
+      "quality": {
+        "rawValues": 1,
+        "themeValues": 0
+      },
+      "shared": false,
+      "signals": {
+        "data": false,
+        "dataHooks": [],
+        "domainProps": false,
+        "pageArea": false,
+        "primaryActions": 0,
+        "region": false,
+        "slots": 0,
+        "styledTarget": null
+      },
+      "smells": [],
+      "uses": [],
+      "wraps": [
+        "mui:Chip"
+      ]
+    },
+    {
+      "confidence": "high",
+      "evidence": "CONFIRMED",
+      "exportNames": [
+        "LeadRow"
+      ],
+      "families": [
+        "status-color-map:all"
+      ],
+      "file": "src/components/leads/LeadRow.tsx",
+      "id": "src/components/leads/LeadRow.tsx#LeadRow",
+      "importers": {
+        "files": 1,
+        "modules": [
+          "leads"
+        ]
+      },
+      "layer": "snowflake",
+      "level": "molecule",
+      "levelReason": "2+ atoms combined for one job",
+      "line": 6,
+      "loc": 8,
+      "logic": "presentational",
+      "module": "leads",
+      "name": "LeadRow",
+      "promotionCandidate": false,
+      "quality": {
+        "rawValues": 1,
+        "themeValues": 2
+      },
+      "shared": false,
+      "signals": {
+        "data": false,
+        "dataHooks": [],
+        "domainProps": false,
+        "pageArea": false,
+        "primaryActions": 0,
+        "region": false,
+        "slots": 0,
+        "styledTarget": null
+      },
+      "smells": [],
+      "uses": [
+        "src/common/components/status-tag.tsx#StatusTag"
+      ],
+      "wraps": [
+        "mui:Box",
+        "mui:Typography"
+      ]
+    },
+    {
+      "confidence": "high",
+      "evidence": "CONFIRMED",
+      "exportNames": [
+        "LeadsPage"
+      ],
+      "families": [
+        "repeated-style-block:e30c88a12898"
+      ],
+      "file": "src/components/leads/LeadsPage.tsx",
+      "id": "src/components/leads/LeadsPage.tsx#LeadsPage",
+      "importers": {
+        "files": 1,
+        "modules": []
+      },
+      "layer": "snowflake",
+      "level": "page",
+      "levelReason": "referenced as a route element",
+      "line": 10,
+      "loc": 15,
+      "logic": "smart",
+      "module": "leads",
+      "name": "LeadsPage",
+      "promotionCandidate": false,
+      "quality": {
+        "rawValues": 3,
+        "themeValues": 2
+      },
+      "shared": false,
+      "signals": {
+        "data": true,
+        "dataHooks": [
+          "fetchLeads",
+          "useQuery"
+        ],
+        "domainProps": false,
+        "pageArea": true,
+        "primaryActions": 0,
+        "region": true,
+        "slots": 0,
+        "styledTarget": null
+      },
+      "smells": [],
+      "uses": [
+        "src/common/components/page-title.tsx#PageTitle",
+        "src/common/components/panel-toolbar.tsx#PanelToolbar",
+        "src/components/leads/LeadRow.tsx#LeadRow"
+      ],
+      "wraps": [
+        "mui:Box",
+        "mui:Dialog",
+        "mui:TextField"
+      ]
+    },
+    {
+      "confidence": "high",
+      "evidence": "CONFIRMED",
+      "exportNames": [
+        "Inbox"
+      ],
+      "families": [
+        "identical-files:1680f5d74738",
+        "same-name:Inbox"
+      ],
+      "file": "src/components/messenger-v2/Inbox.tsx",
+      "id": "src/components/messenger-v2/Inbox.tsx#Inbox",
+      "importers": {
+        "files": 0,
+        "modules": []
+      },
+      "layer": "snowflake",
+      "level": "molecule",
+      "levelReason": "2+ atoms combined for one job",
+      "line": 5,
+      "loc": 12,
+      "logic": "presentational",
+      "module": "messenger-v2",
+      "name": "Inbox",
+      "promotionCandidate": false,
+      "quality": {
+        "rawValues": 3,
+        "themeValues": 1
+      },
+      "shared": false,
+      "signals": {
+        "data": false,
+        "dataHooks": [],
+        "domainProps": false,
+        "pageArea": false,
+        "primaryActions": 0,
+        "region": false,
+        "slots": 0,
+        "styledTarget": null
+      },
+      "smells": [],
+      "uses": [],
+      "wraps": [
+        "mui:List",
+        "mui:ListItem",
+        "mui:ListItemText",
+        "mui:Typography"
+      ]
+    },
+    {
+      "confidence": "high",
+      "evidence": "CONFIRMED",
+      "exportNames": [
+        "Inbox"
+      ],
+      "families": [
+        "identical-files:1680f5d74738",
+        "same-name:Inbox"
+      ],
+      "file": "src/components/messenger/Inbox.tsx",
+      "id": "src/components/messenger/Inbox.tsx#Inbox",
+      "importers": {
+        "files": 0,
+        "modules": []
+      },
+      "layer": "snowflake",
+      "level": "molecule",
+      "levelReason": "2+ atoms combined for one job",
+      "line": 5,
+      "loc": 12,
+      "logic": "presentational",
+      "module": "messenger",
+      "name": "Inbox",
+      "promotionCandidate": false,
+      "quality": {
+        "rawValues": 3,
+        "themeValues": 1
+      },
+      "shared": false,
+      "signals": {
+        "data": false,
+        "dataHooks": [],
+        "domainProps": false,
+        "pageArea": false,
+        "primaryActions": 0,
+        "region": false,
+        "slots": 0,
+        "styledTarget": null
+      },
+      "smells": [],
+      "uses": [],
+      "wraps": [
+        "mui:List",
+        "mui:ListItem",
+        "mui:ListItemText",
+        "mui:Typography"
+      ]
+    },
+    {
+      "confidence": "high",
+      "evidence": "CONFIRMED",
+      "exportNames": [
+        "default"
+      ],
+      "families": [
+        "repeated-style-block:e30c88a12898"
+      ],
+      "file": "src/components/settings/SettingsPage.tsx",
+      "id": "src/components/settings/SettingsPage.tsx#SettingsPage",
+      "importers": {
+        "files": 1,
+        "modules": []
+      },
+      "layer": "snowflake",
+      "level": "page",
+      "levelReason": "referenced as a route element",
+      "line": 9,
+      "loc": 10,
+      "logic": "presentational",
+      "module": "settings",
+      "name": "SettingsPage",
+      "promotionCandidate": false,
+      "quality": {
+        "rawValues": 7,
+        "themeValues": 3
+      },
+      "shared": false,
+      "signals": {
+        "data": false,
+        "dataHooks": [],
+        "domainProps": false,
+        "pageArea": false,
+        "primaryActions": 0,
+        "region": false,
+        "slots": 0,
+        "styledTarget": null
+      },
+      "smells": [],
+      "uses": [
+        "src/components/settings/StatusChip.tsx#StatusChip"
+      ],
+      "wraps": [
+        "mui:Box",
+        "mui:Typography"
+      ]
+    },
+    {
+      "confidence": "high",
+      "evidence": "CONFIRMED",
+      "exportNames": [
+        "StatusChip"
+      ],
+      "families": [
+        "same-name:StatusChip",
+        "status-color-map:all"
+      ],
+      "file": "src/components/settings/StatusChip.tsx",
+      "id": "src/components/settings/StatusChip.tsx#StatusChip",
+      "importers": {
+        "files": 2,
+        "modules": [
+          "deals",
+          "settings"
+        ]
+      },
+      "layer": "recipe",
+      "level": "atom",
+      "levelReason": "wraps a single primitive",
+      "line": 5,
+      "loc": 3,
+      "logic": "presentational",
+      "module": "settings",
+      "name": "StatusChip",
+      "promotionCandidate": true,
+      "quality": {
+        "rawValues": 0,
+        "themeValues": 0
+      },
+      "shared": false,
+      "signals": {
+        "data": false,
+        "dataHooks": [],
+        "domainProps": false,
+        "pageArea": false,
+        "primaryActions": 0,
+        "region": false,
+        "slots": 0,
+        "styledTarget": null
+      },
+      "smells": [],
+      "uses": [],
+      "wraps": [
+        "mui:Chip"
+      ]
+    },
+    {
+      "confidence": "high",
+      "evidence": "CONFIRMED",
+      "exportNames": [
+        "AppRoutes"
+      ],
+      "families": [],
+      "file": "src/routes/Routes.tsx",
+      "id": "src/routes/Routes.tsx#AppRoutes",
+      "importers": {
+        "files": 1,
+        "modules": []
+      },
+      "layer": "snowflake",
+      "level": "organism",
+      "levelReason": "composes 2+ in-house components including a molecule or higher; raised to organism by its children",
+      "line": 7,
+      "loc": 8,
+      "logic": "presentational",
+      "module": null,
+      "name": "AppRoutes",
+      "promotionCandidate": false,
+      "quality": {
+        "rawValues": 0,
+        "themeValues": 0
+      },
+      "shared": false,
+      "signals": {
+        "data": false,
+        "dataHooks": [],
+        "domainProps": false,
+        "pageArea": false,
+        "primaryActions": 0,
+        "region": false,
+        "slots": 0,
+        "styledTarget": null
+      },
+      "smells": [],
+      "uses": [
+        "src/components/leads/LeadsPage.tsx#LeadsPage",
+        "src/components/settings/SettingsPage.tsx#SettingsPage"
+      ],
+      "wraps": [
+        "router:Route",
+        "router:Routes"
+      ]
+    }
+  ],
+  "engine": "0.1.0",
+  "families": [
+    {
+      "key": "copy-comment:all",
+      "kind": "copy-comment",
+      "members": [
+        {
+          "file": "src/components/deals/StatusChip.tsx",
+          "line": 3,
+          "name": "copied from settings/StatusChip and adjusted for deals"
+        }
+      ],
+      "note": "1 comment(s) say the code was copied",
+      "size": 1
+    },
+    {
+      "key": "cross-feature-import:deals->settings",
+      "kind": "cross-feature-import",
+      "members": [
+        {
+          "file": "src/components/deals/DealsPanel.tsx",
+          "line": null,
+          "name": "src/components/settings/StatusChip.tsx"
+        }
+      ],
+      "note": "1 import(s) from deals reach into settings",
+      "size": 1
+    },
+    {
+      "key": "dead-shared:all",
+      "kind": "dead-shared",
+      "members": [
+        {
+          "file": "src/common/components/unused-card.tsx",
+          "line": 3,
+          "name": "UnusedCard"
+        }
+      ],
+      "note": "1 shared component(s) have no consumers",
+      "size": 1
+    },
+    {
+      "key": "identical-files:1680f5d74738",
+      "kind": "identical-files",
+      "members": [
+        {
+          "file": "src/components/messenger-v2/Inbox.tsx",
+          "line": null,
+          "name": null
+        },
+        {
+          "file": "src/components/messenger/Inbox.tsx",
+          "line": null,
+          "name": null
+        }
+      ],
+      "note": "2 files are identical apart from whitespace and comments",
+      "size": 2
+    },
+    {
+      "key": "repeated-style-block:e30c88a12898",
+      "kind": "repeated-style-block",
+      "members": [
+        {
+          "file": "src/components/deals/DealsPanel.tsx",
+          "line": 4,
+          "name": "HEADER_CELL_SX"
+        },
+        {
+          "file": "src/components/leads/LeadsPage.tsx",
+          "line": 8,
+          "name": "HEADER_CELL_SX"
+        },
+        {
+          "file": "src/components/settings/SettingsPage.tsx",
+          "line": 5,
+          "name": "HEADER_CELL_SX"
+        }
+      ],
+      "note": "The same style block appears in 3 files",
+      "size": 3
+    },
+    {
+      "key": "same-name:Inbox",
+      "kind": "same-name",
+      "members": [
+        {
+          "file": "src/components/messenger-v2/Inbox.tsx",
+          "line": 5,
+          "name": "Inbox"
+        },
+        {
+          "file": "src/components/messenger/Inbox.tsx",
+          "line": 5,
+          "name": "Inbox"
+        }
+      ],
+      "note": "Inbox is exported from 2 modules",
+      "size": 2
+    },
+    {
+      "key": "same-name:StatusChip",
+      "kind": "same-name",
+      "members": [
+        {
+          "file": "src/components/deals/StatusChip.tsx",
+          "line": 6,
+          "name": "StatusChip"
+        },
+        {
+          "file": "src/components/settings/StatusChip.tsx",
+          "line": 5,
+          "name": "StatusChip"
+        }
+      ],
+      "note": "StatusChip is exported from 2 modules",
+      "size": 2
+    },
+    {
+      "key": "status-color-map:all",
+      "kind": "status-color-map",
+      "members": [
+        {
+          "file": "src/components/deals/StatusChip.tsx",
+          "line": 4,
+          "name": "DEAL_TONES"
+        },
+        {
+          "file": "src/components/leads/LeadRow.tsx",
+          "line": 4,
+          "name": "STATUS_COLORS"
+        },
+        {
+          "file": "src/components/settings/StatusChip.tsx",
+          "line": 3,
+          "name": "TONES"
+        }
+      ],
+      "note": "3 separate status-to-colour maps",
+      "size": 3
+    }
+  ],
+  "inputs": {
+    "files": 18,
+    "hash": "51bd9819982d07816ebd6954bf291c6344571e69"
+  },
+  "metrics": {
+    "byLevel": {
+      "atom": 5,
+      "layout": 0,
+      "molecule": 4,
+      "organism": 3,
+      "page": 2,
+      "template": 0
+    },
+    "components": 14,
+    "distinct": {
+      "colors": 8,
+      "fontSizes": 6,
+      "radii": 1,
+      "shadows": 0,
+      "spacing": 3
+    },
+    "families": 8,
+    "files": 18,
+    "samples": 52,
+    "tokenCoverage": 0.356
+  },
+  "modules": [
+    {
+      "components": 2,
+      "files": 5,
+      "i18nCoverage": 0,
+      "lastCommit": null,
+      "loc": 39,
+      "module": "(other)",
+      "rawPerKloc": 51.3,
+      "samples": 2,
+      "testRatio": 0,
+      "tokenDiscipline": 0
+    },
+    {
+      "components": 2,
+      "files": 2,
+      "i18nCoverage": 0,
+      "lastCommit": null,
+      "loc": 21,
+      "module": "deals",
+      "rawPerKloc": 190.5,
+      "samples": 7,
+      "testRatio": 0,
+      "tokenDiscipline": 0.333
+    },
+    {
+      "components": 2,
+      "files": 2,
+      "i18nCoverage": 0.5,
+      "lastCommit": null,
+      "loc": 37,
+      "module": "leads",
+      "rawPerKloc": 189.2,
+      "samples": 12,
+      "testRatio": 0.5,
+      "tokenDiscipline": 0.364
+    },
+    {
+      "components": 1,
+      "files": 1,
+      "i18nCoverage": 0,
+      "lastCommit": null,
+      "loc": 16,
+      "module": "messenger",
+      "rawPerKloc": 187.5,
+      "samples": 4,
+      "testRatio": 0,
+      "tokenDiscipline": 0.25
+    },
+    {
+      "components": 1,
+      "files": 1,
+      "i18nCoverage": 0,
+      "lastCommit": null,
+      "loc": 16,
+      "module": "messenger-v2",
+      "rawPerKloc": 187.5,
+      "samples": 4,
+      "testRatio": 0,
+      "tokenDiscipline": 0.25
+    },
+    {
+      "components": 2,
+      "files": 2,
+      "i18nCoverage": 0,
+      "lastCommit": null,
+      "loc": 25,
+      "module": "settings",
+      "rawPerKloc": 280,
+      "samples": 10,
+      "testRatio": 0,
+      "tokenDiscipline": 0.3
+    },
+    {
+      "components": 4,
+      "files": 5,
+      "i18nCoverage": 0,
+      "lastCommit": null,
+      "loc": 38,
+      "module": "shared",
+      "rawPerKloc": 78.9,
+      "samples": 10,
+      "testRatio": 0,
+      "tokenDiscipline": 0.625
+    }
+  ],
+  "parseErrors": [],
+  "primitives": {
+    "Box": {
+      "count": 5,
+      "props": {}
+    },
+    "Button": {
+      "count": 1,
+      "props": {
+        "variant": {
+          "contained": 1
+        }
+      }
+    },
+    "Card": {
+      "count": 1,
+      "props": {}
+    },
+    "CardContent": {
+      "count": 1,
+      "props": {}
+    },
+    "Chip": {
+      "count": 3,
+      "props": {
+        "color": {
+          "{expr}": 2
+        },
+        "size": {
+          "small": 3
+        }
+      }
+    },
+    "Dialog": {
+      "count": 1,
+      "props": {}
+    },
+    "Drawer": {
+      "count": 1,
+      "props": {}
+    },
+    "IconButton": {
+      "count": 1,
+      "props": {}
+    },
+    "List": {
+      "count": 2,
+      "props": {}
+    },
+    "ListItem": {
+      "count": 2,
+      "props": {}
+    },
+    "ListItemText": {
+      "count": 2,
+      "props": {}
+    },
+    "TextField": {
+      "count": 1,
+      "props": {
+        "size": {
+          "small": 1
+        }
+      }
+    },
+    "ThemeProvider": {
+      "count": 1,
+      "props": {}
+    },
+    "Toolbar": {
+      "count": 1,
+      "props": {}
+    },
+    "Typography": {
+      "count": 8,
+      "props": {
+        "variant": {
+          "h4": 1,
+          "h6": 1
+        }
+      }
+    }
+  },
+  "schemaVersion": 1,
+  "theme": {
+    "radiusUnit": 4,
+    "source": "static",
+    "spacingUnit": 8
+  }
+}

@@ -1,0 +1,47 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "shironigun",
+  "description": "AI tools marketplace by shironigun — skills, plugins, and MCP servers for AI-assisted workflows",
+  "owner": {
+    "name": "shironigun",
+    "url": "https://github.com/shironigun"
+  },
+  "plugins": [
+    {
+      "name": "qa-toolkit",
+      "description": "QA workflow automation — generate API and UI test cases, convert failures to bugs, push to your tracker",
+      "source": "./plugins/qa-toolkit",
+      "category": "testing"
+    },
+    {
+      "name": "crm-bug-suite",
+      "description": "File Bugs and Defects on the Acme CRM Agile Project ADO project in the team's QA house style, plus ticket comments",
+      "source": "./plugins/crm-bug-suite",
+      "category": "bug-tracking"
+    },
+    {
+      "name": "release-notes-suite",
+      "description": "Two-stage release pipeline: harvester builds the complete engineering inventory; releaser writes client-facing notes for Acme CRM and Acme Notify",
+      "source": "./plugins/release-notes-suite",
+      "category": "release-management"
+    },
+    {
+      "name": "ui-testing",
+      "description": "UI test case authoring and Playwright script generation for Acme CRM — buggy (ADO Test Cases) and tester (cases + runnable UI specs)",
+      "source": "./plugins/ui-testing",
+      "category": "testing"
+    },
+    {
+      "name": "api-testing",
+      "description": "API test case authoring, Playwright + TypeScript script generation, and bug drafting — api-tester (cases + specs) and api-bugger (triage + bug draft)",
+      "source": "./plugins/api-testing",
+      "category": "testing"
+    },
+    {
+      "name": "qa-engineering",
+      "description": "AI QA engineering — one orchestrator for the whole QA loop: analyze an ADO story, author + approve test cases, publish them to a Test Plan/Suite, build + generate API + UI automation, and turn a failing run into a filed bug, human-gated at every tracker write. Also teaches and reviews a self-contained, product-neutral Playwright + TypeScript framework; the QA's specifics live in a git-ignored house-profile",
+      "source": "./plugins/qa-engineering",
+      "category": "testing"
+    }
+  ]
+}

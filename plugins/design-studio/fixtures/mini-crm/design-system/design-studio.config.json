@@ -1,0 +1,11 @@
+{
+  "product": "Mini CRM",
+  "appRoot": ".",
+  "adapter": "react-mui",
+  "sources": ["src/**/*.{ts,tsx,js,jsx}", "src/**/*.{css,scss,less}"],
+  "exclude": ["**/*.test.*", "**/*.spec.*", "**/__tests__/**", "**/__mocks__/**", "**/*.stories.*", "**/*.d.ts"],
+  "libraryHome": "src/common/components",
+  "themeEntry": "src/theme/index.ts",
+  "providersEntry": "src/app.tsx",
+  "modules": { "roots": ["src/components"], "shared": ["src/common/components"] }
+}

@@ -1,0 +1,14 @@
+.env
+*.env
+reports/
+test-results/
+playwright/.auth/
+node_modules/
+
+# House profile + session state — user-supplied, product-specific; never committed.
+# The neutral house-profile.example.json stays tracked.
+house-profile.json
+qa-context.json
+
+# Program vision brief (contains local paths) — kept local, not shipped
+/ENHANCEMENT-CONTEXT.md

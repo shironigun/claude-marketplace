@@ -1,0 +1,7 @@
+{
+  "name": "api-testing",
+  "version": "1.0.0",
+  "description": "API test case authoring, Playwright + TypeScript script generation, and bug drafting for Acme CRM. api-tester authors contract/endpoint/workflow cases and generates runnable specs (forward and reverse); api-bugger triages failed API tests and drafts review-ready bugs.",
+  "author": { "name": "shironigun" },
+  "keywords": ["testing", "qa", "api", "playwright", "typescript", "zod", "test-cases", "acme-crm"]
+}

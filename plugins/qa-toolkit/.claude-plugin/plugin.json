@@ -1,0 +1,13 @@
+{
+  "name": "qa-toolkit",
+  "version": "1.0.0",
+  "description": "QA workflow automation — generate API and UI test cases, convert failures to bugs, push to your tracker",
+  "author": {
+    "name": "shironigun",
+    "url": "https://github.com/shironigun"
+  },
+  "homepage": "https://github.com/shironigun/claude-marketplace/tree/main/plugins/qa-toolkit",
+  "repository": "https://github.com/shironigun/claude-marketplace",
+  "license": "MIT",
+  "keywords": ["testing", "qa", "automation", "test-cases", "bug-tracker"]
+}
