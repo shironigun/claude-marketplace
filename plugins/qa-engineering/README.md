@@ -15,9 +15,11 @@ account live in a `.env` in your own framework folder. Neither is ever committed
 | Ask | Engine |
 |---|---|
 | "Analyze this story" (an ADO work-item id) | `story-intelligence` (read-only → understanding + gaps) |
+| "Analyze this module to test it" (codebase → QA) | `code-intelligence` (read-only → understanding + gaps + review from the code) |
 | "Create test cases" | `author-api-cases` / `author-ui-cases` (+ an explicit approval gate) |
 | "Push these to ADO" | `ado-publish` (gated: pick plan/suite → dry-run → confirm) |
 | "Automate these cases" | `automation-engine` (approved / ADO cases → framework specs) |
+| "Run the suite / smoke / these tests" / "did it pass?" | `run-suite` (runs the kit's **own** scripts → the real result → writes failures) |
 | "Turn this red run into a bug" | `failure-to-bug` (investigate an API/UI failure → gated file) |
 | "Build a framework brick by brick" | `scan-and-confirm` → `kit-builder` (the build path below) |
 | "Teach me automation" / "review my framework" | `automation-tutor` / `framework-reviewer` |
@@ -41,9 +43,10 @@ verifies, and reports before moving on. It never assumes a value you have not co
 ## Requirements
 
 - **Self-contained — no external plugin dependency.** The whole loop runs on the plugin's own native
-  engines (`story-intelligence`, `author-api-cases`, `author-ui-cases`, `ado-publish`, `automation-engine`,
-  `failure-to-bug`, plus `file-to-tracker` — the thin author→publish router) and the build skills
-  (`scan-and-confirm`, `kit-builder`) with the tutor/reviewer agents. Nothing else needs to be installed.
+  engines (`story-intelligence`, `code-intelligence`, `author-api-cases`, `author-ui-cases`, `ado-publish`,
+  `automation-engine`, `run-suite`, `failure-to-bug`, plus `file-to-tracker` — the thin author→publish
+  router) and the build skills (`scan-and-confirm`, `kit-builder`) with the tutor/reviewer agents. Nothing
+  else needs to be installed.
 - The product-specific sibling plugins in the marketplace are **inspiration only**. They are
   never required, and the kit builds and runs without them.
 - Node 20 or later, git, and network access to the system under test.
