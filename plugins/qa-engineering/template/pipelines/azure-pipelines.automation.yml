@@ -1,0 +1,128 @@
+# ─────────────────────────────────────────────────────────────────────────────
+#  Standalone automation pipeline — Azure DevOps.
+#
+#  Register this as a NEW pipeline. Never edit the product's existing build
+#  pipelines: the automation suite must be able to fail without blocking a
+#  deploy, and a deploy must be able to change without breaking the suite.
+#
+#  Secrets (AUTH_PASSWORD, NOTIFY_WEBHOOK_URL, …) come from a variable group.
+#  Create one named `automation-qa` and link it below — never inline a secret.
+# ─────────────────────────────────────────────────────────────────────────────
+
+trigger: none          # start manual/scheduled; add path triggers once it is trusted
+
+# Scheduled run: 06:00 UTC on weekdays (overnight for the Americas — results are
+# waiting when the team starts). Edit the cron for your timezone; use `0 6 * * *`
+# to include weekends. `always: true` runs even when the repo has not changed,
+# because the environment under test can change without a commit here.
+schedules:
+  - cron: '0 6 * * 1-5'
+    displayName: 'Scheduled run'
+    branches:
+      include: [main]              # ← the branch that holds this file
+    always: true
+
+# Uncomment to run after the API deploy pipeline finishes:
+# resources:
+#   pipelines:
+#     - pipeline: api-deploy
+#       source: 'My API - QA'
+#       trigger:
+#         branches:
+#           include: [qa]
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+variables:
+  - group: automation-qa           # ← secrets live here
+  - name: workingDir
+    value: .                       # the folder holding package.json (set to a subdir if nested)
+  - name: AUTOMATION_ENV
+    value: QA
+
+jobs:
+  - job: api_tests
+    displayName: 'API tests'
+    timeoutInMinutes: 60
+    steps:
+      - checkout: self
+        fetchDepth: 2              # depth 2 so `npm run impacted` can diff HEAD~1 (see the optional step below)
+
+      - task: NodeTool@0
+        inputs:
+          versionSpec: '20.x'
+        displayName: 'Use Node 20'
+
+      - script: npm ci
+        workingDirectory: $(workingDir)
+        displayName: 'Install dependencies'
+
+      # Chromium only — API projects need no browser, but the auth-setup project
+      # and any UI project do. Drop this step for a strictly API-only suite.
+      - script: npx playwright install --with-deps chromium
+        workingDirectory: $(workingDir)
+        displayName: 'Install Playwright browsers'
+
+      # Fail fast and legibly if the environment is not reachable, instead of
+      # discovering it 300 identical 401s later.
+      - script: npm run verify:setup
+        workingDirectory: $(workingDir)
+        displayName: 'Verify setup (auth + connectivity)'
+        env:
+          API_BASE_URL:   $(API_BASE_URL)
+          AUTH_BASE_URL:  $(AUTH_BASE_URL)
+          AUTH_USERNAME:  $(AUTH_USERNAME)
+          AUTH_PASSWORD:  $(AUTH_PASSWORD)
+          AUTH_TENANT_ID: $(AUTH_TENANT_ID)
+
+      # `continueOnError`, not `|| true`: `|| true` also swallows OOM, a missing
+      # env var and a wrong working directory. This marks the step as failed-with-issues
+      # but lets the publish steps below run; `PublishTestResults` then turns the job
+      # red (failed tests, or no results file at all). Publish steps use
+      # `succeededOrFailed()`: they run after a pass or a fail, but not after a cancel.
+      #
+      # Once you add path triggers, swap this step's script for `npm run test:impacted`
+      # to run only the tests the diff can affect (see docs/ci-and-tools.md).
+      - script: npx playwright test --project=contracts --project=endpoints --project=workflows
+        workingDirectory: $(workingDir)
+        displayName: 'Run API tests'
+        continueOnError: true
+        env:
+          API_BASE_URL:       $(API_BASE_URL)
+          AUTH_BASE_URL:      $(AUTH_BASE_URL)
+          AUTH_USERNAME:      $(AUTH_USERNAME)
+          AUTH_PASSWORD:      $(AUTH_PASSWORD)
+          AUTH_TENANT_ID:     $(AUTH_TENANT_ID)
+          CROSS_TENANT_ID:    $(CROSS_TENANT_ID)
+          AUTOMATION_PROFILE: default
+          CI: 'true'
+
+      - task: PublishTestResults@2
+        condition: succeededOrFailed()
+        displayName: 'Publish JUnit results'
+        inputs:
+          testResultsFormat: JUnit
+          testResultsFiles: '$(workingDir)/reports/junit.xml'
+          testRunTitle: 'Automation — $(AUTOMATION_ENV)'
+          failTaskOnFailedTests: true      # the pipeline SHOULD go red on test failures
+          failTaskOnMissingResultsFile: true   # ...and on a run that crashed before writing results
+
+      - task: PublishPipelineArtifact@1
+        condition: succeededOrFailed()
+        displayName: 'Publish HTML report'
+        inputs:
+          targetPath: $(workingDir)/reports/html
+          artifact: playwright-report
+
+      - script: npm run report:summarize && npm run notify
+        workingDirectory: $(workingDir)
+        condition: succeededOrFailed()
+        continueOnError: true
+        displayName: 'Summarize + notify'
+        env:
+          NOTIFY_CHANNEL:     teams
+          NOTIFY_WEBHOOK_URL: $(NOTIFY_WEBHOOK_URL)
+          NOTIFY_WHEN:        always
+          AUTOMATION_ENV:     $(AUTOMATION_ENV)
+          REPORT_URL: $(System.CollectionUri)$(System.TeamProject)/_build/results?buildId=$(Build.BuildId)&view=artifacts

@@ -1,0 +1,32 @@
+{
+  // ── Playwright Test for VS Code ────────────────────────────────────────────
+  // The extension reads playwright.config.ts, so projects, reporters, auth
+  // setup, and timeouts are defined THERE, not here. The keys below only shape
+  // how the editor runs the suite. No secrets live in this file: real values
+  // stay in .env (gitignored), which playwright.config.ts loads via dotenv at
+  // startup. See knowledge/standards/vscode-playwright.md.
+
+  // Environment variables the extension sets before an editor run, so a run
+  // from the Testing panel matches a terminal run. The profile selects which
+  // .env values win (see config/profiles.index.ts); the .env file itself is
+  // loaded by the config, so only this pointer is needed here. You may add more
+  // NON-SECRET overrides — never put tokens, passwords, or URLs in this file.
+  "playwright.env": {
+    "AUTOMATION_PROFILE": "default"
+  },
+
+  // Fresh browser context per run — matches the suite's own-data isolation.
+  // Flip to true to keep one browser open while iterating on a single UI spec.
+  "playwright.reuseBrowser": false,
+
+  // Leave the Trace Viewer off by default (the config already captures a trace
+  // on-first-retry). Flip to true to open the trace automatically after a run.
+  "playwright.showTrace": false,
+
+  // ── Testing panel ──────────────────────────────────────────────────────────
+  // The extension populates VS Code's native Testing panel automatically once
+  // it discovers playwright.config.ts — there is no separate enable. This only
+  // keeps the inline failure peek from hijacking the editor; failures still show
+  // in the Testing panel and the Trace Viewer.
+  "testing.automaticallyOpenPeekView": "never"
+}

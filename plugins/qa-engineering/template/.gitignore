@@ -1,0 +1,27 @@
+# Secrets — never commit. `.env` is the canonical name dotenv reads; the other patterns
+# are defensive (some teammates use *.env.* / *.env.local naming).
+.env
+*.env
+*.env.local
+qa.env
+# Per-environment files (.env.qa, .env.staging, ...) are ignored; the example stays tracked.
+.env.*
+!.env.example
+
+# Playwright storageState files (contain live session tokens — never commit).
+# The directory itself is tracked via its .gitkeep; only the state files are ignored.
+playwright/.auth/*.json
+
+# Ephemeral run outputs
+reports/
+node_modules/
+test-results/
+
+# House profile + session state — user-supplied, product-specific; never commit.
+# The neutral house-profile.example.json (shipped with the plugin) stays tracked.
+house-profile.json
+qa-context.json
+
+# OS / editor
+.DS_Store
+*.log

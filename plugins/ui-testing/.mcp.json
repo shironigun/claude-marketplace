@@ -1,0 +1,14 @@
+{
+  "_comment": "Self-contained + secret-free. Bundles the azure-devops MCP with Azure Identity auth (DefaultAzureCredential), so NO PAT or token lives here or is required — only the 'buggy' skill uses it (to create Test Cases in ADO); 'tester' needs no MCP. Run 'az login' once; the org defaults to acme-org (edit AZURE_DEVOPS_ORG_URL for another org). Windows 'cmd /c npx' launcher shown; on macOS/Linux use command 'npx' with the args after '/c' (see README.md).",
+  "mcpServers": {
+    "azure-devops": {
+      "type": "stdio",
+      "command": "cmd",
+      "args": ["/c", "npx", "-y", "@tiberriver256/mcp-server-azure-devops@0.1.48"],
+      "env": {
+        "AZURE_DEVOPS_ORG_URL": "https://dev.azure.com/your-org",
+        "AZURE_DEVOPS_AUTH_METHOD": "azure-identity"
+      }
+    }
+  }
+}

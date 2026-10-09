@@ -1,0 +1,49 @@
+{
+  "name": "test-automation-workspace",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Standalone Playwright + TypeScript + Zod API/UI test-automation workspace.",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "scan": "tsx scripts/scan-backend.ts",
+    "install:agents": "tsx scripts/install-agent-config.ts",
+    "verify:setup": "tsx scripts/verify-setup.ts",
+    "test": "playwright test",
+    "test:api": "playwright test --project=contracts --project=endpoints --project=workflows",
+    "test:contracts": "playwright test --project=contracts",
+    "test:endpoints": "playwright test --project=endpoints",
+    "test:workflows": "playwright test --project=workflows",
+    "test:ui": "playwright test --project=ui-smoke --project=ui-regression --project=ui-e2e",
+    "test:smoke": "playwright test --grep \"@smoke\"",
+    "test:impacted": "tsx pipelines/run-impacted.ts --run",
+    "impacted": "tsx pipelines/run-impacted.ts",
+    "auth:refresh": "playwright test --project=auth-setup",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint .",
+    "verify": "npm run typecheck && npm run lint && npm run test:smoke",
+    "clean": "node -e \"const{rmSync,mkdirSync}=require('fs'),p=require('path');const d=p.resolve(__dirname,'reports');try{rmSync(d,{recursive:true,force:true})}catch(e){};mkdirSync(d,{recursive:true});console.log('reports/ cleared.')\"",
+    "report:open": "playwright show-report reports/html",
+    "report:summarize": "tsx scripts/summarize.ts",
+    "report:allure": "allure generate reports/allure-results --clean -o reports/allure-html",
+    "report:allure:open": "allure open reports/allure-html",
+    "notify": "tsx scripts/notify.ts"
+  },
+  "dependencies": {
+    "@playwright/test": "^1.49.0",
+    "dotenv": "^16.4.5",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.0",
+    "allure-commandline": "^2.43.0",
+    "allure-js-commons": "^3.10.2",
+    "allure-playwright": "^3.10.2",
+    "cross-env": "^10.1.0",
+    "eslint": "^9.39.5",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2",
+    "typescript-eslint": "^8.66.0"
+  }
+}
