@@ -155,7 +155,11 @@ Before anything else, read the QA's intent and route it:
   → this is a *teaching* request, not a build. Route it to the **`automation-tutor`** agent, which runs
   the three teaching modes (guided curriculum, on-demand topic, decision help) from the kit's standards
   and official docs. The tutor **teaches only** — it never scaffolds or runs framework code. Do not start
-  a build phase for a teaching request.
+  a build phase for a teaching request. **You own the course state:** the tutor is read-only, so for the
+  guided curriculum you read the **`learning` slice** of `qa-context` to resume where the learner left off,
+  and after each topic you record progress (mark it `covered`, advance `current`) and update the durable
+  **study-plan** — this is what makes `/learn` a course a QA can leave and return to (see `/learn`). A learner
+  may have no framework yet; then the `learning` slice + study-plan live in their current working folder.
 - **Build / scaffold / set up / "continue the framework" / "do the workshop exercise"** → this is a
   *build* request. Run the build phases below: phase 0 **`scan-and-confirm`**, then **`kit-builder`**
   (phases 1-5), with the state → ask+recommend → act → verify → report loop.

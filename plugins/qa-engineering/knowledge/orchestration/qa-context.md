@@ -20,11 +20,11 @@ copying it.
 
 | | |
 |---|---|
-| **File** | `qa-context.json`, pretty-printed JSON at the **framework root** — beside `.env`, `flow-map.json` and `package.json` |
+| **File** | `qa-context.json`, pretty-printed JSON at the **framework root** — beside `.env`, `flow-map.json` and `package.json`. (The `learning` slice can exist **before any framework** — a QA may learn first; then `qa-context.json` and the study-plan live in the QA's current working folder.) |
 | **Git** | **git-ignored.** It may carry story text, analysis notes, created work-item ids and module findings, so it never gets committed (added to the template `.gitignore`). |
 | **Created** | lazily — the first engine that produces a slice writes the file; there is no "init" step and no example to copy (unlike the house profile). |
 | **Owner** | the `qa-orchestrator` mediates every read and write. An engine receives only the slice it needs and returns its output; the orchestrator folds that output back into the file. |
-| **Scope** | one QA session / one piece of work. A new story starts a fresh context (or a new top-level entry); stale slices are cleared, not silently reused. |
+| **Scope** | one QA session / one piece of work. A new story starts a fresh context (or a new top-level entry); stale **work** slices (`story`, `review`, `module`, `cases`, `ado`, `automation`, `failures`, `bugs`) are cleared, not silently reused. **Exception — never cleared by a new work-item:** `catalog` (the framework/module registry) and `learning` (course progress) persist across stories and sessions; clearing them would lose what's built and where the learner is. |
 | **Hand-off** | **the file is the hand-off.** Read `qa-context` *from the file*, never from a chat block that may be gone after a compaction — exactly as `kit-builder` reads `flow-map.json`. |
 
 ## The slices
@@ -45,6 +45,7 @@ not produced yet is simply absent.
 | `automation` | `{ specs[], levels[] }` — the generated `.spec.ts` files (each `{ path, level, tracesCase }`) and the levels covered (contract / endpoint / workflow, smoke / regression / e2e) | `kit-builder` generation (exists) → **automation-engine** (SP9) | `failure-to-bug` (a red run → the `failures` slice) |
 | `failures` | `{ runs[] }` — red runs captured for triage (each `{ specPath, title, assertion, status }`); an all-green run writes an empty `runs[]` | **run-suite** (SP12 — the run engine) / `failure-to-bug` | `failure-to-bug` (the investigate stage) |
 | `bugs` | `{ items[] }` — drafted or filed defects (each `{ id?, title, tracesCase, tracesStory, status }`) | **`failure-to-bug`** (SP10: investigate → classify → draft → gated file) | the traceability thread |
+| `learning` | `{ goal, depth, current, path[], studyPlanPath }` — the **learning-course state**, independent of the QA loop: `goal` (what the QA wants from automation), `depth` (their level — new / basics / confident, which the tutor maps to its L1–L4 altitude: new→L1, basics→L2, confident→L3, per `curriculum/depth-levels.md`), `current` (the current topic), `path[]` each `{ topic, status }` with `status ∈ pending \| covered` (the best-sequence curriculum, so progress persists across sessions), and `studyPlanPath` (the durable study-plan markdown the learner keeps). The **`automation-tutor` teaches read-only; the orchestrator persists this slice** after each topic. This is what turns learning from ephemeral chat into a course you can leave and resume | **the orchestrator** (SP15 P-learn — writes progress; the tutor stays read-only) | `/learn`, `/resume` (resume where you left off) |
 
 Every engine named above is **built** (the `SPx` tags are provenance, not a roadmap). The orchestrator
 routes to the one that owns each slice; a slice simply stays **absent** until its engine has run this
@@ -98,7 +99,11 @@ without the QA restating anything.
   "framework": { "map": "services: api; fixtures: orders, widgets" },
   "automation": { "specs": [{ "path": "modules/orders/api/tests/lifecycle.spec.ts", "level": "workflow", "tracesCase": null }], "levels": ["contract","endpoint","workflow"] },
   "failures": { "runs": [] },
-  "bugs":     { "items": [] }
+  "bugs":     { "items": [] },
+  "learning": { "goal": "test our API confidently", "depth": "basics", "current": "fixtures",
+                "studyPlanPath": "learning-plan.md",
+                "path": [ { "topic": "what is automation", "status": "covered" },
+                          { "topic": "fixtures", "status": "pending" } ] }
 }
 ```
 
