@@ -40,20 +40,24 @@ live **`QA status` pane** that renders the status board and refreshes as `qa-con
 as `/status`, but always-on beside your work. It auto-opens, and **`/qa-status`** reopens it. Read-only and
 honest (shows only what the slices actually hold).
 
-**Requirement + caveat — read this before you rely on it.** The pane is a hooks **mod** (`hooks/register.tsx`),
-a format only the mods runtime loads. On an engine that predates it:
+### ⚠ Requirement — read this before you install
 
-- the pane simply **does not load**, and
-- **`claude plugin validate` reports** `hooks: expected record, received undefined` (an older CLI reads
-  `hooks.json` as the classic event-record shape, not the mods `{ "modules": [...] }` form), and the plugin's
-  hooks won't load there.
+The pane is a hooks **mod** (`hooks/register.tsx`), a format only the **mods runtime (≈2.1.293+)** loads. This
+has a hard, **confirmed** consequence:
 
-The in-chat **`/status`** board is the universal fallback — it needs no mods runtime and works everywhere,
-including headless `-p` (where mods never run). Keep your Claude Code current to use the pane. **If you need the
-plugin to install and validate cleanly on an engine without the mods runtime, remove the `hooks/` folder** (the
-pane) — nothing else in the plugin depends on it. (We've confirmed the validate failure on an older CLI; we
-have not characterized whether such an engine loads the plugin's other components or rejects the whole plugin,
-so removing `hooks/` is the safe path there.)
+> **On any engine without the mods runtime, the ENTIRE plugin fails to load** — not just the pane. `claude plugin
+> list` shows `✘ failed to load` / `Error: Hook load failed`, and the plugin's **skills, commands, and agents
+> all become unavailable on that engine.** This affects the **standalone `claude` CLI, `claude -p` / CI, and any
+> Claude Code older than the mods runtime.** (Mods-capable *interactive* engines — the desktop Code tab on a
+> current build — load the whole plugin fine, pane included.)
+
+So use this plugin on a **current, mods-capable Claude Code**. **If you need it on an engine without the mods
+runtime (CLI, headless/CI, older versions), delete the `hooks/` folder** — the pane is the only thing that
+depends on it, and everything else (all skills, commands, agents, and the in-chat `/status` board) then loads
+normally everywhere.
+
+The in-chat **`/status`** command renders the same board with no mods runtime and works everywhere (including
+headless `-p`) — it is the portable equivalent of the pane.
 
 ## What it does — the QA loop
 
