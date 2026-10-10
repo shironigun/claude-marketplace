@@ -38,7 +38,7 @@ One line of the headline numbers, each from its slice; show a metric only when i
 | Metric | From | Shows |
 |---|---|---|
 | modules built | `catalog.modules` | count `status=built` / total |
-| last run | `failures` | `N failed`, or `all green` (empty `runs[]`), or `not run yet` (no slice). **Do not show a passed or flaky count in P-view** — the `failures` slice holds only *failing* entries, so passed/flaky totals are underivable here; they arrive with the P-rich `runHistory`. |
+| last run | `runHistory` (latest), else `failures` | From the latest `runHistory` entry: `N passed / M failed / K flaky` (+ a short trend of the last few runs **of a comparable scope**, noting the scope — e.g. "last 3 @orders: ✓ ✓ ✗" — so a narrow green run isn't shown as fixing a broad red one). If there's **no `runHistory` yet** (older session, or P-rich hasn't recorded one), fall back to `failures`: `N failed` / `all green` (empty `runs[]`) / `not run yet`. Only ever show numbers that are actually in a slice — never infer a passed/flaky count when only `failures` exists. |
 | course | `learning` | the current topic + progress (`<current> (N of M topics)`), from `learning.current` + `path[]` covered/total; omit the metric if there's no `learning` slice |
 | open bugs | `bugs.items` | count whose `status` is not `closed` (closed = the terminal value), or `0` |
 
@@ -93,15 +93,49 @@ One line: the single best next action + its command (the same recommendation the
 
 ## Focusing a section (`/status <section>`)
 `/status` with no arg renders the whole board. With a section word, render **only** that part, expanded:
-`modules` (the full catalog table), `coverage` (P-rich — the coverage matrix; until then, the module table),
-`learning` (the course position + study-plan pointer), `loop` (the current focus's six steps with detail).
+`modules` (the full catalog table), `coverage` (the coverage matrix below), `learning` (the course position +
+study-plan pointer), `loop` (the current focus's six steps with detail).
+
+## Coverage matrix (P-rich)
+`/status coverage` renders a **modules × levels** table — which of the six test levels each module actually has
+specs for. It answers "what's covered" without the QA eyeballing `npm run test:api -- --list`.
+
+- **Rows** = the modules from `catalog`. **Columns** = the six levels (API: contract · endpoint · workflow;
+  UI: smoke · regression · e2e), per `knowledge/standards/test-levels.md`.
+- **A cell is `✓`** when a spec exists for that module+level, **`○`** when not. Derive existence from
+  `automation.specs[]` (each `{ path, level, tracesCase }`) **and** a **read-only** glob of the framework's
+  spec folders (`modules/<module>/**/tests/**`, matched to the folder-is-the-level + tag convention). Read-only
+  — never create or run anything to find out.
+- A covered cell **may** be annotated `✗` when that **specific module+level**'s last run was red — derive this
+  **only** from `failures.runs[]` (whose `specPath`/tag maps to the exact module+level). **Never from
+  `runHistory`**, which holds only per-run totals + a coarse `scope` and can't say *which* cell failed (using it
+  would paint every cell of a module red for one failure). Coverage (a spec exists) and result (it passed) are
+  different things; keep them visually distinct and never imply a pass that didn't happen.
+- Honest + absent-safe: a module/level with nothing is `○` ("no spec yet"), never a guessed `✓`. If there's no
+  framework/`automation` yet, say "nothing automated yet" and point at `/build`.
+
+```
+| module   | contract | endpoint | workflow | smoke | regression | e2e |
+|----------|----------|----------|----------|-------|------------|-----|
+| orders   | ✓        | ✓        | ✓        | ✓     | ✓          | ○   |
+| payments | ✓        | ✓        | ○        | ○     | ○          | ○   |
+```
+
+## Durable status file (P-rich)
+Besides rendering in chat, the board is written to a **durable `qa-status.md`** at the framework root so the QA
+has a kept snapshot (not just scrollback). The orchestrator writes/refreshes it whenever it renders the board
+or completes a loop/build/run step; its content is the board — header, metrics, loop, modules, next — and
+includes the coverage matrix (the one section the in-chat default leaves to `/status coverage`). It is
+**git-ignored** (a personal snapshot derived from git-ignored state — a team may commit
+a sanitized copy if they choose, but that's not the default). Writing the file is the orchestrator's one write
+here; *rendering/reading* the board stays read-only.
 
 ## Worked example (illustrative — mock data)
 
 ```
 QA status — Acme            (from qa-context)
 
-modules built 2/7 · last run 2 failed · course fixtures (1 of 2 topics) · open bugs 1
+modules built 2/7 · last run 48 passed / 2 failed (last 3: ✓ ✓ ✗) · course fixtures (1 of 2 topics) · open bugs 1
 
 billing module:  analyze ✓ → cases ✓ → publish ✓ → automate ● → run ○ → bugs ○
 
@@ -122,5 +156,9 @@ Values are illustrative; the real board shows only what `qa-context` actually ho
 - [ ] Both `/qa` (home base) and `/status` render the board from this one spec, identically
 - [ ] Every value traces to a real slice; absent slices render "not started"/"—"; nothing fabricated; read-only
 - [ ] It's portable markdown (legend, metric line, loop strip, module table, next line); no graphics dependency
+- [ ] **(P-rich)** last run uses `runHistory` for passed/flaky + a comparable-scope trend, falling back to
+      `failures` with no inference; the **coverage matrix** marks `✓`/`○` from `automation` + a read-only scan and
+      any per-cell `✗` only from `failures` (never `runHistory`); a durable **`qa-status.md`** snapshot is
+      refreshed (git-ignored) and is the only write
 - [ ] Nothing product-specific or secret appears in the spec or the rendered board beyond the house-profile
       product name the QA supplied

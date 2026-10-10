@@ -42,7 +42,9 @@ language:
 `${CLAUDE_PLUGIN_ROOT}/knowledge/orchestration/status-board.md` (read-only; read `qa-context` + `catalog` from
 the file; honest — absent slices render "not started", nothing fabricated): the header, the metric line
 (modules built / last run / course / open bugs), the loop strip with **you-are-here**, the module table, and
-the single next action. (`/status` renders this same board on demand.)
+the single next action. (`/status` renders this same board on demand.) The board also shows the last run's
+passed/flaky + trend from `runHistory` and offers the coverage matrix (`/status coverage`); refreshing the
+derived **`qa-status.md`** snapshot is the only write — the render itself stays read-only.
 
 Then offer the single best next move and name its command:
 - an `in-progress` module → "continue it" (`/build`) · a `discovered` module → "add it" (`/build`)

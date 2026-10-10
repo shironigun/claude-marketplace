@@ -44,6 +44,7 @@ not produced yet is simply absent.
 | `framework` | `{ map }` — the inspected framework map (services, fixtures, modules present) the build/automation engines reason over | `kit-builder` (exists) | the automation engine |
 | `automation` | `{ specs[], levels[] }` — the generated `.spec.ts` files (each `{ path, level, tracesCase }`) and the levels covered (contract / endpoint / workflow, smoke / regression / e2e) | `kit-builder` generation (exists) → **automation-engine** (SP9) | `failure-to-bug` (a red run → the `failures` slice) |
 | `failures` | `{ runs[] }` — red runs captured for triage (each `{ specPath, title, assertion, status }`); an all-green run writes an empty `runs[]` | **run-suite** (SP12 — the run engine) / `failure-to-bug` | `failure-to-bug` (the investigate stage) |
+| `runHistory` | `{ runs[] }` — a rolling record of the last few runs (keep ~10, newest last), each `{ when, scope, total, passed, failed, flaky, skipped, duration }` — all **real numbers from the actual run** (never inferred). This is what lets the status board show a **passed/flaky count and a trend** (the `failures` slice holds only the latest *failing* entries, so it can't). | **run-suite** (SP16 P-rich — appends one entry per run) | the status board (`/status`, `/qa` home base) |
 | `bugs` | `{ items[] }` — drafted or filed defects (each `{ id?, title, tracesCase, tracesStory, status }`) | **`failure-to-bug`** (SP10: investigate → classify → draft → gated file) | the traceability thread |
 | `learning` | `{ goal, depth, current, path[], studyPlanPath }` — the **learning-course state**, independent of the QA loop: `goal` (what the QA wants from automation), `depth` (their level — new / basics / confident, which the tutor maps to its L1–L4 altitude: new→L1, basics→L2, confident→L3, per `curriculum/depth-levels.md`), `current` (the current topic), `path[]` each `{ topic, status }` with `status ∈ pending \| covered` (the best-sequence curriculum, so progress persists across sessions), and `studyPlanPath` (the durable study-plan markdown the learner keeps). The **`automation-tutor` teaches read-only; the orchestrator persists this slice** after each topic. This is what turns learning from ephemeral chat into a course you can leave and resume | **the orchestrator** (SP15 P-learn — writes progress; the tutor stays read-only) | `/learn`, `/resume` (resume where you left off) |
 
@@ -99,6 +100,7 @@ without the QA restating anything.
   "framework": { "map": "services: api; fixtures: orders, widgets" },
   "automation": { "specs": [{ "path": "modules/orders/api/tests/lifecycle.spec.ts", "level": "workflow", "tracesCase": null }], "levels": ["contract","endpoint","workflow"] },
   "failures": { "runs": [] },
+  "runHistory": { "runs": [ { "when": "2026-10-11T09:00:00Z", "scope": "@orders", "total": 50, "passed": 48, "failed": 2, "flaky": 0, "skipped": 0, "duration": "41s" } ] },
   "bugs":     { "items": [] },
   "learning": { "goal": "test our API confidently", "depth": "basics", "current": "fixtures",
                 "studyPlanPath": "learning-plan.md",
