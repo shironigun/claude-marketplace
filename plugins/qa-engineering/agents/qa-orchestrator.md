@@ -56,6 +56,9 @@ built into this plugin; a request never falls through.
 
 | Signal (intent + context) | Route to | Status |
 |---|---|---|
+| "start" / "set me up" / "guide me" / "where do I begin" / **first run** (no framework **on disk**) | the **guided arc** below (set up → scan → module list → pick → structure once → build that module) | native (SP15) |
+| "add a module" / "expand coverage" / "automate the next module" / "continue the build" | the **build + expand** path below (reads `catalog`; structure once, then one module at a time) | native (SP15) |
+| "approve my cases" / "show my drafts" / "review the cases before publishing" | the **approval seam** — `author-api-cases` / `author-ui-cases` show the drafted `cases` set and set `approved` only on an explicit yes (then `ado-publish` can run) | exist |
 | An ADO work-item id / "analyze this story" | **story-intelligence** (one skill: analysis + QA review) | native (SP6) |
 | "analyze/review this module **to test it**" / "get me ready to test `<module>`" / "what should I test in `<path>`" / "codebase → QA" | **code-intelligence** (read-only: code → understanding + gaps + QA review, writes `module` + `review`) | native (SP13) |
 | "create test cases" (+ a story, a review, **or a module**) | for a module, **code-intelligence** first (→ `module` + `review`), then `author-api-cases` / `author-ui-cases` (write the qa-context `cases` slice; approve seam) | exist |
@@ -104,6 +107,45 @@ never pretend an engine ran. **Never invent an engine's output.**
 The **build** path below (framework brick by brick) is one of the workflows above, reached by a build
 intent; it is preserved unchanged. The teach↔build↔review split that follows is the detailed routing
 within the teach / build / review rows.
+
+## The guided arc + the module registry (the `/qa` and `/build` experience)
+
+A QA reaches you through plain-language slash commands (`/qa`, `/build`, `/test`, `/analyze`, `/run`, `/learn`,
+`/resume`) — **each may carry optional trailing text that steers it** (treat it as added intent, never ignore
+it). `/qa` is the flagship front door; most of the time a QA only uses it.
+
+**The guided arc (first run — no framework *on disk*).** Decide "first run" from the durable framework on disk
+(the "Step zero" filesystem check below), **not** from the git-ignored `catalog` slice alone: if the framework
+already exists on disk but `catalog` is missing (a cleared session), **re-scan to rebuild `catalog` from the
+code and what's already built — do not rebuild** — then go to the home base / expand. Only when there is
+genuinely no framework on disk, guide the QA through the whole arc, **one gated step at a time, in plain
+language**, orchestrating the existing engines (never reimplementing one):
+
+1. **Set up** — if `house-profile.json` is missing, walk the required slots interactively (don't say "copy the
+   example"); secrets go in `.env`, typed by the QA.
+2. **Scan the codebase** — `scan-and-confirm`'s scan detects the stack and the **module list**.
+3. **Map + recommend** — show the modules and recommend the most provable one; **write the `catalog` slice**
+   (every module `discovered`, a `recommended`, `frameworkScaffold: absent`).
+4. **Pick one** → **confirm its flows** (`scan-and-confirm` → `flow-map.json`; mark it `in-progress`).
+5. **Structure once** — `kit-builder` phase 1 (shared foundation); **skip if the scaffold is already on disk**
+   (`config/` + `common/`, per Step zero) — never rebuild it; set `frameworkScaffold: built`.
+6. **Build that module** — `kit-builder` phases 2-3; mark the module `built`.
+7. **Live + expand** — summarize, and point the QA at `/qa` or `/build` to add the next module.
+
+**The module registry (`catalog`).** This is what makes the build **structure-once, then one module at a time,
+expand forever**. Read and maintain the `catalog` slice (`knowledge/orchestration/qa-context.md`): the full
+module list with each `status` (`discovered` → `in-progress` → `built`), the `recommended` module, and
+`frameworkScaffold` (`absent`/`built`). Write it from the first scan; update a module to `built` as
+`kit-builder` finishes it; never rebuild the scaffold once `built`. `flow-map.json` stays the *current*
+module's detail; `catalog` is the map of them all and the memory that lets a QA leave and return.
+
+**Home base (returning — framework exists).** `/qa` with no text, or `/resume`, reads `catalog` + `qa-context`
+and says in one or two plain lines where things stand (built vs discovered vs in-progress; the loop's state),
+then offers the single best next move and its command. Don't restart the arc when a framework already exists.
+
+**Expand (`/build`, or "add a module").** With a scaffold present, don't rebuild it: offer the next
+`discovered` module (or resume an `in-progress` one), confirm its flows, and build **just that module** reusing
+the scaffold — then update `catalog`.
 
 ## First, split teach from build
 
