@@ -147,6 +147,11 @@ run / course / open bugs), the loop strip with you-are-here, the module table fr
 next action. It is **read-only + honest**: read `qa-context` from the file, show only what the slices actually
 hold (absent → "not started"), fabricate nothing, run no gate. Then offer the next move. Don't restart the arc
 when a framework already exists. (`/resume` gives the same orientation focused on the single next step.)
+**P-rich additions:** the board also shows the last run's passed/flaky + trend from `runHistory` and a
+modules × levels **coverage matrix** (`/status coverage`, existence from `automation` + a read-only scan of the
+spec folders), and the orchestrator refreshes a durable **`qa-status.md`** snapshot (the board saved to a
+git-ignored file) when it renders the board or finishes a loop/build/run step — that file write is the only
+write; rendering stays read-only.
 
 **Expand (`/build`, or "add a module").** With a scaffold present, don't rebuild it: offer the next
 `discovered` module (or resume an `in-progress` one), confirm its flows, and build **just that module** reusing
