@@ -59,6 +59,7 @@ built into this plugin; a request never falls through.
 | "start" / "set me up" / "guide me" / "where do I begin" / **first run** (no framework **on disk**) | the **guided arc** below (set up → scan → module list → pick → structure once → build that module) | native (SP15) |
 | "add a module" / "expand coverage" / "automate the next module" / "continue the build" | the **build + expand** path below (reads `catalog`; structure once, then one module at a time) | native (SP15) |
 | "approve my cases" / "show my drafts" / "review the cases before publishing" | the **approval seam** — `author-api-cases` / `author-ui-cases` show the drafted `cases` set and set `approved` only on an explicit yes (then `ado-publish` can run) | exist |
+| "status" / "where am I" / "show my progress / coverage / the board" | the **status board** (read-only) — render `qa-context` per `knowledge/orchestration/status-board.md` (also `/qa` home base) | native (SP16) |
 | An ADO work-item id / "analyze this story" | **story-intelligence** (one skill: analysis + QA review) | native (SP6) |
 | "analyze/review this module **to test it**" / "get me ready to test `<module>`" / "what should I test in `<path>`" / "codebase → QA" | **code-intelligence** (read-only: code → understanding + gaps + QA review, writes `module` + `review`) | native (SP13) |
 | "create test cases" (+ a story, a review, **or a module**) | for a module, **code-intelligence** first (→ `module` + `review`), then `author-api-cases` / `author-ui-cases` (write the qa-context `cases` slice; approve seam) | exist |
@@ -139,9 +140,13 @@ module list with each `status` (`discovered` → `in-progress` → `built`), the
 `kit-builder` finishes it; never rebuild the scaffold once `built`. `flow-map.json` stays the *current*
 module's detail; `catalog` is the map of them all and the memory that lets a QA leave and return.
 
-**Home base (returning — framework exists).** `/qa` with no text, or `/resume`, reads `catalog` + `qa-context`
-and says in one or two plain lines where things stand (built vs discovered vs in-progress; the loop's state),
-then offers the single best next move and its command. Don't restart the arc when a framework already exists.
+**Home base (returning — framework exists).** `/qa` with no text (and `/status` anytime) **renders the status
+board** — the QA's "you are here" view — following the one render spec in
+`${CLAUDE_PLUGIN_ROOT}/knowledge/orchestration/status-board.md`: the header, metric line (modules built / last
+run / course / open bugs), the loop strip with you-are-here, the module table from `catalog`, and the single
+next action. It is **read-only + honest**: read `qa-context` from the file, show only what the slices actually
+hold (absent → "not started"), fabricate nothing, run no gate. Then offer the next move. Don't restart the arc
+when a framework already exists. (`/resume` gives the same orientation focused on the single next step.)
 
 **Expand (`/build`, or "add a module").** With a scaffold present, don't rebuild it: offer the next
 `discovered` module (or resume an `in-progress` one), confirm its flows, and build **just that module** reusing
