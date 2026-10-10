@@ -129,14 +129,26 @@ function statusMark(s: string): { glyph: string; color: string; dim: boolean } {
   return { glyph: '○', color: 'gray', dim: true }
 }
 
+// Guards so a second load of this module (a reinstall, a stray duplicate copy, or a
+// repeated session.start) never duplicates behavior: the command registers once, the
+// pane is keyed by id (reopening is a no-op), and only one refresh timer ever runs.
+let refreshStarted = false
+
 export const register: Register = on => {
   on('session.start', async ($, e, next) => {
-    await $.command.register({
-      name: 'qa-status',
-      description: 'Open the live QA status board pane',
-    })
-    void $.ui.open({ id: PANE, title: 'QA status' })
-    $.clock.every(3000, () => void update($, tick, (n: number) => n + 1))
+    try {
+      await $.command.register({
+        name: 'qa-status',
+        description: 'Open the live QA status board pane',
+      })
+    } catch {
+      // already registered by an earlier load — ignore, don't duplicate
+    }
+    void $.ui.open({ id: PANE, title: 'QA status' }) // idempotent: one pane per id
+    if (!refreshStarted) {
+      refreshStarted = true
+      $.clock.every(3000, () => void update($, tick, (n: number) => n + 1))
+    }
     return next(e)
   })
 
