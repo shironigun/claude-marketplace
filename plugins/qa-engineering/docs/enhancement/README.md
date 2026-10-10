@@ -151,6 +151,26 @@ learning gap (teaching had zero persistence) and the SP2 "pick up where they lef
 at stage ends; a "try it in the kit" hand-off to `/build`. `teach-automation`'s old "keeps no external state"
 rule was replaced with learning-slice-backed resume.
 
+## Phase 6 — The QA status board (SP16)
+
+The plugin modeled its whole state in `qa-context` but never showed it (both audits' #1 gap). Phase 6 renders
+it as a **status board** — the "you are here" view that makes the plugin feel like one application. Spec/plan:
+[`SP16-spec.md`](./SP16-spec.md) · [`SP16-plan.md`](./SP16-plan.md).
+
+| SP | Title | Depends on | Status |
+|---|---|---|---|
+| **SP16 P-view** | In-chat status board — `/status` + `/qa` home base render it from one spec (loop + you-are-here, module table, metrics, next) | SP5, SP15 | ✅ **complete** (2026-10-11) |
+| **SP16 P-rich** | Durable `qa-status.md` + coverage matrix + run-history trend | SP16 P-view, SP12 | ⏳ next |
+
+**P-view complete (2026-10-11).** One render spec (`knowledge/orchestration/status-board.md`) defines the board
+— header, metric line (modules built / last run / course / open bugs), the **loop strip with you-are-here**
+(`✓`/`●`/`○`/`✗`), the module table from `catalog`, and the single next action — drawn from the slices
+`qa-context` already holds. New **`/status [section]`** command renders it on demand (optional section focus);
+**`/qa` returning** renders the same board as its home base, both from the one spec. **Read-only + honest**
+(absent slices → "not started", nothing fabricated, no gate) and **portable markdown** (no graphics
+dependency — the baseline that works in any Claude Code surface). Version `0.2.0 → 0.3.0`. P-rich (durable file
++ coverage matrix + run trend) is next. A live Claude Code **mod** pane (Tier 3) stays deferred.
+
 ## SP1 (this sub-project)
 Spec: [`SP1-spec.md`](./SP1-spec.md) · Plan: [`SP1-plan.md`](./SP1-plan.md) · Research notes:
 [`research/official-docs-notes.md`](./research/official-docs-notes.md).

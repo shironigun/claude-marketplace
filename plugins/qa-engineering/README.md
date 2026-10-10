@@ -12,19 +12,21 @@ account live in a `.env` in your own framework folder. Neither is ever committed
 
 ## Commands — start with one
 
-Seven commands, and you really only need the first. **`/qa` is your front door and home base**: the first time,
-it sets you up, reads your codebase, shows your modules, and builds your first one step by step; after that it
-tells you where you are and what's next. The rest are smart shortcuts. **Every command takes optional text to
-steer it** (`/qa test payments`, `/build API only`, `/run yesterday's failures`, `/learn start at fixtures`).
+A handful of commands, and you really only need the first. **`/qa` is your front door and home base**: the
+first time, it sets you up, reads your codebase, shows your modules, and builds your first one step by step;
+after that it shows your **status board** — where you are and what's next. The rest are smart shortcuts. **Every
+command takes optional text to steer it** (`/qa test payments`, `/build API only`, `/run yesterday's failures`,
+`/learn start at fixtures`).
 
 | Command | What it does |
 |---|---|
-| ⭐ `/qa [anything]` | **Start here.** First run: set you up → read the codebase → pick a module → build the structure, then that module, step by step. Later: your home base — where you are + what's next. Routes anything you type. |
+| ⭐ `/qa [anything]` | **Start here.** First run: set you up → read the codebase → pick a module → build the structure, then that module, step by step. Later: your home base — the status board + what's next. Routes anything you type. |
 | `/build [context]` | Build the framework, or **add another module** to it. Structure is built once; then one module at a time, resuming where you left off. |
 | `/test <id or module>` | Test one thing end to end — understand → cases → publish → automate → run → bugs, pausing for your OK. Auto-detects a story vs a module. |
 | `/analyze <id or module>` | Just understand it first (read-only): what to test + the gaps. |
 | `/run [scope]` | Run tests, see the real result, turn failures into bugs. |
 | `/learn [topic]` | Learn automation — a guided, best-sequence course that saves your progress. |
+| `/status [section]` | Your status board (read-only): what's built, the last run, course progress, and what's next. |
 | `/resume` | Pick up where you left off — build, test, or learning. |
 
 Commands are namespaced `qa-engineering:` (e.g. `/qa-engineering:qa`). The gated steps (writing cases,
