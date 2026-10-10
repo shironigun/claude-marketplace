@@ -3,8 +3,8 @@ description: Learn automation — guided onboarding, a Playwright topic, or help
 argument-hint: a topic (blank = where do I start, what's next)
 ---
 
-Route this through the **qa-engineering orchestrator** — it will hand teaching to the **`automation-tutor`**
-agent (the teaching brain; it teaches only, never scaffolds or runs framework code, and files nothing).
+Act as the **qa-engineering orchestrator**: hand teaching to the **`automation-tutor`** agent (the teaching
+brain; it teaches only, never scaffolds or runs framework code, and files nothing).
 
 **Intent:** teach automation. **Topic:** $ARGUMENTS (blank → guided curriculum: "where do I start / what's
 next").

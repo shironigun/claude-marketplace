@@ -10,34 +10,26 @@ The plugin is **product-agnostic**: it ships no product data, no URLs, no org na
 product/tracker specifics live in a git-ignored `house-profile.json`; the target system's address and a test
 account live in a `.env` in your own framework folder. Neither is ever committed.
 
-## Commands — the easy way in
+## Commands — start with one
 
-Type `/` and pick a command — each shows a plain-language description and what to type. You don't need to
-know the engines; the commands route everything through the orchestrator and keep you in control at every
-gate.
-
-**Easy-buttons — do it all, I'll pause for your OK at each step:**
-
-| Command | What it does |
-|---|---|
-| `/qa` | Start here. Tells you where you are and asks what you've got. |
-| `/test-story <id>` | Test a story end to end: understand → cases → publish → automate → run → bugs. |
-| `/test-module <path>` | Same, starting from existing code. |
-| `/resume` | Pick up where you left off. |
-
-**Single steps — when you just want one thing:**
+Seven commands, and you really only need the first. **`/qa` is your front door and home base**: the first time,
+it sets you up, reads your codebase, shows your modules, and builds your first one step by step; after that it
+tells you where you are and what's next. The rest are smart shortcuts. **Every command takes optional text to
+steer it** (`/qa test payments`, `/build API only`, `/run yesterday's failures`, `/learn start at fixtures`).
 
 | Command | What it does |
 |---|---|
-| `/analyze-story <id>` · `/analyze-module <path>` | Understand a story / some code before testing (read-only). |
-| `/make-cases` · `/review-cases` | Write the test cases, then approve them. |
-| `/push-cases` | Publish approved cases to the Test Plan/Suite (gated). |
-| `/automate` · `/run <scope>` | Generate the scripts, then run them and see the real result. |
-| `/file-bug` | Turn a real failure into a filed bug (gated). |
-| `/build-framework` · `/learn <topic>` | Build a framework brick by brick · learn automation. |
+| ⭐ `/qa [anything]` | **Start here.** First run: set you up → read the codebase → pick a module → build the structure, then that module, step by step. Later: your home base — where you are + what's next. Routes anything you type. |
+| `/build [context]` | Build the framework, or **add another module** to it. Structure is built once; then one module at a time, resuming where you left off. |
+| `/test <id or module>` | Test one thing end to end — understand → cases → publish → automate → run → bugs, pausing for your OK. Auto-detects a story vs a module. |
+| `/analyze <id or module>` | Just understand it first (read-only): what to test + the gaps. |
+| `/run [scope]` | Run tests, see the real result, turn failures into bugs. |
+| `/learn [topic]` | Learn automation — a guided, best-sequence course that saves your progress. |
+| `/resume` | Pick up where you left off — build, test, or learning. |
 
-Commands are namespaced `qa-engineering:` (e.g. `/qa-engineering:test-story`). Prefer the orchestrator in
-your own words any time — the commands are just a friendlier front door onto the same loop.
+Commands are namespaced `qa-engineering:` (e.g. `/qa-engineering:qa`). The gated steps (writing cases,
+publishing, filing bugs) happen *inside* `/test`, `/build` and `/qa` — just say what you want, e.g. "push my
+cases", and `/qa` routes it. You can always talk to the orchestrator in your own words instead.
 
 ## What it does — the QA loop
 
@@ -84,8 +76,8 @@ verifies, and reports before moving on. It never assumes a value you have not co
 
 From the folder that will hold your framework (ideally on a branch of your own):
 
-- **Easiest:** type `/` and pick a command — `/qa` if you're not sure where to start, `/test-story <id>` or
-  `/test-module <path>` to go end to end, or a single-step command (see **Commands** above).
+- **Easiest:** just run **`/qa`** — the first time it sets you up and builds your first module; after that it's
+  your home base. Or use a shortcut (`/build`, `/test <id or module>`, `/run`, `/learn`) — see **Commands** above.
 - Or invoke the **`qa-orchestrator`** agent (`qa-engineering:qa-orchestrator`) and say what you want in your
   own words — "analyze story #1234", "create test cases for this", "push these to ADO", "automate these
   cases", "turn this red run into a bug", or "build a test framework brick by brick". It routes to the engine
