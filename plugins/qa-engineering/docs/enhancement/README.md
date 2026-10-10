@@ -196,11 +196,13 @@ working live (empty + populated states). Version `0.4.0 → 0.5.0`.
 
 **Decision + honest caveat (documented in the README).** Folded **into** `qa-engineering` (user's call) rather
 than a sibling plugin, so the pane ships with the plugin. The trade: the mods `hooks.json` format only loads on
-the mods runtime (≈2.1.293+); on older engines the pane doesn't load **and `claude plugin validate` fails on
-the hooks** (`expected record`). The documented safe path there is to remove the `hooks/` folder (nothing else
-depends on it); the in-chat `/status` board is the universal fallback (mods also never run headless `-p`). Not
-characterized: whether an older engine loads the plugin's other components or rejects it wholesale — hence the
-remove-`hooks/` guidance. Requires keeping Claude Code current.
+the mods runtime (≈2.1.293+). **Confirmed consequence (observed on the 2.1.233 CLI after install):** on an engine
+without the mods runtime the **entire plugin fails to load** — `claude plugin list` → `✘ failed to load` /
+`Error: Hook load failed` — so all skills/commands/agents are unavailable there, not just the pane. Mods-capable
+*interactive* engines load the whole plugin fine. Affects the standalone CLI, `claude -p` / CI, and older
+versions. The documented remedy for those: **delete `hooks/`** (the only thing that depends on it) — everything
+else, including the in-chat `/status` board, then loads normally. User chose to keep it folded in regardless
+(their users are on current mods-capable builds); the trade is accepted and documented, not hidden.
 
 > Side-fix found via the full-plugin validate this phase triggered: `framework-standards` and `teach-automation`
 > had an in-value `: ` (colon-space) in their YAML `description`, which a strict parser rejects (the desktop
