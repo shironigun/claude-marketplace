@@ -97,6 +97,26 @@ intent), writes the `module` + `review` slices the authoring engines already con
 gate. Both are product-neutral, secret-free, and gated; specs/plans: [`SP12-spec.md`](./SP12-spec.md) ·
 [`SP13-spec.md`](./SP13-spec.md).
 
+## Phase 4 — Ease-of-use command surface (SP14)
+
+Phase 1–3 built the whole loop, but the only entry point was "invoke the `qa-orchestrator` agent and phrase
+your intent." For a manual-QA audience that is the first bit of friction. Phase 4 adds a discoverable
+**slash-command layer** so a QA drives the loop from the `/` menu without knowing the engines.
+
+| SP | Title | Depends on | Status |
+|---|---|---|---|
+| **SP14** | QA-friendly command surface — `commands/` slash commands (easy-button journeys + per-step), routed through the orchestrator | SP5–SP13 | ✅ **complete** (2026-10-10) |
+
+**Phase 4 complete (2026-10-10).** Added `commands/` (auto-discovered, namespaced `/qa-engineering:*`) in two
+tiers. **Easy-buttons** walk the whole loop in sequence, pausing at every human gate in plain language: `/qa`
+(concierge / front door), `/test-story <id>`, `/test-module <path>` (the codebase → QA journey), `/resume`.
+**Single steps**, one per engine: `/analyze-story`, `/analyze-module`, `/make-cases`, `/review-cases`,
+`/push-cases`, `/automate`, `/run`, `/file-bug`, `/build-framework`, `/learn`. Every command is a **thin
+wrapper that routes through the `qa-orchestrator`** — it hands a clean intent + argument to the orchestrator,
+which keeps house-profile reading, qa-context threading, and all the gates centralized; no command bypasses a
+gate, performs an un-gated tracker write, or restates an engine's procedure (nothing to drift). Product-neutral
++ secret-free. Spec/plan: [`SP14-spec.md`](./SP14-spec.md) · [`SP14-plan.md`](./SP14-plan.md).
+
 ## SP1 (this sub-project)
 Spec: [`SP1-spec.md`](./SP1-spec.md) · Plan: [`SP1-plan.md`](./SP1-plan.md) · Research notes:
 [`research/official-docs-notes.md`](./research/official-docs-notes.md).
