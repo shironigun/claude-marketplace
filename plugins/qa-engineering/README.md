@@ -33,6 +33,28 @@ Commands are namespaced `qa-engineering:` (e.g. `/qa-engineering:qa`). The gated
 publishing, filing bugs) happen *inside* `/test`, `/build` and `/qa` — just say what you want, e.g. "push my
 cases", and `/qa` routes it. You can always talk to the orchestrator in your own words instead.
 
+## Live status pane (optional — needs the mods runtime)
+
+On a Claude Code build with the **mods runtime** (≈2.1.293+, terminal or desktop Code tab), the plugin opens a
+live **`QA status` pane** that renders the status board and refreshes as `qa-context` changes — the same board
+as `/status`, but always-on beside your work. It auto-opens, and **`/qa-status`** reopens it. Read-only and
+honest (shows only what the slices actually hold).
+
+**Requirement + caveat — read this before you rely on it.** The pane is a hooks **mod** (`hooks/register.tsx`),
+a format only the mods runtime loads. On an engine that predates it:
+
+- the pane simply **does not load**, and
+- **`claude plugin validate` reports** `hooks: expected record, received undefined` (an older CLI reads
+  `hooks.json` as the classic event-record shape, not the mods `{ "modules": [...] }` form), and the plugin's
+  hooks won't load there.
+
+The in-chat **`/status`** board is the universal fallback — it needs no mods runtime and works everywhere,
+including headless `-p` (where mods never run). Keep your Claude Code current to use the pane. **If you need the
+plugin to install and validate cleanly on an engine without the mods runtime, remove the `hooks/` folder** (the
+pane) — nothing else in the plugin depends on it. (We've confirmed the validate failure on an older CLI; we
+have not characterized whether such an engine loads the plugin's other components or rejects the whole plugin,
+so removing `hooks/` is the safe path there.)
+
 ## What it does — the QA loop
 
 | Ask | Engine |
