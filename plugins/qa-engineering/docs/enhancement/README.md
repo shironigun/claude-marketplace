@@ -178,6 +178,34 @@ dependency — the baseline that works in any Claude Code surface). Version `0.2
 `learning-plan.md`). All honest + read-only for rendering (the `qa-status.md` write is the one local-file write).
 Version `0.3.0 → 0.4.0`. A live Claude Code **mod** pane (Tier 3) stays deferred. **SP16 complete.**
 
+## Phase 7 — Live status pane (SP17, mods / Tier 3)
+
+The deferred Tier 3 of the status board: a live Claude Code **mod** pane that renders the board beside the work
+and refreshes as `qa-context` changes — the "always-on app" surface.
+
+| SP | Title | Depends on | Status |
+|---|---|---|---|
+| **SP17** | Live status pane — a `hooks/` mod (`register.tsx`) rendering the board in a live Pane; `/qa-status` + auto-open | SP16 | ✅ **complete** (2026-10-11) |
+
+**Complete (2026-10-11).** Built with the `plugin-authoring` mods API: `hooks/hooks.json` (`{ "modules": [...] }`)
++ `hooks/register.tsx` opens a `QA status` Pane via `ui.open`/`ui.render`, reads `qa-context.json` with `$.fs`,
+and refreshes every 3s via `$.clock.every` (bumping a `$.state` tick atom; contract in `types/index.d.ts`). It
+renders the same board as `/status` — metric line, loop strip with you-are-here (`✓`/`●`/`○`/`✗`), module list,
+coverage + trend — **read-only and honest** (absent slices → "not started"; nothing fabricated). Verified
+working live (empty + populated states). Version `0.4.0 → 0.5.0`.
+
+**Decision + honest caveat (documented in the README).** Folded **into** `qa-engineering` (user's call) rather
+than a sibling plugin, so the pane ships with the plugin. The trade: the mods `hooks.json` format only loads on
+the mods runtime (≈2.1.293+); on older engines the pane doesn't load **and `claude plugin validate` fails on
+the hooks** (`expected record`). The documented safe path there is to remove the `hooks/` folder (nothing else
+depends on it); the in-chat `/status` board is the universal fallback (mods also never run headless `-p`). Not
+characterized: whether an older engine loads the plugin's other components or rejects it wholesale — hence the
+remove-`hooks/` guidance. Requires keeping Claude Code current.
+
+> Side-fix found via the full-plugin validate this phase triggered: `framework-standards` and `teach-automation`
+> had an in-value `: ` (colon-space) in their YAML `description`, which a strict parser rejects (the desktop
+> runtime tolerated it) — replaced with an em dash so the frontmatter is valid YAML everywhere.
+
 ## SP1 (this sub-project)
 Spec: [`SP1-spec.md`](./SP1-spec.md) · Plan: [`SP1-plan.md`](./SP1-plan.md) · Research notes:
 [`research/official-docs-notes.md`](./research/official-docs-notes.md).
