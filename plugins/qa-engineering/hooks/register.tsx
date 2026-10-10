@@ -2,11 +2,12 @@
 // (the same board as the /status command and the /qa home base) in a live pane that
 // refreshes as qa-context changes.
 //
-// REQUIRES a Claude Code engine with the mods runtime (~2.1.293+). On older engines
-// this hooks module does not load and `claude plugin validate` fails on the hooks.json
-// (it reads the classic event-record shape, not the mods `{ "modules": [...] }` form).
-// For a clean install/validation on such engines, remove the plugin's `hooks/` folder;
-// the in-chat `/status` board is the universal fallback. See the README, "Live status pane".
+// REQUIRES a Claude Code engine with the mods runtime (~2.1.293+). CONFIRMED: on an
+// engine WITHOUT it, the WHOLE plugin fails to load (`Error: Hook load failed`), not just
+// this pane — skills/commands/agents all become unavailable there. Affects the standalone
+// CLI, `claude -p`/CI, and older versions; mods-capable interactive engines load it fine.
+// Remedy on such engines: delete the plugin's `hooks/` folder (only the pane depends on it);
+// everything else, incl. the in-chat `/status` board, then loads. See README, "Live status pane".
 //
 // Honest + read-only by the same rule as the board spec
 // (knowledge/orchestration/status-board.md): every value is read from qa-context.json;
