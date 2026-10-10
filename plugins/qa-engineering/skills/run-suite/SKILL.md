@@ -77,11 +77,15 @@ From the run output capture: **total / passed / failed / flaky(retried) / skippe
 level/tag. Use the JSON reporter output when present; otherwise parse the line/list reporter. Attribute nothing
 you didn't see in the output.
 
-### 5. Write the `failures` slice (qa-context)
-Per `knowledge/orchestration/qa-context.md`, write the `failures` slice additively (never clobber another
-engine's slice):
+### 5. Write the `failures` slice + append `runHistory` (qa-context)
+Per `knowledge/orchestration/qa-context.md`, write additively (never clobber another engine's slice):
 - **`failures`** = `{ runs[] }`, each failed run `{ specPath, title, assertion, status }`. An all-green run
   writes an **empty** `runs[]` (and you say "all green").
+- **`runHistory`** — append one entry for this run: `{ when, scope, total, passed, failed, flaky, skipped,
+  duration }`, all the **real numbers from this run's output** (the totals you parsed in step 4 — never
+  inferred). Keep the list to roughly the last 10 (drop the oldest). This is what lets the status board show a
+  passed/flaky count and a trend; the `failures` slice alone can't (it holds only failing entries). A run that
+  didn't execute (a start-up/env error) writes **no** `runHistory` entry — it wasn't a run.
 
 Report the full summary to the QA: `N passed / M failed / K flaky / S skipped in <duration>`, then one line
 per failure (`<level> <spec> — <title>: <assertion>`). Report green as green, red as red — no smoothing.
@@ -111,6 +115,8 @@ environment error as a product bug — `failure-to-bug` makes that call. A green
 - [ ] The run executed and the **real** pass/fail/flaky/skipped result was reported — never fabricated; a
       start-up/env error was reported as such, not as a pass
 - [ ] The `failures` slice was written from the actual failures (empty when green), additively, from the file
+- [ ] A **`runHistory`** entry was appended with this run's **real** totals (kept to ~10); **no** entry for a
+      start-up/env non-run
 - [ ] Real failures were **offered** to `failure-to-bug` (gated); nothing was auto-filed; a flaky/env result
       was not filed as a product bug
 - [ ] Nothing product-specific, secret or reinvented appears in the skill or its run

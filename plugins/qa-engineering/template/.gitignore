@@ -21,6 +21,9 @@ test-results/
 # The neutral house-profile.example.json (shipped with the plugin) stays tracked.
 house-profile.json
 qa-context.json
+# Derived personal snapshots (rendered from the git-ignored state above).
+qa-status.md
+learning-plan.md
 
 # OS / editor
 .DS_Store

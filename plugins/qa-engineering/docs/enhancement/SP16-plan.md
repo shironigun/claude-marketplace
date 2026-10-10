@@ -16,6 +16,15 @@ adversarial review** → commit. The QA status board (sense of place).
     `/status` + home-base board. Version `0.2.0 → 0.3.0`. docs/enhancement Phase-6 entry.
   - [x] Verify: read-only + honest; `/qa` + `/status` share the one spec; portable markdown; neutral.
   - [ ] Independent review; fix; commit.
-- [ ] **P-rich — Tier 2.** Durable `qa-status.md` (refreshed each step); coverage matrix (modules × levels,
-      replacing eyeballed `--list`); run-history trend (`run-suite` appends; `runHistory` in qa-context).
-      Independent review; fix; commit.
+- [x] **P-rich — Tier 2.**
+  - [x] `runHistory` slice in `qa-context.md` (contract + example); `run-suite` appends a real-totals entry per
+    run (step 5), none for a start-up/env non-run.
+  - [x] `status-board.md`: last-run metric now uses `runHistory` (passed/flaky + trend, `failures` fallback); a
+    **coverage matrix** (modules × levels, `✓`/`○` from `automation` + read-only spec-folder scan) for
+    `/status coverage`; a durable **`qa-status.md`** snapshot (orchestrator refreshes; git-ignored).
+  - [x] `commands/status.md` (coverage matrix + the qa-status.md snapshot), `qa.md`/orchestrator home base
+    (trend + coverage + snapshot refresh), `template/.gitignore` (`qa-status.md`, `learning-plan.md`), version
+    `0.3.0 → 0.4.0`, roadmap.
+  - [x] Verify: real numbers only (no inferred passed/flaky); coverage read-only; snapshot write is the only
+    write; neutral.
+  - [ ] Independent review; fix; commit.
