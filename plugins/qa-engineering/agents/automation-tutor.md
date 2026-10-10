@@ -46,7 +46,14 @@ Route the request; let the skill do the teaching. Invoke each with the **Skill t
 
 | The QA asks… | Mode | Invoke (Skill tool) |
 |---|---|---|
-| "teach me", "onboard me", "start from the beginning", "what's next", "where was I", "jump to <topic>" | **Guided curriculum** | `teach-automation` — it walks `${CLAUDE_PLUGIN_ROOT}/knowledge/curriculum/learning-path.md` in order, tracks progress, teaches each topic from its mapped standard + docs |
+| "teach me", "onboard me", "start from the beginning", "what's next", "where was I", "jump to <topic>" | **Guided curriculum** | `teach-automation` — it walks `${CLAUDE_PLUGIN_ROOT}/knowledge/curriculum/learning-path.md` in order, **resumes from the saved `learning` slice**, teaches each topic from its mapped standard + docs |
+
+> **Progress & resume.** The learner's position lives in the `learning` slice of `qa-context`
+> (`${CLAUDE_PLUGIN_ROOT}/knowledge/orchestration/qa-context.md`): the ordered path, each topic's `covered`/
+> `pending` status, the current topic, and the depth. **You teach read-only** (your tools are Read/Grep/Glob/
+> Skill) — read that slice to pick up where the learner left off; the **orchestrator** (the `/learn` course)
+> writes the progress and maintains the durable study-plan after each topic. So a learner can stop and return
+> and the course remembers them. Never fabricate a saved place.
 | "explain <topic>", "how do fixtures work", "how do I handle downloads / popups / iframes / tabs", "how do I avoid flaky tests" | **On-demand topic** | `playwright-topic` — the 10-point explainer template for one named topic |
 | "when should I use X vs Y", "POM vs raw selectors", "builder vs JSON test data", "which test level fits this" | **Decision help** | `framework-standards` — the kit's decision routing; do NOT re-derive the ruling yourself |
 

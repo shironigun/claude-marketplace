@@ -130,7 +130,7 @@ module and back to expand, a lean smart-command set, a module registry for "one 
 | SP | Title | Depends on | Status |
 |---|---|---|---|
 | **SP15 P-build** | Flagship `/qa` guided arc + lean 7-command set (14→7, optional-context args) + `catalog` module registry + `/build` expand | SP5–SP14 | ✅ **complete** (2026-10-10) |
-| **SP15 P-learn** | `/learn` as a progress-saving course — `learning` slice, kickstart/resume best-sequence path, durable study-plan | SP2, SP15 P-build | ⏳ next |
+| **SP15 P-learn** | `/learn` as a progress-saving course — `learning` slice, kickstart/resume best-sequence path, durable study-plan | SP2, SP15 P-build | ✅ **complete** (2026-10-10) |
 
 **P-build complete (2026-10-10).** Commands **14 → 7**: ⭐ `/qa` (flagship — first run walks set-up → scan the
 codebase → module list + recommendation → pick one → structure once → build that module, gated; returning, it's
@@ -139,7 +139,17 @@ the home base), `/build` (build/expand — structure once, then one module at a 
 steer it**. New `catalog` slice in qa-context is the **module registry** (`discovered`/`in-progress`/`built` +
 `frameworkScaffold`) that makes expand-one-module-at-a-time real. The gated sub-steps (cases/publish/automate/
 file-bug) fold into the journeys + `/qa` — capability kept, menu halved. Orchestrator drives the arc + registry;
-version bumped `0.1.0 → 0.2.0`. P-learn (the course + persistence) is next.
+version bumped `0.1.0 → 0.2.0`.
+
+**P-learn complete (2026-10-10).** `/learn` is now a **progress-saving course**, not a Q&A box. New `learning`
+slice in qa-context (`goal`, `depth`, `current`, `path[]` with `pending`/`covered`, `studyPlanPath`) persists
+the learner's place across sessions. `/learn` with no arg **kickstarts** (ask goal + level → build the
+best-sequence path from `learning-path.md` → write the slice + a durable **study-plan** markdown the learner
+keeps) or **resumes** ("last time: X; next: Y"); an arg jumps/steers. The **`automation-tutor` teaches
+read-only; the orchestrator persists** progress and the study-plan after each topic — fixing the audit's #1
+learning gap (teaching had zero persistence) and the SP2 "pick up where they left off" regression. Checkpoints
+at stage ends; a "try it in the kit" hand-off to `/build`. `teach-automation`'s old "keeps no external state"
+rule was replaced with learning-slice-backed resume.
 
 ## SP1 (this sub-project)
 Spec: [`SP1-spec.md`](./SP1-spec.md) · Plan: [`SP1-plan.md`](./SP1-plan.md) · Research notes:

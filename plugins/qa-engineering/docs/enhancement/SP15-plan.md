@@ -21,6 +21,14 @@ adversarial review** → commit. The guided QA experience.
     orchestrator; arc orchestrates existing engines (no reimplementation) + keeps every gate; catalog contract
     additive + correct; no capability lost in 14→7; neutral + secret-free.
   - Independent review; fix; commit to `dev`.
-- [ ] **P-learn — `/learn` course + progress persistence (Part E).** `learning` slice; kickstart/resume the
-      best-sequence path; orchestrator persists progress (tutor stays read-only); durable study-plan artifact;
-      steer via arg. Independent review; fix; commit.
+- [x] **P-learn — `/learn` course + progress persistence (Part E).**
+  - [x] `learning` slice in `qa-context.md` (contract + example + the "before any framework" location note).
+  - [x] `commands/learn.md` rewritten to the course: kickstart (ask goal+level → build best-sequence path →
+    write slice + study-plan) / resume; teach via the tutor; **orchestrator persists** each topic; durable
+    `learning-plan.md` study-plan; checkpoints; steer via arg; teach→build hand-off.
+  - [x] `teach-automation/SKILL.md`: replaced the "keeps no external state / per-conversation" rule with
+    learning-slice-backed resume (read-only; orchestrator persists). `automation-tutor.md` + orchestrator teach
+    routing: progress/resume note (tutor read-only, orchestrator owns the slice + study-plan).
+  - [x] Verify: slice contract additive + correct; tutor stays read-only; orchestrator persists; best-sequence
+    + resume; no-framework location handled; neutral.
+  - [ ] Independent review; fix; commit.

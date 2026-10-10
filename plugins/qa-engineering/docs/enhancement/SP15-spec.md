@@ -85,7 +85,7 @@ teal "expand" loop.
   (`knowledge/curriculum/learning-path.md`, 7 stages / 35 topics) — ask one quick question (goal + rough
   level), then teach topic 1. If progress exists, **resume** ("last time: X; next: Y").
 - **Save progress:** a new `learning` slice in qa-context — `{ goal, depth, current, path:[{topic,status}],
-  lastTopic }` — written as the learner advances. The **orchestrator persists it** (it owns qa-context
+  studyPlanPath }` — written as the learner advances. The **orchestrator persists it** (it owns qa-context
   writes); the `automation-tutor` stays read-only and teaches. `/resume` and "where was I" read it.
 - **Durable study-plan:** on kickstart, render the path as a **study-plan the learner keeps** (a checklist of
   the stages/topics with their position marked), updated as topics complete — the visible, persistent
