@@ -105,7 +105,10 @@ your intent." For a manual-QA audience that is the first bit of friction. Phase 
 
 | SP | Title | Depends on | Status |
 |---|---|---|---|
-| **SP14** | QA-friendly command surface — `commands/` slash commands (easy-button journeys + per-step), routed through the orchestrator | SP5–SP13 | ✅ **complete** (2026-10-10) |
+| **SP14** | QA-friendly command surface — `commands/` slash commands (easy-button journeys + per-step), routed through the orchestrator | SP5–SP13 | ✅ complete (2026-10-10) · **superseded by SP15 (14→7)** |
+
+> The 14-command set below is SP14's historical record; **SP15 consolidated it to 7** (see Phase 5). The
+> command names listed here no longer exist as separate files.
 
 **Phase 4 complete (2026-10-10).** Added `commands/` (auto-discovered, namespaced `/qa-engineering:*`) in two
 tiers. **Easy-buttons** walk the whole loop in sequence, pausing at every human gate in plain language: `/qa`
@@ -116,6 +119,37 @@ wrapper that routes through the `qa-orchestrator`** — it hands a clean intent 
 which keeps house-profile reading, qa-context threading, and all the gates centralized; no command bypasses a
 gate, performs an un-gated tracker write, or restates an engine's procedure (nothing to drift). Product-neutral
 + secret-free. Spec/plan: [`SP14-spec.md`](./SP14-spec.md) · [`SP14-plan.md`](./SP14-plan.md).
+
+## Phase 5 — The guided QA experience (SP15)
+
+SP14's 14 flat commands were too many for a manual QA, and there was no single "start here and guide me" entry.
+Phase 5 turns the plugin into a guided experience: a flagship that walks a QA from zero → first automated
+module and back to expand, a lean smart-command set, a module registry for "one module at a time", and a
+`/learn` that saves progress. Spec/plan: [`SP15-spec.md`](./SP15-spec.md) · [`SP15-plan.md`](./SP15-plan.md).
+
+| SP | Title | Depends on | Status |
+|---|---|---|---|
+| **SP15 P-build** | Flagship `/qa` guided arc + lean 7-command set (14→7, optional-context args) + `catalog` module registry + `/build` expand | SP5–SP14 | ✅ **complete** (2026-10-10) |
+| **SP15 P-learn** | `/learn` as a progress-saving course — `learning` slice, kickstart/resume best-sequence path, durable study-plan | SP2, SP15 P-build | ✅ **complete** (2026-10-10) |
+
+**P-build complete (2026-10-10).** Commands **14 → 7**: ⭐ `/qa` (flagship — first run walks set-up → scan the
+codebase → module list + recommendation → pick one → structure once → build that module, gated; returning, it's
+the home base), `/build` (build/expand — structure once, then one module at a time, resumes), `/test` and
+`/analyze` (auto-detect story vs module), `/run`, `/learn`, `/resume`; **every command takes optional context to
+steer it**. New `catalog` slice in qa-context is the **module registry** (`discovered`/`in-progress`/`built` +
+`frameworkScaffold`) that makes expand-one-module-at-a-time real. The gated sub-steps (cases/publish/automate/
+file-bug) fold into the journeys + `/qa` — capability kept, menu halved. Orchestrator drives the arc + registry;
+version bumped `0.1.0 → 0.2.0`.
+
+**P-learn complete (2026-10-10).** `/learn` is now a **progress-saving course**, not a Q&A box. New `learning`
+slice in qa-context (`goal`, `depth`, `current`, `path[]` with `pending`/`covered`, `studyPlanPath`) persists
+the learner's place across sessions. `/learn` with no arg **kickstarts** (ask goal + level → build the
+best-sequence path from `learning-path.md` → write the slice + a durable **study-plan** markdown the learner
+keeps) or **resumes** ("last time: X; next: Y"); an arg jumps/steers. The **`automation-tutor` teaches
+read-only; the orchestrator persists** progress and the study-plan after each topic — fixing the audit's #1
+learning gap (teaching had zero persistence) and the SP2 "pick up where they left off" regression. Checkpoints
+at stage ends; a "try it in the kit" hand-off to `/build`. `teach-automation`'s old "keeps no external state"
+rule was replaced with learning-slice-backed resume.
 
 ## SP1 (this sub-project)
 Spec: [`SP1-spec.md`](./SP1-spec.md) · Plan: [`SP1-plan.md`](./SP1-plan.md) · Research notes:

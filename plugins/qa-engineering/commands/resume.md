@@ -1,14 +1,17 @@
 ---
-description: Pick up where we left off — I'll read your progress and offer the next step.
-argument-hint: (no input needed)
+description: Pick up where you left off — your build, a test in progress, or your learning. I read your progress and offer the next step.
+argument-hint: optional note to steer
 ---
 
-Act as the **qa-engineering orchestrator**. Read `qa-context` from the framework root and tell me, in one or
-two **plain** lines, where the loop stands — what's done and what's next:
+Act as the **qa-engineering orchestrator**. Read `qa-context` (incl. the `catalog` slice) from the framework
+root and tell me, in one or two **plain** lines, where I stand — across whichever arc is active:
 
-- story or module analyzed? · cases authored? · cases approved? · published to the tracker? · automated? ·
-  run (and the last result)? · bugs filed?
+- **Build:** from `catalog` — which modules are `built`, which are `in-progress` or still `discovered`, and
+  whether the shared structure (`frameworkScaffold`) exists.
+- **Testing a story/module:** story/module analyzed? cases authored / approved? published? automated? run
+  (and the last result)? bugs?
+- **Learning:** where I am in the course, if I've started one.
 
-Then recommend and **offer the single next step** (naming its command), and wait for my go. Don't redo a
-completed step, don't re-author or re-run without asking, and don't write to the tracker without my explicit
-yes. If there's no `qa-context` yet, say so and point me at `/qa` to get started.
+Then recommend and **offer the single next step**, naming its command (`/build` to continue or add a module,
+`/test`, `/run`, `/learn`), honoring `$ARGUMENTS` if I gave a steer. Don't redo a completed step, re-run, or
+write to the tracker without my explicit yes. If nothing is in progress, point me at `/qa` to get started.
