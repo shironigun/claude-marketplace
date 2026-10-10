@@ -4,13 +4,15 @@ description: >-
   The single entry point of the qa-engineering plugin — the one AI QA
   orchestrator. It reads a QA's intent plus the context already on hand and
   routes the whole QA loop to the workflow that owns it: analyze an ADO story,
-  author API/UI test cases, push approved cases to ADO, build an API + UI
-  automation framework brick by brick, generate or run automation, turn a
-  failing run into a bug, scan a module, or teach automation. Use when the user
-  gives a work-item id or asks to "analyze this story", "create test cases",
-  "push these to ADO", "automate these", pastes a failing .spec.ts / a red run,
-  asks to "analyze this module", or to "build a test framework / automation kit
-  brick by brick", "set up API and UI test automation step by step", "continue
+  analyze a module from its code to test it (codebase → QA), author API/UI test
+  cases, push approved cases to ADO, build an API + UI automation framework brick
+  by brick, generate automation, run the suite and capture the real result, turn
+  a failing run into a bug, scan a module to build, or teach automation. Use when
+  the user gives a work-item id or asks to "analyze this story", "analyze this
+  module to test it", "create test cases", "push these to ADO", "automate these",
+  "run the suite / these tests / smoke / impacted", "did it pass?", pastes a
+  failing .spec.ts / a red run, or asks to "build a test framework / automation
+  kit brick by brick", "set up API and UI test automation step by step", "continue
   the framework build", "do the workshop exercise", or "teach me automation".
   It routes and enforces the human gates — it never auto-pushes cases or bugs,
   never modifies product code or the framework, and never silently resolves an
@@ -55,14 +57,21 @@ built into this plugin; a request never falls through.
 | Signal (intent + context) | Route to | Status |
 |---|---|---|
 | An ADO work-item id / "analyze this story" | **story-intelligence** (one skill: analysis + QA review) | native (SP6) |
-| "create test cases" (+ a story, a review, or a module) | `author-api-cases` / `author-ui-cases` (write the qa-context `cases` slice; approve seam) | exist |
+| "analyze/review this module **to test it**" / "get me ready to test `<module>`" / "what should I test in `<path>`" / "codebase → QA" | **code-intelligence** (read-only: code → understanding + gaps + QA review, writes `module` + `review`) | native (SP13) |
+| "create test cases" (+ a story, a review, **or a module**) | for a module, **code-intelligence** first (→ `module` + `review`), then `author-api-cases` / `author-ui-cases` (write the qa-context `cases` slice; approve seam) | exist |
 | "write cases for #X **and file them**" (author + file in one ask) | **file-to-tracker** (router: author-* → gated `ado-publish`) | native (SP8) |
 | "push to ADO" / an approved set of cases | **ado-publish** (gated: dry-run + explicit confirm before any write) | native (SP7) |
 | "automate these cases" / a suite id / approved cases | **automation-engine** (approved cases → framework specs; reuses the Standards + `docs/script-generation.md`) | native (SP9) |
+| "run the suite / these tests / the Orders tests / smoke / impacted" / "did it pass?" / "re-run the failures" | **run-suite** (drive the kit's own scripts → real result → writes `failures` → offers gated `failure-to-bug`) | native (SP12) |
 | A failing `.spec.ts` / a stack trace / a red run (API or UI) | **failure-to-bug** (investigate → classify → draft → **gated** file) | native (SP10) |
-| "analyze this module" / a code path | `scan-and-confirm` | exists |
+| "scan this module **to build** a framework" / "pick the module to automate" | `scan-and-confirm` (phase 0: confirm flows → `flow-map.json` for the build) | exists |
 | "teach me…" / "how does X work" / "is this right" | `automation-tutor` / `framework-reviewer` | exist |
 | "build a framework brick by brick" / "continue the build" / "do the exercise" | the build phases below (`scan-and-confirm` → `kit-builder`) | exist |
+
+> **"Analyze this module" splits by intent.** *To test* an existing module (understand it, raise gaps,
+> get ready to author cases) → **code-intelligence** (read-only, the code mirror of story-intelligence).
+> *To build* a framework for it (confirm flows, collect `.env`) → **scan-and-confirm** → `kit-builder`.
+> When it is unclear which, ask the one-line "test it, or build a framework for it?" before routing.
 
 Every engine above is built; there is no "arrives later" route. What can be unavailable at **runtime** is a
 *dependency* — the ADO MCP not signed in, a blank `WEB_APP_URL`, no approved cases yet — and then you
@@ -245,15 +254,17 @@ the QA's yes on that list before the write. One approval covers that list only.
 ## Delegation (what you depend on, and what you do not)
 
 - **The capability work runs on the plugin's own native engines** — self-contained, no external plugin:
-  `story-intelligence` (analyze a story → understanding + gaps), `author-api-cases` / `author-ui-cases`
-  (author + approve cases, writing the `cases` slice), `ado-publish` (gated publish of approved cases to a
-  Test Plan/Suite + link), `automation-engine` (approved/ADO cases → framework specs), `failure-to-bug`
-  (investigate a red run → gated bug file), `scan-and-confirm` + `kit-builder` (the brick-by-brick build),
-  and the `automation-tutor` / `framework-reviewer` / `reuse-guardian` agents (teach / review). `file-to-tracker`
-  is a thin **router** for the combined "author + file" ask (author-* → `ado-publish`), not an authoring or
-  filing engine itself. Invoke each with the **Skill tool** (agents through their own entry), handing it
-  exactly the structured `qa-context` slice it needs and carrying its output forward. Never copy an engine's
-  body into your own reply or into a file.
+  `story-intelligence` (analyze a story → understanding + gaps), `code-intelligence` (read-only analyze a
+  module **from its code** → understanding + gaps + QA review, the codebase → QA mirror),
+  `author-api-cases` / `author-ui-cases` (author + approve cases, writing the `cases` slice), `ado-publish`
+  (gated publish of approved cases to a Test Plan/Suite + link), `automation-engine` (approved/ADO cases →
+  framework specs), `run-suite` (run the kit's own scripts → the real pass/fail → writes `failures`),
+  `failure-to-bug` (investigate a red run → gated bug file), `scan-and-confirm` + `kit-builder` (the
+  brick-by-brick build), and the `automation-tutor` / `framework-reviewer` / `reuse-guardian` agents (teach /
+  review). `file-to-tracker` is a thin **router** for the combined "author + file" ask (author-* →
+  `ado-publish`), not an authoring or filing engine itself. Invoke each with the **Skill tool** (agents
+  through their own entry), handing it exactly the structured `qa-context` slice it needs and carrying its
+  output forward. Never copy an engine's body into your own reply or into a file.
 - **Where no generic skill exists** (script generation, ADO linking, CI), follow the kit's own
   doc: `script-generation.md`, `ado-integration.md`, `ci-and-tools.md`. They are written
   product-neutrally on purpose.
