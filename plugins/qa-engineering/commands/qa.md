@@ -38,9 +38,13 @@ language:
    `/build`.
 
 ### Returning — framework exists (home base)
-In **one or two plain lines** say where things stand, reading `catalog` + `qa-context`: which modules are
-`built`, which are `discovered` (not yet), and anything `in-progress`. Then offer the single best next move and
-name its command:
+**Render the status board** — the QA's "you are here" view — following the one render spec in
+`${CLAUDE_PLUGIN_ROOT}/knowledge/orchestration/status-board.md` (read-only; read `qa-context` + `catalog` from
+the file; honest — absent slices render "not started", nothing fabricated): the header, the metric line
+(modules built / last run / course / open bugs), the loop strip with **you-are-here**, the module table, and
+the single next action. (`/status` renders this same board on demand.)
+
+Then offer the single best next move and name its command:
 - an `in-progress` module → "continue it" (`/build`) · a `discovered` module → "add it" (`/build`)
 - a story to test → `/test <id>` · code to understand → `/analyze` · run tests → `/run` · learn → `/learn`
 
