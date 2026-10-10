@@ -71,6 +71,23 @@ Write the `failures` slice (`qa-context`), each failed run:
   matched) is **not** a test result — report the cause + fix (install, set the key, sign in, correct the
   scope) and write **no** `failed` runs for it.
 
+## Output → the `runHistory` slice (the trend)
+Besides the `failures` slice, **append one `runHistory` entry per run** so the status board can show a
+passed/flaky count and a trend (the `failures` slice holds only failing entries, so it can't). Use the **real
+totals** parsed from this run's output:
+
+```json
+{ "runHistory": { "runs": [
+  { "when": "2026-10-11T09:00:00Z", "scope": "@orders", "total": 50,
+    "passed": 48, "failed": 2, "flaky": 0, "skipped": 0, "duration": "41s" }
+] } }
+```
+
+- Append (keep roughly the last 10, drop the oldest); never clobber `failures`.
+- `scope` is what you actually ran (`@orders`, `@smoke`, `all`, a path) — the board compares trend within a
+  comparable scope.
+- A run that **didn't execute** (a start-up/env error) gets **no** `runHistory` entry — it wasn't a run.
+
 ## Honesty
 Every number and every failure line comes from the **actual run output**. Never infer a pass, never carry a
 previous run's numbers, never downgrade a red run. A run that didn't execute is reported as "didn't run",

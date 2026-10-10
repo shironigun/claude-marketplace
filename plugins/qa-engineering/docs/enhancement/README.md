@@ -160,7 +160,7 @@ it as a **status board** — the "you are here" view that makes the plugin feel 
 | SP | Title | Depends on | Status |
 |---|---|---|---|
 | **SP16 P-view** | In-chat status board — `/status` + `/qa` home base render it from one spec (loop + you-are-here, module table, metrics, next) | SP5, SP15 | ✅ **complete** (2026-10-11) |
-| **SP16 P-rich** | Durable `qa-status.md` + coverage matrix + run-history trend | SP16 P-view, SP12 | ⏳ next |
+| **SP16 P-rich** | Durable `qa-status.md` + coverage matrix + run-history trend | SP16 P-view, SP12 | ✅ **complete** (2026-10-11) |
 
 **P-view complete (2026-10-11).** One render spec (`knowledge/orchestration/status-board.md`) defines the board
 — header, metric line (modules built / last run / course / open bugs), the **loop strip with you-are-here**
@@ -168,8 +168,15 @@ it as a **status board** — the "you are here" view that makes the plugin feel 
 `qa-context` already holds. New **`/status [section]`** command renders it on demand (optional section focus);
 **`/qa` returning** renders the same board as its home base, both from the one spec. **Read-only + honest**
 (absent slices → "not started", nothing fabricated, no gate) and **portable markdown** (no graphics
-dependency — the baseline that works in any Claude Code surface). Version `0.2.0 → 0.3.0`. P-rich (durable file
-+ coverage matrix + run trend) is next. A live Claude Code **mod** pane (Tier 3) stays deferred.
+dependency — the baseline that works in any Claude Code surface). Version `0.2.0 → 0.3.0`.
+
+**P-rich complete (2026-10-11).** Tier 2 adds the durable + coverage + trend layer: a **`runHistory`** slice
+(`run-suite` appends real totals per run) so the board shows the last run's **passed/flaky + a trend** (the
+`failures` slice holds only failing entries, so it couldn't); a **coverage matrix** (modules × the six levels,
+`✓`/`○` from `automation` + a read-only scan of the spec folders) behind `/status coverage`, replacing eyeballed
+`--list`; and a durable **`qa-status.md`** snapshot the orchestrator refreshes each step (git-ignored, with
+`learning-plan.md`). All honest + read-only for rendering (the `qa-status.md` write is the one local-file write).
+Version `0.3.0 → 0.4.0`. A live Claude Code **mod** pane (Tier 3) stays deferred. **SP16 complete.**
 
 ## SP1 (this sub-project)
 Spec: [`SP1-spec.md`](./SP1-spec.md) · Plan: [`SP1-plan.md`](./SP1-plan.md) · Research notes:
