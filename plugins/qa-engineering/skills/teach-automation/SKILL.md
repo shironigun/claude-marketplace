@@ -27,14 +27,17 @@ Read `learning-path.md` first, then respond to how the learner wants to move:
 | The learner says… | Do this |
 |---|---|
 | "start from the beginning" / "onboard me" | Begin at **topic 1** and teach forward one topic at a time. |
-| "what's next" / "continue the course" | Teach the next topic after the last one covered in this conversation. |
+| "what's next" / "continue the course" | Teach the next topic after the learner's `current` position (the `learning` slice, else the last topic covered in this conversation). |
 | "jump to `<topic>`" | Go to that topic. First check its **prereqs**: if earlier topics look uncovered, name them and offer a quick L1 primer or a jump-anyway. |
-| "where was I" | Report the last topic covered in this conversation and the next in sequence; if the conversation gives no clue, say so and offer to start at topic 1 or at a named topic. |
+| "where was I" | Report the last `covered` topic and the next in sequence **from the `learning` slice** (fall back to the conversation); if neither has a clue, say so and offer to start at topic 1 or at a named topic. |
 | "I'm a manual QA, no background" | Start at topic 1 in the **"explain like I'm new"** mode (L1 + plain language + analogy, per `depth-levels.md`). |
 
-**Progress is per-conversation.** This skill keeps no external state — infer the current position from the
-conversation. If it is genuinely unclear, ask or offer to start at the beginning; never fabricate a saved
-place. **Respect prerequisites**: a topic's listed prereqs are taught (or knowingly skipped) before it.
+**Progress persists in the `learning` slice** (`knowledge/orchestration/qa-context.md`): the ordered `path[]`
+with each topic's `status` (`pending`/`covered`), the `current` topic, and the learner's `depth`. **Read it to
+resume across sessions.** This skill **teaches read-only** — it does not write the slice; the orchestrator (the
+`/learn` course) records progress after each topic. If no slice exists yet, infer from the conversation, ask,
+or offer to start at the beginning; never fabricate a saved place. **Respect prerequisites**: a topic's listed
+prereqs are taught (or knowingly skipped) before it.
 
 ## Teaching one topic
 For the current topic, in order:
