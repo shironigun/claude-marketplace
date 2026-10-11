@@ -19,6 +19,14 @@ the payoff; isolation is the discipline that earns it.
   them independent.
 - **A named lock** for a shared resource that truly cannot take concurrent access, keeping everything
   else parallel.
+- **A de-facto singleton** — a resource there is effectively **one of** — cannot be owned per test. This is
+  a per-tenant singleton (settings/config), a **"create" that is really an ensure/upsert/get-or-create**
+  (calling it twice returns the same instance), or a resource **1:1 with a single shared prerequisite** the
+  suite can't multiply (one child per the one parent id). Handle it one of two ways: **create its
+  prerequisite per test** if the parent is creatable (a fresh parent → a fresh child → real isolation), or
+  **treat it as a singleton** — read-only where you can, else snapshot→restore, and **serialize every
+  mutating test in ONE file** (`mode: 'serial'`) or a named lock; an idempotent ensure usually should
+  **not be voided between tests** (the void is the race). See `docs/script-generation.md` (singletons note).
 - **Do NOT** share mutable state through module-level variables, a mutated seed, or a fixed record two
   tests both edit.
 
@@ -63,6 +71,10 @@ test('updates the single settings record', { lock: 'app-settings' }, async ({ ap
 - A test that depends on another test having run first — each must stand alone.
 - Serial mode as a default convenience instead of making tests independent.
 - Two tests editing the same fixed record concurrently with no lock — a race that flakes intermittently.
+- **Per-test create + `finally` void of a *de-facto singleton*** (an ensure/upsert, or a child 1:1 with the
+  one shared parent) — worse when scattered across parallel **files**: two tests hit the same instance and
+  one's `void` pulls it out from under the other's read/update. Passes at `workers: 1` (CI), flakes in
+  parallel (local) — the exact trap to catch at analysis time.
 - Treating `workers: 1` as a correctness fix for a flaky suite — the flake is shared state; fix the
   isolation, then scale with sharding.
 

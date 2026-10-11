@@ -17,7 +17,10 @@ import {
 export function buildProfile(shape: {
   name: string;
   envPrefix: string;
+  /** The product variant this profile represents (its enum value); omit for the default. */
   variant?: number;
+  /** Human label for the variant (the enum member name). */
+  variantName?: string;
 }): Profile {
   const credentials = readCredentials(shape.envPrefix);
   const webApp = readWebAppConfig(shape.envPrefix);

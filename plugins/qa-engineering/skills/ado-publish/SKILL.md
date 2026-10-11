@@ -160,6 +160,11 @@ response. Otherwise (the `wit_create_work_item` path) link it now:
   overrides the link kind, use its value.
 - If the relation is rejected, fall back to `type: "related"` and **tell the QA** which relation was
   actually used. Report only links the API confirmed.
+- **Module-sourced case (no story):** when `tracesStory` is null but `tracesModule` is set (a case
+  authored from code, not a story), there is no story work-item to link — **skip the story link** rather
+  than inventing one, and instead tag the case with the module (e.g. a `@<module>` tag or the area path)
+  so the back-reference is still visible. The case is not an orphan: `tracesModule` carries it in
+  `qa-context`, and the dry-run says plainly "no story link (module-sourced case: `<module>`)".
 
 ### 9. Write the qa-context `ado` slice + return (context write)
 Per `knowledge/orchestration/qa-context.md`, write the `ado` slice back into `qa-context.json` at the

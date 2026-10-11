@@ -111,7 +111,7 @@ The shared voice rules live in the core (`knowledge/authoring/house-style.md`): 
 
 Per the core's output contract (`knowledge/authoring/house-style.md`):
 
-1. Write the `cases` slice to `qa-context.json` (framework root, from the file): `items[]` (each `{ title, level, tags[], tracesStory, adoCaseId: null }`, `level` = `contract`/`endpoint`/`workflow`), plus `mdPath`, `coverage`, with **`approved: false`**.
+1. Write the `cases` slice to `qa-context.json` (framework root, from the file): `items[]` (each `{ title, level, tags[], tracesStory, tracesModule, adoCaseId: null }`, `level` = `contract`/`endpoint`/`workflow`; set **`tracesStory`** for a story-sourced case or **`tracesModule`** (the `module` slice's name) for a code-sourced one — the other `null`, so a module-authored case is never an orphan), plus `mdPath`, `coverage`, with **`approved: false`**.
 2. Present the cases grouped by level (Contract → Endpoints → Workflows) and ask a **single** gate: **"Approve this exact set to lock it for publishing? Reply *approve* to lock it, or tell me what to add, cut, or change."** Adjust before finalizing.
 3. Set **`approved: true` only on an explicit *approve*** (or unmistakable equivalent); a change request or a bare "ok" is not approval; never infer it from "ok"/silence/drafting. **Any change to the set resets `approved` to `false`.**
 4. Once approved, the gated **`ado-publish`** skill files them; if an authored case later fails during execution, `failure-to-bug` drafts the bug.
