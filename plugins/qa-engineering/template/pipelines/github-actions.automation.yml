@@ -23,6 +23,15 @@ jobs:
   api-tests:
     runs-on: ubuntu-latest
     timeout-minutes: 60
+    # VARIANT AXIS? If system-map.json has a non-null variantAxis (per dealer/tenant type, tier
+    # or role), this single-profile job tests ONE variant and reports green while the rest are
+    # untested. Expand to a matrix over the in-scope variants and select each leg's secret block;
+    # give each leg a distinct artifact name. See "Running the per-variant matrix" in docs/ci-and-tools.md.
+    #   strategy:
+    #     matrix:
+    #       profile: [typeA, typeB]
+    #   # then: AUTOMATION_PROFILE: ${{ matrix.profile }}, pick AUTH_* from that profile's secrets,
+    #   #       and upload artifacts as playwright-report-${{ matrix.profile }}.
     defaults:
       run:
         working-directory: .        # the folder holding package.json (set to a subdir if nested)

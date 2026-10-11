@@ -22,6 +22,15 @@ export interface ExampleSeed {
 /**
  * Extends the base fixture with a worker-scoped `seed`. A test that MUTATES data still
  * creates its own; this exists only so read-only specs do not each create-and-delete.
+ *
+ * FIXTURE-ARG GOTCHA: this seed takes `api` from the base — `async ({ api }, use)`. A seed that
+ * needs NOTHING from the base (e.g. it reads a pre-existing id from `process.env`) must STILL use an
+ * object-destructuring pattern as the first arg: `async ({}, use)`. Playwright analyses that argument
+ * statically to decide which fixtures to wire, so a plain param (`async (_unused, use)`) FAILS with
+ * "First argument must use the object destructuring pattern". And `({}, use)` needs **no**
+ * `eslint-disable no-empty-pattern` — the kit's eslint config does not enable that rule, so a disable
+ * there would itself be flagged as unused. (The disable above is a different rule, for the empty `{}`
+ * test-fixtures type.)
  */
 export const test = base.extend<
   // eslint-disable-next-line @typescript-eslint/no-empty-object-type

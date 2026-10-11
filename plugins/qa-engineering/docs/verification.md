@@ -28,12 +28,12 @@ with their own `.env` + `flow-map.json`. The kit itself was never modified to ma
 
 ### Findings (Run 1)
 
-- **Real defect surfaced by the kit** — `GET v2/customers/{id}` with an unknown id returns **500**
+- **Real defect surfaced by the kit** — `GET customers/{id}` with an unknown id returns **500**
   (an unhandled "value cannot be null" server error) where **404** is correct. Reproducible against
   QA. The endpoint spec asserts the correct 404 and carries a `knownBug` marker on the line directly
   above that assertion, so the suite stays green while the defect is open and turns red the day it is
   fixed. A matching bug draft was written on the degrade path (`failure-to-bug` JSON shape).
-- **Softer observation (not filed)** — `GET customer/detailsv2/{id}` with an unknown id returns 200
+- **Softer observation (not filed)** — `GET customers/{id}/summary` with an unknown id returns 200
   with an all-null body rather than a 404. Noted for triage; not drafted as a defect.
 - **Data hygiene** — the Customer API has no DELETE endpoint, so create tests leave `AUTOMATION_`-named
   records (teardown is a no-op; the name keeps them greppable for the SQL cleanup). Expected, not a
@@ -127,9 +127,11 @@ It catches what the self-check missed.
 - The review gate is **review-only**: `framework-reviewer` and `reuse-guardian` report findings
   (file:line · violated standard · why · fix **direction**) and **block**; they never edit. The **builder**
   applies the fix on its next pass, then the gate re-runs until it returns **PASS**.
-- The reviewer **delegates the reuse/duplication dimension** to `reuse-guardian` and merges its Blocking
-  findings; both agents also run **standalone** on a "review my framework" request (routed by
-  `qa-orchestrator`).
+- The reuse/duplication dimension is `reuse-guardian`'s; because a subagent cannot spawn another subagent,
+  the **orchestrator runs `reuse-guardian` as a sibling pass** alongside `framework-reviewer` and combines
+  both verdicts (both must PASS) — the reviewer does not invoke it. When `framework-reviewer` is run
+  standalone with no sibling pass, it covers reuse itself as a **labeled generalist fallback**. Both agents
+  also run **standalone** on a "review my framework" request (routed by `qa-orchestrator`).
 - Nothing is committed while a Blocking finding is open. The two tiers are distinct — neither replaces the
   other.
 

@@ -12,7 +12,10 @@ exists to keep a legitimate situation honest without silencing the suite.
 ## When to use it (and when NOT)
 - **`knownBug`** when a defect is known but you still want the correct-behaviour assertion in the suite.
   Place it on the line **immediately before** the assertion it explains — never as the first line of the
-  test.
+  test. Pass the filed tracker id as `id` when there is one; when the bug is **drafted but not yet filed**
+  (filing gated or the tracker down), pass a **draft ref** — `knownBug('DRAFT:<module>-<slug>', summary)` —
+  and record that ref on the `bugs` slice (`knownBugRef`); `failure-to-bug` back-fills the real id into both
+  on filing, so the marker never points at nothing.
 - **`onlyFor`/`skipFor`** for genuine product-variant preconditions (a feature that exists for one
   variant and not another), documented in the reason string.
 - **`authGuardTests`** to prove every data route rejects an unauthenticated call.

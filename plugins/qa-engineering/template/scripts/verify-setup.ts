@@ -12,7 +12,9 @@
  *   1. resolve + validate the active profile
  *   2. mint a token with the configured strategy
  *   3. decode it (expiry, subject) when it is a JWT
- *   4. probe VERIFY_PATH on every configured service with that token
+ *   4. probe the PRIMARY host's VERIFY_PATH (the gate) + any host with its own
+ *      <HOST>_VERIFY_PATH; non-primary hosts without one get an advisory reachability
+ *      check (one path can't be valid on every host, so they never fail the gate)
  */
 import { request as pwRequest } from '@playwright/test';
 import { getProfile, profileNames } from '../config/profiles.index';
@@ -61,7 +63,7 @@ async function main(): Promise<void> {
   heading('2. Services');
   const configured: Array<{ key: string; url: string }> = [];
   for (const key of serviceKeys()) {
-    const def = SERVICES[key] as { envKey: string; description: string };
+    const def = SERVICES[key];
     const url = profile.services[key];
     if (url) {
       ok(`${String(key).padEnd(12)} ${url}`);
@@ -128,7 +130,7 @@ async function main(): Promise<void> {
   }
 
   // ── 4. Authenticated probe ──────────────────────────────────────────────
-  heading(`4. Authenticated probe — GET ${env.verifyPath}`);
+  heading('4. Authenticated probe');
 
   // Exactly what a test sends: profile default headers + auth. If a gateway key
   // is missing, this must fail here rather than in the first spec someone writes.
@@ -137,12 +139,30 @@ async function main(): Promise<void> {
     info(`default headers: ${defaultHeaderNames.join(', ')}`);
   }
   const headers = { ...profile.defaultHeaders, ...authHeaders(profile.auth, token) };
+  const primary = primaryServiceKey();
   let anyFailed = false;
 
+  // One VERIFY_PATH cannot be valid on every host. The PRIMARY host is the gate — it uses the
+  // global VERIFY_PATH (or its own <PRIMARY>_VERIFY_PATH). A non-primary host is a gate ONLY when
+  // it has its own <HOST>_VERIFY_PATH; otherwise it gets an advisory reachability check that never
+  // fails the setup (so extra hosts don't red a run just because one path doesn't exist on them).
   for (const { key, url } of configured) {
-    const target = joinUrl(url, env.verifyPath);
+    const perHost = process.env[`${key.toUpperCase()}_VERIFY_PATH`]?.trim();
+    const isPrimary = key === String(primary);
+    const verifyPath = perHost || (isPrimary ? env.verifyPath : undefined);
     const ctx = await pwRequest.newContext();
     try {
+      if (!verifyPath) {
+        // Non-primary host, no verify path configured: advisory only.
+        const res = await ctx.get(url, { headers }).catch(() => null);
+        if (res) {
+          info(`${key.padEnd(12)} reachable (${res.status()}) — set ${key.toUpperCase()}_VERIFY_PATH to probe it as a gate`);
+        } else {
+          info(`${key.padEnd(12)} not probed — set ${key.toUpperCase()}_VERIFY_PATH for an authenticated check`);
+        }
+        continue;
+      }
+      const target = joinUrl(url, verifyPath);
       const res = await ctx.get(target, { headers });
       const status = res.status();
       if (status === 401 || status === 403) {
@@ -153,8 +173,8 @@ async function main(): Promise<void> {
         }
         anyFailed = true;
       } else if (status === 404) {
-        bad(`${key.padEnd(12)} 404 — VERIFY_PATH does not exist on this host (${target})`);
-        info('Set VERIFY_PATH to any cheap authenticated GET on this service.');
+        bad(`${key.padEnd(12)} 404 — this host does not serve '${verifyPath}' (${target})`);
+        info(`Set ${isPrimary ? 'VERIFY_PATH' : `${key.toUpperCase()}_VERIFY_PATH`} to a cheap authenticated GET on this service.`);
         anyFailed = true;
       } else if (status >= 500) {
         bad(`${key.padEnd(12)} ${status} — the service is unhealthy (${target})`);
@@ -183,7 +203,6 @@ async function main(): Promise<void> {
   console.log('  2. scaffold modules/<your-module>/ (see modules/README.md and AGENTS.md §6)');
   console.log('  3. npm run typecheck && npm test\n');
 
-  const primary = primaryServiceKey();
   console.log(`(primary service: '${String(primary)}' — the \`api\` fixture points here)\n`);
 }
 

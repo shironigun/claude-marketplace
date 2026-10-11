@@ -110,6 +110,13 @@ duplicated) and surface what applies **to this module**, read from the code. Cov
   error/empty/failure paths the code doesn't handle; success that isn't observable.
 - **Permissions / security** — routes/actions with no auth/role check; a lower-privilege caller able to
   reach an action by API even if a UI hides it; data a role shouldn't see; tenant/account isolation.
+- **Variant / user-type behaviour** — where this module branches on the product's variant axis (an
+  account/user/deployment type: dealer type, tenant type, tier, role — grep `== <Enum>.<Value>`,
+  `switch (type)`, a role/tier gate, a `=== <Enum>.<Value>` near a render). Each branch is a
+  variant-specific behaviour to cover (cite the `file:line`); a branch that exists in one tier but not
+  another is exactly the kind of regression a single-variant run misses. See
+  `knowledge/standards/variants-and-user-types.md`. If no branch exists, the module is variant-agnostic —
+  say so rather than inventing a per-variant concern.
 - **Integration** — the contract at each boundary the module calls; what the module does when a
   dependency is slow, down, partial, or errors.
 - **Regression** — the existing flows that share code, state, or a screen with this module (the step-5
@@ -119,6 +126,15 @@ duplicated) and surface what applies **to this module**, read from the code. Cov
   doesn't handle.
 - **Data / state** — state machine transitions the code allows/forbids; soft vs hard delete; defaults;
   stale/cached state; idempotency.
+- **Singleton / shared-instance resources** — a resource there is effectively **one of**, so a test can't
+  own its own copy: a true per-tenant singleton (settings, config, feature flags), OR a **"create" that is
+  really an ensure/upsert/get-or-create** (the handler returns the existing row, e.g. `EnsureQuote`), OR a
+  resource **1:1 with a single shared prerequisite** the suite can't multiply (one quote per the one
+  configured opportunity). Flag it: say whether the parent is **creatable** (so tests can make a fresh one
+  each and stay isolated) or a **single shared id** (so the resource must be treated as a singleton —
+  serialized, not create/void-per-test). This is the isolation trap that passes serially and flakes in
+  parallel; the authoring/generation engines need the flag (`isolation-and-parallelism.md`,
+  `docs/script-generation.md` singletons note).
 - **Backward-compatibility** — older clients of a changed contract; saved/in-flight data.
 - **Risks the module introduces** — new failure modes, hot-path queries, new external calls.
 
@@ -177,14 +193,12 @@ These are the **same slice shapes `story-intelligence` writes** — `review`, pl
 understanding where that engine writes `story` — so the authoring engines pick up a code-analyzed
 module as their qa-context analysis input the same way they pick up a story-analyzed one.
 
-> **Honest caveat on traceability.** The `cases` slice currently anchors the traceability thread on
-> `tracesStory` (the work-item id, left `null` when authoring did not come from a story) — there is
-> **no module trace field yet**. So a case authored from a module here is informed by this analysis but
-> traces back only through `tracesStory` (`null` for a module), not through a first-class module id.
-> Treat **case → module traceback as a known gap on the `cases` contract** (a future `tracesModule` or
-> equivalent) — it is not something this engine can set, and this engine does not claim the back-link
-> exists. The `module` understanding feeds authoring; closing the back-link is follow-up on the `cases`
-> slice, out of scope here.
+> **Traceability for a module-sourced case.** The `cases` slice carries **`tracesModule`** alongside
+> `tracesStory`, so a case authored from this analysis traces back to its **module** by name (not left an
+> orphan on a null `tracesStory`). This engine writes the `module` slice with the module's name; the
+> authoring engines set `items[].tracesModule` to that name (and leave `tracesStory` null) when the case
+> came from code rather than a story. The thread then runs module → case → script → defect, the same way a
+> story-sourced case runs story → case → script → defect.
 
 Nothing product-specific, secret or real-URL goes into the context.
 

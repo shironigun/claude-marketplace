@@ -121,6 +121,44 @@ add the UI keys to the env block (`WEB_APP_URL`, `WEB_APP_LOGIN_URL`, `WEB_APP_P
 **Recommended:** run them in the same job at first; split into a second job once you want API and UI
 failures reported separately.
 
+### Running the per-variant matrix (when the system map has a variant axis)
+
+If `system-map.json` carries a **`variantAxis`** (the product changes behaviour by a dealer/tenant type,
+tier, role — see `knowledge/standards/variants-and-user-types.md`), a single-profile pipeline is a
+**coverage lie**: it exercises one variant and reports green while every other variant is untested. The
+whole reason the architecture models per-variant profiles is to run them. So **when `variantAxis` is
+non-null, generate the pipeline as a matrix** over the in-scope variants (`inScope && hasTestAccount`);
+when it is null, the single-profile pipeline above is correct.
+
+Each matrix leg selects its profile and injects **that variant's own credentials** (`<VARIANT>_AUTH_*`
+from the variable group / repo secrets), and publishes results + artifacts under a **per-leg name** so
+they don't collide. URLs and the auth host are shared; only the credential block differs per leg.
+
+**Azure** — a `strategy.matrix` on the job, one entry per variant:
+
+```yaml
+    strategy:
+      matrix:
+        typeA: { DMS_PROFILE: 'typeA', DMS_USERNAME: '$(TYPEA_AUTH_USERNAME)', DMS_PASSWORD: '$(TYPEA_AUTH_PASSWORD)', DMS_TENANT: '$(TYPEA_AUTH_TENANT_ID)' }
+        typeB: { DMS_PROFILE: 'typeB', DMS_USERNAME: '$(TYPEB_AUTH_USERNAME)', DMS_PASSWORD: '$(TYPEB_AUTH_PASSWORD)', DMS_TENANT: '$(TYPEB_AUTH_TENANT_ID)' }
+      maxParallel: 4
+    # then in verify:setup + the test step's env:
+    #   AUTOMATION_PROFILE: $(DMS_PROFILE)
+    #   AUTH_USERNAME: $(DMS_USERNAME)   AUTH_PASSWORD: $(DMS_PASSWORD)   AUTH_TENANT_ID: $(DMS_TENANT)
+    # and publish per-leg:  artifact: 'playwright-report-$(DMS_PROFILE)'
+```
+
+**GitHub Actions** — `strategy.matrix.profile`, selecting the right secret block per leg (e.g. via a
+`vars`/`secrets` lookup or one entry per profile). Give each leg a distinct artifact name
+(`playwright-report-${{ matrix.profile }}`).
+
+**Variable-group / secret keys per variant:** one credential block each —
+`<VARIANT>_AUTH_USERNAME`, `<VARIANT>_AUTH_PASSWORD` (secret), `<VARIANT>_AUTH_TENANT_ID` — alongside the
+shared `AUTH_BASE_URL` / host URLs. `AUTOMATION_PROFILE` is set per leg by the matrix, not globally.
+
+`kit-builder` phase 5 generates the real matrix (concrete variant names) from `system-map.variantAxis`;
+this doc's generic `typeA/typeB` are placeholders.
+
 ---
 
 ## 5. Where each value comes from
@@ -139,7 +177,9 @@ git-ignored `.env` does not exist on the agent. The pipeline's `env:` blocks are
 | `AUTH_CLIENT_ID`, `AUTH_CLIENT_SECRET`, `AUTH_STATIC_TOKEN`, `DEFAULT_HEADERS` | `.env` (strategy-dependent) | variable group, **secret** | repo secret | **yes** |
 | `NOTIFY_WEBHOOK_URL` | `.env` | variable group, **secret** | repo secret | **yes** (a webhook URL is a credential) |
 | `WEB_APP_URL`, `WEB_APP_LOGIN_URL`, `WEB_APP_POST_LOGIN_HEADING` | `.env` | variable group | repo secret | no |
-| `AUTOMATION_PROFILE`, `CI`, `AUTOMATION_ENV`, `NOTIFY_CHANNEL`, `NOTIFY_WHEN` | defaults | set in the YAML | set in the YAML | no (not sensitive, safe in source) |
+| `<VARIANT>_AUTH_USERNAME` / `_PASSWORD` / `_TENANT_ID` (one block per in-scope variant, when there is a variant axis) | `.env` | variable group, password **secret** | repo secret | password **yes** |
+| `AUTOMATION_PROFILE` | default (single-profile) **or set per matrix leg** (variant pipeline) | set in the YAML / matrix | set in the YAML / matrix | no |
+| `CI`, `AUTOMATION_ENV`, `NOTIFY_CHANNEL`, `NOTIFY_WHEN` | defaults | set in the YAML | set in the YAML | no (not sensitive, safe in source) |
 | `REPORT_URL` | n/a | built from `System.CollectionUri`, `System.TeamProject`, `Build.BuildId` | built from `github.server_url`, `github.repository`, `github.run_id` | no |
 
 **The checklist that prevents the most common CI-only failure** (do it once, at phase 5):
@@ -257,9 +297,15 @@ the recommended option and its reason:
    **Recommended: yes, in the same job first** (section 4).
 5. **Notifications.** "Post a summary to Teams or Slack?" **Recommended: yes, with a webhook from the
    secret store**; with none set, the summary lands in `reports/notification.json`, which is harmless.
+6. **Variant matrix.** (Only if `system-map.json` has a non-null `variantAxis`.) "Run the suite as a
+   matrix over the in-scope variants, each with its own credentials?" **Recommended: yes** — a
+   single-profile pipeline reports green while every other variant is untested (see "Running the
+   per-variant matrix" above). Generate one leg per in-scope variant; skip when `variantAxis` is null.
 
-**Act:** copy the right pipeline file; apply section 5's checklist to its `env:` blocks; tune
-`resources/impact-map.json`; fill in `docs/RUNBOOK.md`.
+**Act:** copy the right pipeline file; **if `variantAxis` is non-null, expand it to the per-variant
+matrix** (one leg per in-scope variant, each injecting its `<VARIANT>_AUTH_*` creds and a distinct
+artifact name); apply section 5's checklist to its `env:` blocks; tune `resources/impact-map.json`; fill
+in `docs/RUNBOOK.md`.
 
 **Verify** (report real results):
 
@@ -270,6 +316,7 @@ the recommended option and its reason:
 | No inline secrets | every credential is a `$(NAME)` / `${{ secrets.NAME }}` reference; the secret scan returns **0** |
 | It goes red when it should | break one test on purpose, run the pipeline, and confirm it ends **red** and still **publishes** the report and results; then revert |
 | It goes green when it should | run it on the unbroken suite and confirm a green run with results published |
+| The variant matrix covers every variant | (variant axis only) the pipeline has one leg per in-scope variant, each selecting its `AUTOMATION_PROFILE` + its `<VARIANT>_AUTH_*` creds and publishing a distinct per-leg artifact |
 | The local tool selects | change a file under a mapped module, run `npm run impacted`, and confirm it prints that module's tag rather than the smoke fallback |
 
 **Produces:** a registered, scheduled pipeline with secrets from a store, a tuned impact map, and a

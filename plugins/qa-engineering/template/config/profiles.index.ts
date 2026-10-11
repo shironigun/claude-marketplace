@@ -15,6 +15,13 @@ const registry: Record<string, () => Profile> = {
 
   // Register additional environments/tenants here:
   // staging: stagingProfile,
+
+  // VARIANT profiles — one per account/user/deployment type the product branches on
+  // (a dealer type, tenant type, tier, role). Each reads its own `<VARIANT>_AUTH_*`
+  // with the global `AUTH_*` as fallback. Select with AUTOMATION_PROFILE, run every
+  // variant in CI as a matrix. See knowledge/standards/variants-and-user-types.md.
+  // typeA: typeAProfile,
+  // typeB: typeBProfile,
 };
 
 export const profileNames = (): string[] => Object.keys(registry);
