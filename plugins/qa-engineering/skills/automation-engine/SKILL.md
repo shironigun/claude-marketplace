@@ -105,14 +105,24 @@ Run the objective check (`npm run typecheck` / `lint`, and the level's `npm run 
 result — a red run is reported red. A spec counts as generated only when it typechecks; a case whose spec
 could not be generated cleanly is reported as such, never glossed.
 
-### 6. Write the qa-context `automation` slice + return
+### 6. Write the `automation` slice, then reconcile the thread
 Per `knowledge/orchestration/qa-context.md`, write **only** the `automation` slice back, additively:
 - **`automation`** = `{ specs[], levels[] }` — each spec `{ path, level, tracesCase }` where `tracesCase`
   is the case's `adoCaseId` when it has one (else the case title), and `levels[]` the levels covered.
 
+Then **run the reconcile step** (the one procedure in `knowledge/orchestration/qa-context.md` —
+"Keeping the thread consistent"; do not re-derive it here). Generation can emit a spec beyond the approved
+set — a negative/edge case the matrix implies, a `knownBug` expected-fail — whose `traces-case:` title has no
+authored case; reconcile **backfills** it as a `source: "generated"` case (carrying `tracesModule`) and sets
+that spec's `tracesCase`, so no spec is left orphaning a future bug. It also reports any authored case with no
+spec as a coverage gap (read-only; never deletes a case). A backfilled `source: "generated"` case is recorded
+for traceability only — it does **not** flip `cases.approved`, so this engine's fail-closed gate (step 1) is
+unaffected.
+
 The traceability thread stays linked: `story.id ⇄ cases.items[].tracesStory / .adoCaseId ⇄
 automation.specs[].tracesCase`. Then return the generated paths + a per-case summary (generated ✓/✗,
-level, reused vs newly-added blocks), reporting only what verification actually showed.
+level, reused vs newly-added blocks), the **reconcile result** (specs backfilled as `generated` cases;
+authored cases with no spec), reporting only what verification actually showed.
 
 ## Safety & honesty rules (state and obey)
 1. **Approved only, fail-closed.** No spec is generated from an unapproved or absent `cases` slice.
@@ -140,5 +150,8 @@ level, reused vs newly-added blocks), reporting only what verification actually 
 - [ ] Each spec carries a `traces-case:` line resolving to its case; the story ⇄ case ⇄ script thread holds
 - [ ] The self-check ran, then the independent `framework-reviewer` gate returned PASS before verify
 - [ ] The `automation` slice was written from the file, additively; results were reported honestly
+- [ ] The **reconcile step** ran after the `automation` write — every spec on disk resolves to a case (an
+      orphan was backfilled as `source: "generated"`, not left orphaning a bug); uncovered cases were
+      reported, none deleted; no `generated` case flipped `cases.approved`
 - [ ] Nothing product-specific, secret or real-URL appears in the skill or in what it generated to a
       committed file
