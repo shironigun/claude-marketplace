@@ -1,23 +1,15 @@
 {
-  "_comment": "No secrets or product data here. ADO_ORG is read from the shell that launches Claude Code. Windows command shown; macOS/Linux variant and auth notes are in README.md.",
+  "_comment": "No secrets or product data here. ADO_ORG is read from the shell that launches Claude Code (not from .env). Cross-platform `npx` launcher — works on macOS, Linux and WSL out of the box; Windows users who hit an `npx` ENOENT can wrap each command with `cmd /c` (see README.md). ADO is optional: without it the tracker-write steps draft locally and every other workflow still works.",
   "mcpServers": {
     "playwright": {
       "type": "stdio",
-      "command": "cmd",
-      "args": ["/c", "npx", "-y", "@playwright/mcp@0.0.83"]
+      "command": "npx",
+      "args": ["-y", "@playwright/mcp@0.0.83"]
     },
     "ado": {
       "type": "stdio",
-      "command": "cmd",
-      "args": [
-        "/c",
-        "npx",
-        "-y",
-        "@azure-devops/mcp@2.10.0",
-        "${ADO_ORG}",
-        "--authentication",
-        "interactive"
-      ]
+      "command": "npx",
+      "args": ["-y", "@azure-devops/mcp@2.10.0", "${ADO_ORG}", "--authentication", "interactive"]
     }
   }
 }
