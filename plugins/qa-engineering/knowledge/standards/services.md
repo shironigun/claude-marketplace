@@ -70,6 +70,13 @@ export class WidgetService {
 ```
 
 ## Anti-patterns
+- A **read that returns `[]` (or a default) on a non-2xx** — it masks a down endpoint under a weak
+  assertion (a `.some(...)` just reads false). A read **throws** on a non-2xx with the status + body; a
+  `200` with an empty array is the only empty a read returns.
+- A **service method no spec calls** — a bypassed layer. Emit a method when a spec needs parsed data or a
+  write + undo; a pure contract GET asserts the raw response (`toMatchContract`) and needs no wrapper.
+- A **`POST`/`PUT`/`PATCH` to a required-body endpoint sent with no body** — it 400s, and when it's a
+  teardown the failure is swallowed and the resource leaks. Send a builder body when `requestBody` is required.
 - `expect()` inside a service — moves the verification out of the spec and makes the report lie about
   what ran.
 - A retry wrapper around a call a test asserts on — it can hide a real intermittent bug; retries belong

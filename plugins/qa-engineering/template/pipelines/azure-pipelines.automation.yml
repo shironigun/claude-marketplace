@@ -45,6 +45,17 @@ jobs:
   - job: api_tests
     displayName: 'API tests'
     timeoutInMinutes: 60
+    # VARIANT AXIS? If system-map.json has a non-null variantAxis (the product behaves
+    # differently per dealer/tenant type, tier or role), this single-profile job is a
+    # COVERAGE LIE — it tests one variant and reports green. Expand it to a matrix over the
+    # in-scope variants (one leg each, with that variant's <VARIANT>_AUTH_* creds + a distinct
+    # artifact name). See "Running the per-variant matrix" in docs/ci-and-tools.md.
+    #   strategy:
+    #     matrix:
+    #       typeA: { DMS_PROFILE: 'typeA', DMS_USERNAME: '$(TYPEA_AUTH_USERNAME)', DMS_PASSWORD: '$(TYPEA_AUTH_PASSWORD)', DMS_TENANT: '$(TYPEA_AUTH_TENANT_ID)' }
+    #       typeB: { DMS_PROFILE: 'typeB', DMS_USERNAME: '$(TYPEB_AUTH_USERNAME)', DMS_PASSWORD: '$(TYPEB_AUTH_PASSWORD)', DMS_TENANT: '$(TYPEB_AUTH_TENANT_ID)' }
+    #     maxParallel: 4
+    #   # then set AUTOMATION_PROFILE: $(DMS_PROFILE) and AUTH_USERNAME/PASSWORD/TENANT_ID to the DMS_* vars.
     steps:
       - checkout: self
         fetchDepth: 2              # depth 2 so `npm run impacted` can diff HEAD~1 (see the optional step below)

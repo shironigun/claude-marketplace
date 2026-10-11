@@ -14,7 +14,10 @@ Use `$ARGUMENTS` as a steer if I gave it (a topic to jump to, "I know the basics
 ### 1. Figure out where I am
 - **No `learning` slice yet (first time):** welcome me in two lines, then ask **one** quick question — my
   **goal** (what I want from automation) and **rough level** (new / some basics / confident). From
-  `learning-path.md` build my **path** in its best sequence (7 stages, 35 topics), set `depth` from my level
+  `learning-path.md` pick the **track** that matches my goal (its "Tracks" table: **api-first** / **ui-first**
+  / **full** — default to **full** if my goal is unclear, don't guess a narrow track) and build my **path** in
+  that track's order (deferred topics become a "later" tail, never dropped; Foundations 1-7 are always
+  included). Record the chosen track in the `learning` slice. Set `depth` from my level
   (**new → L1, some basics → L2, confident → L3**, per `depth-levels.md` — the tutor teaches at that altitude),
   and pick the starting topic. **Write the `learning` slice** and render the **study-plan** (below). If
   `$ARGUMENTS` already told me the level or a starting topic, fold that into the kickstart — don't re-ask.

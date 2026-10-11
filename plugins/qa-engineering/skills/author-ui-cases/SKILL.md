@@ -69,7 +69,7 @@ For every story, produce cases across all applicable axes: happy path; each acce
 
 Per the core's output contract (`knowledge/authoring/house-style.md`):
 
-1. Write the `cases` slice to `qa-context.json` (framework root, from the file): `items[]` (each `{ title, level, tags[], tracesStory, adoCaseId: null }`, `level` = `smoke`/`regression`/`e2e`), plus `mdPath`, `coverage`, with **`approved: false`**.
+1. Write the `cases` slice to `qa-context.json` (framework root, from the file): `items[]` (each `{ title, level, tags[], tracesStory, tracesModule, adoCaseId: null }`, `level` = `smoke`/`regression`/`e2e`; set **`tracesStory`** for a story-sourced case or **`tracesModule`** (the `module` slice's name) for a code-sourced one — the other `null`), plus `mdPath`, `coverage`, with **`approved: false`**.
 2. Present all cases and ask a **single** gate: **"Approve this exact set to lock it for publishing? Reply *approve* to lock it, or tell me what to add, cut, or change."** Adjust before finalizing.
 3. Set **`approved: true` only on an explicit *approve*** (or unmistakable equivalent); a change request or a bare "ok" is not approval; never infer it from "ok"/silence/drafting. **Any change to the set resets `approved` to `false`.**
 4. Once approved, the gated **`ado-publish`** skill files them to a Test Plan/Suite; if an authored case later fails during execution, `failure-to-bug` drafts the bug.

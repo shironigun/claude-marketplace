@@ -92,11 +92,13 @@ or re-derive its emit rules here** — it is the single source; this engine only
 ### 4. Self-check, then the independent gate (same two tiers as kit-builder)
 After emitting the specs and **before** any verify, run **`kit-builder`'s per-phase generation self-check**
 (the seven items in its SKILL, each naming its Standard) over the generated specs — run it from there, do
-not re-list it here. Then run the **independent** gate:
-invoke **`framework-reviewer`** over the generated files (it re-checks against
-`knowledge/review/review-rubric.md` + the Standards and delegates the reuse dimension to
-**`reuse-guardian`**). **Blocking findings stop generation** — fix on the next pass until the reviewer
-returns PASS. The self-check does not replace the independent gate.
+not re-list it here. Then run the **independent** gate as **two sibling passes you (the engine, top-level)
+spawn** over the generated files: **`framework-reviewer`** (rubric + Standards + grep/build gates, every
+dimension except reuse) **and** **`reuse-guardian`** (the reuse/duplication dimension). Run both — the
+reviewer cannot invoke the guardian itself (a subagent cannot spawn another), so spawning them as siblings
+is what makes the specialist reuse pass actually run; then combine their verdicts. **A Blocking finding from
+either stops generation** — fix on the next pass until **both** return PASS. The self-check does not replace
+the independent gate.
 
 ### 5. Verify honestly
 Run the objective check (`npm run typecheck` / `lint`, and the level's `npm run test:*`). Report the real

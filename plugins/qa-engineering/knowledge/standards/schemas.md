@@ -19,6 +19,12 @@ least once so the schema itself is proven to constrain something.
 - **Build from a real body.** Capture an actual response and model it; do not transcribe a doc.
 - **Do NOT** make every field `.optional()` — such a schema parses `{}` and catches nothing.
 - **Do NOT** export a schema no test ever asserts against — an unexercised schema can drift unnoticed.
+- **Honor `nullable` from the contract, not just the sample.** When an OpenAPI/JSON-Schema marks a field
+  `nullable: true` (or `type: [T, "null"]`), model it `.nullable()` **even if the one captured body
+  didn't contain a null** — the sample is a single observation, the contract is the rule, and a later
+  valid `null` must not false-fail. (A field both nullable and sometimes-absent is `.nullable().optional()`.)
+- **Do NOT assert a nullable field's JS type in a spec** (`expect(typeof x).toBe('string')` on a field the
+  contract allows to be null breaks on a valid null) — assert the shape via the schema instead.
 
 ## Official guidance
 - Response-shape validation is a team choice, not Playwright guidance — the API-testing docs cover making

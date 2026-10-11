@@ -98,14 +98,29 @@ Present the draft as readable text AND, when the user wants to save/queue it, as
   "status": "Draft",
   "tracesCase": null,
   "tracesStory": null,
+  "tracesModule": null,
+  "knownBugRef": null,
   "source": { "test": "Orders - Orders - Verify that POST orders creates an order successfully.", "domain": "api", "level": "endpoint", "failingAssertion": "expect(res.status()).toBe(201) // received 500" },
   "triage": { "classification": "real_bug", "confidence": "high", "reason": "A valid create payload returns 500 and persists nothing; the endpoint is at fault." }
 }
 ```
 
 `tracesCase` resolves to the failing test's case — its `adoCaseId` when known (from the `cases` slice /
-`traces-case:` tag), else the case title; `tracesStory` is the story behind that case. They become the
-`bugs` slice's link keys.
+`traces-case:` tag), else the case title. Carry the source case's **`tracesStory`** AND **`tracesModule`**
+onto the bug (one is set, one is null) — a defect found through a module-sourced case is not an orphan; it
+traces module → case → defect. `knownBugRef` is the marker a spec's `knownBug(...)` uses for this defect
+(see the next note); it starts null and is set to the draft ref when the spec marks the test.
+
+### `knownBug` before the bug is filed (a draft ref that back-fills)
+
+`knownBug(id, summary)` normally takes the filed tracker id. But filing is **gated** (and the tracker may
+be unreachable), so a real defect is often **drafted now, filed later** — there is no id yet. Don't block
+on that and don't leave a bare red: mark the test with a **draft ref** —
+`knownBug('DRAFT:<module>-<slug>', '<summary>')` — and set the draft's `knownBugRef` to that same
+`DRAFT:<module>-<slug>`. The test is then an honest expected-fail with a traceable marker. When this bug is
+later **filed** (gate 2 below), **back-fill**: rewrite the spec's `knownBug` id from `DRAFT:<…>` to the
+real tracker id, and update the `bugs` slice entry's `knownBugRef` to the filed id. That closes the loop
+`spec knownBug ⇄ bugs.knownBugRef ⇄ filed id` so the marker always points at something real.
 
 ## Where the defect format comes from (read, never hard-code)
 
@@ -163,10 +178,14 @@ For each approved bug:
 
 ### 5. Write the qa-context `bugs` slice + return
 Per `knowledge/orchestration/qa-context.md`, write the `bugs` slice additively (never clobber another
-engine's slice): each item `{ id: <filed id>, title, tracesCase, tracesStory, status: "Filed" }`. A
-`real_bug` approved but not yet filed stays `status: "Approved"` (and a drafted-but-unapproved one
-`"Draft"`, per the lifecycle); a non-real failure is recorded with its verdict, not as a bug. The thread stays linked: `cases.items[].adoCaseId ⇄ bugs.items[].tracesCase`. Return
-the filed ids + a per-bug summary (filed ✓/✗, linked ✓/✗, relation used), reporting only what the API
+engine's slice): each item `{ id: <filed id>, title, tracesCase, tracesStory, tracesModule, knownBugRef, status: "Filed" }`
+— carry both `tracesStory` and `tracesModule` from the source case (one set, one null) so a module-sourced
+defect traces back; set `knownBugRef` to the filed id (and **back-fill** the spec's `knownBug('DRAFT:…')`
+marker to that id — see the draft-ref note above). A `real_bug` approved but not yet filed stays
+`status: "Approved"` (and a drafted-but-unapproved one `"Draft"`, per the lifecycle); a non-real failure is
+recorded with its verdict, not as a bug. The thread stays linked:
+`cases.items[].adoCaseId ⇄ bugs.items[].tracesCase` and `cases.items[].tracesModule ⇄ bugs.items[].tracesModule`.
+Return the filed ids + a per-bug summary (filed ✓/✗, linked ✓/✗, relation used), reporting only what the API
 returned. For authoring or fixing the cases themselves, use `author-api-cases` / `author-ui-cases`.
 
 ## Safety rules (load-bearing — state and obey)

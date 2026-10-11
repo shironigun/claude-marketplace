@@ -126,12 +126,23 @@ worked examples.
    Every object ends in `.passthrough()` — an unknown extra field is the backend adding something, not
    a contract break; a missing or wrong-typed **known** field is. Never an all-`.optional()` schema: it
    parses `{}` and catches nothing. Build the shape from a **real** response body, not from docs.
+   - **Honor `nullable` from the contract, not only the sample.** When an OpenAPI/JSON-Schema marks a
+     field `nullable: true` (or `type: [T, "null"]`), model it `.nullable()` **even if the one captured
+     body didn't happen to contain a null** — otherwise a later valid `null` false-fails `toMatchContract`.
+     A field both nullable and sometimes-absent is `.nullable().optional()`.
+   - **Never assert a nullable field's JS type in a spec.** `expect(typeof x).toBe('string')` on a field
+     the contract allows to be null will break on a valid null. Assert the shape via the schema
+     (`toMatchContract`), or assert the non-null invariant you actually mean (e.g. an id that is always
+     present), not `typeof` on a nullable one.
 
 4. **`knownBug(id, summary)` goes on the line IMMEDIATELY BEFORE the assertion it explains** — never
    as the first line of the test. `knownBug` calls `test.fail(true)`, which turns *every* later failure
    into an expected one; placed too early it would swallow a stopped host, an auth failure, or a failed
    setup and report the suite green. The test still asserts the **correct** behaviour, so it stays green
-   while the bug is open and turns red the day it is fixed — telling you to delete the marker.
+   while the bug is open and turns red the day it is fixed — telling you to delete the marker. Pass the
+   filed tracker id as `id`; if the bug is drafted-not-yet-filed (gated/tracker down), pass a draft ref
+   `knownBug('DRAFT:<module>-<slug>', summary)` and record it as the bug's `knownBugRef` — `failure-to-bug`
+   back-fills the real id on filing (`knowledge/standards/helpers.md`).
 
 5. **Mutating tests create their own data and clean up; read-only tests use the worker seed.**
    - One created resource → `try { … } finally { await cleanup(); }` using the ref the service returns.
@@ -157,6 +168,30 @@ worked examples.
    five tests carries five lines. That one-to-one match is what lets phase 4 link each script to its
    Test Case almost automatically (`docs/ado-integration.md`). `authGuardTests(...)` registers one
    `test()` per route entry, so list one `traces-case:` line per entry in the JSDoc directly above the call.
+
+9. **Send a body when the endpoint requires one.** A `POST`/`PUT`/`PATCH` to an endpoint whose
+   `requestBody` is `required: true` (OpenAPI) must send a **builder** body — never an empty write. An
+   empty write to a required-body endpoint returns 400 and, when it's a teardown (`void`/`delete`), the
+   failure is swallowed and the resource leaks. Read `requestBody.required` (and the schema's required
+   fields); if the minimal valid body is `{}` (all fields optional) send `{}`, otherwise send the builder.
+   Confirm the accepted shape against a real call and mark `[confirm]` if the contract is silent.
+
+10. **Emit a service method only if a spec uses it; don't ship a layer the specs bypass.** A pure
+    **contract** GET asserts the raw response with `toMatchContract` and needs no service method — do not
+    generate `emailTypes()`/`categories()` wrappers no test calls. Generate a service method when a spec
+    needs **parsed** data (a workflow reading an id back, an endpoint test using the record) or a write +
+    its undo. Either route the reads through the service **or** leave the contract GETs calling `api.get`
+    directly — never both. And a service **read throws on a non-2xx** (per `services.md`): a 200 with an
+    empty array is the only `[]` a read returns; never `return []` + `console.warn` on an error (it masks
+    a down endpoint under a weak assertion).
+
+11. **One source of truth for a record type (respecting the layer boundary).** Emit
+    `export type XRecord = z.infer<typeof xSchema>;` **next to the schema** (`modules/<m>/api/schemas/`)
+    for specs to use, instead of hand-writing a parallel `interface`. The **service** lives in `common/`
+    (below `modules/`), so it cannot import a module schema — give it a **minimal structural** return type
+    (the id + the few fields it guarantees), not a copy of the full contract shape. That split is a layer
+    boundary, not a duplication to collapse: the full shape is the zod schema (asserted in the contract
+    spec); the service's type is a thin accessor.
 
 ---
 
@@ -225,6 +260,10 @@ export interface WidgetRef {
   cleanup: () => Promise<void>;
 }
 
+// A MINIMAL structural type: the id + the few fields the service guarantees. The FULL contract shape
+// is the zod schema (modules/<m>/api/schemas), asserted in the contract spec; specs that want the full
+// type use `z.infer<typeof widgetSchema>` next to the schema. The service lives in common/ (below
+// modules/) so it cannot import a module schema — these are two layers, not a duplication (rule 11).
 export interface WidgetRecord {
   id: number;
   name: string;
@@ -243,15 +282,12 @@ export class WidgetService {
     private readonly tenantId: number,
   ) {}
 
-  /** Read: returns [] on a non-OK response — but LOGS the status first. */
+  /** Read: THROWS on a non-2xx so a down endpoint surfaces; a 200 with [] is the only empty result. */
   async list(params: Record<string, string | number> = {}): Promise<WidgetRecord[]> {
     const { res } = await this.client.get(WidgetRoutes.List, {
       params: { tenantId: this.tenantId, ...params },
     });
-    if (!res.ok()) {
-      console.warn(`[WidgetService.list] API returned ${res.status()}`);
-      return [];
-    }
+    if (!res.ok()) throw new Error(`list: ${res.status()} ${await res.text()}`);
     return json<WidgetRecord[]>(res);
   }
 
@@ -287,7 +323,7 @@ export class WidgetService {
 
   async history(widgetId: number): Promise<WidgetHistoryEntry[]> {
     const { res } = await this.client.get(fillRoute(WidgetRoutes.History, { widgetId }));
-    if (!res.ok()) return [];
+    if (!res.ok()) throw new Error(`history(${widgetId}): ${res.status()} ${await res.text()}`);
     return json<WidgetHistoryEntry[]>(res);
   }
 
@@ -319,17 +355,37 @@ export const widgetSchema = z.object({
   name:       z.string(),
   status:     z.enum(['Draft', 'Active', 'Retired']),
   quantity:   z.number(),
-  categoryId: z.number().nullable(),                     // present, may be null
+  categoryId: z.number().nullable(),                     // present, may be null (contract: nullable:true)
   tags:       z.array(z.string()).optional(),            // legitimately absent in some states
 }).merge(auditFields).passthrough();                     // extra fields are not a break
 
 export const widgetListSchema = z.array(widgetSchema);
+
+// Single source of truth for the full record TYPE (rule 11): derive it from the schema so the type and
+// the runtime shape can't drift. Specs import this; the service keeps its own minimal structural type
+// (it's in common/, below modules/, so it can't import this module file).
+export type Widget = z.infer<typeof widgetSchema>;
 ```
 
 ### 3e. Module fixture + sweeper — `modules/widgets/fixtures.ts`
 
 Copied from `modules/example/fixtures.ts`: a worker-scoped **read-only** `seed` plus a run-level
 `sweep*`. Contract and read-only tests import `test`/`expect` from here to get `seed`.
+
+> **Fixture-arg gotcha.** The seed below takes `api` (`async ({ api }, use)`). A seed that needs nothing
+> from the base — e.g. it reads a pre-existing id from `process.env` — must still use an object pattern:
+> `async ({}, use)`. Playwright reads that argument statically to wire fixtures, so a plain param
+> (`async (_x, use)`) fails with "First argument must use the object destructuring pattern". `({}, use)`
+> needs **no** `eslint-disable no-empty-pattern` (the kit's eslint config doesn't enable that rule; a
+> disable there is flagged unused).
+>
+> **Two seed shapes.** (1) **Create-and-delete** (below) — the fixture makes a cheap read-only resource and
+> tears it down; use it when the resource is safely creatable. (2) **Env-provided pre-existing id** — when
+> the resource can't be created per test (a de-facto singleton, or a read-only module), the seed reads an id
+> from `process.env.<MODULE>_TEST_<RESOURCE>_ID` (phase 0 discovers one with a read-only list→pick-first
+> probe and writes it to `.env`), e.g. `async ({}, use) => { const raw = process.env.CUSTOMER_TEST_CRM_ID;
+> await use({ id: raw && /^\d+$/.test(raw) ? Number(raw) : null }); }`. Either way the id is **nullable** and
+> dependent tests `test.skip` when it is null.
 
 ```ts
 import { test as base } from '../../common/fixtures/base';
@@ -666,6 +722,31 @@ test('Widgets - Lifecycle - Verify that a widget can be created, activated and r
 > "create your own data" is impossible. Prefer read-only coverage; else snapshot → mutate → restore in
 > `finally`; and put every test that mutates the same singleton in ONE file with
 > `test.describe.configure({ mode: 'serial' })` at the top. Never leave a singleton mutated.
+>
+> **De-facto singletons — a "create" that is really an ensure/upsert on a shared prerequisite.** Some
+> resources *look* creatable but are a singleton in disguise, and the generator must spot it:
+> - the create endpoint is an **ensure / upsert / get-or-create** (e.g. `EnsureQuote`, `PUT .../settings`):
+>   calling it twice returns the **same** instance, not a new one; or
+> - the resource is **1:1 with a single shared external prerequisite** the suite can't multiply — e.g. one
+>   quote per the one configured opportunity (`.../opportunities/{the-one-id}/quote`), one cart per the one
+>   test user.
+>
+> In both cases there is effectively **one instance**, so the create/`try…finally void` per-test pattern is
+> wrong: two tests (worse, two tests in **different files** under `fullyParallel`) race the same instance —
+> one's `void` in `finally` pulls the record out from under the other's read/update → a flake that passes at
+> `workers:1` (CI) and breaks in parallel (local). This is exactly the cpq-plus-quote trap. Handle it by
+> **one of**, in order of preference:
+> 1. **Create the prerequisite per test.** If the parent *is* creatable (e.g. the suite can POST an
+>    opportunity), make a fresh one per test so each test owns its own child end to end — full isolation,
+>    the best outcome. Reuse the owning module's service to make it (cross-module reuse), never a local copy.
+> 2. **Treat it as a singleton** (when the parent is a single shared external id): read-only where you can;
+>    else snapshot → mutate → restore; and **serialize every mutating test in ONE file** with
+>    `test.describe.configure({ mode: 'serial' })` — never scatter create/void of the shared instance across
+>    parallel files. An idempotent ensure means you usually **do not void** it between tests (voiding is what
+>    creates the race); let a run-end sweep reclaim it.
+>
+> The analysis (`scan-and-confirm` / `code-intelligence`) flags which case applies; the generator must not
+> emit per-test create/void for a de-facto singleton.
 
 ---
 
@@ -1034,6 +1115,12 @@ are in different timezones; a test that depends on "today" fails at midnight som
 - The thing is **broken on purpose once** and the test fails for the right reason — a test that has
   never failed is a test with no evidence it works.
 - It creates its own data and cleans up (or correctly uses the read-only seed).
+- **Every exported schema is asserted at least once** (`toMatchContract` / `safeParse` against a real body)
+  — an exported-but-unused schema is unverified and rots; if nothing asserts it, add the contract test or
+  don't emit it. Likewise every emitted **service method is used by a spec** (rule 10) — no bypassed layer.
+- **Nullable fields modelled from the contract** (`.nullable()` for a `nullable:true` / present-but-null
+  field), and **no `typeof`/exact-type assertion on a nullable field** (rule 3); a required-body write
+  sends a builder body (rule 9).
 - One exact status per assertion; module tag + one level tag via the `{ tag: [...] }` option (not in the
   title); no hardcoded URL, id, or timestamp; `test.step()` in every workflow; one `traces-case:` line per
   `test()` block, its title equal to the test title, for phase-4 linking.

@@ -57,11 +57,19 @@ export interface Profile {
   /** Uppercased env-var prefix for per-profile overrides, e.g. 'STAGING'. */
   envPrefix: string;
   /**
-   * Optional discriminator when one deployment serves several variants
-   * (tenant type, product tier, backend flavour). Branch on this only when the
-   * API contract genuinely differs — never for configuration differences.
+   * The variant this profile represents on the product's variant axis — an
+   * account/user/deployment type the product changes behaviour for (a dealer
+   * type, tenant type, product tier, user role, client app). Carries the
+   * product's own enum value. Undefined for a variant-agnostic / default profile.
+   *
+   * Branch on it ONLY where the product's own code branches — via
+   * `onlyFor` / `skipFor` in a spec, citing the `file:line` — never for a
+   * configuration difference (a URL/id/credential belongs in env, not an `if`).
+   * See `knowledge/standards/variants-and-user-types.md`.
    */
   variant?: number;
+  /** Human label for the variant (the enum member name), for report/skip messages. */
+  variantName?: string;
 
   /** Base URL per registered service. Unset services are `undefined`. */
   services: Record<ServiceKey, string | undefined>;

@@ -26,3 +26,6 @@ Thumbs.db
 # Stray drops at the repo root (e.g. downloaded lead/XML files)
 /index.html
 /*.xml
+
+# Local-only: live-test gaps log holds product specifics — never commit to the public repo
+plugins/qa-engineering/docs/enhancement/plugin-gaps-from-crm-live-test.md
