@@ -106,9 +106,14 @@ Present the draft as readable text AND, when the user wants to save/queue it, as
 ```
 
 `tracesCase` resolves to the failing test's case — its `adoCaseId` when known (from the `cases` slice /
-`traces-case:` tag), else the case title. Carry the source case's **`tracesStory`** AND **`tracesModule`**
-onto the bug (one is set, one is null) — a defect found through a module-sourced case is not an orphan; it
-traces module → case → defect. `knownBugRef` is the marker a spec's `knownBug(...)` uses for this defect
+`traces-case:` tag), else the case title. **If the failing spec's `traces-case:` title is not in the `cases`
+slice** (a spec generated beyond the approved set, or added by hand), **run the reconcile step first** (the
+one procedure in `knowledge/orchestration/qa-context.md` — "Keeping the thread consistent"): it backfills a
+`source: "generated"` case for that orphan spec (carrying `tracesModule`) so `tracesCase` resolves to a real
+case instead of a dangling title. This is the fail-safe that keeps a failure on an un-authored spec from
+producing an orphaned bug — do it before drafting, not by hand after. Carry the source case's
+**`tracesStory`** AND **`tracesModule`** onto the bug (one is set, one is null) — a defect found through a
+module-sourced case is not an orphan; it traces module → case → defect. `knownBugRef` is the marker a spec's `knownBug(...)` uses for this defect
 (see the next note); it starts null and is set to the draft ref when the spec marks the test.
 
 ### `knownBug` before the bug is filed (a draft ref that back-fills)

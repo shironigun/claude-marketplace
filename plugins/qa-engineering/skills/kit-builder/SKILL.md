@@ -147,7 +147,10 @@ draft a bug (draft only — filing is phase 4). Before moving on, run the **per-
 self-check** (below) over the emitted specs. Verify: `npm run test:api` and `npm run
 typecheck`/`lint` clean; a green run that also fails for the right reason when broken on
 purpose. **Then update state:** write the `automation` slice (`specs[]` = each emitted spec
-`{ path, level, tracesCase }`), and set this module's `catalog.modules[].status = "built"` (it was
+`{ path, level, tracesCase }`), **run the reconcile step** (`knowledge/orchestration/qa-context.md` —
+"Keeping the thread consistent": a spec the matrix emits beyond the authored set, e.g. a `knownBug`
+expected-fail, is backfilled as a `source: "generated"` case so it never orphans a later bug; uncovered cases
+are reported, never deleted), and set this module's `catalog.modules[].status = "built"` (it was
 `in-progress`). That keeps the status board + `/build` truthful about what's done without a disk re-scan.
 Produces: a green API suite for the module.
 
@@ -248,7 +251,8 @@ top-level actor, so IT spawns both review agents as SIBLING passes over the phas
 
 So the per-phase order is: generate → **self-check** (builder, same actor) → **review gate** (the
 orchestrator runs `framework-reviewer` **and** `reuse-guardian` as sibling passes, independent, blocking —
-both must PASS) → objective verify → report.
+both must PASS) → objective verify → **reconcile the thread** (write `automation`, backfill any orphan spec
+as a `source: "generated"` case) → report.
 
 ## Delegation contract (D11)
 

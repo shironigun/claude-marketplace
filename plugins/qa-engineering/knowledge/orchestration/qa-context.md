@@ -39,7 +39,7 @@ not produced yet is simply absent.
 | `review` | `{ verdict, risks[], coverageGaps[] }` — the QA review of the story **or module**: is it testable, what is risky, what coverage it implies | **story-intelligence** (SP6 — one skill writes both `story` and `review`) · **code-intelligence** (SP13 — writes `review` from a code analysis) | the authoring engines |
 | `module` | `{ name, mapRef, findings[] }` — the scan/analysis of a code path / module; `mapRef` points at `flow-map.json` rather than duplicating it. `findings[]` holds the build scan and/or the QA understanding | `scan-and-confirm` (the build scan, exists) · **code-intelligence** (SP13 — extends `findings[]` with the read-only QA understanding + gaps) | the authoring + build engines |
 | `catalog` | `{ product, recommended, frameworkScaffold, modules[] }` — the **registry of the whole product**: `modules[]` each `{ name, summary, endpointCount?, status }` with `status ∈ discovered \| in-progress \| built`; `recommended` = the module to start with; `frameworkScaffold ∈ built \| absent` (the shared foundation is built once). This is what makes the build **structure-once, then one module at a time, expand forever**: the flagship/orchestrator writes it from the initial codebase scan and updates a module to `built` as `kit-builder` finishes it, so `/build` and `/qa` always know what's done, what's pending, and what to resume — across sessions. `module` stays the *current* module's detail; `catalog` is the map of them all | **`scan-and-confirm`** seeds it from the confirmed module inventory (modules `discovered`, target `in-progress`, `frameworkScaffold: absent`); **`kit-builder`** flips `frameworkScaffold`→`built` (phase 1) and the module→`built` (phase 2); the flagship `/qa`/`/build` may also update it. Written by the **engines**, not only the commands, so an engine-direct build still populates it | `/build`, `/qa` (home base + expand), the build engines, the status board |
-| `cases` | `{ approved, items[], mdPath, coverage }` — the authored cases (each `{ title, level, tags[], tracesStory, tracesModule, adoCaseId? }` — **set `tracesStory` for a story-sourced case or `tracesModule` (the module name) for a code-sourced one; the other is `null`**), the `.md` file, coverage notes, and **`approved`** = QA has signed off on this set. `ado-publish` refuses to push until `approved` is `true`; it writes each created case's id back onto `items[].adoCaseId` (the key the automation + traceability thread resolve on) | `author-api-cases` / `author-ui-cases` (exist; they set `approved`) | ado-publish, the automation engine |
+| `cases` | `{ approved, items[], mdPath, coverage }` — the authored cases (each `{ title, level, tags[], tracesStory, tracesModule, adoCaseId?, source? }` — **set `tracesStory` for a story-sourced case or `tracesModule` (the module name) for a code-sourced one; the other is `null`**; `source` is `authored` by default, and `generated` for an item **backfilled by the reconcile step** from a spec that exists on disk with no authored case — see [the reconcile step](#keeping-the-thread-consistent--the-reconcile-step)), the `.md` file, coverage notes, and **`approved`** = QA has signed off on this set. `ado-publish` refuses to push until `approved` is `true`; it writes each created case's id back onto `items[].adoCaseId` (the key the automation + traceability thread resolve on) | `author-api-cases` / `author-ui-cases` (exist; they set `approved`) · **reconcile** (backfills `source: "generated"` items) | ado-publish, the automation engine |
 | `ado` | `{ plan, suite, published[] }` — the chosen test plan + suite and, per published case, `{ caseTitle, adoCaseId }` (the case→id key, so a re-run never double-creates). Written once the QA approves a push (**write path is SP7, not SP5**) | **ado-publish** (SP7) | the automation engine, the traceability thread |
 | `framework` | `{ map }` — the inspected framework map (services, fixtures, modules present) the build/automation engines reason over | `kit-builder` (exists) | the automation engine |
 | `automation` | `{ specs[], levels[] }` — the generated `.spec.ts` files (each `{ path, level, tracesCase }`) and the levels covered (contract / endpoint / workflow, smoke / regression / e2e) | `kit-builder` generation (exists) → **automation-engine** (SP9) | `failure-to-bug` (a red run → the `failures` slice) |
@@ -88,6 +88,44 @@ Keeping this chain in `qa-context` is what lets a later "push these" find the ri
 these" find the right scripts, and "file a bug for this failure" link the defect to the case and story
 without the QA restating anything.
 
+### Keeping the thread consistent — the reconcile step
+
+The thread drifts when the **specs on disk** and the **`cases` slice** fall out of step: a generator may
+emit a spec for a behaviour beyond the approved set (a negative/edge case, a `knownBug` expected-fail), a
+case title may be edited after the spec was written, or a spec may be added by hand. When that happens
+`automation.specs[].tracesCase` — and any later `bugs.items[].tracesCase` — resolves to a title that is **not
+in the `cases` slice**, so the defect is an orphan with nothing to link to. The **reconcile step** is the one
+procedure that keeps `cases ⇄ automation ⇄ bugs` consistent, so the thread never has to be repaired by hand.
+
+**Disk is the source of truth for which specs exist** (the same read-only principle the status board already
+uses for its disk fallback — see `status-board.md`; reconcile reuses that scan, it does not add a second
+one). The procedure:
+
+1. **Scan** `modules/**/tests/**` read-only for every `test()` / `authGuardTests` entry and collect its
+   `traces-case:` value (the case title) and its level tag + `@<module>` tag. This is the actual spec
+   inventory — the `automation` slice should mirror it but may be stale; **disk wins**.
+2. **Match** each spec key to a `cases.items[]` entry — by `adoCaseId` when the value is an id, else by exact
+   title.
+3. **Orphan spec (no match):** the spec tests behaviour with no authored case. **Backfill** a minimal
+   `cases.items[]` entry `{ title: <the traces-case value>, level: <from the level tag/folder>, tags,
+   tracesStory: null, tracesModule: <module>, adoCaseId: null, source: "generated" }` — it carries
+   `tracesModule` so the thread runs module → case → script → defect, and `source: "generated"` marks it as
+   **not QA-authored**. Then set that spec's `automation.specs[].tracesCase` to the title. This is exactly the
+   repair that otherwise has to be done by hand before a bug can link.
+4. **Matched spec:** ensure `automation.specs[].tracesCase` points at the case (its `adoCaseId` when present,
+   else the title).
+5. **Authored case with no spec on disk:** record it as a **coverage gap** in the report — read-only.
+   **Never delete a case**; a missing spec is a gap to fill, not a case to drop.
+
+A `source: "generated"` case is recorded **for traceability only** — it is not a QA-approved case. It does
+**not** flip the slice-level `cases.approved` (so `automation-engine`'s fail-closed gate is unaffected), and
+**`ado-publish` surfaces it for review rather than publishing it as authored** — a reconciled case must be
+seen by the QA before it can be pushed to a tracker. **When reconcile runs:** the generation engines
+(`automation-engine` step 6, `kit-builder` phases 2-3) run it right after writing the `automation` slice;
+`failure-to-bug` runs it before it resolves `tracesCase`, so a failure on an orphan spec still links. It is
+read-only against the product and the tracker — it only reads spec files and writes the `cases`/`automation`
+slices.
+
 ## Example (illustrative — generic placeholders, no real values)
 
 ```json
@@ -118,5 +156,6 @@ without the QA restating anything.
 - [ ] Every engine reads only the slice(s) it depends on and writes only its own slice back (additive)
 - [ ] `flow-map.json` is **referenced** (`module.mapRef`), not duplicated, into the context
 - [ ] The traceability thread (story ⇄ case ⇄ script `traces-case:` ⇄ defect) is maintained on every write
+- [ ] The **reconcile step** keeps `cases ⇄ automation ⇄ bugs` consistent from the specs on disk — an orphan spec is backfilled as a `source: "generated"` case (never left to orphan a bug), an uncovered case is reported (never deleted), and a reconciled case is surfaced for review, never pushed as authored
 - [ ] Not-yet-built engines' slices are defined and left absent until those engines land — no invented output
 - [ ] Nothing product-specific, secret or real-URL appears anywhere in the context or this contract
