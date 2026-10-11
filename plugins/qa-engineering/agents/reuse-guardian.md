@@ -11,8 +11,9 @@ description: >-
   `cross-module-reuse.md` and `page-objects.md`, and returns BLOCKING findings
   for real cross-module-reuse violations — naming the exact reuse the code should
   have called instead. REVIEW-ONLY: it reports and blocks; it never edits or
-  fixes. Runs standalone or is invoked by `framework-reviewer` for the
-  reuse/duplication dimension.
+  fixes. Runs **standalone**, or as a **sibling** review pass the orchestrator
+  (kit-builder) spawns alongside `framework-reviewer` and combines — not nested
+  under the reviewer, since a subagent cannot spawn another subagent.
 tools: Read, Grep, Glob, Bash, Skill
 ---
 
@@ -101,8 +102,9 @@ Reuse findings:
   Minor:     - …
 ```
 
-A real cross-module-reuse violation makes the verdict **BLOCKED**. When invoked by `framework-reviewer`,
-return these findings for it to merge; when run standalone, this *is* the verdict for the reuse dimension.
+A real cross-module-reuse violation makes the verdict **BLOCKED**. As the orchestrator's **sibling** reuse
+pass, return these findings for the orchestrator to combine with `framework-reviewer`'s verdict (both must
+PASS for the phase to advance); when run **standalone**, this *is* the verdict for the reuse dimension.
 
 ## Boundary
 

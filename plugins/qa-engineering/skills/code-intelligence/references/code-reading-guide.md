@@ -89,10 +89,10 @@ module reaches `author-*` exactly as a story-analyzed one does:
 | Regression impact / coverage holes | `review.coverageGaps[]` |
 
 If `scan-and-confirm` already wrote a `module` slice, **extend** its `findings[]` with the QA analysis —
-don't overwrite the scan. **Traceability caveat:** a case authored from a module currently traces via
-`tracesStory` (`null` for a module) — the `cases` contract has no module trace field yet — so the module
-understanding feeds authoring, but **case → module traceback is a known gap** to close on the `cases`
-slice (a future `tracesModule` / equivalent), not a back-link this analysis can set.
+don't overwrite the scan. **Traceability:** the `cases` contract carries **`tracesModule`**, so a case
+authored from this analysis traces back to its module by name (the authoring engines set
+`items[].tracesModule` to the `module` slice's name, `tracesStory` null). Module → case → script → defect
+is a first-class thread, no longer an orphan on a null `tracesStory`.
 
 ## 6. What this guide does NOT do
 

@@ -22,6 +22,25 @@ a QA can "jump to <topic>" and the tutor will flag any missing prerequisites.
 
 ---
 
+## Tracks — order the path by the learner's goal
+
+The 35 topics below are the canonical content; a **track** is the order/subset `/learn` follows for a
+given **goal**, so a learner doesn't sit through topics their goal doesn't need yet. `/learn` picks the
+track from the stated goal (and records it in the `learning` slice); deferred topics aren't dropped — they
+move to the end as a "pick up later" tail. Depth (L1–L4) is still chosen separately per
+`depth-levels.md`.
+
+| Goal says… | Track | Order (topic numbers) | Deferred tail |
+|---|---|---|---|
+| "API", "API testing", "services", "backend" | **api-first** | 1-7 · 12,13,14,15 · 16,17,18,19,20 · 21,22,23,24,25,26,28 · 29,30,31,32,33 · 34,35 | 8,9,10,11,27 (UI) |
+| "UI", "browser", "end-to-end clicking", "web app" | **ui-first** | 1-7 · 12 · 8,9,10,11 · 16,17,18,19,20 · 23,24,25,26,27 · 29,30,31,32,33 · 34,35 | 13,14,15,21,22,28 (API-internals) |
+| "both", "everything", unspecified, or "full course" | **full** | 1 … 35 (the default stage order below) | none |
+
+Rules: **Foundations (1-7) are in every track** — never skipped. A track is an *ordering*, not a licence
+to invent topics: every number comes from the canonical list below. If the goal is ambiguous, default to
+**full** and say so (don't guess a narrow track). A learner can switch tracks or jump to any topic at any
+time; `/learn` re-derives the order and keeps what's already `covered`.
+
 ## Stage 1 — Foundations
 *What automation and a framework are, and the raw tools a test is written with.*
 

@@ -14,6 +14,30 @@ plugin's sense of place.
 >   loop strip, a table, a next line) that renders in any Claude Code surface. Where a richer visual tool
 >   happens to be available it *may* be used, but markdown is the baseline and the contract.
 
+## Deriving from disk when a slice is absent (fallback — read-only)
+
+`qa-context` is written by the orchestrated engines. But a QA can build with the plugin's **guidance**
+(the standards + `docs/script-generation.md`) without every step routing through the orchestrator, and a
+session can be **cleared or compacted** — in all of which the `catalog` / `runHistory` / `house-profile`
+slices are absent while a **real, runnable framework sits on disk**. A board that then says "no framework
+yet" is wrong about reality. So when a slice the board needs is **absent**, derive it **read-only from
+disk** rather than declaring nothing built — and **label the derived values `(from disk)`** so provenance
+stays honest (never claim an orchestrated state that isn't there).
+
+| Board input | Primary source (slice) | Disk fallback when the slice is absent (read-only) |
+|---|---|---|
+| product name | `house-profile.json` `product.name` | the framework folder name, else "your project" — never invented |
+| modules + built state | `catalog.modules` | glob `modules/*/` (exclude `example`); a module is **built (from disk)** when it has ≥1 spec under `modules/<m>/**/tests/**` |
+| per-level coverage | `automation.specs[]` | the six level folders under `modules/<m>/{api,ui}/tests/**` (contract/endpoint/workflow · smoke/regression/e2e) |
+| last run | `runHistory` (then `failures`) | `reports/results.json` (the JSON reporter output) — read totals + the failures; **never invent** a passed/flaky count a file can't supply |
+
+Rules for the fallback: it is **read-only** (glob + read files; never create, write, or run anything to
+find out); it is **honest** (mark derived values `(from disk)`, and a module/level with no spec is `○`,
+never a guessed `✓`); and it applies **per missing slice** — a present slice always wins. Only when there
+is **neither a `catalog` slice nor any `modules/*/`** folder is the framework truly absent → then say
+"No framework yet — run `/qa`". Writing the derived snapshot to `qa-status.md` is still allowed (the one
+write); deriving/reading is read-only.
+
 ## The legend (use these marks everywhere)
 
 | Mark | Means |
@@ -37,8 +61,8 @@ One line of the headline numbers, each from its slice; show a metric only when i
 
 | Metric | From | Shows |
 |---|---|---|
-| modules built | `catalog.modules` | count `status=built` / total |
-| last run | `runHistory` (latest), else `failures` | From the latest `runHistory` entry: `N passed / M failed / K flaky` (+ a short trend of the last few runs **of a comparable scope**, noting the scope — e.g. "last 3 @orders: ✓ ✓ ✗" — so a narrow green run isn't shown as fixing a broad red one). If there's **no `runHistory` yet** (older session, or P-rich hasn't recorded one), fall back to `failures`: `N failed` / `all green` (empty `runs[]`) / `not run yet`. Only ever show numbers that are actually in a slice — never infer a passed/flaky count when only `failures` exists. |
+| modules built | `catalog.modules` | count `status=built` / total — **else** the disk fallback: count `modules/*/` folders with ≥1 spec, shown as "N built (from disk)" |
+| last run | `runHistory` (latest), else `failures` | From the latest `runHistory` entry: `N passed / M failed / K flaky` (+ a short trend of the last few runs **of a comparable scope**, noting the scope — e.g. "last 3 @orders: ✓ ✓ ✗" — so a narrow green run isn't shown as fixing a broad red one). If there's **no `runHistory` yet** (older session, or P-rich hasn't recorded one), fall back to `failures`: `N failed` / `all green` (empty `runs[]`) / `not run yet`. Only ever show numbers that are actually in a slice — never infer a passed/flaky count when only `failures` exists. **If neither slice exists**, read `reports/results.json` (the JSON reporter output) for the last run's real totals, shown "(from disk)"; if that is absent too, "not run yet". |
 | course | `learning` | the current topic + progress (`<current> (N of M topics)`), from `learning.current` + `path[]` covered/total; omit the metric if there's no `learning` slice |
 | open bugs | `bugs.items` | count whose `status` is not `closed` (closed = the terminal value), or `0` |
 
@@ -82,9 +106,12 @@ The `catalog` as a small markdown table — the map of the product and where eac
 Status from `catalog.modules[].status` only (`built`→`✓ built`, `in-progress`→`● in progress`,
 `discovered`→`○ not yet`). **Don't add a per-level/coverage column in P-view** — `catalog` carries no per-level
 field, and the `automation` slice only describes the *current* module, so levels are unknowable for the others;
-the modules × levels **coverage matrix is P-rich** (`/status coverage`). If there's **no `catalog`** (no
-framework yet), skip the table and say: "No framework yet — run `/qa` to set one up." If
-`catalog.frameworkScaffold` is `absent`, note the structure isn't built yet.
+the modules × levels **coverage matrix is P-rich** (`/status coverage`). If there's **no `catalog`**,
+build the table from the **disk fallback** — glob `modules/*/` (exclude `example`) and mark each module
+`✓ built (from disk)` when it has ≥1 spec, `○ not yet` otherwise — and note the row source is the disk
+scan, not a catalog. Only when there is **also no `modules/*/` folder** is the framework truly absent →
+then skip the table and say: "No framework yet — run `/qa` to set one up." If `catalog.frameworkScaffold`
+is `absent`, note the structure isn't built yet.
 
 ### 5. Next
 One line: the single best next action + its command (the same recommendation the home base computes) — e.g.
