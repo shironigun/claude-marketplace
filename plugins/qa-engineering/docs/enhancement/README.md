@@ -22,6 +22,18 @@ enhancement spec (kept with the author; not shipped in this repo).
 7. **Preserve existing strengths** — `qa-orchestrator` (was `kit-orchestrator`), `scan-and-confirm`, `kit-builder`, the
    6-phase state machine, the `template/` scaffold, secret scanning, the MCP servers.
 
+## Latest — Knowledge Base (SP18, 2026-10-11)
+
+Spec: [`SP18-spec.md`](./SP18-spec.md) · Plan: [`SP18-plan.md`](./SP18-plan.md). Adds a **frontend-first,
+per-module Knowledge Base** the plugin generates into the QA's own repo: a behavior brief (`modules/<slug>.md`),
+a central file of atomic testable rules (`RULES.md`), and a thin code atlas (`atlas/<slug>.md`). Modules are
+discovered **frontend-first** (from the app's routes/nav, not backend controllers). Generated **lazily** (a stub
+per module on first `/qa`, deepened on demand by the new `kb-builder` engine). The KB **grounds**
+`story-/code-intelligence`, **seeds** cases from RULES anchors (new `tracesRule` link → rule → case → script →
+bug), and **scopes** automation reuse via the atlas globs. New standard `knowledge/standards/knowledge-base.md`;
+the KB is **committable in the QA's repo, never shipped in the plugin**. Independent review: PASS-WITH-FIXES
+(0 blockers; 5 Minor fixed). Version `0.5.0 → 0.6.0`.
+
 ## Sub-project decomposition (each: spec → plan → build → review)
 
 | SP | Title | Depends on | Status |

@@ -25,6 +25,10 @@ qa-context.json
 qa-status.md
 learning-plan.md
 
+# NOTE: knowledge-base/ is intentionally NOT ignored. It is durable product knowledge
+# (feature briefs + testable RULES + a thin code atlas) the team shares and commits.
+# Do not add it here. See knowledge/standards/knowledge-base.md.
+
 # OS / editor
 .DS_Store
 *.log
