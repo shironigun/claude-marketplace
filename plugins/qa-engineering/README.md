@@ -82,12 +82,26 @@ verifies, and reports before moving on. It never assumes a value you have not co
 
 | Phase | What gets built |
 |---|---|
-| 0 | Scan and confirm: the module's endpoints, flows, hosts and auth, written to `flow-map.json` |
+| 0 | Scan and confirm (**frontend-first**): discover modules from the app's routes/nav, confirm the chosen module's endpoints, flows, hosts and auth → `flow-map.json`; on first run, **scaffold a Knowledge Base** (`knowledge-base/` with a stub per module) |
 | 1 | Foundation: the scaffold from `template/`, config, auth, `verify:setup` |
 | 2 | Module API suite: contract and endpoint specs, run green twice |
 | 3 | Module UI suite: page objects and a smoke spec (skipped if no web app URL is set) |
 | 4 | ADO integration: Test Cases (gated via `ado-publish`), script-to-case links, bugs (gated via `failure-to-bug`; drafts if not signed in) |
 | 5 | CI pipelines, local tools, docs, and a final secret scan |
+
+## Knowledge Base — the product's features, as testable knowledge
+
+The first time you run `/qa` on a product, the plugin builds a **Knowledge Base** in your framework repo under
+`knowledge-base/` — a per-module behavior brief (`modules/<slug>.md`), a central file of atomic testable rules
+(`RULES.md`), and a thin code map (`atlas/<slug>.md`). Modules are discovered **frontend-first** (from the
+app's routes/nav, as users name them, not from backend controllers). It is generated **lazily**: a thin stub
+per module up front, deepened module by module (`kb-builder`) as you analyze, build, or test each one.
+
+The KB is what makes analysis *grounded* — `story-intelligence` and `code-intelligence` read it before they
+reason, the authoring engines seed cases from its RULES anchors (so the thread runs **rule → case → script →
+bug**), and automation reuse is scoped by the atlas globs. It is **durable team knowledge: committed in your
+own repo** (not git-ignored like `.env`/`house-profile.json`), and it is **never** shipped in the plugin.
+Format and rules: `knowledge/standards/knowledge-base.md`.
 
 ## Requirements
 

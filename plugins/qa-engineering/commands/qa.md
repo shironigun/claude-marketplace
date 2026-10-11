@@ -23,11 +23,13 @@ language:
 1. **Welcome + set me up.** In two lines say what this plugin does. If `house-profile.json` is missing, walk
    me through the few required slots interactively (tracker/org/project, product name, API base URL, auth) —
    don't just say "copy the example". (Secrets go in `.env`, typed by me, never echoed.)
-2. **Read the codebase.** Route to `scan-and-confirm`'s scan to detect the stack and **identify my modules**
-   (name + one-line purpose + rough endpoint count each).
+2. **Read the codebase + start the knowledgebase.** Route to `scan-and-confirm`'s scan to detect the stack and
+   **identify my modules frontend-first** (from the app's routes/nav, as users name them — name + one-line
+   purpose + rough endpoint count each), and **scaffold a Knowledge Base** (`knowledge-base/` with a stub per
+   module) that will ground later story/module analysis. Committed in my repo; never shipped in the plugin.
 3. **Give me the map + a recommendation.** Show the module list and recommend the **most provable** one to
-   start with (clear CRUD, fewest prerequisites) and why. Write the `catalog` slice (all modules `discovered`;
-   a top-level `recommended` = the module name; `frameworkScaffold: absent`).
+   start with (clear CRUD, fewest prerequisites) and why. Write the `catalog` slice (all modules `discovered`,
+   each `kb: stub`; a top-level `recommended` = the module name; `frameworkScaffold: absent`).
 4. **I pick one module** (or take the rec).
 5. **Confirm that module's flows** — `scan-and-confirm` → `flow-map.json`; mark it `in-progress` in `catalog`.
 6. **Build the structure once** — `kit-builder` phase 1 (foundation/scaffold/config/auth), shared by every
