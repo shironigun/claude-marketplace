@@ -17,7 +17,7 @@ QA-delegated.
 
 | # | Phase | Produces | Dependency / doc |
 |---|---|---|---|
-| 0 | Scan & confirm | `flow-map.json` + populated `.env` + target module | `scan-and-confirm` skill |
+| 0 | Scan & confirm (frontend-first) | `system-map.json` + `flow-map.json` + `.env` + target module + a scaffolded `knowledge-base/` (first run) | `scan-and-confirm` skill |
 | 1 | Foundation | compiling, lintable skeleton + green auth probe | `template/` + `kit-builder` |
 | 2 | Module — API | a green API suite for the module | `author-api-cases`, `docs/script-generation.md`, `failure-to-bug` |
 | 3 | Module — UI | a UI suite at parity | `author-ui-cases`, `docs/script-generation.md` |
@@ -28,11 +28,14 @@ QA-delegated.
 
 ## Phase 0 — Scan & confirm
 
-**What it does.** Read the target repo or live API, propose how the chosen module's flows
-work, and ask the QA to confirm or correct each one before any test is written. This whole
-phase is owned by the **`scan-and-confirm`** skill, which runs its own 13-question ask loop
-(one question per turn, each with a recommendation). `kit-builder` hands off to it and resumes
-at phase 1 once `flow-map.json` exists.
+**What it does.** Read the target repo or live API, **discover the modules frontend-first** (from the app's
+route table / nav, as users name them, resolving each screen's API calls into backend handlers; backend-prefix
+fallback for an API-only product), propose how the chosen module's flows work, and ask the QA to confirm or
+correct each one before any test is written. On first run it also **scaffolds a Knowledge Base**
+(`knowledge-base/` with README + CONVENTIONS + empty RULES + a thin `modules/<slug>.md` stub per module —
+committable in the QA's repo). This whole phase is owned by the **`scan-and-confirm`** skill, which runs its own
+ask loop (one question per turn, each with a recommendation). `kit-builder` hands off to it and resumes at phase
+1 once `flow-map.json` exists.
 
 **Questions asked** (summarized — the skill owns the full wording): scan target (repo / live
 API / both); stack + which module; each flow, one at a time; out-of-scope endpoints; host
@@ -50,8 +53,9 @@ verify path; the UI app URL; final sign-off.
 
 **Inputs.** A repo path and/or a live API / OpenAPI URL.
 
-**Produced artifact.** `flow-map.json` at the framework root (fields `module`, `hosts`,
-`authKind`, `endpoints`, `flows`), a populated git-ignored `.env`, and a confirmation log.
+**Produced artifact.** `system-map.json` (variant axis + module inventory), `flow-map.json` at the framework
+root (fields `module`, `hosts`, `authKind`, `endpoints`, `flows`), a populated git-ignored `.env`, a seeded
+`catalog` (each module `kb: stub`), a scaffolded `knowledge-base/` (first run), and a confirmation log.
 
 **Verification.** The flow map parses, has exactly the five fields, `authKind` is one of the
 four allowed values, every `baseUrlEnvKey` names a key that exists in `.env`, and it contains

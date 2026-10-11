@@ -97,12 +97,15 @@ Authoring does not end at a chat dump: it **writes the `cases` slice** of `qa-co
 root, from the file — see `knowledge/orchestration/qa-context.md`) so the publish and automation engines can
 find the exact set. Write, additively:
 
-- `cases.items[]` — each `{ title, level, tags[], tracesStory, tracesModule, adoCaseId: null }`. `level` is
-  the domain level (API: `contract`/`endpoint`/`workflow`; UI: `smoke`/`regression`/`e2e`). Set exactly one
-  source: **`tracesStory`** = the source work-item id when authoring came from a **story**, or
+- `cases.items[]` — each `{ title, level, tags[], tracesStory, tracesModule, tracesRule, adoCaseId: null }`.
+  `level` is the domain level (API: `contract`/`endpoint`/`workflow`; UI: `smoke`/`regression`/`e2e`). Set
+  exactly one source: **`tracesStory`** = the source work-item id when authoring came from a **story**, or
   **`tracesModule`** = the module name when authoring came from **code** (codebase→QA, the
   `module` slice); the other is `null`. This is what keeps a module-sourced case from being an orphan.
-  `adoCaseId` is left `null` at authoring and stamped by `ado-publish` once the case is created.
+  **`tracesRule`** = the `knowledge-base/RULES.md` anchor the case verifies when it was seeded from a
+  Knowledge-Base rule (`null` otherwise) — it extends the thread to rule → case and makes KB-rule coverage
+  visible (`knowledge/standards/knowledge-base.md`). `adoCaseId` is left `null` at authoring and stamped by
+  `ado-publish` once the case is created.
 - `cases.mdPath` — where the human-readable `.md` was written. `cases.coverage` — a short coverage note.
 - `cases.approved` — **the approval seam.**
 

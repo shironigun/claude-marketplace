@@ -65,6 +65,13 @@ Rules for the retrieval:
   design link) as a **Gap-or-Question** — never fill it with a guess.
 - **Label every source.** Each fact you carry forward names where it came from (field, comment, linked
   id, history revision). No source means it is not Confirmed — see the labels below.
+- **Ground in the Knowledge Base.** Once you know the affected module(s), read their
+  `knowledge-base/modules/<slug>.md` + the RULES anchors they link (when present) to ground the analysis in
+  **documented product behaviour** — the existing flows, exact messages, variant differences, and the rules
+  already catalogued. Treat a KB fact that cites code evidence as a Confirmed prior; where the story
+  **contradicts** the KB, that contradiction is itself a high-value gap (a behaviour change, or a stale KB).
+  If a touched module's KB is only a `stub` (or `absent`), say so — deepening it via `kb-builder` first would
+  sharpen the analysis. See `knowledge/standards/knowledge-base.md`.
 
 ## (b) Requirement understanding
 

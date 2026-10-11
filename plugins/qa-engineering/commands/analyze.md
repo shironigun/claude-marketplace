@@ -15,8 +15,10 @@ this to the engine that owns it. **Read-only** — nothing is written to the tra
 - ambiguous or empty → ask one quick question, or use the current `qa-context`.
 Treat extra words as steering.
 
-The chosen engine produces a requirement understanding + gaps + QA review with **every claim labeled**
-Confirmed / Inferred / Assumption / Gap-or-Question (inventing nothing), writes its `qa-context` slices
-(`story`+`review`, or `module`+`review`), and **stops at the gaps gate**. Then tell me, in plain language, what
+The chosen engine **reads the module's Knowledge Base** (`knowledge-base/modules/<slug>.md` + its RULES) to
+ground the analysis; if that module's KB is only a `stub`, offer to **deepen it first** (`kb-builder`) — a deep
+KB sharpens this analysis and every later one. It then produces a requirement understanding + gaps + QA review
+with **every claim labeled** Confirmed / Inferred / Assumption / Gap-or-Question (inventing nothing), writes its
+`qa-context` slices (`story`+`review`, or `module`+`review`), and **stops at the gaps gate**. Then tell me, in plain language, what
 you found and the open questions — and that `/test` (or asking `/qa` to make cases) is the next step once the
 gaps are settled.
