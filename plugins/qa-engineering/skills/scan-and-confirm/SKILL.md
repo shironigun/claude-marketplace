@@ -1,13 +1,15 @@
 ---
 name: scan-and-confirm
-description: Phase 0 of building a test-automation framework — scan the target repo or live API, PROPOSE how the chosen module's flows work, and ASK the QA to confirm or correct each one (one question at a time, each with a recommended answer and the reason) before any test is written. Selects the target module, collects the API base URL(s), auth flow and credentials into the QA's git-ignored `.env`, and writes a confirmed flow map (`flow-map.json` with module, hosts, authKind, endpoints, flows) for the kit-builder. Use whenever the user asks to "scan the repo/API before building tests", "confirm the flow before writing tests", "scan and confirm", "propose the flows and let me correct them", "pick the module to automate", or is starting phase 0 of the qa-engineering / a brick-by-brick framework build — also when kit-builder reaches phase 0. It asks instead of assuming — the inverse of automation-setup, which scans but never asks.
+description: Phase 0 of building a test-automation framework — scan the target repo or live API, PROPOSE how the chosen module's flows work, and ASK the QA to confirm or correct each one (one question at a time, each with a recommended answer and the reason) before any test is written. Discovers modules FRONTEND-FIRST (from the app's route table/nav, as users name them, resolving each screen's API calls into backend handlers; backend-prefix fallback for an API-only product). Selects the target module, collects the API base URL(s), auth flow and credentials into the QA's git-ignored `.env`, writes a system map + a confirmed flow map (`flow-map.json`) for the kit-builder, and on first run scaffolds a Knowledge Base (`knowledge-base/` with a stub per discovered module) that later grounds story/module analysis. Use whenever the user asks to "scan the repo/API before building tests", "confirm the flow before writing tests", "scan and confirm", "propose the flows and let me correct them", "pick the module to automate", "create the knowledgebase", or is starting phase 0 of the qa-engineering / a brick-by-brick framework build — also when kit-builder reaches phase 0. It asks instead of assuming — the inverse of automation-setup, which scans but never asks.
 ---
 
 # Scan and Confirm — phase 0
 
 Read the code, form a view of how the module works, then **put that view in front of the QA and ask them to confirm or correct it** — before a single test is designed. The code tells you what the system *does*; only the QA can tell you what it is *meant* to do, which flows matter, and what the real environment looks like. A flow map built from code alone is a guess with line numbers.
 
-This is phase 0 of the `qa-engineering`. It produces four things for `kit-builder` (phases 1-5): a **system map** (`system-map.json` — the product-level picture, including any variant axis), a **target module**, a populated **`.env`**, and a **confirmed flow map written to `flow-map.json`** (see [Output](#output)). It writes no tests and scaffolds no framework.
+This is phase 0 of the `qa-engineering`. It produces, for `kit-builder` (phases 1-5): a **system map** (`system-map.json` — the product-level picture, including any variant axis), a **target module**, a populated **`.env`**, a **confirmed flow map written to `flow-map.json`** (see [Output](#output)), and — on first run — a scaffolded **Knowledge Base** (`knowledge-base/` with a stub per discovered module). It writes no tests and scaffolds no framework.
+
+> **Discover modules frontend-first.** A module is **what users see in the nav**, not how controllers are grouped. Lead the scan with the app's route table / nav / lazy-imports; resolve each screen's API calls into backend handlers. This is more accurate than backend route-prefix grouping (one screen often spans several controllers), and it is the taxonomy the product, its QAs and its users actually name. Fall back to backend grouping only for an API-only product. See `knowledge/standards/knowledge-base.md`.
 
 > **System before module — do not jump to a module.** Analyse the *system* first (section 0): its hosts, its auth, and — crucially — whether the product changes behaviour by a **kind of account / user / deployment** (a dealer type, tenant type, subscription tier, role, client app). That **variant axis** is a first-class architectural input: it decides the profile set and which modules need variant-specific coverage, so it is discovered and confirmed *before* the first module is chosen, not bolted on later. See `knowledge/standards/variants-and-user-types.md`.
 
@@ -105,15 +107,16 @@ Ask question 1 first. Then scan whichever of these exist, in this order — each
 
 | Read | Tells you |
 |---|---|
+| **The frontend route table / router config / nav / lazy-imports** | **the module taxonomy (frontend-first): each top-level route/area is a candidate module, named as users name it** — read this first |
 | OpenAPI / Swagger document (file in the repo, or served by the API) | the route inventory, schemas, documented status codes, security schemes |
-| Controllers / route files / URL conf / handler registrations | the real routes and methods, route templates, role/policy attributes, the status each handler returns |
+| Controllers / route files / URL conf / handler registrations | the real routes and methods, route templates, role/policy attributes, the status each handler returns (resolve the frontend's API calls into these) |
 | The auth/login handler and its request + response types | auth kind, field names, token location, tenancy |
 | **An account-type / role / tier / edition enum + the sites that branch on it** | the **variant axis**: its values (from the enum), its breadth (files/modules), and whether it is ui / backend / both — section 0 |
 | The frontend's API client and env files | base URLs, and exactly how the real client authenticates and what headers it always sends |
 | Any existing e2e suite, seed script or Postman collection | a working, proven token flow and sample payloads — the biggest shortcut available |
 | CI config, `appsettings`/`application-*`/`.env.example` files, README, QA docs | environment names, account names (never values you should copy), conventions and gotchas |
 
-Detect the stack from the routing style you find (attribute-routed controllers, decorator-based routers, annotation-mapped controllers, URL confs, route tables) and state what you detected — the QA confirms it in question 2. Group route prefixes into modules by **what the product calls things**, not how the code is organised — QA and developers must be able to name the same module.
+Detect the stack from the routing style you find (attribute-routed controllers, decorator-based routers, annotation-mapped controllers, URL confs, route tables) and state what you detected — the QA confirms it in question 2. **Derive the module list frontend-first** — from the app's route table / nav (`/orders`, `/customers`, `/widgets`), each top-level route/area a module named as the product names it — then map each module's screens to the backend handlers its API calls hit. Group by **what the product calls things**, not how the code is organised; QA and developers must be able to name the same module. For an **API-only** product (no frontend), group by backend route prefix instead, and say the taxonomy came from the backend.
 
 **No repo, or the repo has no routes you can read?** Explore the live API instead, read-only, with the Playwright MCP (`browser_navigate`, `browser_network_requests`):
 
@@ -257,13 +260,31 @@ in it (secrets stay in `.env`). If one already exists, do not overwrite it.
 **(d) Seed the `catalog` slice — the module registry the status board + `/build` read.** From the module
 inventory you just confirmed (the same modules in `system-map.modules`), write the `catalog` slice to
 `qa-context.json`: `product` = the house-profile `product.name`; `modules[]` each
-`{ name, summary, endpointCount?, status: "discovered" }`; `recommended` = the confirmed target module, and
-set **that module's `status` to `"in-progress"`**; `frameworkScaffold: "absent"` (phase 1 hasn't run yet).
+`{ name, summary, endpointCount?, status: "discovered", kb: "stub" }` (`kb: "stub"` because step (e)
+scaffolds a stub for each; a module whose KB you did not stub stays `kb: "absent"`); `recommended` = the
+confirmed target module, and set **that module's `status` to `"in-progress"`**; `frameworkScaffold: "absent"`
+(phase 1 hasn't run yet).
 `catalog` is the one slice (with `learning`) that **persists across sessions** — it is what makes the build
 "structure once, then one module at a time, expand forever", so seeding it here means a later `/build` or
 `/qa` knows the whole map without re-scanning. `kit-builder` then flips `frameworkScaffold` to `built` and
 the module to `built` as it finishes (see its phases). If a `catalog` already exists, **merge** (add
 newly-discovered modules, don't downgrade a `built` one).
+
+**(e) Scaffold the Knowledge Base — the "`/qa` creates a knowledgebase" step (first run only).** If no
+`knowledge-base/` exists at the framework root, create the scaffold defined by
+`knowledge/standards/knowledge-base.md`:
+- `knowledge-base/README.md` (index + which engine reads which file first) and `CONVENTIONS.md` (slug rules,
+  evidence-tag grammar, FE/BE separation, the `absent → stub → deep` legend) — copy from the template's
+  `knowledge-base/` scaffold;
+- an empty `knowledge-base/RULES.md` (header only — rules are appended as modules are deepened);
+- a **thin `knowledge-base/modules/<slug>.md` stub per discovered module**: Purpose (one line from the scan) +
+  Route(s) + a keyword-pack placeholder, marked `kb: stub`. This is breadth, fast — the whole-app feature map
+  exists immediately; **depth comes lazily** from `kb-builder` when a module is analyzed/built/tested.
+
+This is product knowledge for the QA's team: it is **committable in the QA's repo** (the template `.gitignore`
+does not ignore `knowledge-base/`) and is **never** written into the plugin. Do not deep-generate here — a stub
+per module only; set each stubbed module's `catalog.modules[].kb = "stub"` (step (d)). If `knowledge-base/`
+already exists, do not overwrite it — leave existing module docs as they are.
 
 **The file is the handoff.** `kit-builder` reads `flow-map.json`; a map that exists only in chat is lost across a subagent handoff or a context compaction. If the QA corrects anything after sign-off, re-write the file and re-print it — the file and the printed block must never differ.
 
@@ -355,7 +376,9 @@ The **confirmation log** (human-readable prose or a table, printed after the JSO
 - [ ] `flow-map.json` written at the framework root with exactly `module`, `hosts`, `authKind`, `endpoints`, `flows`, and both files' JSON printed for the QA
 - [ ] A minimal `house-profile.json` was created (from the example, `product.name` set) if absent — so the status board can name the product; never overwritten, never committed, no secret in it
 - [ ] An existing `.env` / frontend env (different key schema) was **adopted by mapping** its keys onto the template schema (not re-typed), the mapping recorded in the confirmation log, secrets never echoed
-- [ ] The `catalog` slice was **seeded** from the confirmed module inventory (modules `discovered`, target `in-progress`, `frameworkScaffold: absent`), merged with any existing catalog — so the status board + `/build` know the map without re-scanning
+- [ ] Modules were discovered **frontend-first** (from the app's route table / nav; backend-prefix fallback only for an API-only product, stated)
+- [ ] The `catalog` slice was **seeded** from the confirmed module inventory (modules `discovered`, target `in-progress`, each `kb: stub`, `frameworkScaffold: absent`), merged with any existing catalog — so the status board + `/build` know the map without re-scanning
+- [ ] On first run, the **Knowledge Base was scaffolded** (`knowledge-base/` README + CONVENTIONS + empty RULES + a thin `modules/<slug>.md` stub per module); it is committable in the QA's repo and was not deep-generated here or written into the plugin
 - [ ] The confirmation log names every correction, delegated answer, gap and still-blank key
 - [ ] Nothing product-specific, secret or real-URL in anything that could be committed
 

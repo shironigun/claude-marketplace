@@ -71,7 +71,10 @@ QA **which** plan/suite before generating.
 ### 2. Inspect the framework for reuse (before generating anything)
 Read the `framework` slice (or inspect the root). Build the reuse map the way `kit-builder` does: which
 services, schemas, routes, builders, page-objects, components and fixtures already exist for this module and
-its dependencies. **Prefer reuse**: a prerequisite another module owns is built by that module's
+its dependencies. **If the module has a KB atlas** (`knowledge-base/atlas/<slug>.md` —
+`knowledge/standards/knowledge-base.md`), use its **FE/BE path globs + FE↔BE link table** to scope which
+product files (services/components/controllers) back each feature, so the reuse map targets the right building
+blocks instead of a broad guess. **Prefer reuse**: a prerequisite another module owns is built by that module's
 service/POM via the merged fixtures, never re-implemented. Note the gaps you will need to add (a missing
 schema, a new page-object) — the minimum, nothing speculative.
 

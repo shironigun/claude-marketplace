@@ -1,6 +1,6 @@
 ---
 name: author-api-cases
-description: Native skill of the qa-engineering — act as a senior SQA analyst doing API testing and author API test cases in a rigorous, behavior-driven house style at three levels: Contract (response/request shape against a schema), Endpoints (happy path plus the full negative matrix per endpoint), and Workflows (chained end-to-end across calls). Product-neutral and tracker-agnostic (ADO / Jira / any), grounded in the kit's framework standards. Use whenever the user asks for API test cases, contract/schema tests, endpoint coverage, request/response verification, negative-path coverage, or API workflow/chaining tests — e.g. "write API tests for POST /orders", "what should I test on this endpoint?", "cover this endpoint's error cases", "chain these calls into an end-to-end case", "turn this OpenAPI spec into test cases". API sibling of the UI-focused author-ui-cases skill; use author-ui-cases for click-by-click UI and this one for anything request/response. Authors cases only — to file them as work items hand off to file-to-tracker; to draft a bug from a failed API test use failure-to-bug.
+description: Native skill of the qa-engineering — act as a senior SQA analyst doing API testing and author API test cases in a rigorous, behavior-driven house style at three levels — Contract (response/request shape against a schema), Endpoints (happy path plus the full negative matrix per endpoint), and Workflows (chained end-to-end across calls). Product-neutral and tracker-agnostic (ADO / Jira / any), grounded in the kit's framework standards. Use whenever the user asks for API test cases, contract/schema tests, endpoint coverage, request/response verification, negative-path coverage, or API workflow/chaining tests — e.g. "write API tests for POST /orders", "what should I test on this endpoint?", "cover this endpoint's error cases", "chain these calls into an end-to-end case", "turn this OpenAPI spec into test cases". API sibling of the UI-focused author-ui-cases skill; use author-ui-cases for click-by-click UI and this one for anything request/response. Authors cases only — to file them as work items hand off to file-to-tracker; to draft a bug from a failed API test use failure-to-bug.
 ---
 
 # API Test Cases — Senior SQA Analyst
@@ -107,11 +107,21 @@ The shared voice rules live in the core (`knowledge/authoring/house-style.md`): 
 - **Endpoints** — happy per method, then the negative matrix (401, 403, 400/422, 404, 409, and any others that apply). One case each; each changes exactly one thing from the happy call.
 - **Workflows** — the primary lifecycle chained with id capture, state-transition assertions, a final `GET`, and teardown; a cross-flow guard per shared-state dependency.
 
+## Seed from the Knowledge Base (when present)
+
+If the module has a `deep` Knowledge Base (`knowledge/standards/knowledge-base.md`), read its
+`knowledge-base/RULES.md` anchors for this module (and the module doc's Flows/Breaks/Variants): **each RULES
+anchor is a testable Condition → Result that should map to at least one case** (usually the negative/validation/
+permission/variant cases teams miss). Seed coverage from the rules first, then add the happy paths and the
+endpoint matrix. For a case that verifies a specific rule, set **`tracesRule`** to that anchor so the thread
+runs rule → case. This grounds the set in documented behaviour and makes KB-rule coverage visible; it does not
+replace your own coverage reasoning.
+
 ## After drafting — record in qa-context + the approval seam
 
 Per the core's output contract (`knowledge/authoring/house-style.md`):
 
-1. Write the `cases` slice to `qa-context.json` (framework root, from the file): `items[]` (each `{ title, level, tags[], tracesStory, tracesModule, adoCaseId: null }`, `level` = `contract`/`endpoint`/`workflow`; set **`tracesStory`** for a story-sourced case or **`tracesModule`** (the `module` slice's name) for a code-sourced one — the other `null`, so a module-authored case is never an orphan), plus `mdPath`, `coverage`, with **`approved: false`**.
+1. Write the `cases` slice to `qa-context.json` (framework root, from the file): `items[]` (each `{ title, level, tags[], tracesStory, tracesModule, tracesRule, adoCaseId: null }`, `level` = `contract`/`endpoint`/`workflow`; set **`tracesStory`** for a story-sourced case or **`tracesModule`** (the `module` slice's name) for a code-sourced one — the other `null`, so a module-authored case is never an orphan; set **`tracesRule`** to the `knowledge-base/RULES.md` anchor a case verifies when it was seeded from a KB rule, else `null`), plus `mdPath`, `coverage`, with **`approved: false`**.
 2. Present the cases grouped by level (Contract → Endpoints → Workflows) and ask a **single** gate: **"Approve this exact set to lock it for publishing? Reply *approve* to lock it, or tell me what to add, cut, or change."** Adjust before finalizing.
 3. Set **`approved: true` only on an explicit *approve*** (or unmistakable equivalent); a change request or a bare "ok" is not approval; never infer it from "ok"/silence/drafting. **Any change to the set resets `approved` to `false`.**
 4. Once approved, the gated **`ado-publish`** skill files them; if an authored case later fails during execution, `failure-to-bug` drafts the bug.

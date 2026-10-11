@@ -65,11 +65,20 @@ Read `references/format-and-voice.md` for the extended granularity guide, common
 
 For every story, produce cases across all applicable axes: happy path; each acceptance criterion (pass + fail/boundary); each business rule (enforce + normal); edge cases (empty, max-length, boundary, missing/expired, duplicate, deleted mid-flow); negative cases; permissions (per role, can/cannot); cross-flow (each shared-data feature, one regression guard). Skip an axis only when it genuinely does not apply. If in doubt, include it.
 
+## Seed from the Knowledge Base (when present)
+
+If the module has a `deep` Knowledge Base (`knowledge/standards/knowledge-base.md`), read its module doc's
+**Flows** (Trigger / Steps / Breaks / UI anchors / Variants) and the **RULES anchors** it links: each flow is a
+UI journey to cover and **each RULES anchor is a testable Condition → Result** that should map to at least one
+case (the exact Breaks strings become the negative assertions; the Variants section tells you which journeys
+need a per-variant case). Set **`tracesRule`** on a case that verifies a specific rule so the thread runs
+rule → case. This grounds the set in documented behaviour; it does not replace your own coverage reasoning.
+
 ## After drafting — record in qa-context + the approval seam
 
 Per the core's output contract (`knowledge/authoring/house-style.md`):
 
-1. Write the `cases` slice to `qa-context.json` (framework root, from the file): `items[]` (each `{ title, level, tags[], tracesStory, tracesModule, adoCaseId: null }`, `level` = `smoke`/`regression`/`e2e`; set **`tracesStory`** for a story-sourced case or **`tracesModule`** (the `module` slice's name) for a code-sourced one — the other `null`), plus `mdPath`, `coverage`, with **`approved: false`**.
+1. Write the `cases` slice to `qa-context.json` (framework root, from the file): `items[]` (each `{ title, level, tags[], tracesStory, tracesModule, tracesRule, adoCaseId: null }`, `level` = `smoke`/`regression`/`e2e`; set **`tracesStory`** for a story-sourced case or **`tracesModule`** (the `module` slice's name) for a code-sourced one — the other `null`; set **`tracesRule`** to the `knowledge-base/RULES.md` anchor a case verifies when seeded from a KB rule, else `null`), plus `mdPath`, `coverage`, with **`approved: false`**.
 2. Present all cases and ask a **single** gate: **"Approve this exact set to lock it for publishing? Reply *approve* to lock it, or tell me what to add, cut, or change."** Adjust before finalizing.
 3. Set **`approved: true` only on an explicit *approve*** (or unmistakable equivalent); a change request or a bare "ok" is not approval; never infer it from "ok"/silence/drafting. **Any change to the set resets `approved` to `false`.**
 4. Once approved, the gated **`ado-publish`** skill files them to a Test Plan/Suite; if an authored case later fails during execution, `failure-to-bug` drafts the bug.
