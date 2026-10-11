@@ -65,6 +65,14 @@ chat block a compaction may have dropped), per `knowledge/orchestration/qa-conte
 `approved` is the one field that unlocks loading; it is set upstream by the authoring/approval step, never
 here. Treat an absent `approved` as not-approved — fail closed, never assume consent.
 
+**Reconciled cases are not authored cases.** An item with **`source: "generated"`** was backfilled by the
+reconcile step from a spec that had no authored case (see `knowledge/orchestration/qa-context.md`) — the QA
+never reviewed or approved it. **Do not publish a `source: "generated"` item as if authored:** hold it out of
+the publish set and **surface it separately** ("N cases were reconciled from generated specs beyond your
+approved set — review/author them before I publish them"). It can be published only after the QA authors or
+explicitly approves it (which clears `source` back to `authored`). The slice-level `approved` flag does not
+cover a `generated` item — approval must be per the real authored set.
+
 **SP7 does not author and does not approve.** It never writes a title, a step, or an expected result;
 it never marks a case approved. Authoring and approval are upstream. If the cases look thin, say so and
 send the QA back to the authoring engine — do not fill the gap.
