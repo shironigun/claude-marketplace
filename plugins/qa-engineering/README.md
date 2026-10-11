@@ -141,23 +141,32 @@ credentials) and is never read by the MCP servers.
 
 If ADO is not signed in, phase 4 degrades to local drafts and the build carries on.
 
-### Windows vs macOS/Linux
+**Tracker support.** **Azure DevOps is the supported tracker today** — the only workflows that need it are
+the two *tracker writes*: publishing approved cases to a Test Plan/Suite (`ado-publish`) and filing a bug
+(`failure-to-bug`). **Everything else is tracker-independent** — analyze, build, generate, run, teach,
+review, and authoring/approving cases all work with no tracker at all, and the two write steps **draft
+locally** when ADO is absent. So a QA on **Jira / GitHub Issues / Linear** gets the whole loop today, with
+the publish/file steps as local drafts; native support for other trackers is a **planned** future (the
+`house-profile` already carries a `tracker.kind` seam for it).
 
-The shipped `.mcp.json` uses the Windows launcher (`cmd /c npx ...`). On macOS or Linux, replace
-each server's `command` and `args` so `npx` is called directly:
+### Platforms (the shipped config is cross-platform)
+
+The shipped `.mcp.json` calls `npx` **directly**, so it starts out of the box on **macOS, Linux and WSL**
+(where most QAs are). On **Windows**, if a server fails to start with an `npx`/ENOENT error, wrap each
+command with the Windows launcher:
 
 ```json
 {
   "mcpServers": {
     "playwright": {
       "type": "stdio",
-      "command": "npx",
-      "args": ["-y", "@playwright/mcp@0.0.83"]
+      "command": "cmd",
+      "args": ["/c", "npx", "-y", "@playwright/mcp@0.0.83"]
     },
     "ado": {
       "type": "stdio",
-      "command": "npx",
-      "args": ["-y", "@azure-devops/mcp@2.10.0", "${ADO_ORG}", "--authentication", "interactive"]
+      "command": "cmd",
+      "args": ["/c", "npx", "-y", "@azure-devops/mcp@2.10.0", "${ADO_ORG}", "--authentication", "interactive"]
     }
   }
 }

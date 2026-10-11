@@ -2,7 +2,7 @@
   "name": "qa-engineering",
   "version": "0.5.0",
   "types": "./types/index.d.ts",
-  "description": "The single AI QA engineering plugin: one orchestrator for the whole loop — analyze an ADO story, author and approve test cases, publish them to a Test Plan/Suite, build and generate API + UI automation, and turn a failing run into a filed bug, human-gated at every tracker write. Also teaches and reviews a Playwright + TypeScript framework. Self-contained with its own native QA skills; ships no product data — the QA supplies tracker, API, auth and URLs locally through a git-ignored house-profile and .env.",
+  "description": "The single AI QA engineering plugin: one orchestrator for the whole loop — analyze a story or a module, author and approve test cases, build and generate API + UI automation, run the suite, and turn a failing run into a bug — human-gated at every tracker write. Publishing cases to a Test Plan/Suite and filing bugs support Azure DevOps today (other trackers planned); every other workflow is tracker-independent and works with no tracker at all. Also teaches and reviews a Playwright + TypeScript framework. Self-contained with its own native QA skills; ships no product data — the QA supplies tracker, API, auth and URLs locally through a git-ignored house-profile and .env.",
   "author": { "name": "shironigun" },
   "keywords": ["testing", "automation", "playwright", "typescript", "zod", "api", "ui", "qa", "ado", "test-cases", "bug-filing", "orchestrator"]
 }
