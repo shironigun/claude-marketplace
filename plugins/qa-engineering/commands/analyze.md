@@ -16,8 +16,9 @@ this to the engine that owns it. **Read-only** — nothing is written to the tra
 Treat extra words as steering.
 
 The chosen engine **reads the module's Knowledge Base** (`knowledge-base/modules/<slug>.md` + its RULES) to
-ground the analysis; if that module's KB is only a `stub`, offer to **deepen it first** (`kb-builder`) — a deep
-KB sharpens this analysis and every later one. It then produces a requirement understanding + gaps + QA review
+ground the analysis; if that module's KB is only a `stub`, **deepen it first by default** (`kb-builder`) —
+recommend it and proceed unless I decline. A deep KB sharpens this analysis and every later one; if I decline,
+ground on the stub but flag the result as **shallow (stub-grounded)**, never as fully grounded. It then produces a requirement understanding + gaps + QA review
 with **every claim labeled** Confirmed / Inferred / Assumption / Gap-or-Question (inventing nothing), writes its
 `qa-context` slices (`story`+`review`, or `module`+`review`), and **stops at the gaps gate**. Then tell me, in plain language, what
 you found and the open questions — and that `/test` (or asking `/qa` to make cases) is the next step once the
