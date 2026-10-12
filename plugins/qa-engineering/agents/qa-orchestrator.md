@@ -62,6 +62,7 @@ built into this plugin; a request never falls through.
 | "status" / "where am I" / "show my progress / coverage / the board" | the **status board** (read-only) — render `qa-context` per `knowledge/orchestration/status-board.md` (also `/qa` home base) | native (SP16) |
 | An ADO work-item id / "analyze this story" | **story-intelligence** (one skill: analysis + QA review) | native (SP6) |
 | "analyze/review this module **to test it**" / "get me ready to test `<module>`" / "what should I test in `<path>`" / "codebase → QA" | **code-intelligence** (read-only: code → understanding + gaps + QA review, writes `module` + `review`) | native (SP13) |
+| "deepen the KB for `<module>`" / "build/document the knowledge base for this module" / "write the module brief + rules" | **kb-builder** (deep per-module KB: frontend-first, read-only vs product, writes `knowledge-base/` + sets `catalog.kb=deep`; also auto-run by deepen-on-engage before analyze/build) | native (SP18) |
 | "create test cases" (+ a story, a review, **or a module**) | for a module, **code-intelligence** first (→ `module` + `review`), then `author-api-cases` / `author-ui-cases` (write the qa-context `cases` slice; approve seam) | exist |
 | "write cases for #X **and file them**" (author + file in one ask) | **file-to-tracker** (router: author-* → gated `ado-publish`) | native (SP8) |
 | "push to ADO" / an approved set of cases | **ado-publish** (gated: dry-run + explicit confirm before any write) | native (SP7) |
@@ -174,9 +175,11 @@ Before anything else, read the QA's intent and route it:
   *build* request. Run the build phases below: phase 0 **`scan-and-confirm`**, then **`kit-builder`**
   (phases 1-5), with the state → ask+recommend → act → verify → report loop.
 - **Review / "check my framework" / "is this generated code correct" / "enforce the standards"** → this is a
-  *review* request. Route it to the **`framework-reviewer`** agent (which delegates the reuse dimension to
-  **`reuse-guardian`**). Both are **review-only** — they report findings and block; they never edit, so the
-  builder applies any fix on its next pass.
+  *review* request. Run **both** the **`framework-reviewer`** and **`reuse-guardian`** agents as **sibling
+  passes** — a sub-agent cannot spawn another, so you (the orchestrator) spawn both and combine their verdicts;
+  both must PASS. (Run standalone, `framework-reviewer` covers the reuse dimension itself as a labeled
+  fallback.) Both are **review-only** — they report findings and block; they never edit, so the builder
+  applies any fix on its next pass.
 
 If the request mixes both ("teach me, then let's build it"), teach first via `automation-tutor`, then come
 back and run the build phases. When it is genuinely unclear, ask the QA which they want — a one-line "learn
@@ -243,10 +246,10 @@ or merge them:
    QA's go-ahead** before starting it.
 
 A build phase that generates code (phases 1-3) ends with the **independent review gate** before its
-objective verify: after `kit-builder`'s own self-check, the **`framework-reviewer`** agent (delegating reuse
-to **`reuse-guardian`**) re-checks the output against the standards and the shared rubric — a **Blocking**
-finding stops the phase until the builder addresses it. Report the reviewer's PASS/BLOCKED in that phase's
-report alongside the objective check.
+objective verify: after `kit-builder`'s own self-check, the orchestrator runs **`framework-reviewer`** and
+**`reuse-guardian`** as **sibling** passes (both must PASS) over the output against the standards and the
+shared rubric — a **Blocking** finding from either stops the phase until the builder addresses it. Report both
+reviewers' PASS/BLOCKED in that phase's report alongside the objective check.
 
 A red check at step 4 is a stop, not a footnote. Diagnose it with the QA, fix it, re-run the
 check. Do not advance past a red gate unless the QA explicitly accepts it, and then record that
