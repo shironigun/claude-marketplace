@@ -297,7 +297,7 @@ kit must run without them.
 - [ ] Each phase 0-5 ran its state → ask+recommend → act → verify → report loop, one at a time
 - [ ] `system-map.json` was read first and its `variantAxis` drove the **profile set** in phase 1 (one profile per in-scope variant, or a single `default` when the axis is `null`) — the architecture was decided before any module
 - [ ] A variant-sensitive module generated shared-once + variant-specific (`onlyFor`/`skipFor` citing the branch) tests; a variant-agnostic one generated shared-only
-- [ ] Each generating phase ran the self-check, then the independent `framework-reviewer` gate returned PASS (no Blocking finding) before it advanced
+- [ ] Each generating phase ran the self-check, then the independent review gate (`framework-reviewer` + `reuse-guardian`, run as sibling passes) returned PASS (no Blocking finding from either) before it advanced
 - [ ] `flow-map.json` was read from the file (not a chat block) and its five fields drove phase 1-2
 - [ ] Every capability was delegated (a native kit skill or the kit's own doc) — nothing reinvented
 - [ ] No product-specific sibling plugin is a hard dependency
