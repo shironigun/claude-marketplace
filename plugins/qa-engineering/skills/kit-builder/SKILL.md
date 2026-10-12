@@ -72,11 +72,13 @@ A phase never silently assumes. Each one runs the same five beats:
 - **`.env`** at the same root — URLs, auth details, credentials. Auth *details* (login path,
   field names, token location) live here, not in the flow map; `authKind` is the only auth
   value the map carries.
-- **The module's Knowledge Base, when `deep`** (`knowledge-base/modules/<slug>.md` +
-  `atlas/<slug>.md`, `catalog.modules[].kb` — `knowledge/standards/knowledge-base.md`). Phase 0
-  (`scan-and-confirm`) scaffolds a KB stub per module; when a module's KB has been deepened, phases 2-3
+- **The module's Knowledge Base** (`knowledge-base/modules/<slug>.md` + `atlas/<slug>.md`,
+  `catalog.modules[].kb` — `knowledge/standards/knowledge-base.md`). Phase 0 (`scan-and-confirm`) scaffolds a
+  KB stub per module. Building a module is grounding-dependent work, so **phases 2-3 deepen the module's KB
+  first by default** (`kb-builder`, unless it is already `deep` or the QA declines — "deepen-on-engage"), then
   read its **Flows + RULES** to ground what to cover and use the atlas **FE/BE globs + link table** to scope
-  which product files back each feature (reuse targeting). The KB is optional grounding, not a required input.
+  which product files back each feature (reuse targeting). If the QA declines, the build proceeds on the stub
+  and says the grounding is shallow.
 
 If `flow-map.json` is missing, phase 0 has not run — invoke `scan-and-confirm` first.
 
