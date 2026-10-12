@@ -158,15 +158,29 @@ A module's KB has one of three depths, tracked on `catalog.modules[].kb`:
 | `deep` | full module brief + trimmed atlas + RULES patch, coverage-self-audited | `kb-builder` (on demand) |
 
 **Generate lazily.** First `/qa` scaffolds `knowledge-base/` and writes a **stub per discovered module** (fast,
-whole-app breadth). A module is **deepened** only when it is about to be analyzed, built, or tested — which
-matches the kit's "structure once, expand module by module" model and keeps token cost proportional to what
-you are working on. Never thin-out a shallow whole-tree deep pass.
+whole-app breadth). Depth is paid **one module at a time**, which matches the kit's "structure once, expand
+module by module" model and keeps token cost proportional to what you are working on. Never thin-out a shallow
+whole-tree deep pass.
+
+**Deepen-on-engage is the default (not an opt-in).** When a module is **engaged for grounding-dependent work**
+— `analyze`, `build`, or `author cases` — the engine **deepens it first**: it recommends deepening and proceeds
+unless the QA declines (the kit's ask-with-recommendation style; "you decide" means it deepens). A module that
+is **already `deep`** is reused as-is (deepen again only to refresh a KB the code has drifted from). This is
+what guarantees the module you are actually testing is always grounded on a `deep` KB, not a `stub`.
+
+Two honesty rules make the default safe:
+- **A declined deepen is flagged, never hidden.** If the QA declines, the engine may ground on the `stub`, but
+  it **labels the result "grounded on a stub (shallow)"** and never presents stub-level knowledge as fully
+  grounded. A thin stub must not masquerade as coverage.
+- **Pure execution does not deepen.** `run` (executing existing specs) does not consult the KB, so it needs no
+  deepening — only the grounding-dependent steps do.
 
 ## How the loop consumes it
 - **`scan-and-confirm`** — frontend-first discovery; seeds `catalog`; scaffolds `knowledge-base/` + the stubs.
 - **`kb-builder`** — deep-generates one module (the investigation protocol + coverage self-audit).
 - **`story-intelligence` / `code-intelligence`** — read `modules/<slug>.md` + its RULES anchors to **ground**
-  analysis; if the module is a `stub`, offer to deepen it first. (Reading markdown is the retrieval — no search
+  analysis; if the module is a `stub`, **deepen it first by default** (recommend; the QA may decline, and a
+  declined analysis is flagged "grounded on a stub (shallow)"). (Reading markdown is the retrieval — no search
   index needed; the engine reads the file.)
 - **`author-api-cases` / `author-ui-cases`** — seed cases from the module's **RULES anchors** (each rule → at
   least one case) and set `cases.items[].tracesRule`.

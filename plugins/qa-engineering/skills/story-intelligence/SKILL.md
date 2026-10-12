@@ -70,8 +70,11 @@ Rules for the retrieval:
   **documented product behaviour** — the existing flows, exact messages, variant differences, and the rules
   already catalogued. Treat a KB fact that cites code evidence as a Confirmed prior; where the story
   **contradicts** the KB, that contradiction is itself a high-value gap (a behaviour change, or a stale KB).
-  If a touched module's KB is only a `stub` (or `absent`), say so — deepening it via `kb-builder` first would
-  sharpen the analysis. See `knowledge/standards/knowledge-base.md`.
+  If the **primary** affected module's KB is only a `stub` (or `absent`), **deepen it first by default** via
+  `kb-builder` (recommend it and proceed unless the QA declines; a declined analysis is flagged "grounded on a
+  stub (shallow)" — never presented as fully grounded). A **secondary touched** module's stub is enough to
+  route and cross-reference it — note where deeper grounding would help, but don't deepen every touched module.
+  See `knowledge/standards/knowledge-base.md` ("Deepen-on-engage is the default").
 
 ## (b) Requirement understanding
 
