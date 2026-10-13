@@ -1,5 +1,5 @@
 ---
-description: "Deepen the knowledge base for a module" → kb-builder (SP18)
+description: Deepen the knowledge base for a module (kb-builder, SP18)
 tags: [trigger, knowledge-base, sp18]
 max_turns: 15
 timeout_seconds: 600
