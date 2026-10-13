@@ -14,8 +14,9 @@ builder does that in SP3), and never re-invents the "when to choose X vs Y" deci
 `framework-standards`).
 
 ## Inputs this skill relies on
-- **`knowledge/curriculum/learning-path.md`** — the ordered ~35 topics, each with a goal, prerequisites,
-  mapped standard(s), official doc link(s), and a "build it with the kit" hook.
+- **`knowledge/curriculum/learning-path.md`** — the ordered ~35 topics (plus the focused **Extension track**
+  E1-E6 for the VS Code extension, run by `/learn-extension`), each with a goal, prerequisites, mapped
+  standard(s), official doc link(s), and a "build it with the kit" hook.
 - **`knowledge/curriculum/depth-levels.md`** — the canonical L1–L4 definitions and the dynamic
   depth-adjust protocol. Default depth is **L2**.
 - **`framework-standards` skill** → `knowledge/standards/*.md` — the actual explanations, code shapes, and
@@ -35,7 +36,7 @@ Read `learning-path.md` first, then respond to how the learner wants to move:
 **Progress persists in the `learning` slice** (`knowledge/orchestration/qa-context.md`): the ordered `path[]`
 with each topic's `status` (`pending`/`covered`), the `current` topic, and the learner's `depth`. **Read it to
 resume across sessions.** This skill **teaches read-only** — it does not write the slice; the orchestrator (the
-`/learn` course) records progress after each topic. If no slice exists yet, infer from the conversation, ask,
+`/learn` course, or `/learn-extension` for the Extension track) records progress after each topic. If no slice exists yet, infer from the conversation, ask,
 or offer to start at the beginning; never fabricate a saved place. **Respect prerequisites**: a topic's listed
 prereqs are taught (or knowingly skipped) before it.
 

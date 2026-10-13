@@ -94,21 +94,36 @@ module test is written.
 3. *Auth probe* — "Run `npm run verify:setup` now to prove login + connectivity before we
    build?" **Recommended: yes** — every automation project that stalls, stalls here; a green
    probe is the real start.
+4. *UI toolchain* — "Set up the Playwright **browsers** and the **VS Code extension** now?"
+   **Recommended: yes** — the UI tests can't run without the browsers, and the extension makes
+   them discoverable/runnable/debuggable from the editor. *(Asked only when `system-map.automation`
+   ∈ {`applicable`, `partial`} **and `WEB_APP_URL` is set** — the one signal that a browser UI is in
+   scope; **skipped** whenever `WEB_APP_URL` is blank: `api`/`desktop`/API-only, or a `mixed` product
+   whose UI is a desktop client. Not gated on `productKind`.)*
 
-**Inputs.** `flow-map.json` (`hosts`, `authKind`, `module`) and `.env`.
+**Inputs.** `flow-map.json` (`hosts`, `authKind`, `module`) and `.env`; `system-map.json`
+(`automation`, `productKind`) for the UI-toolchain gate.
 
 **Act.** Copy `template/`; register each `hosts` entry in `config/services.ts` (first =
 `primary: true`) with its `baseUrlEnvKey`; set `AUTH_STRATEGY` from `authKind`; copy
 `modules/example/fixtures.ts` to `modules/<module>/fixtures.ts` and create the
 `api/{contracts,endpoints,workflows}` + `ui/{smoke,regression,e2e}` folders. **Do NOT
-overwrite an existing `.env` or `flow-map.json`** — fill/append missing keys only.
+overwrite an existing `.env` or `flow-map.json`** — fill/append missing keys only. **Then, for a
+UI-automatable build with a browser UI in scope (`WEB_APP_URL` set),** hand off to the
+**`ui-automation-setup`** skill (gated): detect → install + verify the Playwright **browsers** →
+install the **VS Code extension** (via the `code` CLI, else guide) → wire `.vscode/` additively →
+verify via the framework's own `auth.setup`. It degrades gracefully and **skips cleanly** whenever
+`WEB_APP_URL` is blank (`api`/`desktop`/API-only, or a `mixed` product's desktop UI).
 
 **Produced artifact.** A compiling, lintable skeleton with a working auth probe:
 `config/` · `common/` (one client with token / re-login / stopped-host handling, base
 fixture, matchers, helpers) · `modules/<module>/` · `playwright.config.ts`.
 
 **Verification.** `npm run typecheck` clean, `npm run lint` clean, `npm run verify:setup`
-mints a token and probes `VERIFY_PATH` green on every registered service.
+mints a token and probes `VERIFY_PATH` green on every registered service. **For a build with a browser
+UI (`WEB_APP_URL` set):** the browsers are installed (verified by a real re-check), the VS Code extension is installed
+(via the `code` CLI) or the QA was guided when no `code` CLI exists, `.vscode/` exists, and nothing
+existing was overwritten — a missing `code` CLI or a declined install is reported, never a build failure.
 
 ---
 
