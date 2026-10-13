@@ -22,7 +22,25 @@ enhancement spec (kept with the author; not shipped in this repo).
 7. **Preserve existing strengths** — `qa-orchestrator` (was `kit-orchestrator`), `scan-and-confirm`, `kit-builder`, the
    6-phase state machine, the `template/` scaffold, secret scanning, the MCP servers.
 
-## Latest — Desktop & manual track (SP19, 2026-10-13)
+## Latest — UI-automation setup & VS Code extension mastery (SP20, 2026-10-13)
+
+Spec: [`SP20-spec.md`](./SP20-spec.md) · Plan: [`SP20-plan.md`](./SP20-plan.md). Makes the plugin **actively set
+up** the Playwright UI toolchain during a build and **coach the QA to master the VS Code extension** — closing
+the gap that the plugin only *shipped* `.vscode/` config, *documented* the extension, and *mentioned* it in one
+tutor topic, but never installed the browsers/extension, never verified them, and had no focused "learn the
+extension" path. Two additive parts, both gated on UI-automatability (SP19's `automation`): **(A)** a new
+**`ui-automation-setup`** skill folded into `kit-builder` **Phase 1** (no new command) — detect → install +
+verify the **browsers** (`npx playwright install`) → install the **VS Code extension** (via the `code` CLI, else
+guide) → wire `.vscode/` additively → verify via the framework's own `auth.setup`; it **skips cleanly** for
+`api`/`desktop`/API-only and never fails the build; **(B)** a dedicated **`/learn-extension`** command + an
+**`extension` learning track** (E1-E6: install & discover → run/debug in-editor → Record / Pick-locator →
+codegen→POM refactor → Trace Viewer → multi-config) that **launches** `codegen`/`show-trace`/`show-report` for
+hands-on practice and persists progress in the reused `learning` slice. Guardrails: additive-only (non-UI builds
+byte-unchanged), gated, honest-outcome, non-destructive (never overwrite `.vscode`/`.env`), no password typing
+into remote forms, reuse-over-duplication (one source `vscode-playwright.md`, no new slice), cross-platform.
+Version `0.7.0 → 0.8.0`.
+
+## Desktop & manual track (SP19, 2026-10-13)
 
 Spec: [`SP19-spec.md`](./SP19-spec.md) · Plan: [`SP19-plan.md`](./SP19-plan.md). Makes the plugin useful to QAs
 on **legacy/desktop products** (VB.NET, Delphi, WinForms/WPF) that **cannot** be Playwright-automated — story
