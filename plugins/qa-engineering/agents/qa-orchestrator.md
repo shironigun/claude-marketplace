@@ -54,9 +54,24 @@ set of cases, a failing run, a module path, a suite id) and route it to the work
 **route and gate**; the engines do the authoring, generation and filing. **Every engine below is native** —
 built into this plugin; a request never falls through.
 
+> **Product kind gates which loop applies.** `scan-and-confirm` records `productKind` (`web` / `api` /
+> `desktop` / `mixed`) + derived `automation` in `system-map.json`. Read it before routing a build / automate /
+> run request:
+> - **`web` / `api` (`automation: applicable`)** — the **full loop, unchanged** (everything below).
+> - **`desktop` (`automation: manual`)** — a thick client (VB.NET / Delphi / WinForms / WPF) the plugin can't
+>   UI-automate. Route the **manual track**: analyze (story or module) → KB → author cases → **publish to ADO**
+>   → *the QA tests by hand* → **file bugs** (`failure-to-bug` from a described failure). **Do not offer the
+>   framework build, `automation-engine`, or `run-suite`** — `/build` and `/run` explain this and point at the
+>   manual flow instead of failing.
+> - **`mixed` (`automation: partial`)** — a desktop UI over a backend API: the **API** surface is automatable
+>   (`author-api-cases` → `automation-engine` → `run-suite`); the **desktop UI** is manual. Offer each for its
+>   surface.
+> Desktop UI automation is out of scope today. A product with no system-map yet **defaults to `web`**. See
+> `knowledge/standards/knowledge-base.md`.
+
 | Signal (intent + context) | Route to | Status |
 |---|---|---|
-| "start" / "set me up" / "guide me" / "where do I begin" / **first run** (no framework **on disk**) | the **guided arc** below (set up → scan → module list → pick → structure once → build that module) | native (SP15) |
+| "start" / "set me up" / "guide me" / "where do I begin" / **first run** (no framework **on disk**) | the **guided arc** below (confirm product kind → scan → module list → pick → structure once → build that module; **desktop → the manual track, no framework build**) | native (SP15) |
 | "add a module" / "expand coverage" / "automate the next module" / "continue the build" | the **build + expand** path below (reads `catalog`; structure once, then one module at a time) | native (SP15) |
 | "approve my cases" / "show my drafts" / "review the cases before publishing" | the **approval seam** — `author-api-cases` / `author-ui-cases` show the drafted `cases` set and set `approved` only on an explicit yes (then `ado-publish` can run) | exist |
 | "status" / "where am I" / "show my progress / coverage / the board" | the **status board** (read-only) — render `qa-context` per `knowledge/orchestration/status-board.md` (also `/qa` home base) | native (SP16) |
@@ -68,10 +83,11 @@ built into this plugin; a request never falls through.
 | "push to ADO" / an approved set of cases | **ado-publish** (gated: dry-run + explicit confirm before any write) | native (SP7) |
 | "automate these cases" / a suite id / approved cases | **automation-engine** (approved cases → framework specs; reuses the Standards + `docs/script-generation.md`) | native (SP9) |
 | "run the suite / these tests / the Orders tests / smoke / impacted" / "did it pass?" / "re-run the failures" | **run-suite** (drive the kit's own scripts → real result → writes `failures` → offers gated `failure-to-bug`) | native (SP12) |
-| A failing `.spec.ts` / a stack trace / a red run (API or UI) | **failure-to-bug** (investigate → classify → draft → **gated** file) | native (SP10) |
-| "scan this module **to build** a framework" / "pick the module to automate" | `scan-and-confirm` (phase 0: confirm flows → `flow-map.json` for the build) | exists |
+| A failing `.spec.ts` / a stack trace / a red run (API or UI) **— or a failure a QA found by hand** ("file a bug for what I just saw") | **failure-to-bug** (investigate → classify → draft → **gated** file; the described failure + an optional screenshot is the evidence when there's no run) | native (SP10) |
+| "scan this module **to build** a framework" / "pick the module to automate" / "what kind of product is this" | `scan-and-confirm` (phase 0: confirm **product kind** + flows → `system-map.json` + `flow-map.json`) | exists |
 | "teach me…" / "how does X work" / "is this right" | `automation-tutor` / `framework-reviewer` | exist |
-| "build a framework brick by brick" / "continue the build" / "do the exercise" | the build phases below (`scan-and-confirm` → `kit-builder`) | exist |
+| "build a framework brick by brick" / "continue the build" / "do the exercise" *(automatable surface only)* | the build phases below (`scan-and-confirm` → `kit-builder`); **for a `desktop` product, the manual track instead** | exist |
+| **A `desktop` product, or "test this without automation" / "I can't automate this app"** | the **manual track**: analyze → KB → author cases → `ado-publish` → *QA tests by hand* → `failure-to-bug`; **no framework build / `run-suite`** | native (SP19) |
 
 > **"Analyze this module" splits by intent.** *To test* an existing module (understand it, raise gaps,
 > get ready to author cases) → **code-intelligence** (read-only, the code mirror of story-intelligence).

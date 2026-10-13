@@ -21,6 +21,16 @@ See **`${CLAUDE_PLUGIN_ROOT}/docs/phases.md`** for every phase in full (exact qu
 reason, inputs, produced artifact, verification) and **`${CLAUDE_PLUGIN_ROOT}/docs/reuse.md`** for the reuse map
 (which generic skill backs each capability and how it is invoked).
 
+> **Runs only for an automatable surface — check `system-map.automation` first.** `kit-builder` builds a
+> **Playwright** framework, so before phase 1 read `system-map.json`:
+> - **`automation: applicable`** (a `web`/`api` product) → build the full framework (phases 1-5), as today.
+> - **`automation: partial`** (a `mixed` product) → build the **API** suite only (phase 2); **skip the UI
+>   suite** (phase 3) — the desktop UI is tested manually.
+> - **`automation: manual`** (a `desktop`/thick-client product the plugin can't UI-automate) → **do not build a
+>   framework.** There is nothing to generate. Tell the QA the **manual track** applies (analyze → KB → author
+>   cases → publish to ADO → test manually → file bugs) and hand back to `qa-orchestrator`.
+> See `knowledge/standards/knowledge-base.md` (product kinds). Desktop UI automation is out of scope today.
+
 ## The loop every phase runs
 
 A phase never silently assumes. Each one runs the same five beats:

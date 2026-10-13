@@ -1,6 +1,6 @@
 ---
 name: kb-builder
-description: Native engine of the qa-engineering — deep-generate one module's Knowledge Base entry (a behavior brief + testable RULES + a thin code atlas) from the product code, frontend-first, so the analysis and authoring engines are grounded in documented behavior instead of re-deriving it. Given a module (a route/area/slug), it reads the product repo READ-ONLY, runs the investigation protocol (map the frontend surface, trace its API calls, resolve them into backend handlers, cross-check contracts, extract rules, build disambiguation keyword packs, mark variant behavior), confirms the discovered surface with the QA, then WRITES only the knowledge-base/ files in the QA's own repo (modules/<slug>.md + atlas/<slug>.md + a RULES.md patch) and runs a coverage self-audit. Product-neutral; the module/routes/messages come from the code, never hard-coded. Use whenever the user wants to "deepen the KB for <module>", "build the knowledge base for this module", "document this module's features/rules", "generate the module brief", or when scan-and-confirm/story-/code-intelligence finds a module whose KB is still a stub and the QA opts to deepen it. It generates product KNOWLEDGE into the QA's repo; it does NOT author test cases (author-api-cases / author-ui-cases), scan-to-build (scan-and-confirm → kit-builder), analyze-only (code-intelligence), or write to the tracker.
+description: Native engine of the qa-engineering — deep-generate one module's Knowledge Base entry (a behavior brief + testable RULES + a thin code atlas) from the product code, surface-first, so the analysis and authoring engines are grounded in documented behavior instead of re-deriving it. Given a module (a route/screen/area/slug), it reads the product repo READ-ONLY, runs the investigation protocol (map the surface — web screens under a route OR a desktop app's forms/windows/menus — trace its calls, resolve them into backend handlers or code-behind/business-logic, cross-check contracts, extract rules, build disambiguation keyword packs, mark variant behavior), confirms the discovered surface with the QA, then WRITES only the knowledge-base/ files in the QA's own repo (modules/<slug>.md + atlas/<slug>.md + a RULES.md patch) and runs a coverage self-audit. Product-neutral; the module/routes/messages come from the code, never hard-coded. Use whenever the user wants to "deepen the KB for <module>", "build the knowledge base for this module", "document this module's features/rules", "generate the module brief", or when scan-and-confirm/story-/code-intelligence finds a module whose KB is still a stub and the QA opts to deepen it. It generates product KNOWLEDGE into the QA's repo; it does NOT author test cases (author-api-cases / author-ui-cases), scan-to-build (scan-and-confirm → kit-builder), analyze-only (code-intelligence), or write to the tracker.
 ---
 
 # KB Builder — one module, deep, from the frontend in
@@ -8,7 +8,7 @@ description: Native engine of the qa-engineering — deep-generate one module's 
 A module's Knowledge Base entry is the product's behavior written down as testable knowledge: what each
 feature does, its flows and exact messages, the business rules, how it varies by variant, and the thin code
 map that ties a feature to the files behind it. `kb-builder` produces that entry for **one module at a time, at
-depth**, discovered **frontend-first** (the module is what users see, not how controllers are grouped). It
+depth**, discovered **surface-first** (the module is what users see — web routes **or** desktop forms/menus — not how controllers are grouped). It
 reads the product read-only and writes only the `knowledge-base/` files in the QA's own repo.
 
 This is a native engine of the `qa-engineering` plugin. It produces the artifact defined by
@@ -46,15 +46,17 @@ slots `code-intelligence` lists (`product.name`, `product.domainNouns`, integrat
 
 ## Inputs
 - **The module** — a route, an area of the repo, or a slug the QA points at (the module `scan-and-confirm`
-  discovered frontend-first and seeded into `catalog`). If `catalog` already lists it as a `stub`, deepen that
+  discovered surface-first and seeded into `catalog`). If `catalog` already lists it as a `stub`, deepen that
   stub; if it is `absent`, create the entry.
 - **A confirmed `flow-map.json` / `module` slice**, when `scan-and-confirm` or `code-intelligence` already
   ran — reuse the confirmed surface instead of a cold re-scan.
 - **`system-map.json`** — the variant axis, so the module's variant behavior is cited, not invented.
 
 ## The investigation protocol (execute in order; do not skip)
-Run against **this module only**, frontend-first, every operation read-only. (This is the KB analogue of
-`code-intelligence`'s gather, sequenced to produce the KB; use its code-reading guide for the *how*.)
+Run against **this module only**, surface-first, every operation read-only. (This is the KB analogue of
+`code-intelligence`'s gather, sequenced to produce the KB; use its code-reading guide for the *how*.) Steps
+A-C below are written for a **`web`** product; for a **`desktop`** product use the desktop variant in the box
+beneath them. **D-H are identical for every product kind.**
 
 **A. Map the frontend surface.** From the SPA's route table / router config / nav / lazy-imports, find this
 module's route(s) and every screen, drawer, modal, tab, and empty/error state under them. This is the module's
@@ -70,8 +72,21 @@ attributes, model binding, validation, branching (including variant branches), s
 Follow into services only as far as behavior a test must know. For an **API-only** product with no frontend,
 start from the backend routes instead and say the taxonomy came from the backend.
 
-**D. Cross-check contracts.** FE request/response assumptions vs BE reality. A mismatch is a high-value
-**Gap** (fuel for negative cases and bug-finding) — record it, do not smooth it over.
+> **Desktop variant of A-C** (`productKind: desktop` — a VB.NET / Delphi / WinForms / WPF thick client, no HTTP
+> surface):
+> - **A (desktop).** Map the module's **forms / windows / menu area** — the screens, dialogs, tabs, and
+>   empty/error states the user sees. This is the surface and the source of the module's name.
+> - **B (desktop).** For each screen, read the **code-behind / event handlers** (button clicks, menu commands,
+>   form load, validators) and the **controls** the user touches. Capture UI anchors as the control's
+>   **label / name** (the `Save` button, the `Email` field), not a web locator.
+> - **C (desktop).** Resolve each handler into the **business-logic / data-access** it calls (service methods,
+>   repositories, SQL) — auth/permission checks, validation, branching (incl. variant branches), and the error
+>   dialogs / message boxes it raises. Follow into services only as far as a test must know. (For a `mixed`
+>   product, also resolve any backend-API calls as in web step C.)
+
+**D. Cross-check contracts.** FE request/response assumptions vs BE reality (for `desktop`: the screen's
+assumptions vs what the handler/service actually does). A mismatch is a high-value **Gap** (fuel for negative
+cases and bug-finding) — record it, do not smooth it over.
 
 **E. Extract rules.** Every **Condition → Result** with its exact user/API message becomes a `RULES.md`
 anchor. Walk the concern taxonomy (reused) to make sure auth, validation, permission, variant, money/credit,
@@ -162,7 +177,7 @@ Per `knowledge/orchestration/qa-context.md`, write **from the file**, additively
 - `knowledge/standards/variants-and-user-types.md` — the variant axis the module's Variants section cites.
 
 ## Done when
-- [ ] The module was discovered **frontend-first** (backend fallback only for API-only, stated), reusing a
+- [ ] The module was discovered **surface-first** (web routes / desktop forms / api-prefix — stated), reusing a
       confirmed flow-map when present; every product operation was read-only.
 - [ ] The investigation protocol A–H ran over **this module at depth**; every claim is labeled; nothing
       invented.

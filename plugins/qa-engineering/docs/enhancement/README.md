@@ -22,7 +22,28 @@ enhancement spec (kept with the author; not shipped in this repo).
 7. **Preserve existing strengths** — `qa-orchestrator` (was `kit-orchestrator`), `scan-and-confirm`, `kit-builder`, the
    6-phase state machine, the `template/` scaffold, secret scanning, the MCP servers.
 
-## Latest — Knowledge Base (SP18, 2026-10-11)
+## Latest — Desktop & manual track (SP19, 2026-10-13)
+
+Spec: [`SP19-spec.md`](./SP19-spec.md) · Plan: [`SP19-plan.md`](./SP19-plan.md). Makes the plugin useful to QAs
+on **legacy/desktop products** (VB.NET, Delphi, WinForms/WPF) that **cannot** be Playwright-automated — story
+analysis, the Knowledge Base/atlas, test-case authoring and all Azure DevOps work (Test Plans/Suites, sprints,
+SWAT/bug boards) are relevant to them even though the automation pillar is not. Adds a **`productKind`**
+dimension to `system-map.json` (`web` | `api` | `desktop` | `mixed`) and a derived **`automation`**
+(`applicable` | `manual` | `partial`) that **gates which loop applies**. `scan-and-confirm` confirms the product
+kind first (question 2, default `web`, never silently inferred) and discovers modules **surface-first** — web
+routes/nav, **desktop forms/windows/menus**, or API backend-prefix — skipping all connection questions for a
+pure desktop product. The **manual track** for a `desktop` product is: analyze → KB → author **manual** cases
+(`author-ui-cases` names controls by label) → **publish to ADO** → *test by hand* → **file bugs**
+(`failure-to-bug` from a QA-described failure) — **no Playwright build/run**. The KB/atlas gains a desktop
+variant (**screen → code-behind → service**); a `mixed` product automates its **API** surface and tests its
+**desktop UI** manually. The whole change is **additive-only to the web/api path** — every new branch sits
+behind a `productKind`/`automation` check and a web/api product behaves exactly as before. Independent
+adversarial review (web non-regression + clean gating): **PASS after fixes** — 4 findings (1 HIGH `mixed`
+UI-case mis-gating, 1 broken question cross-reference from the renumbering, 2 low consistency nits), **all
+fixed**; the core invariant held. Desktop UI **automation** is explicitly out of scope today. Version
+`0.6.2 → 0.7.0`.
+
+## Knowledge Base (SP18, 2026-10-11)
 
 Spec: [`SP18-spec.md`](./SP18-spec.md) · Plan: [`SP18-plan.md`](./SP18-plan.md). Adds a **frontend-first,
 per-module Knowledge Base** the plugin generates into the QA's own repo: a behavior brief (`modules/<slug>.md`),

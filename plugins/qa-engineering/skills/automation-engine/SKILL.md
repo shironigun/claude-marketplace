@@ -13,6 +13,12 @@ qa-context `cases` slice, or ADO Test Cases) instead of a module scan.
 This engine **generates**; it does not author, publish, run, or triage. If there are no approved cases, it
 stops and says so.
 
+> **Automatable surface only.** Generation targets a surface Playwright can drive. Check `system-map.automation`
+> first: **`manual`** (a `desktop`/thick-client product) → **STOP** — those cases are **manual** test cases, not
+> automated specs; publish them to ADO (`ado-publish`) and test by hand. **`partial`** (a `mixed` product) →
+> generate only for cases on the **API** surface; the desktop-UI cases stay manual. **`applicable`**
+> (`web`/`api`) → unchanged. See `knowledge/standards/knowledge-base.md`.
+
 > **Reuse, don't reinvent (the load-bearing rule).** Script generation already exists as the kit's own
 > product-neutral guidance — `${CLAUDE_PLUGIN_ROOT}/docs/script-generation.md` (authored case → runnable
 > spec, folder-is-the-level, the `traces-case:` line, §0 mapping each emitted block to its Standard). This

@@ -1,6 +1,6 @@
 ---
 name: scan-and-confirm
-description: Phase 0 of building a test-automation framework — scan the target repo or live API, PROPOSE how the chosen module's flows work, and ASK the QA to confirm or correct each one (one question at a time, each with a recommended answer and the reason) before any test is written. Discovers modules FRONTEND-FIRST (from the app's route table/nav, as users name them, resolving each screen's API calls into backend handlers; backend-prefix fallback for an API-only product). Selects the target module, collects the API base URL(s), auth flow and credentials into the QA's git-ignored `.env`, writes a system map + a confirmed flow map (`flow-map.json`) for the kit-builder, and on first run scaffolds a Knowledge Base (`knowledge-base/` with a stub per discovered module) that later grounds story/module analysis. Use whenever the user asks to "scan the repo/API before building tests", "confirm the flow before writing tests", "scan and confirm", "propose the flows and let me correct them", "pick the module to automate", "create the knowledgebase", or is starting phase 0 of the qa-engineering / a brick-by-brick framework build — also when kit-builder reaches phase 0. It asks instead of assuming — the inverse of automation-setup, which scans but never asks.
+description: Phase 0 of building a test-automation framework — scan the target repo or live API, PROPOSE how the chosen module's flows work, and ASK the QA to confirm or correct each one (one question at a time, each with a recommended answer and the reason) before any test is written. First confirms the PRODUCT KIND (web | api | desktop | mixed), which derives whether automation applies (web/api automatable, desktop manual, mixed = API automatable + desktop UI manual). Discovers modules SURFACE-FIRST — for a web product from the route table/nav (resolving each screen's API calls into backend handlers); for a desktop/thick-client product (VB.NET/Delphi/WinForms/WPF) from the app's forms/windows/menus (resolving each screen into its code-behind + business logic); backend-prefix for an API-only product. Collects API base URL(s)/auth/credentials into the git-ignored `.env` ONLY for an automatable surface (skipped for a pure desktop product). Writes a system map (with productKind + automation) + a confirmed flow map (`flow-map.json`) for the kit-builder, and on first run scaffolds a Knowledge Base (`knowledge-base/` with a stub per discovered module) that later grounds story/module analysis. Use whenever the user asks to "scan the repo/API before building tests", "confirm the flow before writing tests", "scan and confirm", "propose the flows and let me correct them", "pick the module to automate", "create the knowledgebase", or is starting phase 0 of the qa-engineering / a brick-by-brick framework build — also when kit-builder reaches phase 0. It asks instead of assuming — the inverse of automation-setup, which scans but never asks.
 ---
 
 # Scan and Confirm — phase 0
@@ -9,7 +9,22 @@ Read the code, form a view of how the module works, then **put that view in fron
 
 This is phase 0 of the `qa-engineering`. It produces, for `kit-builder` (phases 1-5): a **system map** (`system-map.json` — the product-level picture, including any variant axis), a **target module**, a populated **`.env`**, a **confirmed flow map written to `flow-map.json`** (see [Output](#output)), and — on first run — a scaffolded **Knowledge Base** (`knowledge-base/` with a stub per discovered module). It writes no tests and scaffolds no framework.
 
-> **Discover modules frontend-first.** A module is **what users see in the nav**, not how controllers are grouped. Lead the scan with the app's route table / nav / lazy-imports; resolve each screen's API calls into backend handlers. This is more accurate than backend route-prefix grouping (one screen often spans several controllers), and it is the taxonomy the product, its QAs and its users actually name. Fall back to backend grouping only for an API-only product. See `knowledge/standards/knowledge-base.md`.
+> **Product kind first — it decides what applies.** Before anything else, confirm the **product kind**:
+> `web` (a web app / SPA — **the default**, fully automatable), `api` (an API-only backend), `desktop` (a
+> thick client — VB.NET / Delphi / WinForms / WPF — whose UI the plugin **cannot** automate today, so its loop
+> is **manual + ADO**), or `mixed` (a desktop UI over a **separable backend API** the plugin *can* automate).
+> This derives **`automation`** = applicable (web/api) / manual (desktop) / partial (mixed: API automatable,
+> UI manual), which gates the connection questions and the whole automation pillar below. **Default to `web`
+> when unsure; never infer `desktop` silently.** See `knowledge/standards/knowledge-base.md`.
+
+> **Discover modules by the surface users actually use (the web default is unchanged).** A module is **what
+> users see**, not how controllers are grouped. For a **`web`** product (the default) lead with the app's route
+> table / nav / lazy-imports and resolve each screen's API calls into backend handlers — exactly as before. For
+> a **`desktop`** product the surface is the app's **forms / windows / menu structure**: each top-level
+> screen/area is a module, resolved into its **code-behind / event handlers** and the **business-logic /
+> data-access** they call (source-grounded). For an **`api`**-only product, fall back to backend route-prefix
+> grouping. A **`mixed`** product discovers its desktop UI screen-first *and* maps the backend API. See
+> `knowledge/standards/knowledge-base.md`.
 
 > **System before module — do not jump to a module.** Analyse the *system* first (section 0): its hosts, its auth, and — crucially — whether the product changes behaviour by a **kind of account / user / deployment** (a dealer type, tenant type, subscription tier, role, client app). That **variant axis** is a first-class architectural input: it decides the profile set and which modules need variant-specific coverage, so it is discovered and confirmed *before* the first module is chosen, not bolted on later. See `knowledge/standards/variants-and-user-types.md`.
 
@@ -32,22 +47,23 @@ Code evidence earns a *recommended answer*. It never earns the right to skip the
 
 ### The phase-0 questions (ask them in this order, one per turn)
 
-Skip a question only when its precondition is false (marked below). Never merge two questions into one message — the one-line stack check that opens question 2 is the only exception. Questions 1-3 are the **system analysis** (section 0); 4-13 drill into the chosen module and its connection details.
+Skip a question only when its precondition is false (marked below). Never merge two questions into one message — the one-line stack check that opens question 3 is the only exception. Questions 1-4 are the **system analysis** (section 0); 5-15 drill into the chosen module. **Questions 7-13 describe an *automatable API surface*** (hosts, auth, tenancy, headers, credentials, verify path) — ask them only for `web`, `api`, or `mixed` (its API); **question 14 (the web-app URL) is for a `web` UI only**. For a pure **`desktop`** product there is nothing to authenticate to for automation, so **skip 7-14 entirely**; for an **`api`** backend or a **`mixed`** product's desktop UI there is no web app, so **skip 14** (ask 7-13 for the API).
 
 1. **Scan target** — Where do I look: a repo path, a live API / OpenAPI URL, or both? *(Recommend the repo when available — code is exact; a live API shows only what is reachable.)*
-2. **Stack and module** — Open with one line confirming the stack you detected ("I read this backend as <stack> — right?"), then ask which module we automate. *(Recommend the stack as detected, and one detected module with the reason — see [Module selection](#2-select-the-module).)*
-3. **Variant axis** *(skip only if the scan found no axis)* — "The product appears to change behaviour by `<axis>` (source `file:line`), with values `[…]`, branched on in N files across `<modules>`. Which of these variants are in scope, and which have a dedicated test account?" *(Recommend: model the axis as one profile per in-scope variant that has a test account, plus a `default` profile for shared behaviour; shared behaviour is tested once and variant-specific behaviour only where the product branches — see `knowledge/standards/variants-and-user-types.md`.)*
-4. **Flows, one by one** — For each flow I propose: "Is this how it works — am I missing a step, a prerequisite, a state rule, or a per-variant difference?" *(Recommend "confirm" only if the code and any docs agree; otherwise recommend the corrected version and say what disagreed.)*
-5. **Out of scope** — Which endpoints of this module should we leave out (internal, deprecated, destructive, third-party-backed)? *(Recommend excluding anything that cannot be cleaned up through the API.)*
-6. **Hosts** — How many API hosts does this module call, and what is each base URL? *(Recommend the count the code shows; the QA supplies the URLs for the environment under test.)*
-7. **Auth kind** — `password`, `client-credentials`, `static` or `none`? *(Recommend what the auth handler or the real client shows.)*
-8. **Auth details** *(only if kind is `password` or `client-credentials`)* — Login/token path, request field names, where the token sits in the response, how it is sent (header name + scheme). *(Recommend values read from the login DTOs and the frontend's API client.)*
-9. **Tenancy** — Is every route scoped to a tenant/account id? Is there a second one for isolation tests? *(Recommend "tenant-scoped" if the routes or claims show it; ask for the second id because isolation tests are skipped without it.)*
-10. **Constant headers** — Does the real client send a header on every request besides the token (gateway key, API version, tenant header)? *(Recommend mirroring the real client exactly and adding nothing it does not send.)*
-11. **Credentials** — Which test account do the tests authenticate as — one per in-scope variant when there is a variant axis? *(Recommend a dedicated test account per variant, never a personal one; secrets are typed by the QA into `.env`, not into chat — see [Collect connection details](#4-collect-connection-details-into-env).)*
-12. **Verify path** — What is one cheap authenticated `GET` that proves the setup works? *(Recommend a health route, else a list endpoint with a small page size.)*
-13. **UI app URL** *(optional)* — What URL does the web app live at, if we will also cover the UI? Does any variant have a different login entry? *(Recommend giving it now because phase 3 needs it; blank is fine for API-only; capture a per-variant login URL when one exists.)*
-14. **Sign-off** — "Here is the system map and the flow map. Anything wrong before I hand them to `kit-builder`?" *(Recommend "approve" only after questions 1-13 are answered.)*
+2. **Product kind** — "Is this a **web** app / SPA, an **api**-only backend, a **desktop** / thick client (VB.NET / Delphi / WinForms / WPF), or **mixed** (a desktop UI over a backend API)?" *(Recommend what the scan shows — a web router/SPA → `web`; only an API/OpenAPI with no frontend → `api`; a desktop solution [`.vbproj`/`.csproj` WinForms-WPF, a Delphi `.dpr`/`.dproj`] with no web host → `desktop`; a desktop UI plus a separable backend API → `mixed`. **Default `web` when unsure; never infer `desktop` silently.** This sets `automation` [applicable / manual / partial] and decides whether questions 7-14 apply.)*
+3. **Stack and module** — Open with one line confirming the stack you detected ("I read this as <stack> — right?"), then ask which module we start with. *(Recommend the stack as detected, and one detected module with the reason — see [Module selection](#2-select-the-module).)*
+4. **Variant axis** *(skip only if the scan found no axis)* — "The product appears to change behaviour by `<axis>` (source `file:line`), with values `[…]`, branched on in N files across `<modules>`. Which of these variants are in scope, and which have a dedicated test account?" *(Recommend: model the axis as one profile per in-scope variant that has a test account, plus a `default` profile for shared behaviour; shared behaviour is tested once and variant-specific behaviour only where the product branches — see `knowledge/standards/variants-and-user-types.md`.)*
+5. **Flows, one by one** — For each flow I propose: "Is this how it works — am I missing a step, a prerequisite, a state rule, or a per-variant difference?" *(Recommend "confirm" only if the code and any docs agree; otherwise recommend the corrected version and say what disagreed.)*
+6. **Out of scope** — Which parts of this module should we leave out (internal, deprecated, destructive, third-party-backed)? *(Recommend excluding anything that cannot be safely exercised or cleaned up.)*
+7. **Hosts** *(automatable surface only)* — How many API hosts does this module call, and what is each base URL? *(Recommend the count the code shows; the QA supplies the URLs for the environment under test.)*
+8. **Auth kind** *(automatable surface only)* — `password`, `client-credentials`, `static` or `none`? *(Recommend what the auth handler or the real client shows.)*
+9. **Auth details** *(only if kind is `password` or `client-credentials`)* — Login/token path, request field names, where the token sits in the response, how it is sent (header name + scheme). *(Recommend values read from the login DTOs and the frontend's API client.)*
+10. **Tenancy** *(automatable surface only)* — Is every route scoped to a tenant/account id? Is there a second one for isolation tests? *(Recommend "tenant-scoped" if the routes or claims show it; ask for the second id because isolation tests are skipped without it.)*
+11. **Constant headers** *(automatable surface only)* — Does the real client send a header on every request besides the token (gateway key, API version, tenant header)? *(Recommend mirroring the real client exactly and adding nothing it does not send.)*
+12. **Credentials** *(automatable surface only)* — Which test account do the tests authenticate as — one per in-scope variant when there is a variant axis? *(Recommend a dedicated test account per variant, never a personal one; secrets are typed by the QA into `.env`, not into chat — see [Collect connection details](#4-collect-connection-details-into-env).)*
+13. **Verify path** *(automatable surface only)* — What is one cheap authenticated `GET` that proves the setup works? *(Recommend a health route, else a list endpoint with a small page size.)*
+14. **UI app URL** *(web UI only, optional)* — What URL does the web app live at, if we will also cover the UI? Does any variant have a different login entry? *(Recommend giving it now because phase 3 needs it; ask it only for a **`web`** product — an `api` backend, a `desktop` thick client, and a `mixed` product's desktop UI have no web URL, so **skip**.)*
+15. **Sign-off** — "Here is the system map and the flow map. Anything wrong before I hand them to `kit-builder` (or, for a manual/desktop product, to the manual track)?" *(Recommend "approve" only after the applicable questions are answered.)*
 
 If the QA answers "you decide" or "whatever you think", take your recommendation, **say that you did**, and record it as QA-delegated in the confirmation log. Do not silently convert a non-answer into a confirmation.
 
@@ -64,7 +80,7 @@ If the QA answers "you decide" or "whatever you think", take your recommendation
 ### Question format
 
 ```
-Question 3 of 13 — Flow: create an order
+Question 5 of 15 — Flow: create an order
 What I found:      POST /orders (OrdersController:41) -> 201 + {id}; GET /orders/{id}
                    reads it back; DELETE /orders/{id} -> 204 (soft delete).
 My proposal:       create -> read back -> update status -> delete; delete is a soft delete,
@@ -74,9 +90,34 @@ Recommended:       Confirm as written — the controller, the OpenAPI doc and th
 Your call:         confirm, correct, or tell me what I cannot see from here.
 ```
 
-## 0. System analysis first — the variant axis and the system map
+## 0. System analysis first — product kind, the variant axis, the system map
 
-Before you pick a module, understand the *system*. The one product-level thing most easily missed — and
+Before you pick a module, understand the *system*. Two product-level facts come first.
+
+### 0a. Product kind (determine before anything else)
+What kind of product is this — and therefore **what can the plugin automate**?
+
+1. **Read the signal from the scan** (never guess): a web router / SPA (React-Router, Angular routes, a
+   `routes` table, lazy screen imports) → **`web`**; only an API / OpenAPI, no frontend → **`api`**; a
+   **desktop solution** (a `.vbproj`/`.csproj` WinForms/WPF app, a Delphi `.dpr`/`.dproj`, a thick client with
+   forms/windows and no web host) → **`desktop`**; a desktop UI **plus** a separable backend API/service →
+   **`mixed`**.
+2. **Confirm it** (question 2) — the QA decides. **Default to `web` when the signal is ambiguous; never label a
+   product `desktop` silently.**
+3. **Derive `automation`**: `web`/`api` → **applicable** (Playwright can drive the UI / the API); `desktop` →
+   **manual** (the plugin cannot automate a thick-client UI today, so the loop is **analyze → KB → cases →
+   publish to ADO → test manually → file bugs**); `mixed` → **partial** (the backend **API** is automatable;
+   the desktop **UI** is manual).
+4. **This flag drives the rest of phase 0 and the whole build:** it chooses the discovery surface (web routes
+   vs desktop forms, section 1), whether the connection questions (7-14) apply, the KB/atlas shape
+   (`knowledge/standards/knowledge-base.md`), and whether `kit-builder` runs at all. Record `productKind` +
+   `automation` in `system-map.json` ([Output](#output)).
+
+> Desktop **UI** automation (WinAppDriver / FlaUI and the like) is **out of scope** today — a `desktop`
+> product gets the full manual-QA + ADO loop, not a generated framework.
+
+### 0b. The variant axis
+The one product-level thing most easily missed — and
 most costly to retrofit — is a **variant axis**: a kind of account / user / deployment the product
 changes behaviour for (a dealer type, tenant type, subscription tier/edition, user role, client app).
 It decides the profile set and which modules need per-variant coverage, so it is architecture, not a
@@ -90,7 +131,7 @@ version:
    Grep for the enum name and the branch operator; read the **enum definition** for the authoritative
    value list; **count the branch breadth** (files / modules) to weigh the axis and mark which modules
    are variant-sensitive; note whether it touches **ui / backend / both**.
-2. **If an axis exists**, it becomes question 3 — propose it (source `file:line`, values, breadth) and
+2. **If an axis exists**, it becomes question 4 — propose it (source `file:line`, values, breadth) and
    let the QA confirm which variants are in scope and which have test accounts. **If none exists**
    (nothing in the source branches behaviour on a type/role/tier), say so and skip — do not invent one.
 3. **Record the whole system picture in `system-map.json`** at the framework root (see [Output](#output)):
@@ -98,7 +139,7 @@ version:
    auth kind. This is the system-level handoff that precedes the module-level `flow-map.json`.
 
 The remaining system facts — hosts, auth, tenancy — are gathered in section 1 and confirmed in
-questions 6-10. Module selection (section 2) happens *after* the axis is understood, because a
+questions 7-11 (for an automatable surface). Module selection (section 2) happens *after* the axis is understood, because a
 variant-heavy product is often best started on a module where the axis is simple.
 
 ## 1. Scan the target
@@ -107,7 +148,8 @@ Ask question 1 first. Then scan whichever of these exist, in this order — each
 
 | Read | Tells you |
 |---|---|
-| **The frontend route table / router config / nav / lazy-imports** | **the module taxonomy (frontend-first): each top-level route/area is a candidate module, named as users name it** — read this first |
+| **`web`: the frontend route table / router config / nav / lazy-imports** | **the module taxonomy (frontend-first): each top-level route/area is a candidate module, named as users name it** — read this first for a web product |
+| **`desktop`: the app's forms / windows / menu structure** (WinForms `.Designer.*`, WPF `.xaml`, Delphi `.dfm`/forms, the main menu/ribbon) | **the module taxonomy (screen-first): each top-level screen / menu area is a candidate module**; resolve its controls/events into code-behind + business logic — read this first for a thick client |
 | OpenAPI / Swagger document (file in the repo, or served by the API) | the route inventory, schemas, documented status codes, security schemes |
 | Controllers / route files / URL conf / handler registrations | the real routes and methods, route templates, role/policy attributes, the status each handler returns (resolve the frontend's API calls into these) |
 | The auth/login handler and its request + response types | auth kind, field names, token location, tenancy |
@@ -116,7 +158,7 @@ Ask question 1 first. Then scan whichever of these exist, in this order — each
 | Any existing e2e suite, seed script or Postman collection | a working, proven token flow and sample payloads — the biggest shortcut available |
 | CI config, `appsettings`/`application-*`/`.env.example` files, README, QA docs | environment names, account names (never values you should copy), conventions and gotchas |
 
-Detect the stack from the routing style you find (attribute-routed controllers, decorator-based routers, annotation-mapped controllers, URL confs, route tables) and state what you detected — the QA confirms it in question 2. **Derive the module list frontend-first** — from the app's route table / nav (`/orders`, `/customers`, `/widgets`), each top-level route/area a module named as the product names it — then map each module's screens to the backend handlers its API calls hit. Group by **what the product calls things**, not how the code is organised; QA and developers must be able to name the same module. For an **API-only** product (no frontend), group by backend route prefix instead, and say the taxonomy came from the backend.
+Detect the stack from what you find (attribute-routed controllers, decorator-based routers, URL confs, route tables — or a WinForms/WPF/Delphi desktop solution) and state it — the QA confirms the stack **and the product kind** in questions 2-3. **Derive the module list surface-first:** for a **`web`** product, from the route table / nav (`/orders`, `/customers`, `/widgets`), each top-level route/area a module, then map each screen to the backend handlers its API calls hit (unchanged). For a **`desktop`** product, from the app's **forms / windows / menus**, each top-level screen/area a module, then map each screen's controls/events to its code-behind handlers and the business-logic/data-access they call. For an **`api`-only** product, group by backend route prefix. Group by **what the product calls things**, not how the code is organised; QA and developers must be able to name the same module.
 
 **No repo, or the repo has no routes you can read?** Explore the live API instead, read-only, with the Playwright MCP (`browser_navigate`, `browser_network_requests`):
 
@@ -128,7 +170,7 @@ Record what you could not determine; those become questions, not assumptions.
 
 ## 2. Select the module
 
-Ask question 2: first the one-line stack confirmation, then the module. List every module you detected with a one-line description and an endpoint count, then recommend one:
+Ask question 3: first the one-line stack confirmation, then the module. List every module you detected with a one-line description and a surface count (routes/endpoints for `web`/`api`; **screens/forms for `desktop`**), then recommend one:
 
 ```
 Detected stack: attribute-routed REST controllers — confirm?
@@ -146,7 +188,7 @@ so every test layer can be proven end to end.
 
 ## 3. Propose the flows and ask the QA to confirm or correct
 
-For the chosen module, draft the endpoint list and the flows, then walk the flows with question 3 **one flow per turn**. Typical flows to propose:
+For the chosen module, draft the endpoint list and the flows, then walk the flows with question 5 **one flow per turn**. Typical flows to propose:
 
 - the entity **lifecycle** — create, read back, update, delete (and whether delete is hard or soft);
 - **prerequisites** — what must exist before the entity can be created (a parent record, a lookup value, a user), **and whether the suite can create a fresh one per test or only has a single shared one** (see the singleton check below);
@@ -156,11 +198,16 @@ For the chosen module, draft the endpoint list and the flows, then walk the flow
 - **cross-flow impact** — other resources that change when this one does;
 - **clean-up** — whether everything a test creates can be removed through the API, or only deactivated.
 
-For each flow state the exact steps in order, what is captured from one response to feed the next call, and what you do not know. Then ask. After the QA corrects a flow, restate the corrected version in one line before moving on, so the correction is visibly understood. Run question 4 (out of scope) once the flows are agreed.
+For each flow state the exact steps in order, what is captured from one response to feed the next call, and what you do not know. Then ask. After the QA corrects a flow, restate the corrected version in one line before moving on, so the correction is visibly understood. Run question 6 (out of scope) once the flows are agreed.
 
-## 4. Collect connection details into `.env`
+## 4. Collect connection details into `.env` (automatable surface only)
 
-Questions 5-12. Write each answer into the QA's `.env`, using the key names in the template's `.env.example` so `kit-builder` phase 1 and the template's `config/` read them with no translation:
+> **Skip this whole section for a pure `desktop` product** (`automation: manual`). There is no host to reach or
+> token to mint for automation — the loop is manual + ADO, and `.env`/auth/URL keys are not needed. For a
+> **`mixed`** product, collect these **only for the backend API** surface (its base URL + auth), not the
+> desktop UI. For `web`/`api`, this section is unchanged.
+
+Questions 7-14 (for an automatable surface). Write each answer into the QA's `.env`, using the key names in the template's `.env.example` so `kit-builder` phase 1 and the template's `config/` read them with no translation:
 
 | Answer | `.env` key(s) |
 |---|---|
@@ -219,15 +266,18 @@ framework still needs. (All read-only; never echo a secret you read.)
 
 ## 5. Emit the system map, then the flow map
 
-Ask question 14 and apply the QA's final corrections. Then write **two** files at the framework root:
+Ask question 15 and apply the QA's final corrections. Then write **two** files at the framework root:
 
-**(a) `system-map.json` — the system-level picture (written first).** Holds the confirmed variant axis
-(or `null`), the module inventory with a `variantSensitive` flag, the hosts, and the auth kind. This is
-what makes the build analysis-first: `kit-builder` reads it to scaffold the profile set (one per in-scope
-variant) before any module is generated. Shape:
+**(a) `system-map.json` — the system-level picture (written first).** Holds the confirmed **product kind +
+derived automation**, the variant axis (or `null`), the module inventory with a `variantSensitive` flag, the
+hosts, and the auth kind. This is what makes the build analysis-first: `kit-builder` reads it to decide
+*whether to build a framework at all* and to scaffold the profile set (one per in-scope variant) before any
+module is generated. Shape:
 
 ```json
 {
+  "productKind": "web | api | desktop | mixed",
+  "automation": "applicable | manual | partial",
   "variantAxis": {
     "name": "<axis, e.g. accountType>",
     "source": "<file:line of the enum/role/tier definition>",
@@ -241,8 +291,12 @@ variant) before any module is generated. Shape:
 }
 ```
 
-Set `variantAxis` to `null` when the product has no behavioural variant axis — never invent one. Env key
-**names** only; no secret, URL value, or account name. It may be committed (same policy as the flow map).
+- **`productKind`** is one of `web` / `api` / `desktop` / `mixed` (the confirmed answer to question 2;
+  default `web`). **`automation`** is derived: `applicable` (web/api) / `manual` (desktop) / `partial` (mixed).
+- For a **`desktop`** product there is no automatable surface: **`hosts` is `[]` and `authKind` is `"none"`**
+  (no `.env`/URL/auth was collected). For **`mixed`**, `hosts` + `authKind` describe the **backend API** only.
+- Set `variantAxis` to `null` when the product has no behavioural variant axis — never invent one. Env key
+  **names** only; no secret, URL value, or account name. It may be committed (same policy as the flow map).
 
 **(b) `flow-map.json` — the chosen module (as before).** Then:
 
@@ -356,6 +410,7 @@ The **confirmation log** (human-readable prose or a table, printed after the JSO
 
 | Source field | Becomes |
 |---|---|
+| `system-map.productKind` + `automation` | **whether to build at all** — `applicable`/`partial` (web / api / mixed's API) → run the framework build (phases 1-5); **`manual` (desktop) → no framework build**: the orchestrator runs the manual track (analyze → KB → cases → ADO publish → file bugs) instead |
 | `system-map.variantAxis` | the **profile set** — one profile per in-scope variant (phase 1), each with `variant`/`variantName` and `<VARIANT>_AUTH_*` creds; `null` → a single `default` profile |
 | `system-map.modules[].variantSensitive` | which modules get **variant-specific** tests (`onlyFor`/`skipFor`) vs shared-only |
 | `flow-map.module` | `modules/<module>/` and the `@<module>` test tag |
@@ -366,8 +421,10 @@ The **confirmation log** (human-readable prose or a table, printed after the JSO
 
 ## Done when
 
-- [ ] **System analysis ran first:** the product was scanned for a variant axis, and `system-map.json` was written (axis + values + evidence, or `variantAxis: null`; module inventory with `variantSensitive`; hosts; authKind)
-- [ ] Every question 1-14 was asked (or skipped for a stated reason) — one per turn, each with a recommendation and reason
+- [ ] **Product kind was confirmed first** (question 2; default `web`, `desktop`/`mixed` recognised from a desktop solution, never silently inferred), and `productKind` + derived `automation` written to `system-map.json`
+- [ ] **System analysis ran first:** the product was scanned for a variant axis, and `system-map.json` was written (productKind + automation; axis + values + evidence, or `variantAxis: null`; module inventory with `variantSensitive`; hosts; authKind)
+- [ ] Every applicable question 1-15 was asked (or skipped for a stated reason — questions 7-14 skipped for a pure `desktop` product) — one per turn, each with a recommendation and reason
+- [ ] For a **`desktop`** product, discovery was **screen/form-first**, the automatable-surface questions + `.env`/auth collection were **skipped** (`hosts: []`, `authKind: "none"`), and the loop was framed as the manual track (no framework build)
 - [ ] Stack confirmed and exactly one module confirmed; the rest parked
 - [ ] The variant axis was confirmed with the QA (which variants are in scope, which have test accounts) — or confirmed absent, not invented
 - [ ] Each proposed flow confirmed or corrected by the QA, not assumed
@@ -376,7 +433,7 @@ The **confirmation log** (human-readable prose or a table, printed after the JSO
 - [ ] `flow-map.json` written at the framework root with exactly `module`, `hosts`, `authKind`, `endpoints`, `flows`, and both files' JSON printed for the QA
 - [ ] A minimal `house-profile.json` was created (from the example, `product.name` set) if absent — so the status board can name the product; never overwritten, never committed, no secret in it
 - [ ] An existing `.env` / frontend env (different key schema) was **adopted by mapping** its keys onto the template schema (not re-typed), the mapping recorded in the confirmation log, secrets never echoed
-- [ ] Modules were discovered **frontend-first** (from the app's route table / nav; backend-prefix fallback only for an API-only product, stated)
+- [ ] Modules were discovered **surface-first** — `web`: frontend route table / nav (unchanged); `desktop`: forms/windows/menus; `api`: backend route prefix — stated which surface was used
 - [ ] The `catalog` slice was **seeded** from the confirmed module inventory (modules `discovered`, target `in-progress`, each `kb: stub`, `frameworkScaffold: absent`), merged with any existing catalog — so the status board + `/build` know the map without re-scanning
 - [ ] On first run, the **Knowledge Base was scaffolded** (`knowledge-base/` README + CONVENTIONS + empty RULES + a thin `modules/<slug>.md` stub per module); it is committable in the QA's repo and was not deep-generated here or written into the plugin
 - [ ] The confirmation log names every correction, delegated answer, gap and still-blank key
