@@ -21,6 +21,10 @@ How every file in this folder is written, so the KB stays consistent and machine
 - FE and BE path globs are **always separate** (`frontend_path_*` vs `backend_path_*`), never one mixed list,
   so scoped work can prefer UI files for a UI story and controllers for an API story.
 - A screen's API calls connect to their handlers **only** through the atlas FE↔BE link table.
+- **Desktop product?** The same rule holds with the **UI-layer / logic-layer** glob pair
+  (`ui_layer_path_*` vs `logic_layer_path_*`) in place of `frontend_*`/`backend_*`, and the link table runs
+  **screen → code-behind/handler → service**. `knowledge/standards/knowledge-base.md` (the desktop atlas
+  variant) is authoritative where it and this file differ.
 
 ## Depth legend (lazy generation)
 | Depth | Means |

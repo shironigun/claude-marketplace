@@ -13,6 +13,23 @@ It consumes the shared authoring core — `knowledge/authoring/house-style.md` �
 
 This skill **authors** cases and records them in `qa-context`; it does not write to any tracker. When the user wants them created as Test Case work items, the gated **`ado-publish`** skill files the approved set. For request/response coverage instead of click-by-click UI, use the `author-api-cases` skill.
 
+> **Web UI vs manual/desktop mode.** The case format is the same; the **anchors and intent differ by the UI
+> surface the product exposes** — read `system-map.productKind` **and** `system-map.automation`:
+> - **Automatable web UI** (`productKind: web`, `automation: applicable`) — default, unchanged — steps use the
+>   web UI; anchors are **semantic Playwright** (role + name / label / text); the cases also seed automation
+>   (`automation-engine`).
+> - **Manual / desktop UI** (`productKind: desktop` with `automation: manual` — a VB.NET / Delphi / WinForms /
+>   WPF thick client the plugin can't UI-automate — **or the desktop UI of a `mixed` product**, `automation:
+>   partial`) — steps name the **desktop control by its label / name** ("click **Save** on the Customer form",
+>   "the **Email** field shows a red 'required' message"), **not** web locators. These are **manual** test
+>   cases: they are published to ADO Test Plans/Suites and **executed by hand** (no Playwright specs are
+>   generated). They can still carry a level tag (smoke / regression / e2e) for organisation.
+> On a **`mixed`** product only the **desktop UI** is manual here — its **API** cases come from
+> `author-api-cases` and *are* automatable; so decide the mode by the surface you are authoring for, which for
+> everything in *this* skill except a pure `web` product is the manual/desktop presentation. The three levels,
+> coverage discipline, title convention, `tracesStory`/`tracesModule`/`tracesRule`, and the approval seam are
+> identical in both modes.
+
 > The example module/feature names below (Deals, Settings, Messenger, Customers, Roles, etc.) are illustrative only. Use whatever modules and features exist in the product under test. The **house format below is the neutral default — the house-profile `caseAuthoring` slot may override the title convention, tags, step shape and voice**; the domain is always the user's.
 
 ## Phase 1: Read and analyze (UI-flavored)

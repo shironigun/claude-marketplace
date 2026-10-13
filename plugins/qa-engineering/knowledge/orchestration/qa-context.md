@@ -52,6 +52,16 @@ Every engine named above is **built** (the `SPx` tags are provenance, not a road
 routes to the one that owns each slice; a slice simply stays **absent** until its engine has run this
 session, and the orchestrator says plainly which slice has not been produced yet rather than inventing it.
 
+**Product kind lives in `system-map.json`, not a `qa-context` slice.** `scan-and-confirm` records the
+**`productKind`** (`web` | `api` | `desktop` | `mixed`) and the derived **`automation`** (`applicable` |
+`manual` | `partial`) in the companion `system-map.json` at the framework root (alongside the module
+inventory the `catalog` slice mirrors). It is read, not written, by the rest of the loop and it **gates which
+track applies**: `applicable` → the full build/generate/run pillar; `manual` (a pure `desktop` product) → no
+Playwright framework at all — the engines author **manual** cases, publish to ADO, and file bugs from
+QA-observed failures, with no `automation`/`failures`/`runHistory` slice produced; `partial` (a `mixed`
+product) → the API surface automates while the desktop UI is manual. The `web`/`api` path reads `applicable`
+and behaves exactly as before — the manual branches are additive and never taken for an automatable product.
+
 ## How an engine reads and writes its slice
 
 1. The orchestrator **reads** `qa-context.json` from the framework root and pulls the slice(s) the

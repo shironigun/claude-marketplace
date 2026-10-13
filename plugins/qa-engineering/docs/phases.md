@@ -17,7 +17,7 @@ QA-delegated.
 
 | # | Phase | Produces | Dependency / doc |
 |---|---|---|---|
-| 0 | Scan & confirm (frontend-first) | `system-map.json` + `flow-map.json` + `.env` + target module + a scaffolded `knowledge-base/` (first run) | `scan-and-confirm` skill |
+| 0 | Scan & confirm (surface-first) | `system-map.json` (incl. `productKind` + `automation`) + `flow-map.json` + `.env` + target module + a scaffolded `knowledge-base/` (first run) | `scan-and-confirm` skill |
 | 1 | Foundation | compiling, lintable skeleton + green auth probe | `template/` + `kit-builder` |
 | 2 | Module — API | a green API suite for the module | `author-api-cases`, `docs/script-generation.md`, `failure-to-bug` |
 | 3 | Module — UI | a UI suite at parity | `author-ui-cases`, `docs/script-generation.md` |
@@ -28,19 +28,27 @@ QA-delegated.
 
 ## Phase 0 — Scan & confirm
 
-**What it does.** Read the target repo or live API, **discover the modules frontend-first** (from the app's
-route table / nav, as users name them, resolving each screen's API calls into backend handlers; backend-prefix
-fallback for an API-only product), propose how the chosen module's flows work, and ask the QA to confirm or
-correct each one before any test is written. On first run it also **scaffolds a Knowledge Base**
-(`knowledge-base/` with README + CONVENTIONS + empty RULES + a thin `modules/<slug>.md` stub per module —
-committable in the QA's repo). This whole phase is owned by the **`scan-and-confirm`** skill, which runs its own
-ask loop (one question per turn, each with a recommendation). `kit-builder` hands off to it and resumes at phase
-1 once `flow-map.json` exists.
+**What it does.** First confirm the **product kind** (`web` | `api` | `desktop` | `mixed`) — this decides how
+much of the loop automates and how modules are discovered. Then read the target repo or live API and **discover
+the modules surface-first** (from the surface users actually name): a `web` app's **route table / nav**,
+resolving each screen's API calls into backend handlers; a `desktop` app's **forms / windows / menus**,
+resolving each screen's event handlers into its code-behind and service; a `mixed` app's **desktop UI** plus its
+**backend API**; backend-prefix fallback for an `api`-only product. Propose how the chosen module's flows work,
+and ask the QA to confirm or correct each one before any test is written. On first run it also **scaffolds a
+Knowledge Base** (`knowledge-base/` with README + CONVENTIONS + empty RULES + a thin `modules/<slug>.md` stub per
+module — committable in the QA's repo; the atlas is **screen → code-behind → service** for a desktop product). This
+whole phase is owned by the **`scan-and-confirm`** skill, which runs its own ask loop (one question per turn, each
+with a recommendation). `kit-builder` hands off to it and resumes at phase 1 once `flow-map.json` exists — **but
+only for an automatable product**; a pure `desktop` product has no Playwright framework to build, so it stops
+after the KB + manual cases and runs the **manual track** (analyze → KB → author manual cases → publish to ADO →
+test by hand → file bugs) instead of phases 1-5.
 
 **Questions asked** (summarized — the skill owns the full wording): scan target (repo / live
-API / both); stack + which module; each flow, one at a time; out-of-scope endpoints; host
-count and base URLs; auth kind; auth details; tenancy; constant headers; credentials; a cheap
-verify path; the UI app URL; final sign-off.
+API / both); **product kind** (web / api / desktop / mixed); stack + which module; each flow, one at a time;
+out-of-scope endpoints; host count and base URLs; auth kind; auth details; tenancy; constant headers;
+credentials; a cheap verify path; the UI app URL; final sign-off. For a pure **`desktop`** product the
+connection questions (hosts, auth, headers, credentials, verify path, UI URL — everything from host count down)
+are **skipped** — there is no HTTP surface the plugin drives.
 
 **Recommended options + reasons** (the load-bearing ones):
 - *Scan target* → **the repo when available**, because code is exact where a live API shows
@@ -53,14 +61,17 @@ verify path; the UI app URL; final sign-off.
 
 **Inputs.** A repo path and/or a live API / OpenAPI URL.
 
-**Produced artifact.** `system-map.json` (variant axis + module inventory), `flow-map.json` at the framework
-root (fields `module`, `hosts`, `authKind`, `endpoints`, `flows`), a populated git-ignored `.env`, a seeded
-`catalog` (each module `kb: stub`), a scaffolded `knowledge-base/` (first run), and a confirmation log.
+**Produced artifact.** `system-map.json` (now carrying `productKind` + the derived `automation` =
+`applicable`/`manual`/`partial`, plus the variant axis + module inventory), `flow-map.json` at the framework
+root (fields `module`, `hosts`, `authKind`, `endpoints`, `flows`; for a `desktop` product `hosts: []` and
+`authKind: "none"`), a populated git-ignored `.env` (empty of connection keys for a pure `desktop` product), a
+seeded `catalog` (each module `kb: stub`), a scaffolded `knowledge-base/` (first run), and a confirmation log.
 
 **Verification.** The flow map parses, has exactly the five fields, `authKind` is one of the
 four allowed values, every `baseUrlEnvKey` names a key that exists in `.env`, and it contains
-no secret, token, account name, or URL value. A read-only reachability `GET` to each base URL
-resolved.
+no secret, token, account name, or URL value. For an automatable product a read-only reachability `GET` to each
+base URL resolved; for a pure `desktop` product there is no base URL to probe, so that check is **not run** (and
+its absence is not a failure).
 
 ---
 

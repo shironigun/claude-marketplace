@@ -59,6 +59,21 @@ normally everywhere.
 The in-chat **`/status`** command renders the same board with no mods runtime and works everywhere (including
 headless `-p`) — it is the portable equivalent of the pane.
 
+## Works for your product kind (not just web apps)
+
+The first thing `/qa` confirms is the **product kind**, which decides how much of the loop automates:
+
+| Product kind | What the plugin does |
+|---|---|
+| **`web`** (default) | the full loop — analyze → cases → publish → **generate + run Playwright** → bug |
+| **`api`** | the full loop against the API surface |
+| **`desktop`** — a legacy/thick client (VB.NET, Delphi, WinForms/WPF) the plugin **can't** UI-automate | the same loop **minus automation**: analyze → **Knowledge Base** → author **manual** cases → **publish to ADO** → you test by hand → **file bugs** (from what you describe). Modules are discovered from the app's **forms/windows/menus**, and its atlas maps **screen → code-behind → service**. |
+| **`mixed`** — a desktop UI over a backend API | **API** surface automated; **desktop UI** manual |
+
+So a QA on a legacy desktop product still gets story analysis, the feature Knowledge Base/atlas, test-case
+authoring, ADO Test Plans/Suites and bug boards — everything except Playwright automation (desktop UI
+automation is out of scope today). The **web/route path is unchanged**.
+
 ## What it does — the QA loop
 
 | Ask | Engine |
