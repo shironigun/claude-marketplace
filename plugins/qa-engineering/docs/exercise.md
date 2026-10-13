@@ -15,18 +15,32 @@ points at them and never reproduces their contents.
 
 ## 1. At a glance
 
+Everyone starts with **one command — `/qa`** — which sets you up, reads your codebase, shows your
+modules, and guides the first steps. What you do next depends on the product you test, so the
+workshop runs in **three tracks**. Pick the one that matches your product:
+
+| Track | For | What you do | Scored on |
+|---|---|---|---|
+| **A · Build** | a **web / API** product you can automate | the full brick-by-brick build (phases 0-5 in section 4): a Playwright framework for the **Customer** module, from the shared story | coverage (API + UI) + issues found |
+| **B · Analyze & author** | **any** product — and the gentlest start if automation is new to you | `/qa` → analyze the shared story → author + review test cases → (preview) publish to ADO; run `/learn` alongside to pick up automation | case coverage + issues/gaps raised |
+| **C · Manual / desktop** | a **legacy or desktop** app (VB.NET, Delphi, WinForms/WPF) you can't automate | the **manual track** — analyze → knowledge base → author **manual** cases → publish to ADO → test by hand → file bugs (no Playwright) | case coverage + issues found |
+
+Most of the room (the manual-QA majority) will be on **Track B or C**: you get the whole QA
+discipline — story analysis, a feature knowledge base, house-style cases, gated ADO writes, bug
+filing — **without writing Playwright**. **Track A** is for QAs who want the automation build. The
+plugin confirms your **product kind** on the first `/qa` and routes you to the right track; you don't
+choose it blind.
+
 | | |
 |---|---|
 | **Who** | each QA, individually |
-| **Where** | their **own branch**, their **own `.env`**; no shared state between QAs |
-| **Module** | the **Customer** module (phase 0 recommends it as the workshop default) |
-| **Input** | the shared story, plus the target system's address and a test account |
-| **Driver** | the `qa-orchestrator` agent, which runs the `kit-builder` skill phase by phase |
-| **Output** | a framework that builds, runs green, and surfaces real issues |
-| **Scored on** | (a) coverage of the API + UI surface, (b) issues found, per the rubric |
+| **Where** | their **own branch**, their **own `.env`** (Tracks A/B); no shared state between QAs |
+| **Entry** | **`/qa`** (the front door). Shortcuts: `/analyze`, `/test`, `/build`, `/run`, `/status`, `/learn`, `/learn-extension`, `/resume` |
+| **Input** | the shared story; for Tracks A/B also the target system's address + a test account |
+| **Output** | Track A: a framework that builds + runs green + surfaces issues · Tracks B/C: reviewed cases (+ ADO), a knowledge base, and real issues raised |
 
-The kit is the inverse of a tool that decides for you: **it asks at every phase**, always with a
-recommended option and the reason. The QA's judgement is part of what is being exercised.
+The kit is the inverse of a tool that decides for you: **it asks at every step**, always with a
+recommended option and the reason. Your judgement is part of what is being exercised.
 
 ---
 
@@ -34,9 +48,10 @@ recommended option and the reason. The QA's judgement is part of what is being e
 
 **Facilitator checklist**
 
-- [ ] The `qa-engineering` plugin is installed and enabled for every QA; the agent
-      `qa-engineering:qa-orchestrator` and the skills `kit-builder` and `scan-and-confirm`
-      show up
+- [ ] The `qa-engineering` plugin is installed + enabled for every QA on a **current, mods-capable**
+      Claude Code; `claude plugin list` shows it **✔ loaded** and the **`/qa-engineering:qa` command**
+      + the `qa-orchestrator` agent appear (do this per-attendee — an older engine fails to load the
+      whole plugin)
 - [ ] No other plugin is needed — the kit is self-contained; its `author-api-cases`,
       `author-ui-cases`, `file-to-tracker` and `failure-to-bug` skills ship with it
 - [ ] Each QA has the **target system's address** and **a dedicated test account** (never a
@@ -46,30 +61,44 @@ recommended option and the reason. The QA's judgement is part of what is being e
 
 **Each QA needs**
 
-- Node 20 or later and git, plus network access to the target system.
-- Claude Code (desktop app, VS Code extension, or CLI).
-- `ADO_ORG` exported in the **shell that launches Claude Code**, with a browser sign-in available.
-  Claude Code does not read `.env` for MCP variables. If ADO sign-in cannot be completed, phase 4
-  degrades to local drafts and the QA is still scored on phases 0-3.
-- **A branch of their own**, created before phase 0. **Suggested** naming: `exercise/<their-name>`,
-  cut from the shared base. The agent will check the branch and recommend one if you are on the
-  default branch.
-- An empty framework folder on that branch (the folder that will hold `.env`, `flow-map.json`, and
-  `package.json`).
+- A **current, mods-capable Claude Code** (desktop app or a current CLI). On an older engine the
+  plugin won't load at all — confirm `claude --version` and that **`/qa` appears** before the session.
+- Node 20 or later and git. For Tracks A/B, network access to the target system; for **Track C** you
+  only need the app's **codebase** (read-only) + Azure DevOps — no target URL, auth, or `.env`.
+- **Azure DevOps**, for the two gated write steps (publish cases / file bugs): set **`ADO_ORG`** — in
+  the **desktop app**, via the environment dropdown → **Local** → gear → add `ADO_ORG`, then restart;
+  in a **terminal**, export it in the shell that launches Claude Code (Claude Code does **not** read
+  `.env` for MCP variables). Sign-in is interactive in the browser on first use. No ADO → the two
+  write steps **draft locally** and the QA is still scored.
+- **A branch of their own**. **Suggested:** `exercise/<their-name>`, cut from the shared base. `/qa`
+  checks the branch and recommends one if you're on the default branch.
+- A place to work: for Tracks A/B an **empty framework folder** (it holds `.env`, `flow-map.json`,
+  `package.json`); for **Track C**, the **product repo** itself (the knowledge base is written into it).
 
 ---
 
 ## 3. Starting
 
-Open Claude Code in the framework folder and give the orchestrator the job, with the story:
+Open Claude Code in your working folder and run **`/qa`**. On the first run it confirms your
+**product kind**, reads your codebase, shows your modules, and recommends a next step — then routes
+you to your track.
 
 ```text
-Use the qa-orchestrator agent to build a test-automation framework for the Customer module,
-brick by brick. Here is the shared story: <paste it, or give its path>.
+/qa
 ```
 
-The agent first checks where the build stands and which branch you are on, tells you in two lines,
-and asks you to confirm before it starts. Then it runs phase 0.
+Then say what you're doing, in your own words, with the shared story:
+
+- **Track A (build):** "Build a test-automation framework for the Customer module, brick by brick.
+  Here's the shared story: `<paste it or give its path>`."
+- **Track B (analyze & author):** "Analyze this story and get me ready to test it: `<paste / path>`"
+  (or `/analyze <id>`), then "write the test cases." Run `/learn` alongside to pick up automation.
+- **Track C (manual / desktop):** "This is a desktop app I can't automate — analyze the `<module>`,
+  build its knowledge base, and write manual test cases I can run by hand and publish to ADO."
+
+`/qa` checks where you stand and which branch you're on, tells you in two lines, and asks you to
+confirm before it does anything. It **pauses at every human gate** — you approve the case set before
+it's published and each bug before it's filed; nothing reaches the tracker without your yes.
 
 **Rules of the room**
 
@@ -88,6 +117,12 @@ and asks you to confirm before it starts. Then it runs phase 0.
 ---
 
 ## 4. The run, phase by phase
+
+*This is **Track A** (the full build). On a **web/UI** build, phase 1 also sets up the Playwright
+**browsers + VS Code extension** for you (gated) — `/learn-extension` goes deeper. **Tracks B and C
+don't run these phases**: Track B is `/qa` → analyze → author → (preview) publish; Track C is the
+manual track (analyze → KB → manual cases → publish → test by hand → file bugs). Both skip to
+section 6 for scoring.*
 
 | # | Phase | What you will be asked (headline) | Workshop guidance | Checkpoint to show |
 |---|---|---|---|---|
@@ -130,6 +165,11 @@ How it is used:
 
 The **rubric** is the authority on weights and points. This section explains what each dimension
 measures and how to produce the evidence; it adds no dimensions of its own.
+
+**By track:** Track A produces the evidence below (a green suite + coverage). **Tracks B/C** are
+scored on **authored-case coverage** (the `cases` the plugin wrote/approved, and for Track C the
+committed **knowledge base**) and **issues/gaps found** — there's no green suite to show, so the
+evidence is the case set (in `.md` / ADO), the KB, and each issue with its story contradiction.
 
 ### 6.1 Coverage
 
@@ -200,10 +240,10 @@ later phases. Whether it is scored is the rubric's call.
 
 | Symptom | Likely cause and fix |
 |---|---|
-| The agent is not listed | the plugin is not enabled; enable it and restart the session |
+| `/qa` / the plugin is not listed | the engine may be too old (an older Claude Code fails to load the **whole** plugin, not just the pane) — use a current, mods-capable build; otherwise the plugin isn't enabled. Enable it, restart, and confirm `claude plugin list` shows it **✔ loaded** |
 | `verify:setup` is red | the first thing to check is `.env`: the right URL, a login that returns a token, the token field name. Fix it before anything else |
-| ADO calls fail or are skipped | `ADO_ORG` was not set in the shell that launched Claude Code, or sign-in is incomplete; set it, restart, sign in, or carry on with drafts |
-| An MCP server will not start on macOS or Linux | the plugin's MCP config ships Windows `cmd /c npx` commands; use `npx` directly as the command, with the same arguments |
+| ADO calls fail or are skipped | `ADO_ORG` isn't set, or sign-in is incomplete. Set `ADO_ORG` — desktop: environment dropdown → **Local** → gear; terminal: export in the launching shell — then **restart** and complete the browser sign-in. Or carry on with local drafts |
+| An MCP server won't start on **Windows** (`npx` ENOENT) | the shipped `.mcp.json` calls `npx` **directly** (works on macOS / Linux / WSL out of the box); on native Windows, wrap each command with `cmd /c` (see the plugin README's Platforms section) |
 | `.env` shows in `git status` | it must not; check the root `.gitignore`, and unstage it before any commit |
 | A test passes alone but fails with others | shared data between tests; give each test its own uniquely named data |
 | You cannot tell a bug from a bad test | go back to the triage list in section 6.2, step 1 |
@@ -212,8 +252,8 @@ later phases. Whether it is scored is the rubric's call.
 
 ## Done when
 
-- [ ] You are on your own branch with your own `.env`, untracked
-- [ ] Phase 0 confirmed the Customer module's flows against the shared story
-- [ ] The framework builds, `verify:setup` is green, and the API suite runs green (phases 0-2 at minimum)
-- [ ] Every issue you report passed triage and has its evidence
+- [ ] You started with `/qa`, on your own branch (Tracks A/B: your own untracked `.env`)
+- [ ] Analysis confirmed the Customer module against the shared story
+- [ ] **Track A:** the framework builds, `verify:setup` is green, the API suite runs green (phases 0-2 min) · **Tracks B/C:** the case set is authored + approved (and for C, the knowledge base is written)
+- [ ] Every issue you report passed triage and has its evidence (test/case + the story line it contradicts)
 - [ ] The secret scan returned 0, and you pushed your branch yourself
