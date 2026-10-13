@@ -46,25 +46,32 @@ knowledge-base/
 - **Never in the plugin.** The KB holds product specifics (real routes, messages, module names). It is
   generated into the QA's repo only; nothing from it is ever written into the plugin or any shared content.
 
-## Frontend-first module discovery (load-bearing)
-**Modules are what users see, not how controllers are grouped.** Discover the module taxonomy from the
-product's **frontend** first:
+## Surface-first module discovery (load-bearing)
+**Modules are what users see, not how controllers are grouped.** Discover the taxonomy from the product's
+**user-facing surface** first — *which* surface is set by `system-map.productKind`:
 
+**`web` (the default — unchanged):**
 1. Read the SPA's **route table / router config / nav / lazy-imports** — each top-level route/area is a
-   candidate module (`/orders`, `/customers`, `/widgets`). This is the taxonomy the product, its QAs, and its
-   users actually name.
-2. For each screen under a route, extract its **API calls** deterministically (fetch / Axios / RTK Query /
-   service wrappers): method + path template + the request/response fields the UI uses.
-3. **Resolve** those calls into backend handlers (controllers/actions) to get the API behind each feature.
-4. **Frontend and backend globs are always kept separate** (`frontend_path_*` vs `backend_path_*`), so scoped
-   work can prefer UI files for a UI story and controllers for an API story without cross-contaminating.
+   candidate module (`/orders`, `/customers`). This is the taxonomy the product, its QAs and its users name.
+2. For each screen, extract its **API calls** deterministically (fetch / Axios / RTK Query / service wrappers),
+   then **resolve** them into backend handlers (controllers/actions) to get the API behind each feature.
 
-**Fallback:** for an **API-only** product (no frontend), group by backend route prefix instead, and say the
-taxonomy came from the backend. Record which source was used.
+**`desktop` (thick client — VB.NET / Delphi / WinForms / WPF):**
+1. Read the app's **forms / windows / main menu / ribbon** — each top-level screen or menu area is a candidate
+   module (named as users name it). No web routes exist.
+2. For each screen, read its **code-behind / event handlers** (button clicks, menu commands, form load) and
+   **resolve** them into the **business-logic / data-access** they call. The "surface" is the form; the "behind
+   it" is the handler + service (not an HTTP route).
 
-**Why frontend-first:** a product's real surface is its routes; one screen often spans several controllers, so
-backend grouping fragments a user-visible feature across modules and misses the names people use. Leading with
-the frontend keeps the module map aligned with how the product is understood and tested.
+**`api` (no UI):** group by backend route prefix. **`mixed`:** discover the desktop UI **screen-first** *and*
+map the backend API as the automatable surface.
+
+**UI and logic globs are always kept separate** — `frontend_path_*` (web) or `ui_layer_path_*` (desktop) vs
+`backend_path_*` (web) or `logic_layer_path_*` (desktop) — so scoped work prefers the right files.
+
+**Why surface-first:** a product's real surface is what users touch (routes for a web app, forms/menus for a
+thick client); one screen often spans several controllers/services, so grouping by backend code fragments a
+user-visible feature and misses the names people use. Record which surface was used.
 
 ## The format, file by file
 
@@ -100,6 +107,14 @@ the frontend keeps the module map aligned with how the product is understood and
 ## Gaps          ([UNCLEAR: ...] / [TODO: confirm ...]: what code alone cannot settle)
 ```
 
+**Per product kind — the fields that change (web shown above; desktop remap):** for a **`desktop`** product,
+`Route(s)` becomes **`Screen / Window / Menu: <path>`** (e.g. `Customers form → Edit tab`); a Flow's Trigger /
+Steps name **form opens / control clicks / menu actions**; **Breaks** are **error dialogs / message boxes /
+disabled controls**; **UI anchors** are the desktop control's **label / name** (e.g. the `Save` button on the
+Customer form), not a web role/locator; **API behind it** becomes the **code-behind handler → service /
+business-logic method** (plus a `METHOD path` only when the feature also hits a backend API — i.e. `mixed`).
+**RULES, Variants, keyword packs, evidence rails and deepen-on-engage are identical for every product kind.**
+
 ### `RULES.md` — the testable backbone
 ```markdown
 # Business Rules
@@ -132,9 +147,30 @@ features:
 ## Route map          (route -> component path -> feature ids)
 ## Frontend <-> Backend links   (feature | FE entry (route/component) | API calls | BE files)
 ```
+**Desktop atlas variant** (`productKind: desktop`) — same shape, remapped to the thick client:
+```markdown
+# Atlas: <Module Name>
+---
+screens: ["<Form/Window/Menu name>"]
+ui_layer_path_includes: ["**/<Module>/**/*.vb", "**/<Module>/**/*.xaml", "**/<Module>*.pas"]
+ui_layer_path_excludes: ["**/<Lookalike>/**"]
+logic_layer_path_includes: ["**/<Module>Service*", "**/<Module>/**/*.vb"]   # business logic / data access
+logic_layer_path_excludes: ["**/<Lookalike>*"]
+features:
+  - id: save
+    ui_paths: ["**/<Module>/**/*Edit*"]
+    logic_paths: ["**/<Module>Service*"]
+    handlers: ["btnSave_Click -> <Module>Service.Save"]
+---
+
+## Screen map              (screen / menu -> code-behind file -> feature ids)
+## Screen <-> Logic links  (feature | screen / control | event handler | service / data-access files)
+```
+(For `mixed`, add the web atlas's `api_prefixes` + `apis` for the backend API surface.)
+
 **Deferred to a later SP (not v1):** the full impact / regression packs and change-impact heuristics. The v1
-atlas is just the FE/BE globs + the route map + the link table — enough to scope reuse-inspection and route a
-UI vs API story to the right files.
+atlas is just the globs + the map + the link table — enough to scope reuse-inspection and route a feature to
+the right files.
 
 ## Evidence rails (never invent)
 - **Code wins** for technical facts: method, path, DTO field, status code, exact message, auth attribute.
@@ -176,7 +212,7 @@ Two honesty rules make the default safe:
   deepening — only the grounding-dependent steps do.
 
 ## How the loop consumes it
-- **`scan-and-confirm`** — frontend-first discovery; seeds `catalog`; scaffolds `knowledge-base/` + the stubs.
+- **`scan-and-confirm`** — confirms `productKind`; **surface-first** discovery (web routes / desktop forms / api); seeds `catalog`; scaffolds `knowledge-base/` + the stubs.
 - **`kb-builder`** — deep-generates one module (the investigation protocol + coverage self-audit).
 - **`story-intelligence` / `code-intelligence`** — read `modules/<slug>.md` + its RULES anchors to **ground**
   analysis; if the module is a `stub`, **deepen it first by default** (recommend; the QA may decline, and a
@@ -184,16 +220,18 @@ Two honesty rules make the default safe:
   index needed; the engine reads the file.)
 - **`author-api-cases` / `author-ui-cases`** — seed cases from the module's **RULES anchors** (each rule → at
   least one case) and set `cases.items[].tracesRule`.
-- **`automation-engine` / `kit-builder`** — use the atlas **FE/BE globs + link table** to scope which
-  services/components/controllers back a feature (reuse-inspection), so generation reuses the right blocks.
+- **`automation-engine` / `kit-builder`** (only for an **automatable surface** — web/api, or a `mixed` API) —
+  use the atlas **globs + link table** to scope which services/components/controllers back a feature
+  (reuse-inspection). For a `desktop` product these don't run; the atlas still grounds manual case authoring
+  and `code-intelligence`.
 
 So the traceability thread gains a first link: **rule ⇄ case ⇄ script ⇄ bug** (see `qa-context.md`).
 
 ## Anti-patterns
-- **Grouping modules by backend controllers** when a frontend exists — it fragments a user-visible feature and
-  loses the names people use. Lead with the routes.
-- **A mixed path-glob list** (FE and BE together) — always separate, or scoped discovery can't prefer UI vs
-  API files.
+- **Grouping modules by backend code** when a user-facing surface exists (web routes **or** desktop forms/menus)
+  — it fragments a user-visible feature and loses the names people use. Lead with the surface users see.
+- **A mixed path-glob list** (UI and logic/backend together) — always separate (`frontend_*`/`ui_layer_*` vs
+  `backend_*`/`logic_layer_*`), or scoped work can't prefer UI vs logic files.
 - **Inventing a message, route, or rule** to fill a gap — write `[UNCLEAR]` instead. A confident wrong fact in
   the KB poisons every analysis that reads it.
 - **Deep-generating the whole app up front** — expensive and stale on day two. Scaffold broad, deepen lazily.

@@ -14,3 +14,8 @@ green; a flaky/retried pass is reported as flaky; a start-up/env error is an env
 a bug. It writes the `failures` slice. If there are real failures, **offer** to turn them into bugs (the gated
 `failure-to-bug` flow — just say yes, or run `/test`'s bug step); don't file anything here. If there's no
 framework yet, say so and point me at `/build`.
+
+**Manual product (`system-map.automation: manual`, a `desktop` thick client):** there's **no automated suite to
+run** — the tests are executed by hand. Say so and point me at the manual flow (the cases live in ADO; when I
+hit a failure, `/test`'s bug step or `failure-to-bug` files it from what I describe). A `mixed` product's **API**
+suite runs normally; its desktop UI does not.
