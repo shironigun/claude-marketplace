@@ -1,5 +1,5 @@
 ---
-description: "Get me ready to test this module" → code-intelligence (read-only)
+description: Get me ready to test this module (code intelligence, read-only)
 tags: [trigger, analysis]
 max_turns: 15
 timeout_seconds: 600
