@@ -88,6 +88,8 @@ built into this plugin; a request never falls through.
 | "teach me…" / "how does X work" / "is this right" | `automation-tutor` / `framework-reviewer` | exist |
 | "build a framework brick by brick" / "continue the build" / "do the exercise" *(automatable surface only)* | the build phases below (`scan-and-confirm` → `kit-builder`); **for a `desktop` product, the manual track instead** | exist |
 | **A `desktop` product, or "test this without automation" / "I can't automate this app"** | the **manual track**: analyze → KB → author cases → `ado-publish` → *QA tests by hand* → `failure-to-bug`; **no framework build / `run-suite`** | native (SP19) |
+| "set up Playwright / the browsers / the VS Code extension" / "get my UI automation environment ready" — or a UI-automatable build reaching the foundation step | **ui-automation-setup** (gated: detect → install + verify the browsers + the VS Code extension → wire `.vscode/` additively → verify via the framework's own auth; invoked by `kit-builder` Phase 1 only when `WEB_APP_URL` is set; **skips cleanly** when `WEB_APP_URL` is blank — `api`/`desktop`/API-only/`mixed`) | native (SP20) |
+| "teach me the VS Code **extension** / codegen / Record / Pick locator / Trace Viewer" / "learn the Playwright extension" / `/learn-extension` | **automation-tutor** on the **Extension track** (E1-E6 in `learning-path.md`); the orchestrator persists the `extension` track and **launches** the hands-on `codegen` / `show-trace` / `show-report` (the tutor is read-only, no shell) | native (SP20) |
 
 > **"Analyze this module" splits by intent.** *To test* an existing module (understand it, raise gaps,
 > get ready to author cases) → **code-intelligence** (read-only, the code mirror of story-intelligence).

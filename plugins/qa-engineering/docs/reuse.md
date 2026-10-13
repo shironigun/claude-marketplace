@@ -27,6 +27,7 @@ relays the structured output.
 |---|---|---|---|
 | 0 | Scan the repo/API, confirm flows, select module | kit's **`scan-and-confirm`** skill (Skill tool) | — (produces `flow-map.json` + `.env`) |
 | 1 | Scaffold the foundation | kit's `template/` + `kit-builder` itself (no external skill) | `flow-map.json` `hosts` / `authKind` / `module` → `config/services.ts`, `AUTH_STRATEGY`, `modules/<module>/` |
+| 1 | Set up the UI toolchain (browsers + VS Code extension), when a UI suite is in scope | kit's **`ui-automation-setup`** skill (Skill tool — gated; skips for `api`/`desktop`/API-only) | `system-map.automation` + `WEB_APP_URL` → install + verify browsers + extension, wire `.vscode/` additively |
 | 2 | API cases (contract / endpoint / workflow) | **`author-api-cases`** (Skill tool) | `flow-map.json` `endpoints` + `flows` as the case seed |
 | 2 | API case → runnable Playwright + zod script | kit's **`docs/script-generation.md`** (product-neutral guidance) | the authored cases + the flow-map endpoints |
 | 2 | API failure → bug draft | **`failure-to-bug`** (Skill tool) | the failing test's output / assertion / non-2xx response |

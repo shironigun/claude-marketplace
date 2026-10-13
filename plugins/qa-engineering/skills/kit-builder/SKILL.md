@@ -144,6 +144,19 @@ exists — this is what makes the build "structure once, then expand"); if `scan
 seed `catalog`, seed it now from `system-map.modules`. Produces: a compiling, lintable skeleton with a
 working per-variant auth probe. Delegates to: no external skill — the template + this skill.
 
+**Set up the UI automation toolchain (when a browser UI is in scope).** After the scaffold/auth probe, if the
+product is **UI-automatable** (`system-map.automation` ∈ {`applicable`, `partial`}) **and** a **web UI is in
+scope — `WEB_APP_URL` is set** (the one sound signal, the same one Phase 3 keys its UI suite on; do **not** gate
+on `productKind`), invoke the **`ui-automation-setup`** skill (Skill tool) as a **gated** sub-step here: it shows
+a detect checklist, then (each gated) installs the Playwright **browsers** and the **"Playwright Test for VS
+Code" extension**, wires `.vscode/` **additively**, and **verifies** the toolchain via the framework's own
+`auth.setup` (never typing a password into the app). It **degrades gracefully** — no `code` CLI → it guides the
+QA; a declined install → it says so — and **never fails the build**. Whenever `WEB_APP_URL` is blank — a pure
+**`api`** product, an **API-only** automatable product, or a **`mixed`** product (its UI is a desktop client, not
+a browser) — it **skips cleanly** (nothing to set up). Then point the QA at **`/learn-extension`** to master the
+extension (Record / Pick-locator / Trace Viewer / in-editor debug). See
+`knowledge/standards/vscode-playwright.md`.
+
 ### Phase 2 — Module (API)
 For each `flow` and `endpoint` in the map, invoke **`author-api-cases`** to author
 the three levels (contract / endpoint / workflow), passing the flow-map endpoints and flows

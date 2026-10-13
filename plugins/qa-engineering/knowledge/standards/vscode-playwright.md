@@ -94,6 +94,16 @@ Editor workflow (no terminal)
 - Using Record to emit whole specs verbatim — codegen output is a draft to refactor into page objects and
   fixtures, not a finished test.
 
+## Automated setup & mastery (where this standard is used)
+This standard is the **mechanics source of truth**; two SP20 surfaces *drive* it (and never restate it):
+- **`ui-automation-setup` skill** — invoked by `kit-builder` Phase 1 during a UI-automatable build: it installs
+  the browsers (`npx playwright install`) and this extension (`code --install-extension
+  ms-playwright.playwright`, else guides via "Test: Install Playwright"), wires the committed `.vscode/`
+  additively, and verifies — gated, honest-outcome, non-destructive.
+- **`/learn-extension`** — the focused course (Extension track E1-E6 in `knowledge/curriculum/learning-path.md`)
+  that teaches this extension to mastery: run/debug in the editor, Record / Pick-locator, codegen→POM refactor,
+  Trace Viewer, multi-config.
+
 ## Related standards
 - `tooling-and-commands.md` — the terminal equivalents of run/debug/filter.
 - `reporting-allure.md` — opening the Trace Viewer for a single failure.
