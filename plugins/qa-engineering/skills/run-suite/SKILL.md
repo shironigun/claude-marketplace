@@ -23,6 +23,11 @@ The QA's **framework root** (holds `package.json`, `playwright.config.ts`, `modu
 > "There's no test framework here yet to run. Build one first (`kit-builder`) or generate specs from approved
 > cases (`automation-engine`), then I can run them."
 
+> **No automated suite for a manual product.** If `system-map.automation` is **`manual`** (a `desktop`/thick
+> client), there is **nothing to run** — those tests are executed by hand. Say so and point at the manual flow
+> (the cases are in ADO; file bugs with `failure-to-bug`), rather than looking for a framework. A `mixed`
+> product's **API** suite runs normally; its desktop UI does not.
+
 ## The scope → command map (drive the kit's own scripts)
 Resolve the scope from the QA's intent + context, then run the matching command. Prefer a machine-readable
 reporter so results parse reliably (e.g. append `--reporter=line,json` / set `PLAYWRIGHT_JSON_OUTPUT_NAME`),

@@ -10,6 +10,13 @@ verify the real result → report, then wait for my go).
 
 Use `$ARGUMENTS` to steer if I gave it (a module name to add, "continue" to resume, "API only", etc.).
 
+**First, check `system-map.automation`.** `/build` builds a **Playwright** framework, so it applies only to an
+**automatable** product. If the product is **`desktop`** (`automation: manual` — a thick client the plugin
+can't UI-automate), there is **nothing to build**: say so plainly and point me at the **manual track** instead
+(analyze → KB → author cases → publish to ADO → test by hand → file bugs — run `/qa` or `/test <module>`, which
+handle it). For a **`mixed`** product, build the **API** suite only (skip the UI). For `web`/`api`, continue as
+below.
+
 Decide from `catalog.frameworkScaffold`:
 
 - **No scaffold yet (`absent` / no `catalog`)** — this is the first build. If there's no module list yet, run
