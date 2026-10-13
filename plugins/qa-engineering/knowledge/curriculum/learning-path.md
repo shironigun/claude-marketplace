@@ -35,6 +35,7 @@ move to the end as a "pick up later" tail. Depth (L1–L4) is still chosen separ
 | "API", "API testing", "services", "backend" | **api-first** | 1-7 · 12,13,14,15 · 16,17,18,19,20 · 21,22,23,24,25,26,28 · 29,30,31,32,33 · 34,35 | 8,9,10,11,27 (UI) |
 | "UI", "browser", "end-to-end clicking", "web app" | **ui-first** | 1-7 · 12 · 8,9,10,11 · 16,17,18,19,20 · 23,24,25,26,27 · 29,30,31,32,33 · 34,35 | 13,14,15,21,22,28 (API-internals) |
 | "both", "everything", unspecified, or "full course" | **full** | 1 … 35 (the default stage order below) | none |
+| "the VS Code extension", "codegen", "Record", "Pick locator", "Trace Viewer", "debug in the editor" (via **`/learn-extension`**) | **extension** | E1 → E6 (the *Extension track* cluster below) | the 1-35 course (run `/learn` for that) |
 
 Rules: **Foundations (1-7) are in every track** — never skipped. A track is an *ordering*, not a licence
 to invent topics: every number comes from the canonical list below. If the goal is ambiguous, default to
@@ -321,7 +322,59 @@ time; `/learn` re-derives the order and keeps what's already `covered`.
 
 ---
 
+## Extension track — mastering the Playwright VS Code extension
+*The focused `extension` cluster that **`/learn-extension`** runs — set up by `ui-automation-setup` during the
+build, mastered here. It uses the same tutor pedagogy, depth levels, and `learning` slice as the main course
+(an `extension` track), and is grounded in the one standard `vscode-playwright.md` (no restating). Each topic
+has a **Try it** that the **orchestrator** launches (the read-only tutor has no shell) so the learner practises
+immediately — the CLI-launchable tools (`codegen`, `show-trace`, `show-report`) mirror the in-editor actions the
+plugin can't drive for you.*
+
+#### E1. Install & test discovery
+- **Goal:** Install the extension, run "Test: Install Playwright" to add browsers + pick them, and see tests appear in the Testing panel.
+- **Prereqs:** 7 (basic framework), a scaffolded framework (`ui-automation-setup` may have done the install).
+- **Standard(s):** `vscode-playwright.md`
+- **Official docs:** https://playwright.dev/docs/getting-started-vscode · https://marketplace.visualstudio.com/items?itemName=ms-playwright.playwright
+- **Try it:** open the project in VS Code; accept the recommended-extensions prompt (`.vscode/extensions.json`).
+
+#### E2. Run & debug from the editor
+- **Goal:** Run via the play icons, tick the project(s)/level(s), set a breakpoint and "Debug Test", and read expected-vs-received with the locator highlighted live.
+- **Prereqs:** E1.
+- **Standard(s):** `vscode-playwright.md` · `tooling-and-commands.md`
+- **Official docs:** https://playwright.dev/docs/getting-started-vscode · https://playwright.dev/docs/debug
+- **Try it:** run one `ui-smoke` test from the editor; set a breakpoint and step through it.
+
+#### E3. Generate locators — Record & Pick locator
+- **Goal:** Use Record new / Record at cursor / **Pick locator**, and recognise the role-first locator priority the recorder follows.
+- **Prereqs:** E2.
+- **Standard(s):** `vscode-playwright.md` · `page-objects.md`
+- **Official docs:** https://playwright.dev/docs/codegen · https://playwright.dev/docs/getting-started-vscode
+- **Try it:** `npx playwright codegen <your-app-url>` — record a short flow, watch the locators it emits.
+
+#### E4. Refactor codegen into page objects
+- **Goal:** Treat codegen output as a **draft** — move its locators into page objects (role/label-first, no `expect()` in the POM) and reuse, never commit a recorded script verbatim.
+- **Prereqs:** E3.
+- **Standard(s):** `page-objects.md` · `vscode-playwright.md` (the "don't commit codegen verbatim" anti-pattern)
+- **Official docs:** https://playwright.dev/docs/pom · https://playwright.dev/docs/best-practices
+- **Try it:** take the E3 recording and lift its selectors into a `*.page.ts`, leaving assertions in the spec.
+
+#### E5. Trace Viewer
+- **Goal:** Open the Trace Viewer for a failed run from the editor and read the actions, network, console and DOM snapshots to find the real cause.
+- **Prereqs:** E2.
+- **Standard(s):** `vscode-playwright.md` · `reporting-allure.md`
+- **Official docs:** https://playwright.dev/docs/trace-viewer-intro · https://playwright.dev/docs/debug
+- **Try it:** `npx playwright show-trace` on a `trace.zip` from a failed run (or `npx playwright show-report`).
+
+#### E6. Multi-config & the right env
+- **Goal:** Switch between multiple `playwright.config.ts` from the extension, and point it at the right `.env`/profile (`playwright.env`) so an editor run matches a terminal run.
+- **Prereqs:** E2.
+- **Standard(s):** `vscode-playwright.md` · `config-and-profiles.md`
+- **Official docs:** https://playwright.dev/docs/getting-started-vscode
+- **Try it:** set `playwright.env` to your profile and run a test from the editor; confirm it authenticates like the terminal.
+
+---
+
 ## Coverage note
-Every one of the 23 SP1 standards under `knowledge/standards/` is the mapped teaching source for at least
+Every standard under `knowledge/standards/` is the mapped teaching source for at least
 one topic above, and every official URL is drawn from the researched Source URLs list — so the tutor never
 teaches ungrounded, and the curriculum never duplicates what a standard already says.

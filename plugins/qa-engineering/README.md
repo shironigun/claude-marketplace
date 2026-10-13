@@ -26,6 +26,7 @@ command takes optional text to steer it** (`/qa test payments`, `/build API only
 | `/analyze <id or module>` | Just understand it first (read-only): what to test + the gaps. |
 | `/run [scope]` | Run tests, see the real result, turn failures into bugs. |
 | `/learn [topic]` | Learn automation — a guided, best-sequence course that saves your progress. |
+| `/learn-extension [topic]` | Master the Playwright **VS Code extension** end to end — install & discover, run/debug in the editor, Record & Pick-locator, codegen→page-object refactor, Trace Viewer. Hands-on, saves progress. |
 | `/status [section]` | Your status board (read-only): what's built, the last run, course progress, and what's next. |
 | `/resume` | Pick up where you left off — build, test, or learning. |
 
@@ -98,7 +99,7 @@ verifies, and reports before moving on. It never assumes a value you have not co
 | Phase | What gets built |
 |---|---|
 | 0 | Scan and confirm (**frontend-first**): discover modules from the app's routes/nav, confirm the chosen module's endpoints, flows, hosts and auth → `flow-map.json`; on first run, **scaffold a Knowledge Base** (`knowledge-base/` with a stub per module) |
-| 1 | Foundation: the scaffold from `template/`, config, auth, `verify:setup` |
+| 1 | Foundation: the scaffold from `template/`, config, auth, `verify:setup` — and, when a browser UI is in scope (`WEB_APP_URL` set), the **UI toolchain setup** (gated: install + verify the Playwright browsers and the VS Code extension, wire `.vscode/`; skipped for API-only/desktop/mixed) |
 | 2 | Module API suite: contract and endpoint specs, run green twice |
 | 3 | Module UI suite: page objects and a smoke spec (skipped if no web app URL is set) |
 | 4 | ADO integration: Test Cases (gated via `ado-publish`), script-to-case links, bugs (gated via `failure-to-bug`; drafts if not signed in) |
