@@ -42,6 +42,12 @@
       "description": "AI QA engineering — one orchestrator for the whole QA loop: analyze an ADO story, author + approve test cases, publish them to a Test Plan/Suite, build + generate API + UI automation, and turn a failing run into a filed bug, human-gated at every tracker write. Also teaches and reviews a self-contained, product-neutral Playwright + TypeScript framework; the QA's specifics live in a git-ignored house-profile",
       "source": "./plugins/qa-engineering",
       "category": "testing"
+    },
+    {
+      "name": "feature-explainer",
+      "description": "Name a feature and a reader (product, QA, design, dev, sales) and get a visual explainer page for them: researched read-only, drawn as journeys, grids and annotated screens, the right detail collapsed or left out",
+      "source": "./plugins/feature-explainer",
+      "category": "documentation"
     }
   ]
 }

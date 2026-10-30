@@ -116,6 +116,7 @@ remove one first (`claude plugin marketplace remove shironigun`).
 | [ui-testing](#ui-testing) | testing | UI test-case authoring (ADO) + runnable Playwright UI script generation. |
 | [crm-bug-suite](#crm-bug-suite) | bug-tracking | Files Bugs/Defects and ticket comments on a specific ADO project in a house style. |
 | [release-notes-suite](#release-notes-suite) | release-management | Two-stage release pipeline: harvest the engineering inventory → write audience-facing release notes. |
+| [feature-explainer](#feature-explainer) | documentation | Name a feature and a reader (product, QA, design, dev, sales) → a visual explainer page for them, researched read-only. **Product-neutral.** |
 
 > Several plugins (`api-testing`, `ui-testing`, `crm-bug-suite`, `release-notes-suite`) are tailored to
 > a specific product and Azure DevOps project; `qa-toolkit` and **`qa-engineering`** are product-neutral and
@@ -193,6 +194,16 @@ specific "Agile Project" Azure DevOps project, in a defined QA house style.
 A two-stage release pipeline: **harvester** builds the complete engineering release inventory (every shipped
 story/defect across boards, plus non-ticketed PR/commit deployments); **releaser** turns that inventory (or a
 technical draft) into audience-facing release notes, with brand variants.
+
+### feature-explainer
+
+Give one line of direction ("explain the refund flow") and **feature-explainer** researches the feature
+read-only (code, branches, tickets, docs, live calls when you allow them), then publishes a multi-page
+artifact for the reader you name: product, QA, design, development, sales/operations or everyone. Each
+edition leads with what that reader needs (journeys and decisions, testable rules, screens and states,
+architecture and contract, or a customer-facing overview) as pictures, with the right detail collapsed or
+left out, and an audience-aware lint checks it before it is built. Bundles a drawing kit, a build script and layout checks. See
+`plugins/feature-explainer/README.md`.
 
 ---
 
