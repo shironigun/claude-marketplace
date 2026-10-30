@@ -1,17 +1,17 @@
 ---
 name: bugger
-description: File a Bug work item against a User Story or regression on the Acme CRM "Agile Project" Azure DevOps project, in the team's QA house style. Use this skill WHENEVER the user wants to log, file, raise, draft, create, or write up a BUG found while testing a story or during regression on QA/Staging — e.g. "file a bug for story 123456", "log this regression", "raise a bug on the QA environment", "write up this issue I found testing", or pastes a defect description and asks to turn it into a Bug. This is the bug-filing counterpart to the `buggy` test-case skill. For production/live-client issues use `defector` (Defect) instead; for posting a comment on an existing ticket use `commentor`.
+description: File a Bug work item against a User Story or regression on the "Agile Project" Azure DevOps project, in the team's QA house style. Use this skill WHENEVER the user wants to log, file, raise, draft, create, or write up a BUG found while testing a story or during regression on QA/Staging — e.g. "file a bug for story 123456", "log this regression", "raise a bug on the QA environment", "write up this issue I found testing", or pastes a defect description and asks to turn it into a Bug. This is the bug-filing counterpart to the `buggy` test-case skill. For production/live-client issues use `defector` (Defect) instead; for posting a comment on an existing ticket use `commentor`.
 ---
 
-# Acme CRM Bug Filing (against stories / regression)
+# Bug Filing (against stories / regression)
 
-File a **Bug** the way the QA analyst (QA→BA on Acme CRM) files them: a sharp negative-state title, environment-first repro bullets, a bolded `OBSERVATION` of the actual behaviour, a screenshot, and a "I know this is resolved when:" acceptance line — then create it as a **Bug** work item in Azure DevOps and link it to the source Story.
+File a **Bug** the way the QA analyst (QA→BA on the CRM) files them: a sharp negative-state title, environment-first repro bullets, a bolded `OBSERVATION` of the actual behaviour, a screenshot, and a "I know this is resolved when:" acceptance line — then create it as a **Bug** work item in Azure DevOps and link it to the source Story.
 
 This is the bug-filing sibling of the `buggy` test-case skill: same voice, same spec docs-first rule, same identity and auth rules. The difference is the output is a **Bug**, not a Test Case.
 
 ## Context you can assume (from project memory)
 
-- **Org:** acme-org · **Project:** Agile Project (GUID `00000000-0000-0000-0000-000000000000`)
+- **Org:** your-org · **Project:** Agile Project (GUID `00000000-0000-0000-0000-000000000000`)
 - **Board / area path:** `Agile Project\CRM Team` — the QA/feature-testing board where regression and story bugs live. (SWAT is for production defects — that's `defector`.)
 - **Author / QA identity:** the QA analyst (`qa@example.com`). Never a "QA"-prefixed display name.
 - **Auth:** this plugin **bundles** the `azure-devops` MCP (Azure Identity / `az login`, no PAT or token); use its `mcp__azure-devops__*` tools — never the Cowork OAuth ADO plugin.
@@ -32,7 +32,7 @@ This is the bug-filing sibling of the `buggy` test-case skill: same voice, same 
 Declarative bug **statement** (not imperative, not "Verify that…"). State what is broken, name the module/screen, and end with the environment.
 
 - Frames to use: `<thing> not working`, `<thing> is/are not <verb>ing` (loading, syncing, populating, persisting, saving), `Unable to <verb>`, `<thing> is not <correct>`, `Error <doing X>`, `App crashed on <action>`, and `Able to <do invalid thing>` for should-not-be-allowed cases.
-- **ALL-CAPS the domain keywords**: states and entities (`CLOSED`, `OPEN`, `EMAIL`, `MMS`, `PDF`, `CSV`, `FB`), DMS names (`DMS-B`, `DMS-C`, `DMS-E`, `DMS-A`, `ACME`), environments (`QA`, `STAGING`, `PRODUCTION`).
+- **ALL-CAPS the domain keywords**: states and entities (`CLOSED`, `OPEN`, `EMAIL`, `MMS`, `PDF`, `CSV`, `FB`), DMS names (`DMS-B`, `DMS-C`, `DMS-E`, `DMS-A`, `CRM`), environments (`QA`, `STAGING`, `PRODUCTION`).
 - **Name the module/screen**, using breadcrumb arrows when nested: `Settings > EMAIL`, `Notification panel > Task detail`.
 - **End with the environment**: `… on QA environment.`, `… on STAGING & QA`, `… on DMS-B QA environment.`
 - Include the bracketed **client ID** when client-specific: `Sosebees Outdoor Power and Repair [11928]`.

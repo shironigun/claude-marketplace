@@ -28,7 +28,7 @@ Derived from the team's actual Defects on `Agile Project\SWAT`.
 | Defect type | `Custom.DefectType1` | `Web` |
 | DMS | `Custom.DMS` | `DMS-A` (or the DMS involved) |
 | Hosted | `Custom.Hosted` | `N/A` |
-| Data sync | `Custom.DataSyncIssue` | `false` (set `true` for DMS↔Acme CRM sync issues) |
+| Data sync | `Custom.DataSyncIssue` | `false` (set `true` for DMS↔CRM sync issues) |
 | Repro | `Microsoft.VSTS.TCM.ReproSteps` | HTML |
 | Acceptance | `Microsoft.VSTS.Common.AcceptanceCriteria` | "I know this defect is resolved when:" |
 | Sys info | `Microsoft.VSTS.TCM.SystemInfo` | creds block |
@@ -57,7 +57,7 @@ Derived from the team's actual Defects on `Agile Project\SWAT`.
 ## FINDINGS variant (Defect 123456, SSO investigation)
 
 For auth/SSO/API investigations he uses a bold `FINDINGS` header with a numbered `<ol>` of investigation notes and pastes the API payload/JSON response inline. Example finding lines:
-> 1. DMS-D is able to generate the auth token (attachment #1). 2. Acme CRM is not handling the SSO efficiently. 3. DMS-A dev pointed out there are 2 users with Admin username — needs checking (payload below).
+> 1. DMS-D is able to generate the auth token (attachment #1). 2. The CRM is not handling the SSO efficiently. 3. DMS-A dev pointed out there are 2 users with Admin username — needs checking (payload below).
 
 ## Verbatim post-fix RootCauseDetails examples
 
@@ -69,5 +69,5 @@ For auth/SSO/API investigations he uses a bold `FINDINGS` header with a numbered
 - `App crashed on uploading attachment in Settings > EMAIL on Production environment.`
 - `Parts & Equipment locator not working for all clients on production`
 - `Download ORDERS module results is not working on production.`
-- `SSO not working in Acme CRM through DMS-A WebView on Production test client.`
-- `CLOSED invoices are syncing as OPEN form DMS-B to ACME`  ← data-sync defect → set `DataSyncIssue: true`
+- `SSO not working in the CRM through DMS-A WebView on Production test client.`
+- `CLOSED invoices are syncing as OPEN form DMS-B to CRM`  ← data-sync defect → set `DataSyncIssue: true`

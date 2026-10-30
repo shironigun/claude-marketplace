@@ -1,9 +1,9 @@
 ---
 name: defector
-description: File a production Defect work item on the Acme CRM "Agile Project" Azure DevOps project (SWAT board), in the team's QA house style. Use this skill WHENEVER the user wants to log, file, raise, draft, or create a DEFECT found on PRODUCTION / live clients — e.g. "log a production defect", "file a defect for this live issue", "raise a SWAT defect", "customers are seeing X on prod, log it", or pastes a production issue and asks to turn it into a Defect. For issues found while testing a story or in regression on QA/Staging use `bugger` (Bug) instead; for posting a comment on an existing ticket use `commentor`.
+description: File a production Defect work item on the "Agile Project" Azure DevOps project (SWAT board), in the team's QA house style. Use this skill WHENEVER the user wants to log, file, raise, draft, or create a DEFECT found on PRODUCTION / live clients — e.g. "log a production defect", "file a defect for this live issue", "raise a SWAT defect", "customers are seeing X on prod, log it", or pastes a production issue and asks to turn it into a Defect. For issues found while testing a story or in regression on QA/Staging use `bugger` (Bug) instead; for posting a comment on an existing ticket use `commentor`.
 ---
 
-# Acme CRM Production Defect Filing
+# Production Defect Filing
 
 File a **Defect** the way the QA analyst files production issues: a sharp negative-state title, production-first repro bullets ("Login to the production environment" / "checked on multiple live clients [ID]"), a bolded `OBSERVATION`/`FINDINGS` block, a screenshot, and a "I know this is resolved when:" acceptance line — then create it as a **Defect** work item on the **SWAT** board with the production defect-taxonomy fields populated.
 
@@ -11,7 +11,7 @@ Defector is the production sibling of `bugger`: same voice and repro anatomy, bu
 
 ## Context you can assume (from project memory)
 
-- **Org:** acme-org · **Project:** Agile Project (GUID `00000000-0000-0000-0000-000000000000`)
+- **Org:** your-org · **Project:** Agile Project (GUID `00000000-0000-0000-0000-000000000000`)
 - **Board / area path:** `Agile Project\SWAT` — the production-support / SWAT Kanban board (`Inbox → Done`).
 - **Author / QA identity:** the QA analyst (`qa@example.com`). Never a "QA"-prefixed display name.
 - **Auth:** this plugin **bundles** the `azure-devops` MCP (Azure Identity / `az login`, no PAT or token); use its `mcp__azure-devops__*` tools — never the Cowork OAuth ADO plugin.
@@ -21,7 +21,7 @@ Defector is the production sibling of `bugger`: same voice and repro anatomy, bu
 
 1. **Gather the production facts:** which live client(s) + client ID, which DMS (DMS-B / DMS-C / DMS-E / DMS-A), the exact steps to reproduce on prod, the actual broken result, and screenshots/GIF. Ask for credentials if a specific prod test client is involved.
 2. **Read the spec docs module** the defect touches (+ `RULES.md`) to name the correct expected behaviour. Flag `[UNCLEAR]`/`[ASSUMED]` rather than asserting.
-3. **Decide if it's a data-sync issue** (DMS↔Acme CRM feed). If so set `Custom.DataSyncIssue: true`.
+3. **Decide if it's a data-sync issue** (DMS↔CRM feed). If so set `Custom.DataSyncIssue: true`.
 4. **Draft the Defect** (title + repro + acceptance) and **show the user for approval before creating.**
 5. **Create the Defect** work item (see "Creating in ADO").
 6. Production defects are usually **standalone** (no Story parent). Link to a related ticket only if the user names one.
@@ -35,8 +35,8 @@ Real production examples:
 - `App crashed on uploading attachment in Settings > EMAIL on Production environment.`
 - `Parts & Equipment locator not working for all clients on production`
 - `Download ORDERS module results is not working on production.`
-- `SSO not working in Acme CRM through DMS-A WebView on Production test client.`
-- `CLOSED invoices are syncing as OPEN form DMS-B to ACME`
+- `SSO not working in the CRM through DMS-A WebView on Production test client.`
+- `CLOSED invoices are syncing as OPEN form DMS-B to CRM`
 
 ## Repro Steps — the anatomy (field: `Microsoft.VSTS.TCM.ReproSteps`, HTML)
 
@@ -84,7 +84,7 @@ Field defaults for a **Defect** (full table in `references/ado-defect-fields.md`
 | `Custom.DefectType1` | `Web` |
 | `Custom.DMS` | `DMS-A` (or the DMS involved) |
 | `Custom.Hosted` | `N/A` |
-| `Custom.DataSyncIssue` | `false` (set `true` if it's a DMS↔Acme CRM sync issue) |
+| `Custom.DataSyncIssue` | `false` (set `true` if it's a DMS↔CRM sync issue) |
 | Tags | `By QA Team` + a module tag (e.g. `Settings`, `Broadcasts`, `Inventory`) + `QA` |
 
 `Custom.RootCauseDetails` and `Client.ReleaseNote` (branch, format `<id>_<version>_<date>`) are filled **after** the fix by dev/at verification — leave blank at creation.

@@ -25,7 +25,7 @@ The `Microsoft.VSTS.TCM.Steps` field does **not** accept plain text or Markdown.
 - **The inner HTML is escaped.** The action/expected content is HTML (`<DIV><P>...</P></DIV>`) but it lives inside an XML attribute-like text node, so the angle brackets are entity-encoded (`&lt;`, `&gt;`). When you build the string, escape the inner HTML.
 - **First `parameterizedString` = Action**, second = **Expected Result**. Order is fixed.
 - **`type="ActionStep"`** for normal steps. (`type="ValidateStep"` also exists but ActionStep with an expected result is the norm.)
-- Put **preconditions** either in the work item's `Microsoft.VSTS.TCM.LocalDataSource`/description or as step 2 ("Log in to Acme CRM with Client ID X | Dashboard loads"). Simplest: make it the first step.
+- Put **preconditions** either in the work item's `Microsoft.VSTS.TCM.LocalDataSource`/description or as step 2 ("Log in to the CRM with Client ID X | Dashboard loads"). Simplest: make it the first step.
 
 ## Building it safely
 

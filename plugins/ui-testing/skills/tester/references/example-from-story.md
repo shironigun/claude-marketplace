@@ -42,7 +42,7 @@ Preconditions: Client ID: 99204001 | Environment: QA | Logged in as a user with 
 
 | # | Action | Expected Result |
 |---|--------|-----------------|
-| 1 | Login to Acme CRM | User is logged in and the dashboard loads |
+| 1 | Login to the CRM | User is logged in and the dashboard loads |
 | 2 | Navigate to Settings | Settings page opens |
 | 3 | Move to the Leads tab | Leads settings tab is displayed |
 | 4 | Click the Source Mapping option | Source Mapping settings section opens |
@@ -65,7 +65,7 @@ Preconditions: Client ID: 99204001 | Environment: QA | A source mapping exists f
 
 | # | Action | Expected Result |
 |---|--------|-----------------|
-| 1 | Login to Acme CRM | User is logged in and the dashboard loads |
+| 1 | Login to the CRM | User is logged in and the dashboard loads |
 | 2 | Navigate to the Leads module | Leads module opens and the lead list is displayed |
 | 3 | Click the Add Lead button | Add Lead form opens |
 | 4 | Enter the lead's name in the Name field | Text appears in the Name field |
@@ -87,7 +87,7 @@ Preconditions: Client ID: 99204001 | Environment: QA | The lead source "Walk-In"
 
 | # | Action | Expected Result |
 |---|--------|-----------------|
-| 1 | Login to Acme CRM | User is logged in and the dashboard loads |
+| 1 | Login to the CRM | User is logged in and the dashboard loads |
 | 2 | Navigate to the Leads module | Leads module opens and the lead list is displayed |
 | 3 | Click the Add Lead button | Add Lead form opens |
 | 4 | Enter the lead's name in the Name field | Text appears in the Name field |
@@ -109,7 +109,7 @@ Preconditions: Client ID: 99204001 | Environment: QA | A source mapping exists f
 
 | # | Action | Expected Result |
 |---|--------|-----------------|
-| 1 | Login to Acme CRM | User is logged in and the dashboard loads |
+| 1 | Login to the CRM | User is logged in and the dashboard loads |
 | 2 | Navigate to the Leads module | Leads module opens and the lead list is displayed |
 | 3 | Click the Add Lead button | Add Lead form opens |
 | 4 | Enter the lead's name in the Name field | Text appears in the Name field |
@@ -133,7 +133,7 @@ Preconditions: Client ID: 99204001 | Environment: QA | Logged in as a user with 
 
 | # | Action | Expected Result |
 |---|--------|-----------------|
-| 1 | Login to Acme CRM | User is logged in and the dashboard loads |
+| 1 | Login to the CRM | User is logged in and the dashboard loads |
 | 2 | Navigate to Settings | Settings page opens |
 | 3 | Move to the Leads tab | Leads settings tab is displayed |
 | 4 | Verify that the Source Mapping option is visible and accessible | The Source Mapping option is displayed in the Leads settings and the Admin can click and open it |
@@ -149,7 +149,7 @@ Preconditions: Client ID: 99204001 | Environment: QA | Logged in as a user with 
 
 | # | Action | Expected Result |
 |---|--------|-----------------|
-| 1 | Login to Acme CRM | User is logged in and the dashboard loads |
+| 1 | Login to the CRM | User is logged in and the dashboard loads |
 | 2 | Navigate to Settings | Settings page opens |
 | 3 | Move to the Leads tab | Leads settings tab is displayed |
 | 4 | Verify that the Source Mapping option is not visible or accessible | The Source Mapping option is either hidden or displays an access-denied message; the Salesperson cannot open or modify source mappings |
@@ -165,7 +165,7 @@ Preconditions: Client ID: 99204001 | Environment: QA | Source mappings exist for
 
 | # | Action | Expected Result |
 |---|--------|-----------------|
-| 1 | Login to Acme CRM | User is logged in and the dashboard loads |
+| 1 | Login to the CRM | User is logged in and the dashboard loads |
 | 2 | Navigate to the Leads module | Leads module opens and the lead list is displayed |
 | 3 | Click the Add Lead button | Add Lead form opens |
 | 4 | Enter the lead's name in the Name field | Text appears in the Name field |

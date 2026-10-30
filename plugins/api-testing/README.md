@@ -1,7 +1,7 @@
 # api-testing
 
-API test-case authoring and Playwright + TypeScript + zod **script generation** for **Acme CRM**
-(Acme), plus failed-test bug drafting, in the team's QA house style.
+API test-case authoring and Playwright + TypeScript + zod **script generation** for the CRM,
+plus failed-test bug drafting, in the team's QA house style.
 
 | Skill | What it does | Needs an MCP? |
 |---|---|---|
@@ -18,7 +18,7 @@ into test cases", "the contract test failed, write it up".
 spec files, or a bug draft). To actually **file** a drafted bug into Azure DevOps afterward, hand it to a
 filing skill (**crm-bug-suite**'s `bugger`/`defector`, or **qa-engineering**'s gated `failure-to-bug`) —
 those plugins **bundle** their own ADO MCP (Azure Identity / `az login`, no token), so filing works with no
-extra setup. The generated scripts target the Acme CRM Playwright + TypeScript + zod automation framework;
+extra setup. The generated scripts target the Playwright + TypeScript + zod automation framework;
 running them is done in that framework (`npx playwright test`), not through this plugin.
 
 ## Install
@@ -30,7 +30,7 @@ claude plugin install api-testing@shironigun
 
 ## Notes
 
-- Tuned to Acme CRM's automation framework and the team's house style.
+- Tuned to the automation framework and the team's house style.
 - Sibling plugins: **ui-testing** (the click-by-click UI equivalent) and **crm-bug-suite** (filing
   Bugs/Defects to ADO). For the full product-neutral QA loop — story → cases → publish → automate → bug — in
   one orchestrator, see **qa-engineering**.

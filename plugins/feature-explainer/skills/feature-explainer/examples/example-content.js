@@ -1,5 +1,5 @@
 // Worked example of a content module (made-up feature, made-up data): "Reply Assist" in a fictional
-// helpdesk, Acme Desk. Copy the shape, not the words. Build it with:
+// helpdesk, Helpdesk. Copy the shape, not the words. Build it with:
 //   node ../scripts/build.js example-content.js out/example.html
 'use strict';
 const path = require('path');
@@ -11,7 +11,7 @@ const L = [['Low', 'var(--urg-low)'], ['Medium', 'var(--urg-medium)'], ['High', 
 let G = '';
 G += gbox(20, 110, 150, 56, 'b-ai', ['AI draft', 'arrives']);
 G += arr('M170 138 H206');
-G += gbox(210, 110, 170, 56, 'b-crm', ['Acme Desk checks', 'every draft']);
+G += gbox(210, 110, 170, 56, 'b-crm', ['Helpdesk checks', 'every draft']);
 G += '<path class="ar" d="M380 138 H410 M410 58 V218"/>';
 [[58, 'PASSES', 'b-ok', ['Shown to the agent', 'ready to edit']], [138, 'TOO LONG', 'b-crm', ['Trimmed automatically', 'kept as a draft']], [218, 'BROKEN', 'b-bad', ['Not shown', 'the agent writes their own']]]
   .forEach((b) => { G += arr('M410 ' + b[0] + ' H536'); G += lbl(420, b[0] - 8, b[1]); G += gbox(540, b[0] - 25, 300, 50, b[2], b[3]); });
@@ -22,18 +22,18 @@ const how = [
   sub('The journey', 'how-journey'),
   journey('From a customer email to a sent reply', [
     ['dl', 'sms', 'Customer writes', 'An email or a chat message', 'Customer'],
-    ['crm', 'store', 'Acme Desk opens a ticket', 'And sends the thread to the AI', 'Acme Desk'],
+    ['crm', 'store', 'Helpdesk opens a ticket', 'And sends the thread to the AI', 'Helpdesk'],
     ['ai', 'ai', 'The AI drafts', 'A reply in the team&#8217;s tone', 'AI'],
     ['dl', 'review', 'Agent edits', 'Changes anything, or starts over', 'Agent'],
-    ['crm', 'send', 'Agent sends', 'From the agent&#8217;s own mailbox', 'Acme Desk']
-  ], { icon: 'sync', who: 'Acme Desk', lane: 'crm', html: '<b>When the customer replies,</b> a fresh draft is written for the new message.' }, 'The AI never sends anything. Every reply takes an agent&#8217;s click.'),
+    ['crm', 'send', 'Agent sends', 'From the agent&#8217;s own mailbox', 'Helpdesk']
+  ], { icon: 'sync', who: 'Helpdesk', lane: 'crm', html: '<b>When the customer replies,</b> a fresh draft is written for the new message.' }, 'The AI never sends anything. Every reply takes an agent&#8217;s click.'),
   sub('Two kinds of draft'),
   compare([
     ['sms', 'An answer', 'Answer', msg('c', 'Where is my order #4471?', 'Customer &middot; 10/14', 'Asked') + msg('r', 'It left our warehouse today and should arrive Friday.', 'Draft'), 'Uses only facts in the ticket'],
     ['forum', 'A holding reply', 'Holding', msg('c', 'Can I get a refund for the broken lamp?', 'Customer &middot; 10/14', 'Asked') + msg('r', 'Sorry about the lamp. I&#8217;m checking with our returns team and will reply by 5pm.', 'Draft'), 'Promises a time, never an outcome']
   ]),
   sub('Who does what'),
-  matrix([['ai', 'ai', 'The AI'], ['crm', 'store', 'Acme Desk'], ['dl', 'person', 'The agent']], [
+  matrix([['ai', 'ai', 'The AI'], ['crm', 'store', 'Helpdesk'], ['dl', 'person', 'The agent']], [
     ['sms', 'Write the draft', ['y', 'Every new message'], ['n', '&mdash;'], ['p', 'Edits it']],
     ['shield', 'Check the draft', ['n', '&mdash;'], ['y', 'Length, links, tone'], ['p', 'Reads it']],
     ['send', 'Send the reply', ['n', 'Never'], ['p', 'Sends on the click'], ['y', 'Clicks Send']]
@@ -58,7 +58,7 @@ const how = [
   sub('Issues found on TEST &middot; 3 March 2026', 'how-issues'),
   issues([
     ['crit', 'Not caught', 'Urgency too low after 4 days', 'A ticket waiting 4 days came back High. 3 days or more is Urgent.', '<div class="vz-ver" aria-hidden="true">' + upill('High', L[2][1]) + '<b>&ne;</b>' + upill('Urgent', L[3][1]) + '</div><small>4 days waiting</small>'],
-    ['warn', 'Caught by Acme Desk', 'Draft over the length limit', 'One draft came back at 640 characters. Acme Desk trims it and keeps it.', '<div class="vz-over" aria-hidden="true"><i></i><b></b><span>640</span></div><small>limit 600</small>'],
+    ['warn', 'Caught by Helpdesk', 'Draft over the length limit', 'One draft came back at 640 characters. Helpdesk trims it and keeps it.', '<div class="vz-over" aria-hidden="true"><i></i><b></b><span>640</span></div><small>limit 600</small>'],
     ['info', 'For the team', 'TEST runs an older prompt', 'TEST answers carry version 1.2; the repo has 1.3.', '<div class="vz-ver" aria-hidden="true"><span>TEST 1.2</span><b>&lt;</b><span>repo 1.3</span></div>']
   ]) + foot('info', 'From one test run on 3 March 2026 (example data).'),
   devDetails('For developers: the call, the checks and where drafts are stored', '<p class="note">Developer prose, tables and code blocks go here, word for word from the source. Nothing technical is dropped; it is only moved out of the way.</p>')
@@ -66,13 +66,13 @@ const how = [
 
 module.exports = {
   audience: 'all',                 // all | product | qa | design | dev | sales (references/audiences.md)
-  title: 'Acme Reply Assist',
+  title: 'Reply Assist',
   brand: 'Reply Assist',
   meta: '<b>reply-draft</b> v1.3<br>POST /api/drafts',
   hero: {
-    eyebrow: 'Acme Desk &middot; for product, QA and developers',
+    eyebrow: 'Helpdesk &middot; for product, QA and developers',
     h1: 'Reply Assist: a first draft of every reply',
-    lede: 'Reply Assist reads each new customer message and drafts a reply for the agent. <b>Nothing is sent without the agent&#8217;s click.</b> You&#8217;ll find it in Acme Desk under <b>Tickets &rsaquo; Reply</b>.',
+    lede: 'Reply Assist reads each new customer message and drafts a reply for the agent. <b>Nothing is sent without the agent&#8217;s click.</b> You&#8217;ll find it in Helpdesk under <b>Tickets &rsaquo; Reply</b>.',
     links: 'New to the terms? Start with the <a href="#terms">Glossary</a>.',
     chips: [['where', 'Tickets &rsaquo; Reply'], ['AI helper', 'Drafter'], ['sends', 'only on the agent&#8217;s click'], ['status', 'live on TEST', true]]
   },
@@ -85,5 +85,5 @@ module.exports = {
       '<div class="qs"><div class="qrow"><span class="qn">Q1</span><div><h4>Should a holding reply name a time?</h4><p>Options: always, only during office hours, never.</p></div><div class="pick"><b>Recommended</b>Only during office hours.</div></div></div>' }
   ],
   glossary: [['The feature', [['Draft', 'The reply the AI writes for the agent to edit.', 'How it works'], ['Holding reply', 'A reply that says when the real answer will come.', 'How it works']]]],
-  footer: 'Acme Reply Assist &middot; example page with made-up data'
+  footer: 'Reply Assist &middot; example page with made-up data'
 };
