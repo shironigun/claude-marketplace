@@ -1,0 +1,22 @@
+{
+  "name": "feature-explainer",
+  "version": "0.1.0",
+  "description": "Give it a feature's name and the reader (product, QA, design, development, sales/operations or everyone) and it builds a visual explainer page (a published artifact) for that audience: it researches the feature read-only (code, branches, tickets, docs, live calls when allowed), then draws the journey, who does what, rules as grids, annotated screens and states, what to test, architecture or a customer-facing overview, with dated issues and the right detail collapsed or left out. Bundles the page shell, a drawing kit of ready blocks, a build script with an audience-aware style lint, and layout checks (overflow, overlapping labels, phone width). Product-neutral: ships no product data.",
+  "author": {
+    "name": "shironigun"
+  },
+  "keywords": [
+    "documentation",
+    "artifact",
+    "onboarding",
+    "handover",
+    "qa",
+    "product",
+    "visual",
+    "explainer",
+    "diagrams",
+    "design",
+    "sales",
+    "developer-handover"
+  ]
+}
