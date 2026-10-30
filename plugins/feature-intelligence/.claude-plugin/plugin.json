@@ -1,0 +1,18 @@
+{
+  "name": "feature-intelligence",
+  "version": "0.0.1",
+  "description": "IN DEVELOPMENT, not yet registered in the marketplace. Being built into an AI requirements-engineering and product-intelligence workspace: stories, epics, documents or a rough idea in; one traceable, audience-aware feature workspace out. Forked from feature-explainer 0.1.0 (commit 76f8f9a); until the redesign lands it runs feature-explainer's engine unchanged. For the small, concise explainer, install feature-explainer.",
+  "author": {
+    "name": "shironigun"
+  },
+  "keywords": [
+    "requirements",
+    "requirements-engineering",
+    "product-intelligence",
+    "traceability",
+    "user-stories",
+    "qa",
+    "documentation",
+    "artifact"
+  ]
+}
