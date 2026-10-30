@@ -137,7 +137,7 @@ The three plugins that **write to Azure DevOps** each **bundle their own ADO MCP
   → just set **`ADO_ORG`** in the shell that launches Claude Code.
 
 No tokens live anywhere in this repo. Auth is your `az login` session or an interactive browser sign-in.
-(Each ADO plugin defaults to the `acme-org` org; change `AZURE_DEVOPS_ORG_URL` in its `.mcp.json`
+(Each ADO plugin defaults to the `your-org` org; change `AZURE_DEVOPS_ORG_URL` in its `.mcp.json`
 for another org. The bundled servers use a Windows `cmd /c npx` launcher — each README has the one-line
 macOS/Linux swap.)
 
