@@ -147,7 +147,7 @@ slices.
   "story":   { "id": "0000", "analysis": "Create/read/update an order…", "gaps": ["status set on soft-delete unconfirmed"] },
   "review":  { "verdict": "testable", "risks": ["soft-delete semantics"], "coverageGaps": ["negative: duplicate order"] },
   "module":  { "name": "orders", "mapRef": "flow-map.json", "findings": [] },
-  "catalog": { "product": "Acme", "recommended": "orders", "frameworkScaffold": "built",
+  "catalog": { "product": "the CRM", "recommended": "orders", "frameworkScaffold": "built",
                "modules": [ { "name": "orders", "summary": "order lifecycle", "endpointCount": 34, "status": "built", "kb": "deep" },
                             { "name": "billing", "summary": "invoices", "endpointCount": 28, "status": "discovered", "kb": "stub" } ] },
   "cases":   { "approved": false, "items": [{ "title": "Order lifecycle", "level": "workflow", "tags": ["@orders","@api"], "tracesStory": "0000", "tracesModule": null, "tracesRule": null, "adoCaseId": null }], "mdPath": "cases/orders.md", "coverage": "contract+endpoint+workflow" },

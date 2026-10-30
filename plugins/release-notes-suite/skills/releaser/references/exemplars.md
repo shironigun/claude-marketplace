@@ -34,7 +34,7 @@ Titled "Consent Management & Related Contacts Broadcasting." Exhaustive and prec
 >
 > **UI & Analytics Improvements** — a clearer tree structure; delivery info for contacts on broadcast cards; a simplified Name field; analytics stats for related contacts when included.
 >
-> **That's It!** We hope you love these updates. To attend a free webinar, click here to register! Questions? Use the chat button in the bottom-left corner of your Acme CRM.
+> **That's It!** We hope you love these updates. To attend a free webinar, click here to register! Questions? Use the chat button in the bottom-left corner of your CRM.
 
 ### 1c. The deltas — what changed and why (the lesson)
 - **Renamed the whole feature.** "Consent Management" → "Send Broadcasts to Related Contacts." Nobody could tell what "Consent Management" *did*; once it was clear the only consent managed was broadcast opt-in, the note was named for the client action. **Lesson: name by the verb the client performs, not the subsystem.**
@@ -49,14 +49,14 @@ Titled "Consent Management & Related Contacts Broadcasting." Exhaustive and prec
 
 ---
 
-## EXEMPLAR 2 — "Social Messaging Is Now Inside Acme CRM!"
+## EXEMPLAR 2 — "Social Messaging Is Now Inside the CRM!"
 
 Input: a multi-page flow doc (account linking, page→department mapping, filters, customer creation, merge, sync, limitations, "What If" scenarios). Output note:
 
-> **It's Finally Here: Social Messaging Is Now Inside Acme CRM!**
-> Customers have asked for this for a long time, and it's finally live. Connect your social inbox directly to Acme CRM so your team can manage messages without leaving the CRM. Faster replies, better tracking, fewer missed leads.
+> **It's Finally Here: Social Messaging Is Now Inside the CRM!**
+> Customers have asked for this for a long time, and it's finally live. Connect your social inbox directly to the CRM so your team can manage messages without leaving the CRM. Faster replies, better tracking, fewer missed leads.
 >
-> **What's New?** Social messages show up in Acme CRM Messenger; reply right away; conversations stay tied to the correct department (each page connects to one department); conversations are clearly marked with an icon, and you can filter the inbox by channel.
+> **What's New?** Social messages show up in Messenger; reply right away; conversations stay tied to the correct department (each page connects to one department); conversations are clearly marked with an icon, and you can filter the inbox by channel.
 >
 > **How to Set It Up (Admins Only)** — Settings → Departments, pick the location, click Link, log in with the account credentials and approve access; then choose the page and link it. When connected the icon turns blue; one page = one department.
 >
@@ -95,12 +95,12 @@ And the companion **Overpayment** update shows the shouted-exclusion style:
 
 ---
 
-## EXEMPLAR 4 — "Acme CRM Has a Brand-New Look"
+## EXEMPLAR 4 — "The CRM Has a Brand-New Look"
 
 The redesign playbook: reassure first, tease the future, push depth to KB.
 
-> **Acme CRM Has a Brand-New Look — and a Lot of New Features!** Here's the most important thing up front: **you're not losing anything.** Every tool you use today is still there. Some buttons moved, some screens look different, but everything still works — in most cases better than before. … [docked panels; "My Items" filters; collapsible menu; smarter Dashboard; five-tab Customer Details; rebuilt Deals with tabs, products, quotes] …
-> **Getting Ready for What's Next** — new capabilities are coming to Acme CRM. We're not ready to share details yet, but this new structure makes room for them. Stay tuned.
+> **The CRM Has a Brand-New Look — and a Lot of New Features!** Here's the most important thing up front: **you're not losing anything.** Every tool you use today is still there. Some buttons moved, some screens look different, but everything still works — in most cases better than before. … [docked panels; "My Items" filters; collapsible menu; smarter Dashboard; five-tab Customer Details; rebuilt Deals with tabs, products, quotes] …
+> **Getting Ready for What's Next** — new capabilities are coming to the CRM. We're not ready to share details yet, but this new structure makes room for them. Stay tuned.
 > **Watch the Walkthrough Webinars** … Or visit our knowledge base: learn.example.com.
 
 ### Deltas & reasoning
@@ -112,11 +112,11 @@ The redesign playbook: reassure first, tease the future, push depth to KB.
 
 ---
 
-## EXEMPLAR 5 — Editor's edit pass (Acme CRM + Acme Notify)
+## EXEMPLAR 5 — Editor's edit pass (general brand + DMS-facing brand)
 
 Not a full note — a batch of small, deliberate edits made to a finalized draft, each a standing rule now. Grouped by brand.
 
-### Acme CRM
+### General brand
 - **Added a concrete time anchor.** Appended "Here's what's new since the fresh look arrived" with a dated reference. **Lesson: date past-release references; never leave "since the fresh look" undated.**
 - **Fixed an implied capability.** Rewrote "move a customer from quote to paid without jumping between screens" to the literal action ("grab an existing quote and attach it to the deal card") because the original implied a flow the product can't do. **Lesson: describe the literal action, not a bigger flow it suggests.**
 - **Delineated two screens with a labeled separator.** Added an "Adding Quotes to Deals:" sub-header because orders and quotes are separate screens. **Lesson: split a bullet list that spans distinct screens with a sub-header.**
@@ -126,13 +126,13 @@ Not a full note — a batch of small, deliberate edits made to a finalized draft
 - **Removed a redundant improvement paragraph.** **Lesson: one vague-improvement paragraph, never two.**
 - **De-personalized the webinars.** "my live webinars" → "our live webinars." **Lesson: team framing, never an individual, in client copy.**
 
-### Acme Notify
-- **Same time anchor** as Acme CRM.
+### DMS-facing brand
+- **Same time anchor** as the general brand.
 - **Named the exact screen.** "See MSRP" → specified the Inventory Screen. **Lesson: point clients to where the change appears.**
 - **Fixed the modality.** Reference numbers are mandatory, so "can" was removed. **Lesson: match the verb (must/can/may) to whether the step is required.**
 - **Suppressed a narrow bug fix.** Removed an "add your own links to messages" section (an email-broadcast fix) — "maybe 1 in 10 clients use email broadcasts; for most this changes nothing, and announcing it just alerts people who hadn't noticed." **Lesson: weigh usage share; don't announce a fix most never noticed.**
 - **Same "our webinars"** de-personalization.
-- **Different support pointer.** Acme Notify has no in-app chat button, so its support pointer is DMS-A support. **Lesson: the support pointer is a brand-profile field, not a wording tweak.**
+- **Different support pointer.** The DMS-facing brand has no in-app chat button, so its support pointer is DMS-A support. **Lesson: the support pointer is a brand-profile field, not a wording tweak.**
 
 ---
 

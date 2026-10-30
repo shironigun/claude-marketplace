@@ -1,6 +1,6 @@
-# Acme CRM Bug Suite
+# Bug Suite
 
-Three skills for the Acme CRM **Agile Project** Azure DevOps project, modeled on the team's actual authoring patterns (analyzed across 400+ Bugs and 180+ Defects created).
+Three skills for the **Agile Project** Azure DevOps project, modeled on the team's actual authoring patterns (analyzed across 400+ Bugs and 180+ Defects created).
 
 | Skill | Files what | Board / type | Trigger examples |
 |-------|-----------|--------------|------------------|

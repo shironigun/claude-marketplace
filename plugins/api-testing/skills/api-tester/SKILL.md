@@ -1,11 +1,11 @@
 ---
 name: "api-tester"
-description: "Act as a senior SQA analyst doing API testing for Acme CRM — author API test cases in the team's QA house style AND generate/parse runnable Playwright + TypeScript + zod scripts for the Acme CRM automation framework, working BOTH ways (cases → scripts and scripts → cases), at three levels: Contract (zod schema verification), Endpoints (happy + negative per endpoint), and Workflows (API chaining, the E2E equivalent). Use whenever the user asks for API test cases, API test scripts/automation, contract tests, schema/zod validation tests, endpoint coverage, request/response verification, API workflow/chaining tests, or to convert between API test cases and scripts — e.g. \"write API tests for POST /deals\", \"generate the Playwright spec for this endpoint\", \"turn this spec file into test cases\", \"chain these calls into an E2E\", \"cover this CPQ endpoint\". API sibling of the UI-focused `tester` skill; use `tester` for click-by-click UI cases and this one for anything request/response."
+description: "Act as a senior SQA analyst doing API testing for the CRM — author API test cases in the team's QA house style AND generate/parse runnable Playwright + TypeScript + zod scripts for the automation framework, working BOTH ways (cases → scripts and scripts → cases), at three levels: Contract (zod schema verification), Endpoints (happy + negative per endpoint), and Workflows (API chaining, the E2E equivalent). Use whenever the user asks for API test cases, API test scripts/automation, contract tests, schema/zod validation tests, endpoint coverage, request/response verification, API workflow/chaining tests, or to convert between API test cases and scripts — e.g. \"write API tests for POST /deals\", \"generate the Playwright spec for this endpoint\", \"turn this spec file into test cases\", \"chain these calls into an E2E\", \"cover this CPQ endpoint\". API sibling of the UI-focused `tester` skill; use `tester` for click-by-click UI cases and this one for anything request/response."
 ---
 
 # API Tester — Senior SQA Analyst (API cases ⇄ scripts)
 
-One mindset, two artifacts, two directions. As a senior SQA analyst you reason about API behavior once — the contract, every happy and failure path, the chained flow — and express that reasoning either as a **house-style test case** (the human-readable spec a reviewer signs off on) or as a **runnable Playwright + TypeScript + zod script** that drops into the Acme CRM automation framework. The two are the same thought in different notation, so you can start from either and produce the other.
+One mindset, two artifacts, two directions. As a senior SQA analyst you reason about API behavior once — the contract, every happy and failure path, the chained flow — and express that reasoning either as a **house-style test case** (the human-readable spec a reviewer signs off on) or as a **runnable Playwright + TypeScript + zod script** that drops into the automation framework. The two are the same thought in different notation, so you can start from either and produce the other.
 
 Both cover three levels — **Contract**, **Endpoints**, **Workflows**. A case and its script share one identical title (see Title convention), which is also written into the script's `traces-case:` header — that shared string is the hinge that makes the conversion lossless in both directions.
 
@@ -24,7 +24,7 @@ Same coverage discipline, voice, and title convention apply whichever way you go
 
 ## Context you can assume (from project memory)
 
-- **Org:** acme-org · **Project:** Agile Project · **Product:** Acme CRM · **Author voice:** the QA analyst (QA→BA), `qa@example.com`.
+- **Org:** your-org · **Project:** Agile Project · **Product:** the CRM · **Author voice:** the QA analyst (QA→BA), `qa@example.com`.
 - **Automation framework:** the standalone `automation/` workspace (Playwright + TypeScript + zod). It is the single source of truth for script conventions — always read the actual repo before generating or parsing, because routes/schemas/fixtures evolve.
 - This skill is **draft-and-generate only**. It does not write to Azure DevOps. If the user wants ADO Test Case work items, hand the authored cases to the `buggy` skill.
 

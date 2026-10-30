@@ -1,11 +1,11 @@
 # ui-testing
 
-UI test-case authoring and Playwright + TypeScript UI-script generation for **Acme CRM**
-(Acme), in the team's QA house style.
+UI test-case authoring and Playwright + TypeScript UI-script generation for the CRM,
+in the team's QA house style.
 
 | Skill | What it does | Writes to ADO? |
 |---|---|---|
-| **buggy** | Writes click-by-click **UI Test Cases** for an Acme CRM ticket in the house style **and creates them as Test Case work items in Azure DevOps**, linked to the source ticket. | **Yes** (needs the MCP below) |
+| **buggy** | Writes click-by-click **UI Test Cases** for a ticket in the house style **and creates them as Test Case work items in Azure DevOps**, linked to the source ticket. | **Yes** (needs the MCP below) |
 | **tester** | Reviews a story / AC as a senior SQA analyst and authors UI test cases (and generates/parses runnable Playwright + TypeScript UI specs, forward and reverse). Authoring + script generation only. | No — produces cases/scripts as output |
 
 Trigger either by pasting a ticket / story / AC and asking for UI test cases or scripts — e.g.
@@ -39,7 +39,7 @@ Then run `az login` if you plan to use `buggy` (the bundled MCP handles the rest
 
 ## Notes
 
-- Tuned to Acme CRM's "Agile Project" ADO project and the team's house style (identity, area/board,
+- Tuned to the CRM's "Agile Project" ADO project and the team's house style (identity, area/board,
   title conventions) — retarget those in each skill's `references/` file for another project.
 - Sibling plugins: **api-testing** (the request/response equivalent) and **crm-bug-suite** (filing
   Bugs/Defects). For the full product-neutral QA loop in one orchestrator, see **qa-engineering**.

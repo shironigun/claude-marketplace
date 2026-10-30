@@ -8,7 +8,7 @@ Derived from the team's actual Bugs on `Agile Project\CRM Team`.
 |-------|---------------|---------------|-------|
 | Type | `System.WorkItemType` | `Bug` | |
 | Area path | `System.AreaPath` | `Agile Project\CRM Team` | confirm if user names another board |
-| Iteration | `System.IterationPath` | per OEM/sprint (e.g. `Agile Project\Acme CRM\Requirements`, `…\Husqvarna`, `…\Ariens`) | optional; let ADO default if unknown |
+| Iteration | `System.IterationPath` | per OEM/sprint (e.g. `Agile Project\CRM\Requirements`, `…\Husqvarna`, `…\Ariens`) | optional; let ADO default if unknown |
 | Parent | hierarchy link | the **User Story** the bug was found against | recurring story buckets: `123456`, `123456` |
 | Severity | `Microsoft.VSTS.Common.Severity` | `3 - Medium` (default), `2 - Medium` (higher impact) | `1 - High`/`4 - Low` rare |
 | Priority | `Microsoft.VSTS.Common.Priority` | `2` | almost always 2 |

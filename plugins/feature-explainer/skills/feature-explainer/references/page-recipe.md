@@ -15,11 +15,11 @@
 const K = require('<skill>/assets/vzkit.js');
 module.exports = {
   audience: 'all',                         // all | product | qa | design | dev | sales — see audiences.md; the lint checks it
-  title: 'Acme Reply Assist',            // 2-4 word name: browser tab and gallery. Not "X: explainer".
+  title: 'Reply Assist',                 // 2-4 word name: browser tab and gallery. Not "X: explainer".
   brand: 'Reply Assist',                  // short name in the top bar
   meta: '<b>reply-draft</b> v1.3',        // optional sidebar footer: skill/service names, versions
   hero: {                                  // shown on the first page only
-    eyebrow: 'Acme Desk &middot; for product, QA and developers',
+    eyebrow: 'Helpdesk &middot; for product, QA and developers',
     h1: 'Reply Assist: a first draft of every reply',
     lede: 'One or two plain sentences: what it does, the one safety fact, and where to find it.',
     links: 'New to the terms? Start with the <a href="#terms">Glossary</a>.',
