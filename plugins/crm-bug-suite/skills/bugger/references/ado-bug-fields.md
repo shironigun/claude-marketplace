@@ -8,7 +8,7 @@ Derived from the team's actual Bugs on `Example Project\Delivery Team`.
 |-------|---------------|---------------|-------|
 | Type | `System.WorkItemType` | `Bug` | |
 | Area path | `System.AreaPath` | `Example Project\Delivery Team` | confirm if user names another board |
-| Iteration | `System.IterationPath` | per OEM/sprint (e.g. `Example Project\Acme APP\Requirements`, `…\Husqvarna`, `…\Ariens`) | optional; let ADO default if unknown |
+| Iteration | `System.IterationPath` | per OEM/sprint (e.g. `Example Project\APP\Requirements`, `…\Husqvarna`, `…\Ariens`) | optional; let ADO default if unknown |
 | Parent | hierarchy link | the **User Story** the bug was found against | recurring story buckets: `123456`, `123456` |
 | Severity | `Microsoft.VSTS.Common.Severity` | `3 - Medium` (default), `2 - Medium` (higher impact) | `1 - High`/`4 - Low` rare |
 | Priority | `Microsoft.VSTS.Common.Priority` | `2` | almost always 2 |
