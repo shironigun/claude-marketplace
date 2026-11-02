@@ -12,45 +12,125 @@ function decodeEntities(s) {
       const code = e[1] === 'x' || e[1] === 'X' ? parseInt(e.slice(2), 16) : parseInt(e.slice(1), 10);
       return code > 0 && code <= 0x10ffff ? String.fromCodePoint(code) : m;
     }
-    const v = ENTITIES[e.toLowerCase()];
-    return v === undefined ? m : v;
+    const k = e.toLowerCase();
+    return Object.hasOwn(ENTITIES, k) ? ENTITIES[k] : m;
   });
 }
 
-const stripTags = (s) => String(s).replace(/<\/?[A-Za-z!?][^>]*>/g, '');
-const inlineText = (s) => decodeEntities(stripTags(s)).replace(/\s+/g, ' ').trim();
+// Tags that format words inside a line; every other tag separates words.
+const INLINE_TAGS = new Set(['a', 'abbr', 'b', 'big', 'cite', 'code', 'del', 'em', 'font', 'i', 'ins', 'kbd', 'label',
+  'mark', 'q', 's', 'samp', 'small', 'span', 'strike', 'strong', 'sub', 'sup', 'time', 'tt', 'u', 'var']);
+const TAG = /<(\/?)([A-Za-z][\w:-]*)\b[^>]*>/g;
+const clean = (s) => s.replace(/\s+/g, ' ').trim();
 
-// Converts HTML to Markdown that markdownBlocks reads: headings, paragraphs, list items, tables and code.
-// Converted pieces are held aside and restored at the end, so whitespace clean-up cannot break them.
-function htmlToMarkdown(html) {
-  const held = [];
-  const hold = (md) => {
-    held.push(md);
-    return `\n\n\u0000${held.length - 1}\u0000\n\n`;
-  };
-  let s = String(html)
+// The text of an HTML fragment on one line: inline tags vanish, every other tag (and <br>) becomes a space.
+function inlineText(html) {
+  return clean(decodeEntities(String(html).replace(TAG, (m, close, name) => (INLINE_TAGS.has(name.toLowerCase()) ? '' : ' '))));
+}
+
+// Cuts every outermost <table>...</table> out of the HTML, leaving a <fi-table N> marker in its place.
+function takeTables(html) {
+  const tables = [];
+  let out = '';
+  let depth = 0;
+  let start = 0;
+  let last = 0;
+  for (const m of html.matchAll(/<(\/?)table\b[^>]*>/gi)) {
+    if (!m[1]) {
+      if (depth === 0) {
+        out += html.slice(last, m.index);
+        start = m.index;
+      }
+      depth += 1;
+    } else if (depth > 0) {
+      depth -= 1;
+      if (depth === 0) {
+        last = m.index + m[0].length;
+        tables.push(html.slice(start, last));
+        out += `<fi-table ${tables.length - 1}>`;
+      }
+    }
+  }
+  return { html: out + html.slice(depth > 0 ? start : last), tables };
+}
+
+// A table's blocks: its caption as a paragraph, then one row block per row. The first row is the header only when it
+// is made of <th> cells and other rows follow. A nested table, or any block inside a cell, is read as the cell's text.
+function tableBlocks(table) {
+  const inner = table.replace(/^<table\b[^>]*>/i, '').replace(/<\/table\s*>$/i, '');
+  const { html, tables } = takeTables(inner);
+  const body = html.replace(/<fi-table (\d+)>/g, (m, n) => ` ${inlineText(tables[Number(n)])} `);
+  const blocks = [];
+  const caption = /<caption\b[^>]*>([\s\S]*?)<\/caption\s*>/i.exec(body);
+  if (caption && inlineText(caption[1])) blocks.push({ kind: 'para', text: inlineText(caption[1]) });
+  const rows = [...body.matchAll(/<tr\b[^>]*>([\s\S]*?)<\/tr\s*>/gi)]
+    .map((r) => [...r[1].matchAll(/<(t[hd])\b[^>]*>([\s\S]*?)<\/t[hd]\s*>/gi)])
+    .filter((cells) => cells.length)
+    .map((cells) => ({ th: cells.every((c) => c[1].toLowerCase() === 'th'), cells: cells.map((c) => inlineText(c[2])) }));
+  const header = rows.length > 1 && rows[0].th ? rows[0].cells : null;
+  for (const r of header ? rows.slice(1) : rows) blocks.push({ kind: 'row', cells: r.cells, header });
+  return blocks;
+}
+
+// Reads HTML into the blocks markdownBlocks produces, without going through Markdown, so no text is ever read as
+// Markdown syntax. Inside a list item or a heading everything is inline text: line breaks and block tags become spaces.
+function htmlBlocks(html) {
+  const cleaned = String(html ?? '')
     .replace(/<!--[\s\S]*?-->/g, '')
     .replace(/<(script|style|head|noscript|template)\b[\s\S]*?<\/\1\s*>/gi, '');
-  s = s.replace(/<pre\b[^>]*>([\s\S]*?)<\/pre\s*>/gi, (m, body) => hold(`\`\`\`\n${decodeEntities(stripTags(body)).replace(/^\n+|\s+$/g, '')}\n\`\`\``));
-  s = s.replace(/<table\b[^>]*>([\s\S]*?)<\/table\s*>/gi, (m, body) => {
-    const rows = [...body.matchAll(/<tr\b[^>]*>([\s\S]*?)<\/tr\s*>/gi)]
-      .map((r) => [...r[1].matchAll(/<t[hd]\b[^>]*>([\s\S]*?)<\/t[hd]\s*>/gi)].map((c) => inlineText(c[1]).replace(/\|/g, '\\|')))
-      .filter((r) => r.length);
-    if (!rows.length) return '\n\n';
-    const line = (r) => `| ${r.join(' | ')} |`;
-    return hold([line(rows[0]), `|${rows[0].map(() => '---').join('|')}|`, ...rows.slice(1).map(line)].join('\n'));
+  const { html: rest, tables } = takeTables(cleaned);
+  const pres = [];
+  const source = rest.replace(/<pre\b[^>]*>([\s\S]*?)<\/pre\s*>/gi, (m, body) => {
+    pres.push(decodeEntities(body.replace(/<br\s*\/?>/gi, '\n').replace(TAG, '')).replace(/^\n+|\s+$/g, ''));
+    return `<fi-pre ${pres.length - 1}>`;
   });
-  s = s.replace(/<h([1-6])\b[^>]*>([\s\S]*?)<\/h\1\s*>/gi, (m, level, body) => hold(`${'#'.repeat(Number(level))} ${inlineText(body)}`));
-  s = s.replace(/<li\b[^>]*>([\s\S]*?)(?:<\/li\s*>|(?=<li\b)|(?=<\/[ou]l\s*>))/gi, (m, body) => hold(`- ${inlineText(body)}`));
-  s = s.replace(/<br\s*\/?>/gi, '\n')
-    .replace(/<\/?(p|div|section|article|blockquote|ul|ol|header|footer|main|nav|aside|figure|figcaption|dl|dt|dd|hr)\b[^>]*>/gi, '\n\n');
-  s = decodeEntities(stripTags(s))
-    .split('\n')
-    .map((l) => l.replace(/\s+/g, ' ').trim())
-    .join('\n')
-    .replace(/\n{3,}/g, '\n\n')
-    .trim();
-  return s.replace(/\u0000(\d+)\u0000/g, (m, i) => held[Number(i)]);
+  const blocks = [];
+  let text = '';
+  let kind = 'para';
+  let level = 0;
+  const flush = () => {
+    const t = clean(text);
+    if (t) blocks.push(kind === 'heading' ? { kind, level, text: t } : { kind, text: t });
+    text = '';
+    kind = 'para';
+  };
+  for (const m of source.matchAll(/<(\/?)([A-Za-z][\w:-]*)\b[^>]*>|[^<]+|</g)) {
+    const [raw, close, tag] = m;
+    if (!tag) {
+      text += decodeEntities(raw);
+      continue;
+    }
+    const name = tag.toLowerCase();
+    const inline = kind !== 'para';
+    if (name === 'fi-pre' || name === 'fi-table') {
+      const n = Number(/\d+/.exec(raw)[0]);
+      const piece = name === 'fi-pre' ? pres[n] : tables[n];
+      if (inline) {
+        text += ` ${name === 'fi-pre' ? piece : inlineText(piece)} `;
+      } else {
+        flush();
+        if (name === 'fi-table') blocks.push(...tableBlocks(piece));
+        else if (piece.trim()) blocks.push({ kind: 'code', text: piece });
+      }
+    } else if (name === 'li') {
+      flush();
+      if (!close) kind = 'item';
+    } else if (/^h[1-6]$/.test(name) && kind !== 'item') {
+      flush();
+      if (!close) {
+        kind = 'heading';
+        level = Number(name[1]);
+      }
+    } else if (INLINE_TAGS.has(name)) {
+      // formatting inside a line: no break between words
+    } else if (inline || name === 'br') {
+      text += ' ';
+    } else {
+      flush();
+    }
+  }
+  flush();
+  return blocks;
 }
 
-module.exports = { decodeEntities, stripTags, inlineText, htmlToMarkdown };
+module.exports = { decodeEntities, inlineText, htmlBlocks };
