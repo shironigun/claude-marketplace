@@ -49,7 +49,9 @@ function markdownBlocks(text) {
     if (TABLE_ROW.test(line) && i + 1 < lines.length && TABLE_RULE.test(lines[i + 1])) {
       flush();
       const header = splitRow(line);
+      const before = blocks.length;
       for (i += 2; i < lines.length && TABLE_ROW.test(lines[i]); i += 1) blocks.push({ kind: 'row', cells: splitRow(lines[i]), header });
+      if (blocks.length === before) blocks.push({ kind: 'row', cells: header, header: null });
       i -= 1;
       continue;
     }
