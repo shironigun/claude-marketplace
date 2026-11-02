@@ -22,6 +22,11 @@ test('query: by type, status, section, words and id; superseded nodes only with 
   assert.match(runFi(root, ['query', 'csv', '--id', 'RULE-001']).stdout, /^RULE-001 \[conflict\] Row limit per file: .* \(2 quotes\)$/m);
   assert.equal(runFi(root, ['query', 'csv', '--section', 'Z']).code, 2);
   assert.equal(runFi(root, ['query', 'csv', '--type', 'RUEL']).code, 2);
+  assert.equal(runFi(root, ['query', 'csv', '--text', 'the']).code, 2);
+  must(runFi(root, ['add', 'csv', write(root, 'msg.json', {
+    nodes: [{ id: '+m', type: 'MSG', title: 'Two\nlines', statement: 'line one\nline two', status: 'assumed', derivedFrom: ['GOAL-001'] }],
+  })]));
+  assert.match(runFi(root, ['query', 'csv', '--type', 'MSG']).stdout, /^MSG-001 \[assumed\] Two lines: line one line two$/m);
 });
 
 test('trace: quotes, links out and links in, to a depth', () => {
@@ -42,4 +47,7 @@ test('trace: quotes, links out and links in, to a depth', () => {
   assert.equal(must(runFi(root, ['trace', 'csv', 'RULE-001', '--depth', '1', '--json'])).json.in.length, 2);
   assert.match(runFi(root, ['trace', 'csv', 'RULE-001']).stdout, /← implements STORY-001 \[confirmed\] Reject oversized files/);
   assert.equal(runFi(root, ['trace', 'csv', 'RULE-404']).code, 2);
+  assert.match(runFi(root, ['trace', 'csv', 'RULE-001']).stdout, /← derived from TS-001 \[inferred\] One row over the limit \(via AC-001\)/);
+  must(runFi(root, ['add', 'csv', write(root, 'sup.json', { nodes: [{ id: 'AC-001', supersededBy: 'RULE-001' }] })]));
+  assert.match(runFi(root, ['trace', 'csv', 'RULE-001']).stdout, /← refines AC-001 \[inferred\] Reject over the limit \(superseded by RULE-001\)/);
 });

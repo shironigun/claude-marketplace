@@ -1,6 +1,9 @@
 'use strict';
 const { tokens } = require('./text');
 
+// One line per item: titles and statements may hold line breaks.
+const oneLine = (s) => String(s).replace(/\s+/g, ' ').trim();
+
 // Section letters and the node types they hold (spec 6.6). L, the release-note drafts, is phase 2.
 const SECTION_TYPES = {
   A: ['GOAL', 'PRB', 'SCOPE', 'ACT', 'MET'],
@@ -34,8 +37,8 @@ function queryNodes(nodes, { types, statuses, text, section, ids, all } = {}) {
 
 function nodeLine(n) {
   const quotes = (n.provenance || []).length;
-  return `${n.id} [${n.status}] ${n.title}: ${n.statement}`
+  return `${n.id} [${n.status}] ${oneLine(n.title)}: ${oneLine(n.statement)}`
     + `${quotes ? ` (${quotes} quote${quotes === 1 ? '' : 's'})` : ''}${n.supersededBy ? ` (superseded by ${n.supersededBy})` : ''}`;
 }
 
-module.exports = { SECTION_TYPES, queryNodes, nodeLine };
+module.exports = { SECTION_TYPES, queryNodes, nodeLine, oneLine };
