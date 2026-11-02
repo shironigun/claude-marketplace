@@ -67,6 +67,13 @@ test('ingest: Word, PDF, image, HTML, ADO, pasted text and a repository', () => 
   assert.equal(twice.code, 2);
   assert.match(twice.stderr, /work item 3001 appears twice, at rev 1 and rev 2/);
   assert.equal(loadSources(workspacePaths(root, 'csv')).some((s) => s.origin.workItem === 3001), false);
+  fs.writeFileSync(path.join(root, 'norev.json'), JSON.stringify([{ workItem: { id: 3002, fields: { 'System.Title': 'No rev' } } }]));
+  const norev = runFi(root, ['ingest', 'csv', '--ado', 'norev.json']);
+  assert.equal(norev.code, 2);
+  assert.match(norev.stderr, /work item 3002 has no rev/);
+  fs.writeFileSync(path.join(root, 'titleonly.json'), JSON.stringify([{ workItem: { id: 3003, rev: 1, fields: { 'System.Title': 'Add an export button' } } }]));
+  assert.deepEqual(sourcesOf(root, ['ingest', 'csv', '--ado', 'titleonly.json']).map((s) => [s.title, s.chunks]), [['Add an export button', 1]]);
+  assert.equal(runFi(root, ['ingest', 'csv', '--ado', '']).code, 2);
   fs.writeFileSync(path.join(root, 'same.json'), JSON.stringify([item(3002, 1), item(3002, 1)]));
   assert.deepEqual(sourcesOf(root, ['ingest', 'csv', '--ado', 'same.json']).map((s) => s.skipped), [false, true]);
   const pasted = sourcesOf(root, ['ingest', 'csv', '--paste', 'teams.txt', '--by', 'Product owner'])[0];
@@ -84,6 +91,7 @@ test('ingest: Word, PDF, image, HTML, ADO, pasted text and a repository', () => 
   assert.equal(loadSources(workspacePaths(root, 'csv')).find((s) => s.kind === 'repo').coverageExempt, true);
   assert.equal(loadSources(workspacePaths(root, 'csv')).find((s) => s.kind === 'repo').origin.dirty, true);
   assert.match(runFi(root, ['ingest', 'csv', '--repo', 'app']).stdout, /Skipped/);
+  assert.equal(repo.dirty, true);
 });
 
 test('ingest: an unreadable file is registered, reported, and replaced once it can be read', () => {
@@ -91,11 +99,30 @@ test('ingest: an unreadable file is registered, reported, and replaced once it c
   fs.writeFileSync(path.join(root, 'bad.docx'), 'not a zip archive at all, only text');
   const bad = runFi(root, ['ingest', 'csv', 'bad.docx', '--json']);
   assert.equal(bad.code, 1);
-  assert.deepEqual(bad.json.sources[0], { id: 'SRC-001', kind: 'file', title: 'bad.docx', status: 'unreadable', chunks: 1, skipped: false });
+  const { error, ...row } = bad.json.sources[0];
+  assert.deepEqual(row, { id: 'SRC-001', kind: 'file', title: 'bad.docx', status: 'unreadable', chunks: 1, skipped: false });
+  assert.match(error, /not a zip archive/);
   fs.writeFileSync(path.join(root, 'bad.docx'), writeDocx([{ kind: 'para', text: 'Now readable.' }]));
   assert.deepEqual(sourcesOf(root, ['ingest', 'csv', 'bad.docx'])[0], { id: 'SRC-001', kind: 'file', title: 'bad.docx', status: 'ok', chunks: 1, skipped: false });
   fs.writeFileSync(path.join(root, 'scan.pdf'), '%PDF-1.4\n%%EOF\n');
   assert.equal(runFi(root, ['ingest', 'csv', 'scan.pdf']).code, 1);
   assert.equal(sourcesOf(root, ['ingest', 'csv', 'scan.pdf', '--pages', '3'])[0].chunks, 3);
   assert.deepEqual(loadSources(workspacePaths(root, 'csv')).map((s) => [s.id, s.status]), [['SRC-001', 'ok'], ['SRC-002', 'ok']]);
+  fs.writeFileSync(path.join(root, 'empty.md'), '\n\n');
+  const empty = runFi(root, ['ingest', 'csv', 'empty.md', '--json']);
+  assert.equal(empty.code, 1);
+  assert.deepEqual([empty.json.sources[0].status, empty.json.sources[0].error], ['unreadable', 'no text found in the file']);
+});
+
+test('ingest: the workspace itself does not make its repository dirty', () => {
+  const root = tempDir();
+  const git = (...a) => execFileSync('git', ['-C', root, ...a], { stdio: 'ignore' });
+  git('init', '-q');
+  fs.writeFileSync(path.join(root, 'app.js'), 'x');
+  git('add', '.');
+  git('-c', 'user.name=t', '-c', 'user.email=t@example.com', '-c', 'commit.gpgsign=false', 'commit', '-qm', 'x');
+  assert.equal(runFi(root, ['init', 'x', '--mode', 'existing']).code, 0);
+  const clean = sourcesOf(root, ['ingest', 'x', '--repo', '.'])[0];
+  assert.deepEqual([clean.kind, clean.dirty], ['repo', undefined]);
+  assert.equal(loadSources(workspacePaths(root, 'x')).find((s) => s.kind === 'repo').origin.dirty, undefined);
 });
