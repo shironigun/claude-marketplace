@@ -81,6 +81,7 @@ test('consolidate: negation, modality and later similar claims need a decision; 
   };
   refused({ 'K-001': { action: 'constructor' }, 'K-002': { action: 'conflict' } }, /action must be/);
   refused({ 'K-001': { action: 'conflict', statment: 'x' }, 'K-002': { action: 'conflict' } }, /unknown decision field statment/);
+  refused({ 'K-001': { action: ['merge'] }, 'K-002': { action: 'conflict' } }, /action must be/);
   refused({ 'K-001': { action: 'drop', reason: '  ' }, 'K-002': { action: 'conflict' } }, /reason must be text/);
   const decided = { 'K-001': { action: 'conflict' }, 'K-002': { action: 'conflict' } };
   const r = must(runFi(root, ['consolidate', 'csv', '--apply', write(root, 'ok.json', decided), '--json'])).json;

@@ -137,7 +137,7 @@ function decide(cluster, d) {
   if (!d || typeof d !== 'object' || Array.isArray(d)) throw usageError(`${cluster.id}: a decision is an object like {"action": "merge"}`);
   const unknown = Object.keys(d).filter((k) => !DECISION_FIELDS.has(k));
   if (unknown.length) throw usageError(`${cluster.id}: unknown decision field ${unknown.join(', ')}`);
-  const action = Object.hasOwn(ACTIONS, d.action) ? ACTIONS[d.action] : null;
+  const action = typeof d.action === 'string' && Object.hasOwn(ACTIONS, d.action) ? ACTIONS[d.action] : null;
   if (!action) throw usageError(`${cluster.id}: action must be merge, conflict, separate, existing or drop`);
   for (const f of ['reason', 'title', 'statement']) {
     if (d[f] !== undefined && !(typeof d[f] === 'string' && d[f].trim())) throw usageError(`${cluster.id}: ${f} must be text`);
