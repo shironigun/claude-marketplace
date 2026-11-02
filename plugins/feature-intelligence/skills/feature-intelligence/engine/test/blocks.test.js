@@ -62,3 +62,10 @@ test('html: headings, paragraphs, lists, tables, code, entities; scripts dropped
   ]);
   assert.equal(decodeEntities('&lt;&#65;&#x42;&quot;&unknown;'), '<AB"&unknown;');
 });
+
+test('blocks: anchors stay unique, closing hashes are optional, a bare "<" in HTML text is kept', () => {
+  const md = 'Intro\n\n## \n\nAfter an empty heading\n\n## Notes\n\nA\n\n## Notes\n\nB\n\n## Notes (2)\n\nC\n\n## C# ##\n\nD';
+  assert.deepEqual(chunkMarkdown(md).map((c) => c.anchor), ['¶1', '¶2', '§Notes ¶1', '§Notes (2) ¶1', '§Notes (2) (2) ¶1', '§C# ¶1']);
+  assert.equal(htmlToMarkdown('<p>Price < 10 and > 5</p>'), 'Price < 10 and > 5');
+  assert.deepEqual(chunkMarkdown('## Language: C#\n\nE').map((c) => c.anchor), ['§Language: C# ¶1']);
+});

@@ -40,7 +40,7 @@ function markdownBlocks(text) {
       if (code) blocks.push({ kind: 'code', text: code });
       continue;
     }
-    const heading = /^\s{0,3}(#{1,6})\s+(.*?)\s*#*\s*$/.exec(line);
+    const heading = /^\s{0,3}(#{1,6})\s+(.*?)(?:\s+#+)?\s*$/.exec(line);
     if (heading) {
       flush();
       blocks.push({ kind: 'heading', level: heading[1].length, text: inline(heading[2]) });
@@ -88,16 +88,17 @@ const SECTION_NUMBER = /^(\d+(?:\.\d+)*)\.?\s/;
 // Anchors each non-heading block as "§<section> ¶<n>" (or "¶<n>" before the first heading).
 function chunksFromBlocks(blocks) {
   const chunks = [];
-  const seen = new Map();
+  const used = new Set();
   let section = '';
   let n = 0;
   for (const b of blocks) {
     if (b.kind === 'heading') {
+      if (!b.text) continue; // an empty heading names nothing; its blocks stay in the current section
       const m = SECTION_NUMBER.exec(`${b.text} `);
-      let key = m ? m[1] : b.text.slice(0, 40).trim();
-      const count = (seen.get(key) || 0) + 1;
-      seen.set(key, count);
-      if (count > 1) key = `${key} (${count})`;
+      const base = m ? m[1] : b.text.slice(0, 40).trim();
+      let key = base;
+      for (let k = 2; used.has(key); k += 1) key = `${base} (${k})`; // never reuse a section key, even a written "(2)"
+      used.add(key);
       section = key;
       n = 0;
       continue;
