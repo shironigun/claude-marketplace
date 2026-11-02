@@ -1,28 +1,44 @@
 'use strict';
 const zlib = require('zlib');
 
+// The largest inflated size of one object stream.
+const STREAM_CAP = 64 * 1024 * 1024;
+// A page tree is small; this only stops a crafted file.
+const INFLATE_BUDGET = 128 * 1024 * 1024;
+
 // Inflates the object streams (/Type /ObjStm), one at a time: a page tree is a top-level object or sits inside one.
 // Images, fonts, page content and attached files are never inflated, so their size costs nothing and an attached
 // PDF cannot lend its page tree.
-function* objectStreamTexts(buf, s) {
+function* objectStreamTexts(buf, s, inflateBudget) {
   const re = /(?<!end)stream\r?\n/g;
   let m;
-  while ((m = re.exec(s))) {
+  let prevEnd = 0;
+  let budget = inflateBudget;
+  while (budget > 0 && (m = re.exec(s))) {
     const start = m.index + m[0].length;
     const end = s.indexOf('endstream', start);
     if (end === -1) break;
-    const dict = s.slice(s.lastIndexOf('obj', m.index), m.index);
+    // The object header lies after the previous stream, so only that stretch is searched: linear.
+    const head = s.slice(prevEnd, m.index);
+    const at = head.lastIndexOf('obj');
+    const dict = at === -1 ? '' : head.slice(at);
     if (/\/Type\s*\/ObjStm\b/.test(dict)) {
       try {
-        // An unfiltered object stream already holds plain text, so its payload is yielded as it is.
-        yield /\/Filter\b/.test(dict)
-          ? zlib.inflateSync(buf.subarray(start, end), { finishFlush: zlib.constants.Z_SYNC_FLUSH, maxOutputLength: 64 * 1024 * 1024 }).toString('latin1')
-          : s.slice(start, end);
-      } catch {
+        if (/\/Filter\b/.test(dict)) {
+          const text = zlib.inflateSync(buf.subarray(start, end), { finishFlush: zlib.constants.Z_SYNC_FLUSH, maxOutputLength: STREAM_CAP }).toString('latin1');
+          budget -= text.length;
+          yield text;
+        } else {
+          // An unfiltered object stream already holds plain text, so its payload is yielded as it is.
+          yield s.slice(start, end);
+        }
+      } catch (err) {
         // Not Flate data, or larger than any page tree could be: nothing to search.
+        if (err.code === 'ERR_BUFFER_TOO_LARGE') budget -= STREAM_CAP; // the attempt inflated up to the cap
       }
     }
-    re.lastIndex = end + 'endstream'.length;
+    prevEnd = end + 'endstream'.length;
+    re.lastIndex = prevEnd;
   }
 }
 
@@ -44,7 +60,7 @@ function withoutStreamPayloads(s) {
 }
 
 // The largest /Count of a /Type /Pages node; else the number of /Type /Page objects; else null.
-function pdfPageCount(buf) {
+function pdfPageCount(buf, { inflateBudget = INFLATE_BUDGET } = {}) {
   if (buf.subarray(0, 5).toString('latin1') !== '%PDF-') return null;
   const raw = buf.toString('latin1');
   let count = 0;
@@ -58,7 +74,7 @@ function pdfPageCount(buf) {
     pages += (text.match(/\/Type\s*\/Page(?![A-Za-z])/g) || []).length;
   };
   scan(withoutStreamPayloads(raw));
-  for (const text of objectStreamTexts(buf, raw)) scan(text);
+  for (const text of objectStreamTexts(buf, raw, inflateBudget)) scan(text);
   return count || pages || null;
 }
 
