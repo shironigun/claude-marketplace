@@ -101,3 +101,11 @@ test('html: text is never read as Markdown; odd input is safe', () => {
   assert.deepEqual(htmlBlocks('<p>a <fi-pre 9> b <fi-table 0> c</fi-table></p>'), [{ kind: 'para', text: 'a <fi-pre 9> b <fi-table 0> c</fi-table>' }]);
   assert.deepEqual(htmlBlocks('<fi-pre>'), [{ kind: 'para', text: '<fi-pre>' }]);
 });
+
+test('html: declarations vanish, other tags never split a sentence, an unclosed item ends with its list', () => {
+  const t = (html) => chunksFromBlocks(htmlBlocks(html)).map((c) => `${c.anchor} ${c.text}`);
+  assert.deepEqual(t('<!DOCTYPE html><?xml version="1.0"?><html><body><p>Intro</p></body></html>'), ['¶1 Intro']);
+  assert.deepEqual(t('<p><![if !supportLists]>Word<![endif]> list</p>'), ['¶1 Word list']);
+  assert.deepEqual(t('<p>Click the <img src="gear.png"> icon to <dfn>open</dfn> settings.</p>'), ['¶1 Click the icon to open settings.']);
+  assert.deepEqual(t('<h2>A</h2><ul><li>One<li>Two</ul><h2>B</h2><p>b1</p>'), ['§A ¶1 One', '§A ¶2 Two', '§B ¶1 b1']);
+});

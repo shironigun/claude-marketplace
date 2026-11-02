@@ -18,8 +18,14 @@ function decodeEntities(s) {
 }
 
 // Tags that format words inside a line; every other tag separates words.
-const INLINE_TAGS = new Set(['a', 'abbr', 'b', 'big', 'cite', 'code', 'del', 'em', 'font', 'i', 'ins', 'kbd', 'label',
-  'mark', 'q', 's', 'samp', 'small', 'span', 'strike', 'strong', 'sub', 'sup', 'time', 'tt', 'u', 'var']);
+const INLINE_TAGS = new Set(['a', 'abbr', 'acronym', 'b', 'bdi', 'bdo', 'big', 'cite', 'code', 'data', 'del', 'dfn', 'em',
+  'font', 'i', 'ins', 'kbd', 'label', 'mark', 'nobr', 'q', 's', 'samp', 'small', 'span', 'strike', 'strong', 'sub', 'sup',
+  'time', 'tt', 'u', 'var', 'wbr']);
+// Tags that end a paragraph. Any other tag (an image, a form control, an unknown tag) only separates words.
+const BLOCK_TAGS = new Set(['address', 'article', 'aside', 'blockquote', 'body', 'caption', 'center', 'dd', 'details',
+  'div', 'dl', 'dt', 'fieldset', 'figcaption', 'figure', 'footer', 'form', 'header', 'hgroup', 'hr', 'html', 'legend',
+  'main', 'menu', 'nav', 'ol', 'p', 'pre', 'section', 'summary', 'table', 'tbody', 'td', 'tfoot', 'th', 'thead', 'title',
+  'tr', 'ul']);
 const TAG = /<(\/?)([A-Za-z][\w:-]*)\b[^>]*>/g;
 const clean = (s) => s.replace(/\s+/g, ' ').trim();
 
@@ -78,6 +84,7 @@ function htmlBlocks(html) {
   // The <fi-pre N> and <fi-table N> markers are the converter's own, so any "<fi-" in the input is turned into text.
   const cleaned = String(html ?? '')
     .replace(/<!--[\s\S]*?-->/g, '')
+    .replace(/<[!?][^>]*>/g, '') // declarations, XML prologs and Word's conditional markers
     .replace(/<(script|style|head|noscript|template)\b[\s\S]*?<\/\1\s*>/gi, '')
     .replace(/<(\/?fi-)/gi, '&lt;$1');
   const { html: rest, tables } = takeTables(cleaned);
@@ -123,9 +130,11 @@ function htmlBlocks(html) {
         kind = 'heading';
         level = Number(name[1]);
       }
+    } else if (kind === 'item' && (name === 'ul' || name === 'ol')) {
+      flush(); // a nested or closing list ends the item, even when </li> was left out
     } else if (INLINE_TAGS.has(name)) {
       // formatting inside a line: no break between words
-    } else if (inline || name === 'br') {
+    } else if (inline || !BLOCK_TAGS.has(name)) {
       text += ' ';
     } else {
       flush();
