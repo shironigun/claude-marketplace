@@ -4,6 +4,7 @@ const { MODEL_TYPES, STATUSES } = require('../schema');
 const { SECTION_TYPES, queryNodes, nodeLine } = require('../query');
 const { numberFlag, listFlag } = require('../args');
 const { usageError } = require('../errors');
+const { tokens } = require('../text');
 
 module.exports = {
   name: 'query',
@@ -16,6 +17,7 @@ module.exports = {
     const f = args.flags;
     const section = f.section === undefined ? undefined : String(f.section).toUpperCase();
     if (section !== undefined && !SECTION_TYPES[section]) throw usageError(`--section must be one of ${Object.keys(SECTION_TYPES).join(', ')}`);
+    if (f.text !== undefined && !tokens(f.text).size) throw usageError('--text has no searchable words');
     const limit = numberFlag(f, 'limit', { min: 1, max: 100000, integer: true, fallback: 50 });
     const found = queryNodes(loadModel(paths).nodes, {
       types: listFlag(f, 'type', MODEL_TYPES),
