@@ -5,16 +5,16 @@ const STOP = new Set(['a', 'an', 'the', 'of', 'to', 'in', 'on', 'for', 'with', '
 
 // Strips the BOM and turns CRLF and CR into LF, so results never depend on line-ending settings.
 function readText(bufOrString) {
-  return String(bufOrString).replace(/^﻿/, '').replace(/\r\n?/g, '\n');
+  return String(bufOrString).replace(/^\uFEFF/, '').replace(/\r\n?/g, '\n');
 }
 
 // Lowercases, unifies quotes and dashes, drops zero-width characters and outer quotes, collapses spaces.
 function normalizeQuote(s) {
   return String(s)
-    .replace(/[‘’‚‛]/g, "'")
-    .replace(/[“”„‟]/g, '"')
-    .replace(/[‐-―]/g, '-')
-    .replace(/[​-‍﻿]/g, '')
+    .replace(/[\u2018\u2019\u201A\u201B]/g, "'")
+    .replace(/[\u201C\u201D\u201E\u201F]/g, '"')
+    .replace(/[\u2010-\u2015]/g, '-')
+    .replace(/[\u200B-\u200D\uFEFF]/g, '')
     .replace(/^["'\s]+|["'\s]+$/g, '')
     .replace(/\s+/g, ' ')
     .toLowerCase();

@@ -2,6 +2,7 @@
 const fs = require('fs');
 const path = require('path');
 const { readText } = require('./text');
+const { checkError } = require('./errors');
 
 // Writes through a temp file and a rename, so a crash never leaves half a file.
 function writeFileAtomic(file, content) {
@@ -18,11 +19,16 @@ function readJsonl(file) {
     .map((line, i) => [line, i])
     .filter(([line]) => line.trim())
     .map(([line, i]) => {
+      let row;
       try {
-        return JSON.parse(line);
+        row = JSON.parse(line);
       } catch (e) {
-        throw new Error(`${file}:${i + 1}: invalid JSON (${e.message})`);
+        throw checkError(`${file}:${i + 1}: invalid JSON (${e.message})`);
       }
+      if (row === null || typeof row !== 'object' || Array.isArray(row)) {
+        throw checkError(`${file}:${i + 1}: expected a JSON object`);
+      }
+      return row;
     });
 }
 
@@ -37,7 +43,12 @@ function appendJsonl(file, rows) {
 
 function readJson(file, fallback) {
   if (!fs.existsSync(file)) return fallback;
-  return JSON.parse(readText(fs.readFileSync(file)));
+  const text = readText(fs.readFileSync(file));
+  try {
+    return JSON.parse(text);
+  } catch (e) {
+    throw checkError(`${file}: invalid JSON (${e.message})`);
+  }
 }
 
 function writeJson(file, value) {
