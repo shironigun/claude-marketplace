@@ -57,12 +57,14 @@ function listFlag(flags, name, allowed) {
   return items;
 }
 
+// An input file the caller names. Missing, a folder, or not valid JSON: the command was used wrongly (exit 2).
 function readJsonFile(root, file) {
   if (!file) throw usageError('missing <file>');
   const abs = path.resolve(root, file);
-  if (!fs.existsSync(abs)) throw usageError(`no such file: ${file}`);
+  if (!fs.existsSync(abs) || !fs.statSync(abs).isFile()) throw usageError(`no such file: ${file}`);
+  const text = readText(fs.readFileSync(abs));
   try {
-    return JSON.parse(readText(fs.readFileSync(abs)));
+    return JSON.parse(text);
   } catch (e) {
     throw usageError(`${file} is not valid JSON: ${e.message}`);
   }

@@ -3,8 +3,9 @@ const test = require('node:test');
 const assert = require('node:assert/strict');
 const fs = require('fs');
 const path = require('path');
+const { spawn } = require('child_process');
 const { tempDir, runFi } = require('./helpers');
-const { parseArgs, numberFlag, listFlag } = require('../lib/args');
+const { parseArgs, numberFlag, listFlag, readJsonFile } = require('../lib/args');
 const { workspacePaths, checkSlug } = require('../lib/paths');
 const { loadWorkspace, withLock, saveModel, loadModel } = require('../lib/workspace');
 
@@ -80,4 +81,58 @@ test('model files are sorted, links de-duplicated; the lock clears a stale holde
   const old = new Date(Date.now() - 120000);
   fs.utimesSync(p.lock, old, old);
   assert.equal(withLock(p, () => 'ran'), 'ran');
+});
+
+test('args: readJsonFile reads input files; a missing, folder or malformed file is a usage error', () => {
+  const root = tempDir();
+  fs.writeFileSync(path.join(root, 'ok.json'), `${String.fromCharCode(0xfeff)}{"a": 1}\r\n`);
+  assert.deepEqual(readJsonFile(root, 'ok.json'), { a: 1 });
+  fs.writeFileSync(path.join(root, 'bad.json'), '{"a": }');
+  assert.throws(() => readJsonFile(root, 'bad.json'), (e) => e.code === 2 && /bad\.json is not valid JSON/.test(e.message));
+  assert.throws(() => readJsonFile(root, 'missing.json'), (e) => e.code === 2 && /no such file: missing\.json/.test(e.message));
+  fs.mkdirSync(path.join(root, 'adir'));
+  assert.throws(() => readJsonFile(root, 'adir'), (e) => e.code === 2 && /no such file: adir/.test(e.message));
+  assert.throws(() => readJsonFile(root, undefined), (e) => e.code === 2);
+});
+
+test('lock: a holder that throws releases; a live lock blocks until the deadline', () => {
+  const root = tempDir();
+  const p = workspacePaths(root, 'a');
+  assert.throws(() => withLock(p, () => { throw new Error('boom'); }), /boom/);
+  assert.equal(fs.existsSync(p.lock), false);
+  fs.writeFileSync(p.lock, 'another-holder');
+  assert.throws(() => withLock(p, () => 'never', { timeoutMs: 200 }), (e) => e.code === 1 && /is busy/.test(e.message));
+  assert.equal(fs.readFileSync(p.lock, 'utf8'), 'another-holder');
+});
+
+test('lock: parallel processes never overlap, even when a stale lock is waiting', async () => {
+  const root = tempDir();
+  const p = workspacePaths(root, 'a');
+  fs.mkdirSync(p.cache, { recursive: true });
+  fs.writeFileSync(p.lock, 'a-process-that-died');
+  const old = new Date(Date.now() - 120000);
+  fs.utimesSync(p.lock, old, old);
+  const counter = path.join(root, 'counter.txt');
+  fs.writeFileSync(counter, '0');
+  const lib = path.join(__dirname, '..', 'lib');
+  const script = [
+    "const fs = require('fs');",
+    `const { withLock } = require(${JSON.stringify(path.join(lib, 'workspace.js'))});`,
+    `const { workspacePaths } = require(${JSON.stringify(path.join(lib, 'paths.js'))});`,
+    `const p = workspacePaths(${JSON.stringify(root)}, 'a');`,
+    `const counter = ${JSON.stringify(counter)};`,
+    'for (let i = 0; i < 20; i += 1) {',
+    "  withLock(p, () => fs.writeFileSync(counter, String(Number(fs.readFileSync(counter, 'utf8')) + 1)));",
+    '}',
+  ].join('\n');
+  const runs = Array.from({ length: 6 }, () => new Promise((resolve) => {
+    const child = spawn(process.execPath, ['-e', script], { stdio: ['ignore', 'ignore', 'pipe'] });
+    let stderr = '';
+    child.stderr.on('data', (d) => { stderr += d; });
+    child.on('close', (code) => resolve({ code, stderr }));
+  }));
+  const results = await Promise.all(runs);
+  assert.deepEqual(results.filter((r) => r.code !== 0), []);
+  assert.equal(fs.readFileSync(counter, 'utf8'), '120');
+  assert.equal(fs.existsSync(p.lock), false);
 });
