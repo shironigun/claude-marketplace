@@ -60,6 +60,15 @@ test('ingest: Word, PDF, image, HTML, ADO, pasted text and a repository', () => 
   const ado = sourcesOf(root, ['ingest', 'csv', '--ado', path.join(FIXTURES, 'ado-stories.json')]);
   assert.deepEqual(ado.map((s) => [s.id, s.title, s.chunks]), [['SRC-005', 'Reject oversized files', 6], ['SRC-006', 'Download the error report', 2]]);
   assert.deepEqual(sourcesOf(root, ['ingest', 'csv', '--ado', path.join(FIXTURES, 'ado-stories.json')]).map((s) => s.skipped), [true, true]);
+  const [story] = JSON.parse(fs.readFileSync(path.join(FIXTURES, 'ado-stories.json'), 'utf8'));
+  const item = (id, rev) => ({ ...story, workItem: { ...story.workItem, id, rev } });
+  fs.writeFileSync(path.join(root, 'twice.json'), JSON.stringify([item(3001, 1), item(3001, 2)]));
+  const twice = runFi(root, ['ingest', 'csv', '--ado', 'twice.json']);
+  assert.equal(twice.code, 2);
+  assert.match(twice.stderr, /work item 3001 appears twice, at rev 1 and rev 2/);
+  assert.equal(loadSources(workspacePaths(root, 'csv')).some((s) => s.origin.workItem === 3001), false);
+  fs.writeFileSync(path.join(root, 'same.json'), JSON.stringify([item(3002, 1), item(3002, 1)]));
+  assert.deepEqual(sourcesOf(root, ['ingest', 'csv', '--ado', 'same.json']).map((s) => s.skipped), [false, true]);
   const pasted = sourcesOf(root, ['ingest', 'csv', '--paste', 'teams.txt', '--by', 'Product owner'])[0];
   assert.deepEqual([pasted.kind, pasted.title, pasted.chunks], ['paste', 'Pasted text', 2]);
   const app = path.join(root, 'app');
@@ -69,9 +78,12 @@ test('ingest: Word, PDF, image, HTML, ADO, pasted text and a repository', () => 
   git('init', '-q');
   git('add', '.');
   git('-c', 'user.name=t', '-c', 'user.email=t@example.com', 'commit', '-qm', 'x');
+  fs.writeFileSync(path.join(app, 'b.js'), 'not committed');
   const repo = sourcesOf(root, ['ingest', 'csv', '--repo', 'app'])[0];
   assert.deepEqual([repo.kind, repo.chunks], ['repo', 0]);
   assert.equal(loadSources(workspacePaths(root, 'csv')).find((s) => s.kind === 'repo').coverageExempt, true);
+  assert.equal(loadSources(workspacePaths(root, 'csv')).find((s) => s.kind === 'repo').origin.dirty, true);
+  assert.match(runFi(root, ['ingest', 'csv', '--repo', 'app']).stdout, /Skipped/);
 });
 
 test('ingest: an unreadable file is registered, reported, and replaced once it can be read', () => {

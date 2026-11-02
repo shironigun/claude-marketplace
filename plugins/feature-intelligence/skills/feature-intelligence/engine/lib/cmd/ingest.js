@@ -27,7 +27,7 @@ module.exports = {
     });
     const lines = results.map(({ source: s, skipped }) => (skipped
       ? `Skipped ${s.id} ${s.title}: already registered and unchanged`
-      : `Registered ${s.id} ${s.title}: ${s.status === 'ok' ? `${s.format}, ${s.chunks.length} chunks` : `unreadable (${s.error})`}`));
+      : `Registered ${s.id} ${s.title}: ${s.status === 'ok' ? `${s.format}, ${s.chunks.length} chunks` : `unreadable (${s.error})`}${s.origin && s.origin.dirty ? '; the working tree has uncommitted changes, so read code with git show <commit>:<path> to match the anchors' : ''}`));
     const unreadable = results.some((r) => !r.skipped && r.source.status === 'unreadable');
     lines.push(unreadable
       ? 'Fix or replace the unreadable file, then ingest it again.'
