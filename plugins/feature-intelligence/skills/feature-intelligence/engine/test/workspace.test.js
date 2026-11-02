@@ -114,6 +114,7 @@ test('lock: parallel processes never overlap, even when a stale lock is waiting'
   fs.utimesSync(p.lock, old, old);
   const counter = path.join(root, 'counter.txt');
   fs.writeFileSync(counter, '0');
+  const go = path.join(root, 'go');
   const lib = path.join(__dirname, '..', 'lib');
   const script = [
     "const fs = require('fs');",
@@ -121,18 +122,34 @@ test('lock: parallel processes never overlap, even when a stale lock is waiting'
     `const { workspacePaths } = require(${JSON.stringify(path.join(lib, 'paths.js'))});`,
     `const p = workspacePaths(${JSON.stringify(root)}, 'a');`,
     `const counter = ${JSON.stringify(counter)};`,
+    `const go = ${JSON.stringify(go)};`,
+    'while (!fs.existsSync(go)) Atomics.wait(new Int32Array(new SharedArrayBuffer(4)), 0, 0, 1);',
     'for (let i = 0; i < 20; i += 1) {',
     "  withLock(p, () => fs.writeFileSync(counter, String(Number(fs.readFileSync(counter, 'utf8')) + 1)));",
     '}',
   ].join('\n');
-  const runs = Array.from({ length: 6 }, () => new Promise((resolve) => {
+  const runs = Array.from({ length: 8 }, () => new Promise((resolve) => {
     const child = spawn(process.execPath, ['-e', script], { stdio: ['ignore', 'ignore', 'pipe'] });
     let stderr = '';
     child.stderr.on('data', (d) => { stderr += d; });
     child.on('close', (code) => resolve({ code, stderr }));
   }));
+  await new Promise((resolve) => setTimeout(resolve, 500));
+  fs.writeFileSync(go, '');
   const results = await Promise.all(runs);
   assert.deepEqual(results.filter((r) => r.code !== 0), []);
-  assert.equal(fs.readFileSync(counter, 'utf8'), '120');
+  assert.equal(fs.readFileSync(counter, 'utf8'), '160');
   assert.equal(fs.existsSync(p.lock), false);
+});
+
+test('init: runs under the workspace lock and clears a stale one', () => {
+  const root = tempDir();
+  const p = workspacePaths(root, 'csv');
+  fs.mkdirSync(p.cache, { recursive: true });
+  fs.writeFileSync(p.lock, 'a-process-that-died');
+  const old = new Date(Date.now() - 120000);
+  fs.utimesSync(p.lock, old, old);
+  assert.equal(runFi(root, ['init', 'csv', '--mode', 'new']).code, 0);
+  assert.equal(fs.existsSync(p.lock), false);
+  assert.equal(fs.existsSync(`${p.lock}.takeover`), false);
 });
