@@ -46,12 +46,18 @@ function checkClaims(p, input) {
       problems.forEach(fail);
       return;
     }
+    // An empty quote matches any text (includes('') is true), so it needs at least one letter or digit.
+    if (!/[\p{L}\p{N}]/u.test(normalizeQuote(claim.quote))) return fail('quote has no words');
     const srcId = claim.chunk.split('#')[0];
     const src = sources.get(srcId);
     if (!src) return fail(`no source ${srcId}`);
     if (src.kind === 'repo') {
       if (claim.chunk !== srcId) return fail(`code claims cite the source id ${srcId}, not a chunk`);
       if (!CODE_ANCHOR.test(claim.anchor)) return fail(`code anchor "${claim.anchor}" must look like path/file.ts:42@1a2b3c4`);
+      // An anchor must name the commit the registry recorded; a short prefix of it is fine.
+      const at = claim.anchor.slice(claim.anchor.lastIndexOf('@') + 1).toLowerCase();
+      const commit = String(src.origin.commit).toLowerCase();
+      if (!commit.startsWith(at)) return fail(`anchor commit ${at} is not ${srcId}'s commit ${commit.slice(0, 7)}`);
       claims.push({ ...claim, src: srcId, hash: null, quoteVerified: false });
       return undefined;
     }
