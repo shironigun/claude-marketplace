@@ -9,9 +9,10 @@ const clean = (s) => s.replace(/\s+/g, ' ').trim();
 function paragraphText(xml) {
   let out = '';
   const body = xml.replace(/<w:pPr>[\s\S]*?<\/w:pPr>/, '');
-  for (const m of body.matchAll(/<w:t(?:\s[^>]*)?>([\s\S]*?)<\/w:t>|<w:tab\b[^>]*\/>|<w:(?:br|cr)\b[^>]*\/>/g)) {
+  for (const m of body.matchAll(/<w:t(?:\s[^>]*[^/>])?>([\s\S]*?)<\/w:t>|<w:t\b[^>]*\/>|<w:tab\b[^>]*\/>|<w:(?:br|cr)\b[^>]*\/>/g)) {
     if (m[1] !== undefined) out += decodeEntities(m[1]);
-    else out += m[0].startsWith('<w:tab') ? '\t' : '\n';
+    else if (m[0].startsWith('<w:tab')) out += '\t';
+    else if (m[0].startsWith('<w:br') || m[0].startsWith('<w:cr')) out += '\n';
   }
   return out;
 }
@@ -28,8 +29,9 @@ function readDocxBlocks(buf) {
     if (el.startsWith('<w:tbl')) {
       const rows = [...el.matchAll(/<w:tr\b[^>]*>([\s\S]*?)<\/w:tr>/g)].map((r) => [...r[1].matchAll(/<w:tc\b[^>]*>([\s\S]*?)<\/w:tc>/g)]
         .map((c) => [...c[1].matchAll(/<w:p\b[^>]*>([\s\S]*?)<\/w:p>/g)].map((p) => clean(paragraphText(p[0]))).filter(Boolean).join(' ')));
-      const [header, ...rest] = rows;
-      if (!rest.length && header && header.length) blocks.push({ kind: 'row', cells: header, header: null }); // a one-row table still says something
+      const [first, ...rest] = rows;
+      const header = first && first.some((c) => c) ? first : null; // an all-blank first row is no header (writeDocx writes one for a headerless table)
+      if (!rest.length && header) blocks.push({ kind: 'row', cells: header, header: null }); // a one-row table still says something
       for (const cells of rest) blocks.push({ kind: 'row', cells, header });
       continue;
     }

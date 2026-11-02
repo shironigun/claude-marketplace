@@ -36,4 +36,8 @@ test('docx: numbering, Title style, tabs, tracked deletions and empty paragraphs
   assert.throws(() => readDocxBlocks(writeZip([{ name: 'other.xml', data: '<x/>' }])), /no word\/document.xml/);
   const oneRow = '<w:document xmlns:w="x"><w:body><w:tbl><w:tr><w:tc><w:p><w:r><w:t>Only row</w:t></w:r></w:p></w:tc></w:tr></w:tbl></w:body></w:document>';
   assert.deepEqual(readDocxBlocks(writeZip([{ name: 'word/document.xml', data: oneRow }])), [{ kind: 'row', cells: ['Only row'], header: null }]);
+  const selfClosing = '<w:document xmlns:w="x"><w:body><w:p><w:r><w:t xml:space="preserve"/></w:r><w:r><w:t>X</w:t></w:r></w:p></w:body></w:document>';
+  assert.deepEqual(readDocxBlocks(writeZip([{ name: 'word/document.xml', data: selfClosing }])), [{ kind: 'para', text: 'X' }]);
+  const headerless = [{ kind: 'row', cells: ['a', 'b'], header: null }, { kind: 'row', cells: ['c', 'd'], header: null }];
+  assert.deepEqual(readDocxBlocks(writeDocx(headerless)), headerless);
 });
