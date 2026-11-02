@@ -480,6 +480,7 @@ with `node:test`. Every command takes the feature slug, prints human-readable te
 | `fi add <slug> <file>` | Adds derived nodes and links, validated | 1 |
 | `fi validate <slug>` | Schema, dangling links, provenance (P3), status rules (P4), unique ids | 1 |
 | `fi coverage <slug> [--min 0.95]` | Coverage per source; lists unaccounted chunks; fails below `--min` | 1 |
+| `fi set-aside <slug> <chunk...> --reason <text>` | Marks chunks that carry nothing to model (a greeting, a sign-off) so coverage counts them as accounted for (5.6); refuses chunks the model cites | 1 |
 | `fi query <slug> [--type] [--status] [--text] [--section]` | Compact slices of the model | 1 |
 | `fi trace <slug> <id>` | The upstream and downstream chain of one node | 1 |
 | `fi questions <slug>` | Open questions ranked by blast radius × severity | 1 |
