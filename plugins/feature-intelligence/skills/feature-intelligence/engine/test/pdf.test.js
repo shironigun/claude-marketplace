@@ -9,6 +9,7 @@ test('pdf: page count of a written PDF; text is escaped', () => {
   assert.equal(pdf.subarray(0, 8).toString('latin1'), '%PDF-1.4');
   assert.equal(pdfPageCount(pdf), 3);
   assert.match(pdf.toString('latin1'), /\(Page two \\\(b\\\)\) Tj/);
+  assert.match(pdf.toString('latin1'), /\/Encoding \/WinAnsiEncoding/);
 });
 
 test('pdf: a page tree inside a compressed object stream', () => {
@@ -26,4 +27,15 @@ test('pdf: page objects only, and not a PDF at all', () => {
   assert.equal(pdfPageCount(pdf), 2);
   assert.equal(pdfPageCount(Buffer.from('hello')), null);
   assert.equal(pdfPageCount(Buffer.from('%PDF-1.4\n%%EOF\n')), null);
+});
+
+test('pdf: an attached file is never read for pages', () => {
+  const attached = zlib.deflateSync(Buffer.from('<< /Type /Pages /Kids [4 0 R] /Count 50 >>'));
+  const pdf = Buffer.concat([
+    writeSimplePdf([['one'], ['two']]),
+    Buffer.from(`99 0 obj\n<< /Type /EmbeddedFile /Filter /FlateDecode /Length ${attached.length} >>\nstream\n`, 'latin1'),
+    attached,
+    Buffer.from('\nendstream\nendobj\n', 'latin1'),
+  ]);
+  assert.equal(pdfPageCount(pdf), 2);
 });

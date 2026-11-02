@@ -1,39 +1,44 @@
 'use strict';
 const zlib = require('zlib');
 
-// The text of every stream that inflates, so objects inside compressed object streams can be searched.
-function inflatedStreams(buf) {
-  const s = buf.toString('latin1');
-  const out = [];
+// Inflates the object streams (/Type /ObjStm), one at a time: a page tree is a top-level object or sits inside one.
+// Images, fonts, page content and attached files are never inflated, so their size costs nothing and an attached
+// PDF cannot lend its page tree.
+function* objectStreamTexts(buf, s) {
   const re = /(?<!end)stream\r?\n/g;
   let m;
   while ((m = re.exec(s))) {
     const start = m.index + m[0].length;
     const end = s.indexOf('endstream', start);
     if (end === -1) break;
-    try {
-      out.push(zlib.inflateSync(buf.subarray(start, end), { finishFlush: zlib.constants.Z_SYNC_FLUSH }).toString('latin1'));
-    } catch {
-      // Not Flate data (an image, a font, another filter): nothing to search.
+    if (/\/Type\s*\/ObjStm\b/.test(s.slice(s.lastIndexOf('obj', m.index), m.index))) {
+      try {
+        yield zlib.inflateSync(buf.subarray(start, end), { finishFlush: zlib.constants.Z_SYNC_FLUSH, maxOutputLength: 64 * 1024 * 1024 })
+          .toString('latin1');
+      } catch {
+        // Not Flate data, or larger than any page tree could be: nothing to search.
+      }
     }
     re.lastIndex = end + 'endstream'.length;
   }
-  return out;
 }
 
 // The largest /Count of a /Type /Pages node; else the number of /Type /Page objects; else null.
 function pdfPageCount(buf) {
   if (buf.subarray(0, 5).toString('latin1') !== '%PDF-') return null;
+  const raw = buf.toString('latin1');
   let count = 0;
   let pages = 0;
-  for (const text of [buf.toString('latin1'), ...inflatedStreams(buf)]) {
+  const scan = (text) => {
     for (const m of text.matchAll(/<<((?:(?!<<|>>)[\s\S])*)>>/g)) {
       if (!/\/Type\s*\/Pages\b/.test(m[1])) continue;
       const c = /\/Count\s+(\d+)/.exec(m[1]);
       if (c) count = Math.max(count, Number(c[1]));
     }
     pages += (text.match(/\/Type\s*\/Page(?![A-Za-z])/g) || []).length;
-  }
+  };
+  scan(raw);
+  for (const text of objectStreamTexts(buf, raw)) scan(text);
   return count || pages || null;
 }
 
@@ -41,7 +46,7 @@ const pdfString = (s) => String(s).replace(/[^\x20-\x7e\xa0-\xff]/g, '?').replac
 
 // A plain PDF with one text line per entry, used to make fixtures.
 function writeSimplePdf(pages) {
-  const objects = ['', '', '<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>'];
+  const objects = ['', '', '<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica /Encoding /WinAnsiEncoding >>'];
   const kids = [];
   for (const lines of pages) {
     const content = ['BT', '/F1 11 Tf', '14 TL', '72 770 Td', ...lines.map((l, i) => `${i ? 'T* ' : ''}(${pdfString(l)}) Tj`), 'ET'].join('\n');
