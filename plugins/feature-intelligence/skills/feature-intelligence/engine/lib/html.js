@@ -17,7 +17,7 @@ function decodeEntities(s) {
   });
 }
 
-const stripTags = (s) => String(s).replace(/<[^>]*>/g, '');
+const stripTags = (s) => String(s).replace(/<\/?[A-Za-z!?][^>]*>/g, '');
 const inlineText = (s) => decodeEntities(stripTags(s)).replace(/\s+/g, ' ').trim();
 
 // Converts HTML to Markdown that markdownBlocks reads: headings, paragraphs, list items, tables and code.
