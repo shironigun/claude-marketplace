@@ -41,3 +41,23 @@ test('docx: numbering, Title style, tabs, tracked deletions and empty paragraphs
   const headerless = [{ kind: 'row', cells: ['a', 'b'], header: null }, { kind: 'row', cells: ['c', 'd'], header: null }];
   assert.deepEqual(readDocxBlocks(writeDocx(headerless)), headerless);
 });
+
+test('docx: text boxes, tracked moves, merged cells, contents lists and other Word forms', () => {
+  const doc = (body) => writeZip([{ name: 'word/document.xml', data: `<w:document xmlns:w="x"><w:body>${body}</w:body></w:document>` }]);
+  const run = (t) => `<w:r><w:t>${t}</w:t></w:r>`;
+  const box = `<w:r><mc:AlternateContent><mc:Choice Requires="wps"><w:drawing><wps:txbx><w:txbxContent><w:p>${run('Callout')}</w:p>`
+    + `</w:txbxContent></wps:txbx></w:drawing></mc:Choice><mc:Fallback><w:pict><v:textbox><w:txbxContent><w:p>${run('Callout')}</w:p>`
+    + '</w:txbxContent></v:textbox></w:pict></mc:Fallback></mc:AlternateContent></w:r>';
+  assert.deepEqual(readDocxBlocks(doc(`<w:p>${run('Before the box. ')}${box}${run('After the box.')}</w:p>`)),
+    [{ kind: 'para', text: 'Before the box. After the box.' }, { kind: 'para', text: 'Callout' }]);
+  assert.deepEqual(readDocxBlocks(doc(`<w:p><w:moveFrom w:id="1">${run('Moved.')}</w:moveFrom></w:p><w:p><w:moveTo w:id="2">${run('Moved.')}</w:moveTo></w:p>`)),
+    [{ kind: 'para', text: 'Moved.' }]);
+  const tc = (t, span) => `<w:tc>${span ? `<w:tcPr><w:gridSpan w:val="${span}"/></w:tcPr>` : ''}<w:p>${run(t)}</w:p></w:tc>`;
+  const merged = `<w:tbl><w:tr>${tc('Group', 2)}${tc('Total')}</w:tr><w:tr>${tc('a')}${tc('b')}${tc('c')}</w:tr><w:tr>${tc('')}${tc('')}${tc('')}</w:tr></w:tbl>`;
+  assert.deepEqual(readDocxBlocks(doc(merged)), [{ kind: 'row', cells: ['a', 'b', 'c'], header: ['Group', '', 'Total'] }]);
+  assert.deepEqual(readDocxBlocks(doc(
+    `<w:p><w:pPr><w:pStyle w:val="TOC1"/></w:pPr>${run('1 Import rules 1')}</w:p>`
+    + '<w:p><w:r><w:t >re</w:t><w:noBreakHyphen/><w:t>upload</w:t></w:r></w:p>'
+    + `<w:p><w:pPr><w:numPr><w:ilvl w:val="0"/><w:numId w:val="0"/></w:numPr></w:pPr>${run('Not a list item')}</w:p>`)),
+  [{ kind: 'para', text: 're-upload' }, { kind: 'para', text: 'Not a list item' }]);
+});
