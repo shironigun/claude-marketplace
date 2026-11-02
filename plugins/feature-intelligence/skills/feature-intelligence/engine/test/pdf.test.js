@@ -44,3 +44,16 @@ test('pdf: an attached file is never read for pages', () => {
   ]);
   assert.equal(pdfPageCount(plain), 2);
 });
+
+test('pdf: an unfiltered object stream holding a page tree counts', () => {
+  const objStm = '<< /Type /Pages /Kids [5 0 R] /Count 7 >>\n<< /Type /Page >>\n';
+  const pdf = Buffer.from(`%PDF-1.5\n1 0 obj\n<< /Type /ObjStm /N 2 /First 10 /Length ${objStm.length} >>\nstream\n${objStm}endstream\nendobj\n%%EOF\n`, 'latin1');
+  assert.equal(pdfPageCount(pdf), 7);
+});
+
+test('pdf: many stream keywords without endstream finish fast', () => {
+  const pdf = Buffer.from('%PDF-1.4\n' + 'stream\n'.repeat(100000), 'latin1');
+  const started = Date.now();
+  assert.equal(pdfPageCount(pdf), null);
+  assert.ok(Date.now() - started < 1000, `took ${Date.now() - started} ms`);
+});

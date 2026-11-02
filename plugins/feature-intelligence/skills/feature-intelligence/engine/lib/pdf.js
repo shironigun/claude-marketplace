@@ -11,16 +11,36 @@ function* objectStreamTexts(buf, s) {
     const start = m.index + m[0].length;
     const end = s.indexOf('endstream', start);
     if (end === -1) break;
-    if (/\/Type\s*\/ObjStm\b/.test(s.slice(s.lastIndexOf('obj', m.index), m.index))) {
+    const dict = s.slice(s.lastIndexOf('obj', m.index), m.index);
+    if (/\/Type\s*\/ObjStm\b/.test(dict)) {
       try {
-        yield zlib.inflateSync(buf.subarray(start, end), { finishFlush: zlib.constants.Z_SYNC_FLUSH, maxOutputLength: 64 * 1024 * 1024 })
-          .toString('latin1');
+        // An unfiltered object stream already holds plain text, so its payload is yielded as it is.
+        yield /\/Filter\b/.test(dict)
+          ? zlib.inflateSync(buf.subarray(start, end), { finishFlush: zlib.constants.Z_SYNC_FLUSH, maxOutputLength: 64 * 1024 * 1024 }).toString('latin1')
+          : s.slice(start, end);
       } catch {
         // Not Flate data, or larger than any page tree could be: nothing to search.
       }
     }
     re.lastIndex = end + 'endstream'.length;
   }
+}
+
+// Stream payloads are data, not page objects: the top-level scan reads the text with each payload cut out.
+function withoutStreamPayloads(s) {
+  const re = /(?<!end)stream\r?\n/g;
+  let out = '';
+  let last = 0;
+  let m;
+  while ((m = re.exec(s))) {
+    const start = m.index + m[0].length;
+    const end = s.indexOf('endstream', start);
+    if (end === -1) break;
+    out += s.slice(last, start);
+    last = end;
+    re.lastIndex = end + 'endstream'.length;
+  }
+  return out + s.slice(last);
 }
 
 // The largest /Count of a /Type /Pages node; else the number of /Type /Page objects; else null.
@@ -37,7 +57,7 @@ function pdfPageCount(buf) {
     }
     pages += (text.match(/\/Type\s*\/Page(?![A-Za-z])/g) || []).length;
   };
-  scan(raw.replace(/(?<!end)stream\r?\n[\s\S]*?endstream/g, 'stream endstream')); // stream payloads are data, not objects
+  scan(withoutStreamPayloads(raw));
   for (const text of objectStreamTexts(buf, raw)) scan(text);
   return count || pages || null;
 }
