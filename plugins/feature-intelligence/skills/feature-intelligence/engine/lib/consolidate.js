@@ -4,7 +4,7 @@ const { tokens, jaccard, numbers, normalizeQuote } = require('./text');
 const { nextId, formatId } = require('./ids');
 const { sha256 } = require('./hash');
 const { readJson, writeJson } = require('./jsonl');
-const { validateNode, MODEL_TYPES } = require('./schema');
+const { validateNode, CLAIM_TYPES } = require('./schema');
 const { loadModel, saveModel } = require('./workspace');
 const { loadClaims } = require('./claims');
 const { checkError, usageError } = require('./errors');
@@ -15,13 +15,19 @@ const SAME_MIN = 0.85; // near-identical statements (spec 5.5)
 const modelHash = (p) => sha256(fs.existsSync(p.nodes) ? fs.readFileSync(p.nodes) : '');
 const loadRecord = (p) => readJson(p.consolidated, { claims: {} });
 const numberKey = (s) => [...numbers(s)].sort().join(',');
+// Words that flip or soften a requirement: two statements that differ only in these say different things.
+const MODALITY = new Set(['must', 'shall', 'should', 'may', 'might', 'can', 'cannot', 'could', 'will', 'would', 'not', 'no',
+  'never', 'none', 'without', 'optional', 'required']);
+const modalityKey = (s) => [...new Set((String(s).toLowerCase().replace(/n't\b/g, ' not').match(/[a-z]+/g) || [])
+  .filter((w) => MODALITY.has(w)))].sort().join(',');
 
 function pendingClaims(p) {
   const done = loadRecord(p).claims;
   return loadClaims(p).filter((c) => !Object.prototype.hasOwnProperty.call(done, c.id));
 }
 
-// The live node of the claim's type that it restates: the same source anchor first, else a near-identical statement.
+// The live node of the claim's type it most likely speaks about: the same source anchor first, else the most similar
+// statement. A match below SAME_MIN is weak: it is shown for a decision, never applied by default.
 function matchExisting(claim, nodes, nodeTokens) {
   const ct = tokens(claim.statement);
   let best = null;
@@ -29,9 +35,9 @@ function matchExisting(claim, nodes, nodeTokens) {
     if (n.type !== claim.type) continue;
     const sim = jaccard(ct, nodeTokens.get(n.id));
     const sameAnchor = (n.provenance || []).some((pv) => pv.src === claim.src && pv.anchor === claim.anchor);
-    if (!sameAnchor && sim < SAME_MIN) continue;
+    if (!sameAnchor && sim < CLUSTER_MIN) continue;
     const score = (sameAnchor ? 1 : 0) + sim;
-    if (!best || score > best.score) best = { id: n.id, sim, score };
+    if (!best || score > best.score) best = { id: n.id, sim, score, sameAnchor };
   }
   return best;
 }
@@ -40,15 +46,20 @@ function matchExisting(claim, nodes, nodeTokens) {
 function suggestFor(members, existing, match, toks) {
   const statements = members.map((c) => c.statement).concat(existing ? [existing.statement] : []);
   const numbersDiffer = new Set(statements.map(numberKey)).size > 1;
+  const modalityDiffers = new Set(statements.map(modalityKey)).size > 1;
+  const differs = numbersDiffer || modalityDiffers;
+  const whyDiffers = numbersDiffer ? 'the numbers differ' : 'one says must, may or not where another does not';
   if (!existing && members.length === 1) return { suggest: 'new', why: '' };
   if (existing) {
     const restates = members.every((c) => match.has(c.id) && match.get(c.id).id === existing.id && match.get(c.id).sim >= SAME_MIN);
-    if (restates && !numbersDiffer) return { suggest: 'same', why: `restates ${existing.id}` };
+    if (restates && !differs) return { suggest: 'same', why: `restates ${existing.id}` };
     if (members.length === 1) {
-      return { suggest: 'update?', why: numbersDiffer ? `numbers differ from ${existing.id}` : `same anchor as ${existing.id}, different wording` };
+      const m = match.get(members[0].id);
+      if (m && m.sameAnchor) return { suggest: 'update?', why: differs ? `${whyDiffers} (${existing.id})` : `same anchor as ${existing.id}, different wording` };
+      return { suggest: differs ? 'conflict?' : 'update?', why: differs ? `${whyDiffers} (${existing.id})` : `similar to ${existing.id}` };
     }
   }
-  if (numbersDiffer) return { suggest: 'conflict?', why: 'the numbers differ' };
+  if (differs) return { suggest: 'conflict?', why: whyDiffers };
   const repeats = members.every((a, i) => members.every((b, j) => j <= i || jaccard(toks.get(a.id), toks.get(b.id)) >= SAME_MIN));
   if (!existing && repeats) return { suggest: 'merge', why: 'the same statement more than once' };
   return { suggest: 'merge?', why: existing ? `similar to each other and to ${existing.id}` : 'similar statements' };
@@ -118,16 +129,25 @@ function propose(p, { now }) {
 
 const ACTIONS = { new: 'separate', separate: 'separate', merge: 'merge', conflict: 'conflict', existing: 'existing', same: 'existing', drop: 'drop' };
 const DEFAULTS = { new: 'separate', same: 'existing', merge: 'merge' };
+const DECISION_FIELDS = new Set(['action', 'reason', 'title', 'statement', 'type']);
 
 // The action for one cluster: the decision given, or the default when the suggestion needs no judgment.
 function decide(cluster, d) {
   if (d === undefined) return DEFAULTS[cluster.suggest] ? { action: DEFAULTS[cluster.suggest] } : null;
   if (!d || typeof d !== 'object' || Array.isArray(d)) throw usageError(`${cluster.id}: a decision is an object like {"action": "merge"}`);
-  const action = ACTIONS[d.action];
+  const unknown = Object.keys(d).filter((k) => !DECISION_FIELDS.has(k));
+  if (unknown.length) throw usageError(`${cluster.id}: unknown decision field ${unknown.join(', ')}`);
+  const action = Object.hasOwn(ACTIONS, d.action) ? ACTIONS[d.action] : null;
   if (!action) throw usageError(`${cluster.id}: action must be merge, conflict, separate, existing or drop`);
+  for (const f of ['reason', 'title', 'statement']) {
+    if (d[f] !== undefined && !(typeof d[f] === 'string' && d[f].trim())) throw usageError(`${cluster.id}: ${f} must be text`);
+  }
   if (action === 'existing' && !cluster.existing) throw usageError(`${cluster.id}: there is no existing node to update`);
   if (action === 'drop' && !d.reason) throw usageError(`${cluster.id}: drop needs a reason`);
-  if (d.type !== undefined && (!MODEL_TYPES.has(d.type) || (cluster.existing && action !== 'separate'))) {
+  if (action === 'separate' && cluster.claims.length > 1 && (d.title || d.statement)) {
+    throw usageError(`${cluster.id}: separate makes ${cluster.claims.length} nodes, so a title or statement cannot apply`);
+  }
+  if (d.type !== undefined && (!CLAIM_TYPES.has(d.type) || (cluster.existing && action !== 'separate'))) {
     throw usageError(`${cluster.id}: type must be a node type, and an existing node keeps its own`);
   }
   return { ...d, action };
@@ -193,7 +213,7 @@ function apply(p, decisions, { now }) {
     }
     if (d.action === 'separate') {
       for (const c of members) {
-        record.claims[c.id] = create(cluster, d.type || c.type, { title: c.title, statement: c.statement, status: c.status, provenance: [provenanceOf(c)] });
+        record.claims[c.id] = create(cluster, d.type || c.type, { title: d.title || c.title, statement: d.statement || c.statement, status: c.status, provenance: [provenanceOf(c)] });
       }
       continue;
     }
