@@ -33,6 +33,11 @@ test('jsonl: write, read, append, and a bad line names its line number', () => {
   assert.deepEqual(readJson(json, { empty: true }), { empty: true });
   writeJson(json, { b: 1 });
   assert.equal(fs.readFileSync(json, 'utf8'), '{\n  "b": 1\n}\n');
+  const bom = path.join(dir, 'bom.jsonl');
+  fs.writeFileSync(bom, '﻿{"id":"A"}\r\n{"id":"B"}\r{"id":"C"}\n');
+  assert.deepEqual(readJsonl(bom).map((r) => r.id), ['A', 'B', 'C']);
+  fs.writeFileSync(json, '﻿{"b": 2}\r\n');
+  assert.deepEqual(readJson(json, null), { b: 2 });
 });
 
 test('hash: sha256 and the 12-character short form', () => {
