@@ -71,6 +71,7 @@ function ingestFile(p, file, { root, now, pages, paste, by, title }) {
   let error = null;
   try {
     read = paste ? { format: 'markdown', chunks: chunkMarkdown(readText(buf)) } : readFileChunks(abs, buf, pages);
+    if (!read.chunks.length) throw new Error('no text found in the file');
   } catch (e) {
     if (e instanceof FiError) throw e;
     error = e.message;
@@ -110,6 +111,7 @@ function ingestAdo(p, file, { root, now }) {
   const known = (a) => sources.find((s) => s.kind === 'ado' && s.origin.workItem === a.origin.workItem);
   const listed = new Map();
   for (const a of shaped) {
+    if (a.origin.rev == null) throw usageError(`${file}: work item ${a.origin.workItem} has no rev; save the item as the server returned it`);
     const prior = listed.get(a.origin.workItem);
     if (prior !== undefined && prior !== a.origin.rev) throw usageError(`${file}: work item ${a.origin.workItem} appears twice, at rev ${prior} and rev ${a.origin.rev}`);
     listed.set(a.origin.workItem, a.origin.rev);
@@ -122,7 +124,8 @@ function ingestAdo(p, file, { root, now }) {
     const same = known(a);
     if (same) return { source: same, skipped: true };
     const fields = { kind: 'ado', origin: a.origin, title: a.title, fetchedAt: now, status: 'ok', format: 'ado' };
-    return { source: register(p, sources, fields, a.chunks), skipped: false };
+    // An item with no description, criteria or comments is its title.
+    return { source: register(p, sources, fields, a.chunks.length ? a.chunks : [{ anchor: 'title', text: a.title }]), skipped: false };
   });
   saveSources(p, sources);
   return results;
@@ -140,11 +143,13 @@ function ingestRepo(p, dir, { root, now, commit, title }) {
     } catch {
       throw usageError(`${dir} is not a git repository; pass --commit <sha>`);
     }
-    // Anchors name the commit, so a dirty working copy must be read with git show.
     try {
-      dirty = execFileSync('git', ['-C', abs, 'status', '--porcelain'], { encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] }).trim() !== '';
+      // Anchors name the commit, so a dirty working copy must be read with git show. The plugin's own footprint is
+      // not a change; optional locks and fsmonitor hooks stay off because the folder may be untrusted.
+      dirty = execFileSync('git', ['--no-optional-locks', '-c', 'core.fsmonitor=false', '-C', abs, 'status', '--porcelain', '--',
+        '.', ':(exclude)knowledge-base', ':(exclude).gitignore'], { encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] }).trim() !== '';
     } catch {
-      dirty = false; // a failed status is treated as clean
+      dirty = true; // when the check cannot run, assume changes
     }
   }
   const rel = relPath(root, abs) || '.';

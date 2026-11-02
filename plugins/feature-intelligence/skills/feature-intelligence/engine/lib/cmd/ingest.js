@@ -13,7 +13,7 @@ module.exports = {
     const [slug, file] = args._;
     const { paths } = loadWorkspace(ctx.root, slug);
     const f = args.flags;
-    if ([file, f.ado, f.paste, f.repo].filter((v) => v !== undefined).length !== 1) {
+    if ([file, f.ado, f.paste, f.repo].filter(Boolean).length !== 1) {
       throw usageError('give one of <file>, --ado <json>, --paste <file> or --repo <dir>');
     }
     const opts = {
@@ -37,6 +37,7 @@ module.exports = {
       json: {
         sources: results.map(({ source: s, skipped }) => ({
           id: s.id, kind: s.kind, title: s.title, status: s.status, chunks: s.chunks.length, skipped,
+          ...(s.error ? { error: s.error } : {}), ...(s.origin && s.origin.dirty ? { dirty: true } : {}),
         })),
       },
       exitCode: unreadable ? 1 : 0,
