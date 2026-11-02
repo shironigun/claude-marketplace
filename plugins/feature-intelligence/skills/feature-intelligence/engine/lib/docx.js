@@ -4,17 +4,72 @@ const { decodeEntities } = require('./html');
 
 const W_NS = 'http://schemas.openxmlformats.org/wordprocessingml/2006/main';
 const clean = (s) => s.replace(/\s+/g, ' ').trim();
+const BREAKS = { tab: '\t', br: '\n', cr: '\n', noBreakHyphen: '-' };
 
-// Text of one paragraph in document order: text runs, tabs and breaks. Deleted text (w:delText) is not read.
+// Text of one paragraph in document order: text runs, tabs, breaks and non-breaking hyphens. Deleted text
+// (w:delText) is never read; text a tracked change moved away is removed before this runs.
 function paragraphText(xml) {
   let out = '';
   const body = xml.replace(/<w:pPr>[\s\S]*?<\/w:pPr>/, '');
-  for (const m of body.matchAll(/<w:t(?:\s[^>]*[^/>])?>([\s\S]*?)<\/w:t>|<w:t\b[^>]*\/>|<w:tab\b[^>]*\/>|<w:(?:br|cr)\b[^>]*\/>/g)) {
-    if (m[1] !== undefined) out += decodeEntities(m[1]);
-    else if (m[0].startsWith('<w:tab')) out += '\t';
-    else if (m[0].startsWith('<w:br') || m[0].startsWith('<w:cr')) out += '\n';
+  for (const m of body.matchAll(/<w:t(?:\s[^>]*)?(?<!\/)>([\s\S]*?)<\/w:t>|<w:(tab|br|cr|noBreakHyphen)\b[^>]*\/>/g)) {
+    out += m[1] !== undefined ? decodeEntities(m[1]) : BREAKS[m[2]];
   }
   return out;
+}
+
+// One table row's cells. A cell merged across n grid columns adds n - 1 empty cells, so labels stay aligned.
+function rowCells(rowXml) {
+  const cells = [];
+  for (const c of rowXml.matchAll(/<w:tc\b[^>]*>([\s\S]*?)<\/w:tc>/g)) {
+    cells.push([...c[1].matchAll(/<w:p\b[^>]*>([\s\S]*?)<\/w:p>/g)].map((p) => clean(paragraphText(p[0]))).filter(Boolean).join(' '));
+    const span = Number((/<w:gridSpan w:val="(\d+)"/.exec(c[1]) || [])[1] || 1);
+    for (let k = 1; k < span; k += 1) cells.push('');
+  }
+  return cells;
+}
+
+function tableBlocks(tableXml, blocks) {
+  const [first, ...rest] = [...tableXml.matchAll(/<w:tr\b[^>]*>([\s\S]*?)<\/w:tr>/g)].map((r) => rowCells(r[1]));
+  const header = first && first.some((c) => c) ? first : null; // an all-blank first row is no header (writeDocx writes one for a headerless table)
+  if (!rest.length && header) blocks.push({ kind: 'row', cells: header, header: null }); // a one-row table still says something
+  for (const cells of rest) if (cells.some((c) => c)) blocks.push({ kind: 'row', cells, header }); // a blank row carries nothing
+}
+
+function paragraphBlock(xml, blocks) {
+  const style = (/<w:pStyle w:val="([^"]+)"/.exec(xml) || [])[1] || '';
+  if (/^TOC/.test(style)) return; // a table of contents repeats the headings
+  const raw = paragraphText(xml);
+  if (style === 'Code') {
+    const code = raw.replace(/\s+$/, '');
+    if (code.trim()) blocks.push({ kind: 'code', text: code });
+    return;
+  }
+  const text = clean(raw);
+  if (!text) return;
+  const heading = style === 'Title' ? '1' : (/^Heading([1-6])$/.exec(style) || [])[1];
+  const numbered = /<w:numPr>/.test(xml) && !/<w:numId w:val="0"\/>/.test(xml); // numbering id 0 means "not a list"
+  if (heading) blocks.push({ kind: 'heading', level: Number(heading), text });
+  else if (numbered || /^List/.test(style)) blocks.push({ kind: 'item', text });
+  else blocks.push({ kind: 'para', text });
+}
+
+// Reads a body into blocks. Word writes a fallback copy of every drawing and text box (dropped), keeps text a
+// tracked change moved away inside w:moveFrom (dropped), and nests a text box's paragraphs inside its host
+// paragraph (lifted out and read after the host, so the host's own text stays whole).
+function readBody(xml, blocks) {
+  const boxes = [];
+  const body = xml
+    .replace(/<mc:Fallback>[\s\S]*?<\/mc:Fallback>/g, '')
+    .replace(/<w:moveFrom\b[^>]*[^/]>[\s\S]*?<\/w:moveFrom>/g, '')
+    .replace(/<w:txbxContent>([\s\S]*?)<\/w:txbxContent>/g, (m, inner) => {
+      boxes.push(inner);
+      return `<fi-box ${boxes.length - 1}/>`;
+    });
+  for (const m of body.matchAll(/<w:tbl\b[\s\S]*?<\/w:tbl>|<w:p\b[^>]*\/>|<w:p\b[^>]*>[\s\S]*?<\/w:p>/g)) {
+    if (m[0].startsWith('<w:tbl')) tableBlocks(m[0], blocks);
+    else paragraphBlock(m[0], blocks);
+    for (const b of m[0].matchAll(/<fi-box (\d+)\/>/g)) readBody(boxes[Number(b[1])], blocks);
+  }
 }
 
 // Reads the body of word/document.xml into the blocks markdownBlocks produces.
@@ -22,33 +77,8 @@ function readDocxBlocks(buf) {
   const doc = readZip(buf).get('word/document.xml');
   if (!doc) throw new Error('no word/document.xml in the archive');
   const xml = doc.toString('utf8');
-  const body = (/<w:body>([\s\S]*)<\/w:body>/.exec(xml) || [null, xml])[1];
   const blocks = [];
-  for (const m of body.matchAll(/<w:tbl\b[\s\S]*?<\/w:tbl>|<w:p\b[^>]*\/>|<w:p\b[^>]*>[\s\S]*?<\/w:p>/g)) {
-    const el = m[0];
-    if (el.startsWith('<w:tbl')) {
-      const rows = [...el.matchAll(/<w:tr\b[^>]*>([\s\S]*?)<\/w:tr>/g)].map((r) => [...r[1].matchAll(/<w:tc\b[^>]*>([\s\S]*?)<\/w:tc>/g)]
-        .map((c) => [...c[1].matchAll(/<w:p\b[^>]*>([\s\S]*?)<\/w:p>/g)].map((p) => clean(paragraphText(p[0]))).filter(Boolean).join(' ')));
-      const [first, ...rest] = rows;
-      const header = first && first.some((c) => c) ? first : null; // an all-blank first row is no header (writeDocx writes one for a headerless table)
-      if (!rest.length && header) blocks.push({ kind: 'row', cells: header, header: null }); // a one-row table still says something
-      for (const cells of rest) blocks.push({ kind: 'row', cells, header });
-      continue;
-    }
-    const style = (/<w:pStyle w:val="([^"]+)"/.exec(el) || [])[1] || '';
-    const raw = paragraphText(el);
-    if (style === 'Code') {
-      const code = raw.replace(/\s+$/, '');
-      if (code.trim()) blocks.push({ kind: 'code', text: code });
-      continue;
-    }
-    const text = clean(raw);
-    if (!text) continue;
-    const heading = style === 'Title' ? '1' : (/^Heading([1-6])$/.exec(style) || [])[1];
-    if (heading) blocks.push({ kind: 'heading', level: Number(heading), text });
-    else if (/<w:numPr>/.test(el) || /^List/.test(style)) blocks.push({ kind: 'item', text });
-    else blocks.push({ kind: 'para', text });
-  }
+  readBody((/<w:body>([\s\S]*)<\/w:body>/.exec(xml) || [null, xml])[1], blocks);
   return blocks;
 }
 
