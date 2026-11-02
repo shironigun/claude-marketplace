@@ -44,6 +44,8 @@ test('add: temporary ids, a patch, links and a decision', () => {
   assert.deepEqual(must(runFi(root, ['validate', 'csv', '--json'])).json.errors, []);
   const removed = must(runFi(root, ['add', 'csv', write(root, 'rm.json', { removeLinks: [{ from: 'TS-001', type: 'covers', to: 'RULE-001' }] }), '--json'])).json;
   assert.equal(removed.removed, 1);
+  const same = must(runFi(root, ['add', 'csv', write(root, 'same.json', { nodes: [{ id: 'TS-001', title: 'Reject a file over the limit' }] }), '--json'])).json;
+  assert.deepEqual(same.changed, []);
 });
 
 test('add: a dangling id, a bad quote, a wrong link or an unknown node writes nothing', () => {
@@ -57,6 +59,9 @@ test('add: a dangling id, a bad quote, a wrong link or an unknown node writes no
     [{ nodes: [{ id: 'RULE-002', provenance: [{ src: 'SRC-001', anchor: '§2 ¶2', quote: '""' }] }] }, /quote has no words/],
     [{ nodes: [{ id: '+x', type: 'MSG', title: 'm', statement: 's', status: 'recommended' }] }, /recommended nodes need derivedFrom/],
     [{ nodes: [{ id: 'RULE-002', provenance: [null] }] }, /RULE-002: provenance\[0\] must be an object/],
+    [{ links: [{ from: 'SRC-001', type: 'covers', to: 'RULE-001' }] }, /only test scenarios cover/],
+    [{ decisions: [{ id: '+d', question: 'q', answer: 'a', decidedBy: 'b', via: 'session' }], links: [{ from: '+d', type: 'blocks', to: 'RULE-001' }] }, /only questions block/],
+    [{ decisions: [{ id: '+d', question: 'q', answer: 'a', decidedBy: 'b', via: 'session' }], links: [{ from: '+d', type: 'answers', to: 'SRC-001' }] }, /a decision answers a question or a board flag/],
   ];
   for (const [input, message] of refused) {
     const r = runFi(root, ['add', 'csv', write(root, 'bad.json', input)]);
@@ -86,4 +91,26 @@ test('validate: a provenance entry that is not an object is reported, not thrown
   const r = runFi(root, ['validate', 'csv', '--json']);
   assert.equal(r.code, 1, r.stderr);
   assert.deepEqual(r.json.errors, ['RULE-002: provenance[0] must be an object']);
+});
+
+test('add: a model holding one id twice is refused before any write', () => {
+  const root = buildModel();
+  const p = workspacePaths(root, 'csv');
+  const twin = fs.readFileSync(p.nodes, 'utf8').split('\n').find((l) => l.includes('"RULE-004"'));
+  fs.appendFileSync(p.nodes, `${twin}\n`);
+  const before = fs.readFileSync(p.nodes, 'utf8');
+  const q = { nodes: [{ id: '+q', type: 'Q', title: 'q', statement: 'Which?', status: 'open', derivedFrom: ['GOAL-001'] }] };
+  const r = runFi(root, ['add', 'csv', write(root, 'q.json', q)]);
+  assert.equal(r.code, 1);
+  assert.match(r.stderr, /holds RULE-004 more than once/);
+  assert.equal(fs.readFileSync(p.nodes, 'utf8'), before);
+});
+
+test('validate: a damaged registry is reported, not thrown', () => {
+  const root = buildModel();
+  const p = workspacePaths(root, 'csv');
+  fs.writeFileSync(p.sources, JSON.stringify([...JSON.parse(fs.readFileSync(p.sources, 'utf8')), null]));
+  const r = runFi(root, ['validate', 'csv', '--json']);
+  assert.equal(r.code, 1);
+  assert.ok(r.json.errors.includes('sources.json entry 4 is not an object'), r.stdout);
 });

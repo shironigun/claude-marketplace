@@ -15,8 +15,9 @@ module.exports = {
     const input = readJsonFile(ctx.root, file);
     const r = withLock(paths, () => {
       const result = applyAdd(loadState(paths), input, { now: ctx.now });
-      saveModel(paths, result.next);
+      // decisions first, so a crash between the writes leaves at worst an unused decision
       saveDecisions(paths, result.next.decisions);
+      saveModel(paths, result.next);
       return result;
     });
     const ids = Object.entries(r.ids).map(([tmp, id]) => `${tmp} = ${id}`).join(', ');
