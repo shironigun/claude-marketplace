@@ -1,6 +1,7 @@
 'use strict';
 const fs = require('fs');
 const path = require('path');
+const { readText } = require('./text');
 
 // Writes through a temp file and a rename, so a crash never leaves half a file.
 function writeFileAtomic(file, content) {
@@ -12,8 +13,8 @@ function writeFileAtomic(file, content) {
 
 function readJsonl(file) {
   if (!fs.existsSync(file)) return [];
-  return fs.readFileSync(file, 'utf8')
-    .split(/\r?\n/)
+  return readText(fs.readFileSync(file))
+    .split('\n')
     .map((line, i) => [line, i])
     .filter(([line]) => line.trim())
     .map(([line, i]) => {
@@ -36,7 +37,7 @@ function appendJsonl(file, rows) {
 
 function readJson(file, fallback) {
   if (!fs.existsSync(file)) return fallback;
-  return JSON.parse(fs.readFileSync(file, 'utf8').replace(/^﻿/, ''));
+  return JSON.parse(readText(fs.readFileSync(file)));
 }
 
 function writeJson(file, value) {
