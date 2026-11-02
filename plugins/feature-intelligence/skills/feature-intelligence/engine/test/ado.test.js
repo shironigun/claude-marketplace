@@ -29,4 +29,6 @@ test('ado: repro steps for bugs; a list of comments', () => {
   };
   assert.deepEqual(adoChunks(bug).chunks.map((c) => c.anchor), ['repro ¶1', 'repro ¶2', 'comment 1']);
   assert.deepEqual(adoChunks(bug).origin, { workItem: 9, rev: 1, type: null });
+  const undated = adoChunks({ workItem: { id: 1, rev: 1, fields: {} }, comments: [{ id: 3, text: 'c' }, { id: 2, text: 'b' }, { id: 1, text: 'a' }, null] });
+  assert.deepEqual(undated.chunks, [{ anchor: 'comment 1', text: 'a' }, { anchor: 'comment 2', text: 'b' }, { anchor: 'comment 3', text: 'c' }]);
 });

@@ -27,8 +27,11 @@ function adoChunks(entry) {
       chunks.push({ anchor, text });
     });
   }
-  const comments = [...(Array.isArray(listed) ? listed : [])]
-    .sort((a, b) => String(a.createdDate || '').localeCompare(String(b.createdDate || '')));
+  // Comments in the order they were written: by createdDate, then by id (ADO ids grow over time, so they order
+  // comments that carry no date). Anything that is not an object is skipped.
+  const comments = (Array.isArray(listed) ? listed : [])
+    .filter((c) => c && typeof c === 'object')
+    .sort((a, b) => String(a.createdDate || '').localeCompare(String(b.createdDate || '')) || (Number(a.id) || 0) - (Number(b.id) || 0));
   comments.forEach((c, i) => {
     const text = fieldTexts(c.text).join(' ');
     if (text) chunks.push({ anchor: `comment ${i + 1}`, text });
