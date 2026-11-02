@@ -76,6 +76,7 @@ function saveModel(p, { nodes, links }) {
 
 const LOCK_TIMEOUT_MS = 15000;
 const LOCK_STALE_MS = 60000;
+const GUARD_STALE_MS = 10000;
 
 const sleep = (ms) => Atomics.wait(new Int32Array(new SharedArrayBuffer(4)), 0, 0, ms);
 
@@ -99,24 +100,32 @@ function removeQuietly(file) {
   }
 }
 
-// Moves a stale lock aside with an atomic rename, so only one waiter can take it over. If what was moved is not the
-// stale holder's token (a live holder replaced it in between), it is put back; linkSync refuses to overwrite a lock
-// that someone created meanwhile.
-function takeOver(lock, staleToken, token) {
-  const aside = `${lock}.stale-${token}`;
+// Clears a lock whose holder died. Waiters that find it stale at the same moment are serialised by a second exclusive
+// file; the one holding it deletes the lock only if the lock still holds the same token and is still old, so a live
+// lock is never removed. Returns true when it deleted the lock.
+function clearStale(lock, staleToken, staleMs) {
+  const guard = `${lock}.takeover`;
   try {
-    fs.renameSync(lock, aside);
+    fs.writeFileSync(guard, String(process.pid), { flag: 'wx' });
   } catch {
-    return; // another waiter moved it first, or it was released
-  }
-  if (readLock(aside) !== staleToken) {
+    // Another waiter is clearing it. A guard left by a process that died while clearing is removed after a while.
     try {
-      fs.linkSync(aside, lock);
+      if (Date.now() - fs.statSync(guard).mtimeMs > GUARD_STALE_MS) removeQuietly(guard);
     } catch {
-      // A new holder exists already; nothing to restore.
+      // the guard is gone already
     }
+    return false;
   }
-  removeQuietly(aside);
+  try {
+    const stat = fs.statSync(lock);
+    if (readLock(lock) !== staleToken || Date.now() - stat.mtimeMs <= staleMs) return false;
+    removeQuietly(lock);
+    return true;
+  } catch {
+    return false; // released meanwhile
+  } finally {
+    removeQuietly(guard);
+  }
 }
 
 // One writer at a time per workspace: parallel subagents call fi together (spec 6.2). The lock file holds a token
@@ -126,6 +135,7 @@ function withLock(p, fn, { timeoutMs = LOCK_TIMEOUT_MS, staleMs = LOCK_STALE_MS 
   fs.mkdirSync(p.cache, { recursive: true });
   const token = `${process.pid}-${crypto.randomBytes(6).toString('hex')}`;
   const deadline = Date.now() + timeoutMs;
+  let lastError = null;
   for (;;) {
     try {
       fs.writeFileSync(p.lock, token, { flag: 'wx' });
@@ -133,17 +143,25 @@ function withLock(p, fn, { timeoutMs = LOCK_TIMEOUT_MS, staleMs = LOCK_STALE_MS 
     } catch (e) {
       // EPERM and EBUSY: Windows refuses to create a file that is still being deleted.
       if (!['EEXIST', 'EPERM', 'EBUSY'].includes(e.code)) throw e;
+      lastError = e;
     }
-    if (Date.now() > deadline) throw checkError(`workspace ${p.slug} is busy (${p.lock}); retry, or delete the lock if no fi is running`);
+    if (Date.now() > deadline) {
+      throw checkError(lastError.code === 'EEXIST'
+        ? `workspace ${p.slug} is busy (${p.lock}); retry, or delete the lock if no fi is running`
+        : `cannot create the lock ${p.lock}: ${lastError.message}`);
+    }
     const seen = readLock(p.lock); // read the token before judging its age, so a fresh lock is never taken for the stale one
-    let stat;
+    let stat = null;
     try {
       stat = fs.statSync(p.lock);
     } catch {
-      continue; // released meanwhile: try again at once
+      // released meanwhile
     }
-    if (seen !== null && Date.now() - stat.mtimeMs > staleMs) takeOver(p.lock, seen, token);
-    else sleep(50);
+    if (stat && seen !== null && Date.now() - stat.mtimeMs > staleMs) {
+      if (!clearStale(p.lock, seen, staleMs)) sleep(20);
+    } else {
+      sleep(stat ? 50 : 5);
+    }
   }
   try {
     return fn();
