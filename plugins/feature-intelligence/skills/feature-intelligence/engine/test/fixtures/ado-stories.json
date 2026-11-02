@@ -1,0 +1,31 @@
+[
+  {
+    "workItem": {
+      "id": 2104,
+      "rev": 7,
+      "fields": {
+        "System.WorkItemType": "User Story",
+        "System.Title": "Reject oversized files",
+        "System.Description": "<div>As an admin, I want oversized files rejected before import, so that imports stay fast.</div><div>Managers can also start imports.</div>",
+        "Microsoft.VSTS.Common.AcceptanceCriteria": "<ol><li>Given a file with more than 5,000 rows, when it is uploaded, then it is rejected.</li><li>The rejection message names the row limit.</li></ol>"
+      }
+    },
+    "comments": {
+      "totalCount": 2,
+      "comments": [
+        { "id": 2, "text": "<p>Should duplicates by email be updated instead of skipped?</p>", "createdDate": "2026-10-21T09:00:00Z" },
+        { "id": 1, "text": "<p>Thanks!</p>", "createdDate": "2026-10-20T09:00:00Z" }
+      ]
+    }
+  },
+  {
+    "id": 2105,
+    "rev": 3,
+    "fields": {
+      "System.WorkItemType": "User Story",
+      "System.Title": "Download the error report",
+      "System.Description": "<h3>Summary</h3><p>After an import, the admin can download a CSV of rejected rows with the reason for each.</p>",
+      "Microsoft.VSTS.Common.AcceptanceCriteria": "<p>The report lists the row number and the reason.</p>"
+    }
+  }
+]
