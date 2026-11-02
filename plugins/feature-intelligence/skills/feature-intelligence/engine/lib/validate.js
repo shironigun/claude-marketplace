@@ -50,7 +50,11 @@ function validateModel(state) {
     nodes.set(n.id, n);
     for (const e of validateNode(n)) errors.push(`${n.id || '(no id)'}: ${e}`);
   }
-  const sources = new Map(state.sources.map((s) => [s.id, s]));
+  const sourceList = Array.isArray(state.sources) ? state.sources : [];
+  if (!Array.isArray(state.sources)) errors.push('sources.json must hold a list');
+  const isEntry = (s) => s !== null && typeof s === 'object' && !Array.isArray(s);
+  sourceList.forEach((s, i) => { if (!isEntry(s)) errors.push(`sources.json entry ${i + 1} is not an object`); });
+  const sources = new Map(sourceList.filter(isEntry).map((s) => [s.id, s]));
   const decisions = new Map();
   for (const d of state.decisions) {
     if (decisions.has(d.id)) errors.push(`${d.id}: duplicate decision id`);
@@ -72,10 +76,11 @@ function validateModel(state) {
     if (!toFlag && !known(l.to)) errors.push(`${name}: ${l.to} does not exist`);
     const from = nodes.get(l.from);
     const to = nodes.get(l.to);
-    if (l.type === 'blocks' && from && from.type !== 'Q') errors.push(`${name}: only questions block`);
-    if (l.type === 'covers' && from && from.type !== 'TS') errors.push(`${name}: only test scenarios cover`);
+    // The rules hold for every end that exists, whether it is a node, a decision or a source.
+    if (l.type === 'blocks' && known(l.from) && !(from && from.type === 'Q')) errors.push(`${name}: only questions block`);
+    if (l.type === 'covers' && known(l.from) && !(from && from.type === 'TS')) errors.push(`${name}: only test scenarios cover`);
     if (l.type === 'answers' && known(l.from) && !decisions.has(l.from)) errors.push(`${name}: only decisions answer`);
-    if (l.type === 'answers' && to && to.type !== 'Q') errors.push(`${name}: a decision answers a question or a board flag`);
+    if (l.type === 'answers' && !toFlag && known(l.to) && !(to && to.type === 'Q')) errors.push(`${name}: a decision answers a question or a board flag`);
   }
   return errors;
 }

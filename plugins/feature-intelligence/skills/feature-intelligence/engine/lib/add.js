@@ -18,6 +18,12 @@ function applyAdd(state, input, { now }) {
     if (!Array.isArray(v) || v.some((x) => !x || typeof x !== 'object' || Array.isArray(x))) throw usageError(`${k} must be a list of objects`);
     return v;
   });
+  const counts = new Map();
+  for (const n of state.nodes) counts.set(n.id, (counts.get(n.id) || 0) + 1);
+  const twins = [...counts].filter(([, c]) => c > 1).map(([id]) => id);
+  if (twins.length) {
+    throw checkError(`the model holds ${twins.join(', ')} more than once; fix model/nodes.jsonl by hand first, since any write would keep only one copy`);
+  }
   const today = now.slice(0, 10);
   const nodes = new Map(state.nodes.map((n) => [n.id, n]));
   const nodeIds = state.nodes.map((n) => n.id);
@@ -82,6 +88,7 @@ function applyAdd(state, input, { now }) {
       else next[k] = v;
     }
     if (next.type !== old.type) throw usageError(`${n.id}: a node keeps its type`);
+    if (JSON.stringify(next) === JSON.stringify(old)) continue; // nothing changed: no new revision
     next.rev = old.rev + 1;
     next.updated = today;
     nodes.set(n.id, next);
