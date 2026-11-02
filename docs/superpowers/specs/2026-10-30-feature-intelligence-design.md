@@ -78,7 +78,7 @@ server. feature-explainer remains the small, concise explainer.
 |---|---|---|
 | P1 | **One model, many views.** Every section, lens and export is a projection of the Feature Model; nothing is authored twice. | Consistency, traceability, and re-rendering that costs no tokens. |
 | P2 | **Scripts measure, AI judges.** Chunking, IDs, coverage, links, diffs and rendering are deterministic engine work; extraction, consolidation decisions and analysis are model work. | Reproducible bookkeeping; the model spends tokens only on judgment. |
-| P3 | **Every node has a source.** `confirmed` and `conflict` nodes need provenance (source, anchor, quote of at most 40 words); `inferred`, `assumed`, `recommended` and `open` nodes need `derivedFrom`. The engine rejects a node with neither. | Readers can verify any statement or see exactly what it rests on. |
+| P3 | **Every node has a source.** `confirmed` and `conflict` nodes need provenance (source, anchor, quote of at most 40 words; a conflict keeps at least two quotes); `inferred`, `assumed` and `recommended` nodes need `derivedFrom`; an `open` node needs either, because a source can state an open point ("to be confirmed"). The engine rejects a node with neither. | Readers can verify any statement or see exactly what it rests on. |
 | P4 | **Evidence status survives every format.** confirmed, inferred, assumed, recommended, open, conflict. An assumed or recommended node never renders as a requirement without its badge; the lint fails the build. | AI assumptions never pass as confirmed requirements. |
 | P5 | **Nothing is silently dropped.** Every chunk is referenced by a node or set aside with a reason. | Proof against information loss. |
 | P6 | **Ask by impact.** Questions are ranked by blast radius and asked five at a time; the rest go on the board. | Clarification without overload. |
@@ -196,7 +196,7 @@ One JSON object per line in `model/nodes.jsonl`, sorted by `id`.
 | `statement` | string | One atomic, testable sentence. |
 | `status` | enum | Evidence status, 5.4. |
 | `provenance` | array | `{src, anchor, quote, hash}`; `quote` at most 40 words. Required for `confirmed` and `conflict` nodes. A node confirmed by a decision cites the `DL` entry as its source. |
-| `derivedFrom` | array | Node ids this node rests on. Required for `inferred`, `assumed`, `recommended` and `open` nodes; an assumed node points at the question or finding it fills. |
+| `derivedFrom` | array | Node ids this node rests on. Required for `inferred`, `assumed` and `recommended` nodes, and for `open` nodes without provenance; an assumed node points at the question or finding it fills. |
 | `confidence` | enum | `high`, `medium`, `low`; inferred nodes only. |
 | `category` | string | Optional sub-kind: NFR quality category, finding kind, scenario technique, task discipline. |
 | `lenses` | array | Relevance hints for lens ordering; never a filter of truth. |
