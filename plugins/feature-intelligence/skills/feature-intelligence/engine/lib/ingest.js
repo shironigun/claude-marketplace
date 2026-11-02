@@ -108,7 +108,11 @@ function ingestAdo(p, file, { root, now }) {
   });
   const sources = loadSources(p);
   const known = (a) => sources.find((s) => s.kind === 'ado' && s.origin.workItem === a.origin.workItem);
+  const listed = new Map();
   for (const a of shaped) {
+    const prior = listed.get(a.origin.workItem);
+    if (prior !== undefined && prior !== a.origin.rev) throw usageError(`${file}: work item ${a.origin.workItem} appears twice, at rev ${prior} and rev ${a.origin.rev}`);
+    listed.set(a.origin.workItem, a.origin.rev);
     const same = known(a);
     if (same && same.origin.rev !== a.origin.rev) {
       throw phase2(`work item ${a.origin.workItem} changed (rev ${same.origin.rev} to ${a.origin.rev})`, same.id);
@@ -129,11 +133,18 @@ function ingestRepo(p, dir, { root, now, commit, title }) {
   const abs = path.resolve(root, dir);
   if (!fs.existsSync(abs) || !fs.statSync(abs).isDirectory()) throw usageError(`no such folder: ${dir}`);
   let head = commit;
+  let dirty = false;
   if (!head) {
     try {
       head = execFileSync('git', ['-C', abs, 'rev-parse', 'HEAD'], { encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] }).trim();
     } catch {
       throw usageError(`${dir} is not a git repository; pass --commit <sha>`);
+    }
+    // Anchors name the commit, so a dirty working copy must be read with git show.
+    try {
+      dirty = execFileSync('git', ['-C', abs, 'status', '--porcelain'], { encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] }).trim() !== '';
+    } catch {
+      dirty = false; // a failed status is treated as clean
     }
   }
   const rel = relPath(root, abs) || '.';
@@ -142,7 +153,7 @@ function ingestRepo(p, dir, { root, now, commit, title }) {
   if (same && same.origin.commit === head) return { source: same, skipped: true };
   if (same) throw phase2(`${rel} moved from ${same.origin.commit.slice(0, 7)} to ${head.slice(0, 7)}`, same.id);
   const fields = {
-    kind: 'repo', origin: { path: rel, commit: head }, title: title || path.basename(abs), fetchedAt: now,
+    kind: 'repo', origin: { path: rel, commit: head, ...(dirty ? { dirty: true } : {}) }, title: title || path.basename(abs), fetchedAt: now,
     status: 'ok', format: 'repo', coverageExempt: true,
   };
   const source = register(p, sources, fields, []);
