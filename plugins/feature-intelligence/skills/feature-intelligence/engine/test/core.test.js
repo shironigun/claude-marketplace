@@ -28,16 +28,22 @@ test('jsonl: write, read, append, and a bad line names its line number', () => {
   appendJsonl(file, [{ id: 'C' }]);
   assert.deepEqual(readJsonl(file).map((r) => r.id), ['A', 'B', 'C']);
   fs.appendFileSync(file, '{broken\n');
-  assert.throws(() => readJsonl(file), /rows\.jsonl:4: invalid JSON/);
+  assert.throws(() => readJsonl(file), (e) => e.code === 1 && /rows\.jsonl:4: invalid JSON/.test(e.message));
   const json = path.join(dir, 'x.json');
   assert.deepEqual(readJson(json, { empty: true }), { empty: true });
   writeJson(json, { b: 1 });
   assert.equal(fs.readFileSync(json, 'utf8'), '{\n  "b": 1\n}\n');
   const bom = path.join(dir, 'bom.jsonl');
-  fs.writeFileSync(bom, '﻿{"id":"A"}\r\n{"id":"B"}\r{"id":"C"}\n');
+  fs.writeFileSync(bom, '\uFEFF{"id":"A"}\r\n{"id":"B"}\r{"id":"C"}\n');
   assert.deepEqual(readJsonl(bom).map((r) => r.id), ['A', 'B', 'C']);
-  fs.writeFileSync(json, '﻿{"b": 2}\r\n');
+  fs.writeFileSync(json, '\uFEFF{"b": 2}\r\n');
   assert.deepEqual(readJson(json, null), { b: 2 });
+  const scalar = path.join(dir, 'scalar.jsonl');
+  fs.writeFileSync(scalar, '{"id":"A"}\n42\n');
+  assert.throws(() => readJsonl(scalar), (e) => e.code === 1 && /scalar\.jsonl:2: expected a JSON object/.test(e.message));
+  const broken = path.join(dir, 'broken.json');
+  fs.writeFileSync(broken, '{"a": }');
+  assert.throws(() => readJson(broken, null), (e) => e.code === 1 && /broken\.json: invalid JSON/.test(e.message));
 });
 
 test('hash: sha256 and the 12-character short form', () => {
@@ -46,8 +52,8 @@ test('hash: sha256 and the 12-character short form', () => {
 });
 
 test('text: read, normalize quotes, count words, tokens, similarity, numbers', () => {
-  assert.equal(readText(Buffer.from('﻿a\r\nb\rc')), 'a\nb\nc');
-  assert.equal(normalizeQuote('  “Files are   limited” '), 'files are limited');
+  assert.equal(readText(Buffer.from('\uFEFFa\r\nb\rc')), 'a\nb\nc');
+  assert.equal(normalizeQuote('  \u201CFiles are   limited\u201D '), 'files are limited');
   assert.equal(wordCount(' one two  three '), 3);
   assert.equal(wordCount(''), 0);
   assert.deepEqual([...tokens('The file MUST hold 10,000 rows')], ['file', 'hold', '10000', 'rows']);
@@ -55,6 +61,10 @@ test('text: read, normalize quotes, count words, tokens, similarity, numbers', (
   assert.ok(jaccard('a file may hold 10,000 rows', 'a file may hold 5,000 rows') < 0.85);
   assert.equal(jaccard('', ''), 0);
   assert.deepEqual([...numbers('max 10,000 rows, 5 MB, 2.5%')], ['10000', '5', '2.5']);
+  const ch = String.fromCharCode;
+  assert.equal(normalizeQuote(`don${ch(0x2019)}t stop`), "don't stop");
+  assert.equal(normalizeQuote(`10${ch(0x2013)}20 rows`), '10-20 rows');
+  assert.equal(normalizeQuote(`zero${ch(0x200b)}width`), 'zerowidth');
 });
 
 test('errors: check errors exit 1, usage errors exit 2', () => {
