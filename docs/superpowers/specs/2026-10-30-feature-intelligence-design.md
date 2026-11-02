@@ -208,7 +208,7 @@ One JSON object per line in `model/nodes.jsonl`, sorted by `id`.
 Example, from the CSV importer fixture:
 
 ```json
-{"id":"RULE-003","type":"RULE","title":"Row limit per file","statement":"An import file may contain at most 10,000 rows.","status":"conflict","provenance":[{"src":"SRC-1","anchor":"§3.2 ¶2","quote":"Files are limited to 10,000 rows.","hash":"9f2c…"},{"src":"SRC-4","anchor":"STORY-2104 AC-2","quote":"Uploads over 5,000 rows are rejected.","hash":"41ab…"}],"lenses":["product","qa","dev"],"rev":1,"updated":"2026-10-30"}
+{"id":"RULE-003","type":"RULE","title":"Row limit per file","statement":"An import file may contain at most 10,000 rows.","status":"conflict","provenance":[{"src":"SRC-1","anchor":"§3.2 ¶2","quote":"Files are limited to 10,000 rows.","hash":"9f2c…"},{"src":"SRC-4","anchor":"STORY-2104 AC-2","quote":"Uploads over 5,000 rows are rejected.","hash":"41ab…"}],"lenses":["product","qa","development"],"rev":1,"updated":"2026-10-30"}
 ```
 
 ### 5.2 Node types

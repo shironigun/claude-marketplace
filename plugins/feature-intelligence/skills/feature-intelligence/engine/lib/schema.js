@@ -15,8 +15,9 @@ const NODE_TYPES = {
 };
 // Sources live in sources.json and decisions in decisions.jsonl, so neither is a model node.
 const MODEL_TYPES = new Set(Object.keys(NODE_TYPES).filter((t) => t !== 'SRC' && t !== 'DL'));
-// Extractors report facts; an excerpt is never a fact of its own.
-const CLAIM_TYPES = new Set([...MODEL_TYPES].filter((t) => t !== 'EXC'));
+// Extractors report facts from sources: an excerpt is never a fact of its own, and a recommendation (REC) is the
+// system's suggestion.
+const CLAIM_TYPES = new Set([...MODEL_TYPES].filter((t) => t !== 'EXC' && t !== 'REC'));
 const LINK_TYPES = new Set(['derives-from', 'refines', 'implements', 'part-of', 'next', 'governs', 'shows', 'calls',
   'reads', 'writes', 'realized-by', 'covers', 'maps-to', 'depends-on', 'conflicts-with', 'duplicates', 'blocks',
   'answers', 'defines']);
@@ -39,6 +40,8 @@ const DECISION_FIELDS = new Set(['id', 'question', 'answer', 'decidedBy', 'decid
 
 const isText = (v) => typeof v === 'string' && v.trim() !== '';
 const isObject = (v) => v !== null && typeof v === 'object' && !Array.isArray(v);
+// A value matches a pattern only when it is text: String(['RULE-003']) would otherwise pass.
+const isMatch = (v, re) => typeof v === 'string' && re.test(v);
 
 function unknownFields(obj, allowed, errors, prefix = '') {
   for (const k of Object.keys(obj)) if (!allowed.has(k)) errors.push(`${prefix}unknown field "${k}"`);
@@ -61,7 +64,7 @@ function checkProvenance(list, errors) {
       return;
     }
     unknownFields(p, PROVENANCE_FIELDS, errors, `${at}: `);
-    if (!/^(SRC|DL)-\d+$/.test(String(p.src))) errors.push(`${at}.src must be a source or decision id`);
+    if (!isMatch(p.src, /^(SRC|DL)-\d+$/)) errors.push(`${at}.src must be a source or decision id`);
     if (!isText(p.anchor)) errors.push(`${at}.anchor is required`);
     checkQuote(p.quote, errors, `${at}.quote`);
     if (p.hash !== undefined && typeof p.hash !== 'string') errors.push(`${at}.hash must be text`);
@@ -74,7 +77,7 @@ function validateNode(node) {
   const errors = [];
   unknownFields(node, NODE_FIELDS, errors);
   if (!MODEL_TYPES.has(node.type)) errors.push(`type "${node.type}" is not a node type`);
-  if (!ID_RE.test(String(node.id))) errors.push(`id "${node.id}" must look like RULE-003`);
+  if (!isMatch(node.id, ID_RE)) errors.push(`id "${node.id}" must look like RULE-003`);
   else if (node.id.split('-')[0] !== node.type) errors.push(`id ${node.id} does not match type ${node.type}`);
   if (!isText(node.title)) errors.push('title is required');
   if (!isText(node.statement)) errors.push('statement is required');
@@ -82,7 +85,7 @@ function validateNode(node) {
   const prov = node.provenance === undefined ? [] : node.provenance;
   const from = node.derivedFrom === undefined ? [] : node.derivedFrom;
   checkProvenance(prov, errors);
-  if (!Array.isArray(from) || from.some((id) => !ID_RE.test(String(id)))) errors.push('derivedFrom must be a list of ids');
+  if (!Array.isArray(from) || from.some((id) => !isMatch(id, ID_RE))) errors.push('derivedFrom must be a list of ids');
   else if (from.includes(node.id)) errors.push('derivedFrom cannot include the node itself');
   const nProv = Array.isArray(prov) ? prov.length : 0;
   const nFrom = Array.isArray(from) ? from.length : 0;
@@ -98,8 +101,8 @@ function validateNode(node) {
   }
   if (node.ado !== undefined && !(isObject(node.ado) && Number.isInteger(node.ado.id))) errors.push('ado must be {id, type, rev, url}');
   if (!Number.isInteger(node.rev) || node.rev < 1) errors.push('rev must be a whole number from 1');
-  if (!DATE_RE.test(String(node.updated))) errors.push('updated must be a date like 2026-10-30');
-  if (node.supersededBy !== undefined && (!ID_RE.test(String(node.supersededBy)) || node.supersededBy === node.id)) {
+  if (!isMatch(node.updated, DATE_RE)) errors.push('updated must be a date like 2026-10-30');
+  if (node.supersededBy !== undefined && (!isMatch(node.supersededBy, ID_RE) || node.supersededBy === node.id)) {
     errors.push('supersededBy must be another node id');
   }
   return errors;
@@ -110,10 +113,10 @@ function validateLink(link) {
   const errors = [];
   unknownFields(link, LINK_FIELDS, errors);
   if (!LINK_TYPES.has(link.type)) errors.push(`link type "${link.type}" is unknown`);
-  if (!ID_RE.test(String(link.from))) errors.push(`link from "${link.from}" is not an id`);
-  if (!ID_RE.test(String(link.to))) errors.push(`link to "${link.to}" is not an id`);
-  if (link.from === link.to) errors.push('a link cannot point at its own node');
-  if (link.src !== undefined && !SRC_RE.test(String(link.src))) errors.push('link src must be a source id');
+  if (!isMatch(link.from, ID_RE)) errors.push(`link from "${link.from}" is not an id`);
+  if (!isMatch(link.to, ID_RE)) errors.push(`link to "${link.to}" is not an id`);
+  if (isMatch(link.from, ID_RE) && link.from === link.to) errors.push('a link cannot point at its own node');
+  if (link.src !== undefined && !isMatch(link.src, SRC_RE)) errors.push('link src must be a source id');
   return errors;
 }
 
@@ -122,7 +125,7 @@ function validateClaim(claim) {
   if (!isObject(claim)) return ['claim must be an object'];
   const errors = [];
   unknownFields(claim, CLAIM_FIELDS, errors);
-  if (!CHUNK_RE.test(String(claim.chunk)) && !SRC_RE.test(String(claim.chunk))) {
+  if (!isMatch(claim.chunk, CHUNK_RE) && !isMatch(claim.chunk, SRC_RE)) {
     errors.push(`chunk "${claim.chunk}" must be a chunk id like SRC-001#4 (or a source id for code)`);
   }
   if (!CLAIM_TYPES.has(claim.type)) errors.push(`type "${claim.type}" cannot be extracted`);
@@ -142,10 +145,10 @@ function validateDecision(d) {
   if (!isObject(d)) return ['decision must be an object'];
   const errors = [];
   unknownFields(d, DECISION_FIELDS, errors);
-  if (!/^DL-\d+$/.test(String(d.id))) errors.push(`decision id "${d.id}" must look like DL-001`);
+  if (!isMatch(d.id, /^DL-\d+$/)) errors.push(`decision id "${d.id}" must look like DL-001`);
   for (const f of ['question', 'answer', 'decidedBy']) if (!isText(d[f])) errors.push(`${f} is required`);
   if (Number.isNaN(Date.parse(d.decidedAt))) errors.push('decidedAt must be an ISO date');
-  if (d.via !== 'session' && !/^F-\d+$/.test(String(d.via))) errors.push('via must be "session" or a board flag id like F-12');
+  if (d.via !== 'session' && !isMatch(d.via, /^F-\d+$/)) errors.push('via must be "session" or a board flag id like F-12');
   return errors;
 }
 

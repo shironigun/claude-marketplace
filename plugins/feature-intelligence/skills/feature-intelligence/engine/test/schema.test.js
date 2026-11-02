@@ -62,3 +62,16 @@ test('schema: claims and decisions', () => {
   assert.deepEqual(validateDecision({ ...dl, via: 'F-12' }), []);
   assert.match(validateDecision({ ...dl, via: 'email' }).join(), /via must be/);
 });
+
+test('schema: wrongly typed ids are errors, never exceptions; REC is never extracted', () => {
+  assert.match(validateNode(node({ id: ['RULE-003'] })).join(), /must look like RULE-003/);
+  assert.match(validateNode(node({ provenance: [{ ...prov(), src: ['SRC-001'] }] })).join(), /src must be a source or decision id/);
+  assert.match(validateNode(node({ status: 'assumed', provenance: undefined, derivedFrom: [['RULE-001']] })).join(), /derivedFrom must be a list of ids/);
+  assert.match(validateNode(node({ updated: ['2026-10-30'] })).join(), /updated must be a date/);
+  assert.match(validateLink({ from: ['TS-001'], type: 'covers', to: ['RULE-003'] }).join(), /link from .* is not an id/);
+  assert.deepEqual(validateLink({}).filter((e) => /own node/.test(e)), []);
+  const claim = { chunk: ['SRC-001#2'], type: 'RULE', title: 't', statement: 's', status: 'confirmed', anchor: 'a', quote: 'q' };
+  assert.match(validateClaim(claim).join(), /must be a chunk id/);
+  assert.match(validateClaim({ ...claim, chunk: 'SRC-001#2', type: 'REC' }).join(), /cannot be extracted/);
+  assert.match(validateDecision({ id: ['DL-001'], question: 'q', answer: 'a', decidedBy: 'b', decidedAt: '2026-10-30T10:00:00.000Z', via: ['F-1'] }).join(), /must look like DL-001/);
+});
