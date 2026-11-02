@@ -38,4 +38,9 @@ test('pdf: an attached file is never read for pages', () => {
     Buffer.from('\nendstream\nendobj\n', 'latin1'),
   ]);
   assert.equal(pdfPageCount(pdf), 2);
+  const plain = Buffer.concat([
+    writeSimplePdf([['one'], ['two']]),
+    Buffer.from('98 0 obj\n<< /Type /EmbeddedFile /Length 44 >>\nstream\n<< /Type /Pages /Kids [4 0 R] /Count 50 >>\nendstream\nendobj\n', 'latin1'),
+  ]);
+  assert.equal(pdfPageCount(plain), 2);
 });

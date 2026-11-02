@@ -37,7 +37,7 @@ function pdfPageCount(buf) {
     }
     pages += (text.match(/\/Type\s*\/Page(?![A-Za-z])/g) || []).length;
   };
-  scan(raw);
+  scan(raw.replace(/(?<!end)stream\r?\n[\s\S]*?endstream/g, 'stream endstream')); // stream payloads are data, not objects
   for (const text of objectStreamTexts(buf, raw)) scan(text);
   return count || pages || null;
 }
