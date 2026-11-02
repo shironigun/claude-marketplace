@@ -17,6 +17,9 @@ function proposalText(slug, proposal) {
     lines.push(`${k.id} ${k.type} ${k.suggest} ${k.why}`);
     for (const s of k.statements) lines.push(`  ${s.id}${s.src ? ` ${s.src} ${s.anchor}` : ' (existing)'}: ${s.statement}`);
   }
+  for (const k of clusters.filter((c) => c.suggest === 'same' || c.suggest === 'merge')) {
+    lines.push(`${k.id} ${k.type} ${k.suggest} ${k.why} (applies unless decided otherwise)`);
+  }
   lines.push(open.length
     ? `Decide each with merge, conflict, separate, existing or drop (optional title, statement, type), then: fi consolidate ${slug} --apply <decisions.json>`
     : `Nothing needs a decision; apply the suggestions with a decisions file holding {}: fi consolidate ${slug} --apply <decisions.json>`);

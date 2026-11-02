@@ -61,3 +61,28 @@ test('consolidate: a proposal made before new claims arrived is refused; drop ne
   const r = must(runFi(root, ['consolidate', 'csv', '--apply', write(root, 'drop2.json', { ...DECISIONS, 'K-009': { action: 'drop', reason: 'covered by the role matrix' } }), '--json'])).json;
   assert.equal(r.dropped, 1);
 });
+
+test('consolidate: negation, modality and later similar claims need a decision; malformed decisions are refused', () => {
+  const root = buildModel();
+  must(runFi(root, ['claims', 'add', 'csv', write(root, 'more.json', [
+    claim('SRC-003#2', 'AC-1', 'RULE', 'Duplicate emails', 'A row whose email matches an existing customer is not skipped.', 'The report lists the row number and the reason.'),
+    claim('SRC-002#4', 'AC-2', 'RULE', 'File size limit', 'An import file may be at most 2 MB.', 'The rejection message names the row limit.'),
+    claim('SRC-001#5', '§2 ¶4', 'RULE', 'Name required', 'Every row must have a name.', 'Name is required.'),
+  ])]));
+  const proposal = must(runFi(root, ['consolidate', 'csv', '--propose', '--json'])).json;
+  assert.deepEqual(proposal.clusters.map((k) => [k.id, k.existing, k.suggest]), [
+    ['K-001', 'RULE-005', 'conflict?'], ['K-002', 'RULE-002', 'conflict?'], ['K-003', 'RULE-004', 'same'],
+  ]);
+  assert.match(runFi(root, ['consolidate', 'csv', '--propose']).stdout, /K-003 RULE same restates RULE-004/);
+  const refused = (decisions, message) => {
+    const r = runFi(root, ['consolidate', 'csv', '--apply', write(root, 'bad.json', decisions)]);
+    assert.equal(r.code, 2, JSON.stringify(decisions));
+    assert.match(r.stderr, message);
+  };
+  refused({ 'K-001': { action: 'constructor' }, 'K-002': { action: 'conflict' } }, /action must be/);
+  refused({ 'K-001': { action: 'conflict', statment: 'x' }, 'K-002': { action: 'conflict' } }, /unknown decision field statment/);
+  refused({ 'K-001': { action: 'drop', reason: '  ' }, 'K-002': { action: 'conflict' } }, /reason must be text/);
+  const decided = { 'K-001': { action: 'conflict' }, 'K-002': { action: 'conflict' } };
+  const r = must(runFi(root, ['consolidate', 'csv', '--apply', write(root, 'ok.json', decided), '--json'])).json;
+  assert.deepEqual([r.created, r.updated.sort()], [[], ['RULE-002', 'RULE-005']]);
+});
