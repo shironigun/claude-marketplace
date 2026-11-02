@@ -1,0 +1,63 @@
+'use strict';
+const test = require('node:test');
+const assert = require('node:assert/strict');
+const { runFi } = require('./helpers');
+const { DECISIONS, claim, must, write, prepare, buildModel } = require('./model-fixture');
+const { workspacePaths } = require('../lib/paths');
+const { loadModel } = require('../lib/workspace');
+
+const nodesOf = (root) => loadModel(workspacePaths(root, 'csv')).nodes;
+
+test('consolidate: propose suggests; undecided clusters stop --apply; decisions create the model', () => {
+  const root = prepare();
+  const proposal = must(runFi(root, ['consolidate', 'csv', '--propose', '--json'])).json;
+  assert.deepEqual(proposal.clusters.map((k) => [k.id, k.type, k.claims.length, k.suggest]), [
+    ['K-001', 'GOAL', 1, 'new'], ['K-002', 'RULE', 2, 'conflict?'], ['K-003', 'RULE', 1, 'new'], ['K-004', 'RULE', 2, 'merge?'],
+    ['K-005', 'RULE', 1, 'new'], ['K-006', 'Q', 1, 'new'], ['K-007', 'STORY', 1, 'new'], ['K-008', 'STORY', 1, 'new'],
+  ]);
+  assert.match(runFi(root, ['consolidate', 'csv', '--propose']).stdout, /K-002 RULE conflict\? the numbers differ/);
+  const undecided = runFi(root, ['consolidate', 'csv', '--apply', write(root, 'none.json', {})]);
+  assert.equal(undecided.code, 1);
+  assert.match(undecided.stderr, /K-002 \(conflict\?\), K-004 \(merge\?\)/);
+  assert.equal(runFi(root, ['consolidate', 'csv', '--apply', write(root, 'stray.json', { 'K-099': { action: 'merge' } })]).code, 2);
+  const applied = must(runFi(root, ['consolidate', 'csv', '--apply', write(root, 'd.json', DECISIONS), '--json'])).json;
+  assert.deepEqual(applied.created, ['GOAL-001', 'RULE-001', 'RULE-002', 'RULE-003', 'RULE-004', 'RULE-005', 'Q-001', 'STORY-001', 'STORY-002']);
+  const rule = nodesOf(root).find((n) => n.id === 'RULE-001');
+  assert.deepEqual([rule.status, rule.provenance.map((pv) => `${pv.src} ${pv.anchor}`)], ['conflict', ['SRC-001 §2 ¶1', 'SRC-002 AC-1']]);
+  assert.equal(nodesOf(root).find((n) => n.id === 'Q-001').status, 'open');
+  assert.deepEqual(must(runFi(root, ['consolidate', 'csv', '--propose', '--json'])).json.clusters, []);
+});
+
+test('consolidate: a re-run keeps ids stable; restatements, new facts and updates', () => {
+  const root = buildModel();
+  must(runFi(root, ['claims', 'add', 'csv', write(root, 'again.json', [
+    claim('SRC-001#4', '§2 ¶3', 'RULE', 'Email required', 'Every row must have an email.', 'The email column is required.'),
+    claim('SRC-001#6', '§2 ¶5', 'RULE', 'Email format', 'An email must be a valid email address.', 'Format: a valid email address'),
+    claim('SRC-001#2', '§2 ¶1', 'RULE', 'Row limit per file', 'Each file may hold up to 10,000 rows.', 'Files are limited to 10,000 rows.'),
+  ])]));
+  const proposal = must(runFi(root, ['consolidate', 'csv', '--propose', '--json'])).json;
+  assert.deepEqual(proposal.clusters.map((k) => [k.id, k.existing, k.suggest]), [
+    ['K-001', 'RULE-003', 'same'], ['K-002', null, 'new'], ['K-003', 'RULE-001', 'update?'],
+  ]);
+  const statement = 'An import file may contain at most 10,000 rows (FRD, restated) or 5,000 rows (story 2104).';
+  const r = must(runFi(root, ['consolidate', 'csv', '--apply', write(root, 'd2.json', { 'K-003': { action: 'existing', statement } }), '--json'])).json;
+  assert.deepEqual([r.created, r.updated], [['RULE-006'], ['RULE-001']]);
+  const byId = new Map(nodesOf(root).map((n) => [n.id, n]));
+  assert.deepEqual([byId.get('RULE-001').rev, byId.get('RULE-001').statement, byId.get('RULE-001').status], [2, statement, 'conflict']);
+  assert.equal(byId.get('RULE-003').rev, 1);
+});
+
+test('consolidate: a proposal made before new claims arrived is refused; drop needs a reason', () => {
+  const root = prepare();
+  must(runFi(root, ['consolidate', 'csv', '--propose']));
+  must(runFi(root, ['claims', 'add', 'csv', write(root, 'late.json', [
+    claim('SRC-002#2', 'description ¶2', 'ACT', 'Manager', 'Managers can start imports.', 'Managers can also start imports.'),
+  ])]));
+  const stale = runFi(root, ['consolidate', 'csv', '--apply', write(root, 'd.json', DECISIONS)]);
+  assert.equal(stale.code, 1);
+  assert.match(stale.stderr, /changed since --propose/);
+  must(runFi(root, ['consolidate', 'csv', '--propose']));
+  assert.equal(runFi(root, ['consolidate', 'csv', '--apply', write(root, 'drop.json', { ...DECISIONS, 'K-009': { action: 'drop' } })]).code, 2);
+  const r = must(runFi(root, ['consolidate', 'csv', '--apply', write(root, 'drop2.json', { ...DECISIONS, 'K-009': { action: 'drop', reason: 'covered by the role matrix' } }), '--json'])).json;
+  assert.equal(r.dropped, 1);
+});
