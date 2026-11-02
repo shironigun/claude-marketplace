@@ -52,6 +52,7 @@ test('claims: one bad claim rejects the whole file', () => {
     claim({ chunk: 'SRC-001#99' }),
     claim({ status: 'assumed' }),
     claim({ chunk: 'SRC-009#1' }),
+    claim({ quote: '""' }),
   ]);
   assert.equal(r.code, 1);
   assert.deepEqual(r.json.errors, [
@@ -60,6 +61,7 @@ test('claims: one bad claim rejects the whole file', () => {
     'claim 4: no chunk SRC-001#99',
     'claim 5: status must be confirmed or open; extractors do not infer',
     'claim 6: no source SRC-009',
+    'claim 7: quote has no words',
   ]);
   assert.deepEqual(loadClaims(workspacePaths(root, 'csv')), []);
   fs.writeFileSync(path.join(root, 'empty.json'), '[]');
@@ -76,12 +78,18 @@ test('claims: code facts cite the repository with a path:line@commit anchor', ()
   git('init', '-q');
   git('add', '.');
   git('-c', 'user.name=t', '-c', 'user.email=t@example.com', 'commit', '-qm', 'x');
+  const head = execFileSync('git', ['-C', app, 'rev-parse', 'HEAD'], { encoding: 'utf8' }).trim();
   assert.equal(runFi(root, ['ingest', 'csv', '--repo', 'app']).code, 0);
-  const code = claim({ chunk: 'SRC-003', anchor: 'rows.js:1@1a2b3c4', quote: 'const MAX_ROWS = 10000;' });
+  const code = claim({ chunk: 'SRC-003', anchor: `rows.js:1@${head.slice(0, 7)}`, quote: 'const MAX_ROWS = 10000;' });
   assert.equal(add(root, 'code.json', [code]).json.unverified, 1);
-  const r = add(root, 'bad.json', [claim({ chunk: 'SRC-003', anchor: 'rows.js line 1' }), claim({ chunk: 'SRC-003#1' })]);
+  const r = add(root, 'bad.json', [
+    claim({ chunk: 'SRC-003', anchor: 'rows.js line 1' }),
+    claim({ chunk: 'SRC-003#1' }),
+    claim({ chunk: 'SRC-003', anchor: 'rows.js:1@1a2b3c4' }),
+  ]);
   assert.deepEqual(r.json.errors, [
     'claim 1: code anchor "rows.js line 1" must look like path/file.ts:42@1a2b3c4',
     'claim 2: code claims cite the source id SRC-003, not a chunk',
+    `claim 3: anchor commit 1a2b3c4 is not SRC-003's commit ${head.slice(0, 7)}`,
   ]);
 });
