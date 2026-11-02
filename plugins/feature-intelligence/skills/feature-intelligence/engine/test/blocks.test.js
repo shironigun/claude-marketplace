@@ -98,4 +98,6 @@ test('html: text is never read as Markdown; odd input is safe', () => {
   assert.deepEqual(t('<p>```</p><h2>Next</h2><p>Body</p>'), ['```', 'Body']);
   assert.equal(decodeEntities('&constructor;'), '&constructor;');
   assert.deepEqual(htmlBlocks(undefined), []);
+  assert.deepEqual(htmlBlocks('<p>a <fi-pre 9> b <fi-table 0> c</fi-table></p>'), [{ kind: 'para', text: 'a <fi-pre 9> b <fi-table 0> c</fi-table>' }]);
+  assert.deepEqual(htmlBlocks('<fi-pre>'), [{ kind: 'para', text: '<fi-pre>' }]);
 });

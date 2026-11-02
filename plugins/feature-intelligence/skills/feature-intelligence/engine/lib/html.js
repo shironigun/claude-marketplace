@@ -75,9 +75,11 @@ function tableBlocks(table) {
 // Reads HTML into the blocks markdownBlocks produces, without going through Markdown, so no text is ever read as
 // Markdown syntax. Inside a list item or a heading everything is inline text: line breaks and block tags become spaces.
 function htmlBlocks(html) {
+  // The <fi-pre N> and <fi-table N> markers are the converter's own, so any "<fi-" in the input is turned into text.
   const cleaned = String(html ?? '')
     .replace(/<!--[\s\S]*?-->/g, '')
-    .replace(/<(script|style|head|noscript|template)\b[\s\S]*?<\/\1\s*>/gi, '');
+    .replace(/<(script|style|head|noscript|template)\b[\s\S]*?<\/\1\s*>/gi, '')
+    .replace(/<(\/?fi-)/gi, '&lt;$1');
   const { html: rest, tables } = takeTables(cleaned);
   const pres = [];
   const source = rest.replace(/<pre\b[^>]*>([\s\S]*?)<\/pre\s*>/gi, (m, body) => {
