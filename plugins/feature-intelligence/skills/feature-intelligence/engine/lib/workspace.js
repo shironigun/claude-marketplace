@@ -1,6 +1,7 @@
 'use strict';
 const fs = require('fs');
 const path = require('path');
+const crypto = require('crypto');
 const { readJson, writeJson, readJsonl, writeJsonl, writeFileAtomic } = require('./jsonl');
 const { compareIds } = require('./ids');
 const { workspacePaths } = require('./paths');
@@ -31,19 +32,22 @@ function ensureGitignore(file) {
 function initWorkspace(root, slug, { mode, name, now }) {
   if (!MODES.includes(mode)) throw usageError('--mode must be new or existing');
   const p = workspacePaths(root, slug);
-  if (fs.existsSync(p.manifest)) throw checkError(`workspace ${slug} already exists; see fi status ${slug}`);
-  const manifest = {
-    slug, name: name || slug, mode, lensDefault: 'all', version: 0, artifactUrl: null,
-    coverage: { chunks: 0, covered: 0, setAside: 0 }, created: now.slice(0, 10), lastSync: null, boardLastReviewed: null,
-  };
-  writeJson(p.sources, []);
-  for (const f of [p.nodes, p.links, p.decisions]) writeFileAtomic(f, '');
-  if (mode === 'new') writeJson(p.tickets, {});
-  writeJson(p.manifest, manifest);
-  const profileCreated = !fs.existsSync(p.profile);
-  if (profileCreated) writeJson(p.profile, PROFILE_STUB);
-  const gitignoreUpdated = ensureGitignore(p.gitignore);
-  return { paths: p, manifest, profileCreated, gitignoreUpdated };
+  return withLock(p, () => {
+    if (fs.existsSync(p.manifest)) throw checkError(`workspace ${slug} already exists; see fi status ${slug}`);
+    // The .gitignore entry comes first, so the profile (which will hold org and project names) is never left un-ignored.
+    const gitignoreUpdated = ensureGitignore(p.gitignore);
+    const manifest = {
+      slug, name: name || slug, mode, lensDefault: 'all', version: 0, artifactUrl: null,
+      coverage: { chunks: 0, covered: 0, setAside: 0 }, created: now.slice(0, 10), lastSync: null, boardLastReviewed: null,
+    };
+    writeJson(p.sources, []);
+    for (const f of [p.nodes, p.links, p.decisions]) writeFileAtomic(f, '');
+    if (mode === 'new') writeJson(p.tickets, {});
+    writeJson(p.manifest, manifest);
+    const profileCreated = !fs.existsSync(p.profile);
+    if (profileCreated) writeJson(p.profile, PROFILE_STUB);
+    return { paths: p, manifest, profileCreated, gitignoreUpdated };
+  });
 }
 
 function loadWorkspace(root, slug) {
@@ -70,34 +74,81 @@ function saveModel(p, { nodes, links }) {
   writeJsonl(p.links, [...unique.values()].sort((a, b) => compareIds(a.from, b.from) || byType(a, b) || compareIds(a.to, b.to)));
 }
 
-// One writer at a time per workspace. A lock older than a minute is from a process that died.
-function withLock(p, fn) {
+const LOCK_TIMEOUT_MS = 15000;
+const LOCK_STALE_MS = 60000;
+
+const sleep = (ms) => Atomics.wait(new Int32Array(new SharedArrayBuffer(4)), 0, 0, ms);
+
+function readLock(file) {
+  try {
+    return fs.readFileSync(file, 'utf8');
+  } catch {
+    return null;
+  }
+}
+
+// Windows can refuse a delete for a moment while another process has the file open; retry briefly.
+function removeQuietly(file) {
+  for (let i = 0; i < 5; i += 1) {
+    try {
+      fs.rmSync(file, { force: true });
+      return;
+    } catch {
+      sleep(20);
+    }
+  }
+}
+
+// Moves a stale lock aside with an atomic rename, so only one waiter can take it over. If what was moved is not the
+// stale holder's token (a live holder replaced it in between), it is put back; linkSync refuses to overwrite a lock
+// that someone created meanwhile.
+function takeOver(lock, staleToken, token) {
+  const aside = `${lock}.stale-${token}`;
+  try {
+    fs.renameSync(lock, aside);
+  } catch {
+    return; // another waiter moved it first, or it was released
+  }
+  if (readLock(aside) !== staleToken) {
+    try {
+      fs.linkSync(aside, lock);
+    } catch {
+      // A new holder exists already; nothing to restore.
+    }
+  }
+  removeQuietly(aside);
+}
+
+// One writer at a time per workspace: parallel subagents call fi together (spec 6.2). The lock file holds a token
+// unique to its holder, and only that holder removes it. A lock older than staleMs belongs to a process that died.
+// fn must be synchronous, and withLock is not reentrant.
+function withLock(p, fn, { timeoutMs = LOCK_TIMEOUT_MS, staleMs = LOCK_STALE_MS } = {}) {
   fs.mkdirSync(p.cache, { recursive: true });
-  const deadline = Date.now() + 15000;
+  const token = `${process.pid}-${crypto.randomBytes(6).toString('hex')}`;
+  const deadline = Date.now() + timeoutMs;
   for (;;) {
     try {
-      fs.writeFileSync(p.lock, String(process.pid), { flag: 'wx' });
+      fs.writeFileSync(p.lock, token, { flag: 'wx' });
       break;
     } catch (e) {
-      if (e.code !== 'EEXIST') throw e;
-      let age;
-      try {
-        age = Date.now() - fs.statSync(p.lock).mtimeMs;
-      } catch {
-        continue;
-      }
-      if (age > 60000) {
-        fs.rmSync(p.lock, { force: true });
-        continue;
-      }
-      if (Date.now() > deadline) throw checkError(`workspace ${p.slug} is busy (${p.lock}); retry, or delete the lock if no fi is running`);
-      Atomics.wait(new Int32Array(new SharedArrayBuffer(4)), 0, 0, 50);
+      // EPERM and EBUSY: Windows refuses to create a file that is still being deleted.
+      if (!['EEXIST', 'EPERM', 'EBUSY'].includes(e.code)) throw e;
     }
+    if (Date.now() > deadline) throw checkError(`workspace ${p.slug} is busy (${p.lock}); retry, or delete the lock if no fi is running`);
+    const seen = readLock(p.lock); // read the token before judging its age, so a fresh lock is never taken for the stale one
+    let stat;
+    try {
+      stat = fs.statSync(p.lock);
+    } catch {
+      continue; // released meanwhile: try again at once
+    }
+    if (seen !== null && Date.now() - stat.mtimeMs > staleMs) takeOver(p.lock, seen, token);
+    else sleep(50);
   }
   try {
     return fn();
   } finally {
-    fs.rmSync(p.lock, { force: true });
+    if (readLock(p.lock) === token) removeQuietly(p.lock);
   }
 }
 
