@@ -57,3 +57,48 @@ test('pdf: many stream keywords without endstream finish fast', () => {
   assert.equal(pdfPageCount(pdf), null);
   assert.ok(Date.now() - started < 1000, `took ${Date.now() - started} ms`);
 });
+
+test('pdf: stream blocks with no obj keyword finish fast', () => {
+  const pdf = Buffer.from('%PDF-1.4\n' + 'stream\nendstream\n'.repeat(60000), 'latin1');
+  const started = Date.now();
+  assert.equal(pdfPageCount(pdf), null);
+  assert.ok(Date.now() - started < 1000, `took ${Date.now() - started} ms`);
+});
+
+test('pdf: an inflate budget of zero reads no object stream', () => {
+  const tree = zlib.deflateSync(Buffer.from('<< /Type /Pages /Kids [4 0 R] /Count 7 >>'));
+  const pdf = Buffer.concat([
+    Buffer.from(`%PDF-1.5\n1 0 obj\n<< /Type /ObjStm /Filter /FlateDecode /Length ${tree.length} >>\nstream\n`, 'latin1'),
+    tree,
+    Buffer.from('\nendstream\nendobj\n%%EOF\n', 'latin1'),
+  ]);
+  assert.equal(pdfPageCount(pdf), 7);
+  assert.equal(pdfPageCount(pdf, { inflateBudget: 0 }), null);
+});
+
+test('pdf: object streams are not read once the inflate budget is used up', () => {
+  const objStm = (n) => {
+    const body = zlib.deflateSync(Buffer.from(`<< /Type /Pages /Count ${n} >>`));
+    return Buffer.concat([
+      Buffer.from(`${n} 0 obj\n<< /Type /ObjStm /Filter /FlateDecode /Length ${body.length} >>\nstream\n`, 'latin1'),
+      body,
+      Buffer.from('\nendstream\nendobj\n', 'latin1'),
+    ]);
+  };
+  const pdf = Buffer.concat([Buffer.from('%PDF-1.5\n', 'latin1'), objStm(1), objStm(2), objStm(3)]);
+  // Each stream inflates to 27 bytes, so a budget of 40 covers the first two; the third is never read.
+  assert.equal(pdfPageCount(pdf, { inflateBudget: 40 }), 2);
+});
+
+test('pdf: a stream over the per-stream cap still uses up the budget', () => {
+  const bomb = zlib.deflateSync(Buffer.alloc(65 * 1024 * 1024, 0x20));
+  const small = zlib.deflateSync(Buffer.from('<< /Type /Pages /Count 5 >>'));
+  const objStm = (n, body) => Buffer.concat([
+    Buffer.from(`${n} 0 obj\n<< /Type /ObjStm /Filter /FlateDecode /Length ${body.length} >>\nstream\n`, 'latin1'),
+    body,
+    Buffer.from('\nendstream\nendobj\n', 'latin1'),
+  ]);
+  const pdf = Buffer.concat([Buffer.from('%PDF-1.5\n', 'latin1'), objStm(1, bomb), objStm(2, bomb), objStm(3, small)]);
+  // Each oversized attempt uses up its 64 MB share of the 128 MB budget, so the small stream is never read.
+  assert.equal(pdfPageCount(pdf), null);
+});
