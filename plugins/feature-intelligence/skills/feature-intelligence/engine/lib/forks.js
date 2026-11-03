@@ -3,7 +3,8 @@ const fs = require('fs');
 const path = require('path');
 const { execFileSync } = require('child_process');
 
-const STAMP_RE = /forked-from:\s*([\w.-]+)\/([^\s@;]+)\s*@\s*([0-9a-f]{7,40})\s*;\s*forked-on:\s*(\d{4}-\d{2}-\d{2})\s*;\s*local-changes:\s*([^\n"]*?)\s*(?:-->|")?\s*,?\s*$/m;
+// A stamp opens a line as a comment (<!--, //) or the JSON "_fork" value, so the same words inside a string are not one.
+const STAMP_RE = /^[ \t]*(?:<!--|\/\/|"_fork"\s*:\s*")[ \t]*forked-from:\s*([\w.-]+)\/([^\s@;]+)\s*@\s*([0-9a-f]{7,40})\s*;\s*forked-on:\s*(\d{4}-\d{2}-\d{2})\s*;\s*local-changes:\s*([^\n"]*?)\s*(?:-->|")?\s*,?\s*$/m;
 const TEXT_FILES = new Set(['.md', '.js', '.cjs', '.mjs', '.ts', '.json', '.py', '.txt', '.css', '.html']);
 const SKIP_DIRS = new Set(['node_modules', '.git']);
 
@@ -22,7 +23,8 @@ function walk(dir, out = []) {
 // The stamp near the top of a forked file (spec 9.4), or null.
 function readStamp(file) {
   const m = STAMP_RE.exec(fs.readFileSync(file, 'utf8').slice(0, 2000));
-  return m ? { plugin: m[1], path: m[2], commit: m[3], forkedOn: m[4], localChanges: m[5] } : null;
+  if (!m || m[2].split('/').includes('..')) return null; // a source path never leaves its plugin
+  return { plugin: m[1], path: m[2], commit: m[3], forkedOn: m[4], localChanges: m[5] };
 }
 
 const git = (cwd, args) => execFileSync('git', ['-C', cwd, ...args], { encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] }).trim();
