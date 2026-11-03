@@ -1,0 +1,21 @@
+# Tools the feature-intelligence playbooks call (spec 4.4), checked against @azure-devops/mcp@2.10.0 with list-mcp-tools.js.
+# Read a story with its context
+wit_get_work_item
+wit_get_work_items_batch_by_ids
+wit_list_work_item_comments
+wit_list_work_item_revisions
+# Find related items; recover created items by tag
+wit_query_by_wiql
+search_workitem
+# Read the process
+wit_get_work_item_type
+# Choose where
+core_list_project_teams
+work_list_team_iterations
+# Choose who
+core_get_identity_ids
+# Create the tree (tickets flow, after gate 2 only)
+wit_create_work_item
+wit_add_child_work_items
+wit_work_items_link
+wit_update_work_item

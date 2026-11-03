@@ -54,6 +54,38 @@ first, a prose budget, dated issues, no secrets anywhere, and no code or interna
    for overflow and overlapping or clipped labels at desktop and phone width.
 5. **Publish** with the Artifact tool, private until you share it.
 
+## Engine (in development)
+
+`skills/feature-intelligence/engine/` holds `fi`, the command-line engine of the redesign (Node 20 or later, no
+dependencies). It keeps the Feature Model on disk and is the only thing that writes it; Claude reads the sources,
+makes the judgments, and passes its results to `fi`. Run
+`node plugins/feature-intelligence/skills/feature-intelligence/engine/fi.js help` for the commands:
+
+| Command | Does |
+|---|---|
+| `init` | Creates `knowledge-base/features/<slug>/`, the git-ignored profile stub and the `.gitignore` entry |
+| `ingest` | Registers a source and caches its chunks: Markdown, text, HTML, Word, PDF, images, ADO work items, pasted text, a repository |
+| `claims add` | Checks extracted claims against their chunks (anchor and quote) and stores them |
+| `consolidate` | Clusters claims, suggests merges and conflicts, and applies the decisions with stable ids |
+| `add`, `validate` | Adds derived nodes, links and decisions; checks the whole model |
+| `coverage`, `set-aside` | Prove every chunk is cited or set aside with a reason |
+| `query`, `trace`, `questions`, `status` | Slices of the model, chains, ranked open questions, where things stand |
+| `forks` | Lists forked files and upstream changes since each was forked |
+
+Tests: `node --test plugins/feature-intelligence/skills/feature-intelligence/engine/test/*.test.js`
+
+### Azure DevOps
+
+The plugin bundles the official Azure DevOps MCP server (`@azure-devops/mcp`, pinned to 2.10.0). Set `ADO_ORG` to
+your organization name in the shell that starts Claude Code. You sign in in a browser the first time, and no token
+is stored. `.mcp.json` uses the Windows launcher; on macOS or Linux, change the `ado` entry to:
+
+```json
+"ado": {"type": "stdio", "command": "npx", "args": ["-y", "@azure-devops/mcp@2.10.0", "${ADO_ORG}", "--authentication", "interactive"]}
+```
+
+Without `ADO_ORG` the server does not start; everything except reading and creating work items still works.
+
 ## Install
 
 Not in the marketplace yet. To try it during development, load it straight from a clone:

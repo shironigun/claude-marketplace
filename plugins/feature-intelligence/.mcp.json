@@ -1,0 +1,11 @@
+{
+  "_comment": "No credentials or product data. ADO_ORG (your Azure DevOps organization name) is read from the shell that starts Claude Code; sign-in is interactive in a browser, so this file needs no credentials. This is the Windows launcher (cmd /c npx); on macOS or Linux use \"command\": \"npx\" and drop \"/c\" and \"npx\" from args (see README.md). The fi engine never calls this server: Claude does, and passes what it read to fi.",
+  "_fork": "forked-from: qa-engineering/.mcp.json @ 2931a4b; forked-on: 2026-11-03; local-changes: Windows cmd /c launcher; ado server only",
+  "mcpServers": {
+    "ado": {
+      "type": "stdio",
+      "command": "cmd",
+      "args": ["/c", "npx", "-y", "@azure-devops/mcp@2.10.0", "${ADO_ORG}", "--authentication", "interactive"]
+    }
+  }
+}
