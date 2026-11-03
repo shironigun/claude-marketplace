@@ -23,7 +23,8 @@ function rankQuestions({ nodes, links }) {
   }
   const ranked = [...live.values()].filter((n) => n.type === 'Q' && !answered.has(n.id)).map((q) => {
     const blocked = blocks.get(q.id) || [];
-    const radius = new Set([q.id]);
+    // The question joins the radius only after the walk, so nodes resting on the question itself are reached too.
+    const radius = new Set();
     const queue = [...blocked];
     while (queue.length) {
       const id = queue.shift();
@@ -31,6 +32,7 @@ function rankQuestions({ nodes, links }) {
       radius.add(id);
       for (const d of dependents.get(id) || []) if (!radius.has(d)) queue.push(d);
     }
+    radius.add(q.id);
     const severity = Math.max(...[...radius].map((id) => WEIGHTS[live.get(id).type] || 1));
     return {
       id: q.id, title: q.title, statement: q.statement, blocks: blocked,
