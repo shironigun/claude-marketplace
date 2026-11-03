@@ -22,6 +22,7 @@ test('consolidate: propose suggests; undecided clusters stop --apply; decisions 
   assert.match(undecided.stderr, /K-002 \(conflict\?\), K-004 \(merge\?\)/);
   assert.equal(runFi(root, ['consolidate', 'csv', '--apply', write(root, 'stray.json', { 'K-099': { action: 'merge' } })]).code, 2);
   const applied = must(runFi(root, ['consolidate', 'csv', '--apply', write(root, 'd.json', DECISIONS), '--json'])).json;
+  assert.equal(applied.clusterCount, 8);
   assert.deepEqual(applied.created, ['GOAL-001', 'RULE-001', 'RULE-002', 'RULE-003', 'RULE-004', 'RULE-005', 'Q-001', 'STORY-001', 'STORY-002']);
   const rule = nodesOf(root).find((n) => n.id === 'RULE-001');
   assert.deepEqual([rule.status, rule.provenance.map((pv) => `${pv.src} ${pv.anchor}`)], ['conflict', ['SRC-001 §2 ¶1', 'SRC-002 AC-1']]);

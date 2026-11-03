@@ -13,7 +13,7 @@ test('e2e: from sources to a fully accounted model with ranked questions', () =>
   const slug = 'csv-customer-import';
   fi(root, 'init', slug, '--mode', 'new', '--name', 'Import customers from CSV');
   fs.copyFileSync(path.join(FIXTURES, 'mini-frd.md'), path.join(root, 'frd.md'));
-  assert.equal(fi(root, 'ingest', slug, 'frd.md').sources[0].chunks, 9);
+  assert.equal(fi(root, 'ingest', slug, 'frd.md').sources[0].chunkCount, 9);
   assert.equal(fi(root, 'ingest', slug, '--ado', path.join(FIXTURES, 'ado-stories.json')).sources.length, 2);
 
   // First extraction pass; two clusters need a decision.

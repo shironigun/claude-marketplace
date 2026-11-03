@@ -24,7 +24,7 @@ module.exports = {
     return {
       text: `Wrote ${r.changed.length} nodes (${r.changed.join(', ') || 'none'}), ${r.links} links, removed ${r.removed} links, `
         + `${r.decisions.length} decisions${ids ? `\nIds: ${ids}` : ''}`,
-      json: { ids: r.ids, changed: r.changed, links: r.links, removed: r.removed, decisions: r.decisions },
+      json: { ids: r.ids, changed: r.changed, linksAdded: r.links, linksRemoved: r.removed, decisions: r.decisions },
     };
   },
 };

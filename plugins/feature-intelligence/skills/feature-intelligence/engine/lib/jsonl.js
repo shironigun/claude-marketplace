@@ -36,11 +36,6 @@ function writeJsonl(file, rows) {
   writeFileAtomic(file, rows.map((r) => JSON.stringify(r)).join('\n') + (rows.length ? '\n' : ''));
 }
 
-function appendJsonl(file, rows) {
-  fs.mkdirSync(path.dirname(file), { recursive: true });
-  fs.appendFileSync(file, rows.map((r) => `${JSON.stringify(r)}\n`).join(''));
-}
-
 function readJson(file, fallback) {
   if (!fs.existsSync(file)) return fallback;
   const text = readText(fs.readFileSync(file));
@@ -55,4 +50,4 @@ function writeJson(file, value) {
   writeFileAtomic(file, `${JSON.stringify(value, null, 2)}\n`);
 }
 
-module.exports = { writeFileAtomic, readJsonl, writeJsonl, appendJsonl, readJson, writeJson };
+module.exports = { writeFileAtomic, readJsonl, writeJsonl, readJson, writeJson };
