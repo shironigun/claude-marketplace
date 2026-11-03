@@ -109,3 +109,9 @@ test('html: declarations vanish, other tags never split a sentence, an unclosed 
   assert.deepEqual(t('<p>Click the <img src="gear.png"> icon to <dfn>open</dfn> settings.</p>'), ['¶1 Click the icon to open settings.']);
   assert.deepEqual(t('<h2>A</h2><ul><li>One<li>Two</ul><h2>B</h2><p>b1</p>'), ['§A ¶1 One', '§A ¶2 Two', '§B ¶1 b1']);
 });
+
+test('html: an unclosed "<!" inside a script does not leak the script code', () => {
+  const blocks = htmlBlocks('<p>Visible text.</p><script>var a = "<!"; leak_the_code();</script><p>After.</p>');
+  assert.ok(!JSON.stringify(blocks).includes('leak_the_code'));
+  assert.deepEqual(blocks.map((b) => b.text), ['Visible text.', 'After.']);
+});

@@ -1,6 +1,7 @@
 'use strict';
 const test = require('node:test');
 const assert = require('node:assert/strict');
+const fs = require('fs');
 const { runFi } = require('./helpers');
 const { DECISIONS, claim, must, write, prepare, buildModel } = require('./model-fixture');
 const { workspacePaths } = require('../lib/paths');
@@ -86,4 +87,21 @@ test('consolidate: negation, modality and later similar claims need a decision; 
   const decided = { 'K-001': { action: 'conflict' }, 'K-002': { action: 'conflict' } };
   const r = must(runFi(root, ['consolidate', 'csv', '--apply', write(root, 'ok.json', decided), '--json'])).json;
   assert.deepEqual([r.created, r.updated.sort()], [[], ['RULE-002', 'RULE-005']]);
+});
+
+test('consolidate: --apply on a model holding one id twice exits 1 and writes nothing', () => {
+  const root = prepare();
+  const p = workspacePaths(root, 'csv');
+  const node = JSON.stringify({
+    id: 'GOAL-001', type: 'GOAL', title: 'Import customers from a file', statement: 'Admins can import customers from a CSV file.', status: 'confirmed',
+    provenance: [{ src: 'SRC-001', anchor: '§1 ¶1', quote: 'Admins import customers from a CSV file' }], rev: 1, updated: '2026-10-30',
+  });
+  fs.writeFileSync(p.nodes, `${node}\n${node}\n`);
+  const proposal = must(runFi(root, ['consolidate', 'csv', '--propose', '--json'])).json;
+  const decisions = Object.fromEntries(proposal.clusters.map((k) => [k.id, { action: 'separate' }]));
+  const before = fs.readFileSync(p.nodes, 'utf8');
+  const r = runFi(root, ['consolidate', 'csv', '--apply', write(root, 'd.json', decisions)]);
+  assert.equal(r.code, 1);
+  assert.match(r.stderr, /holds GOAL-001 more than once/);
+  assert.equal(fs.readFileSync(p.nodes, 'utf8'), before);
 });

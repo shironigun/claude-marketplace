@@ -46,7 +46,8 @@ function listTools(command, args, timeoutMs) {
     timer = setTimeout(() => finish(new Error(`no tool list within ${timeoutMs / 1000}s`)), timeoutMs);
     const send = (msg) => child.stdin.write(`${JSON.stringify(msg)}\n`);
     child.on('error', finish);
-    child.on('exit', (code) => finish(new Error(`the server exited (${code}) before listing its tools`)));
+    child.stdin.on('error', finish); // a server that closes its input early (EPIPE) is a failure, not a crash
+    child.on('close', (code) => finish(new Error(`the server exited (${code}) before listing its tools`)));
     child.stdout.setEncoding('utf8');
     child.stdout.on('data', (chunk) => {
       buffer += chunk;

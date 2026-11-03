@@ -2,6 +2,7 @@
 const { loadWorkspace, saveManifest, withLock } = require('../workspace');
 const { computeCoverage } = require('../coverage');
 const { numberFlag } = require('../args');
+const { oneLine } = require('../query');
 
 const pct = (r) => `${(r * 100).toFixed(1)}%`;
 const short = (t) => (t == null ? '(no text: read the page or image)' : t.length > 80 ? `${t.slice(0, 77)}...` : t);
@@ -30,6 +31,10 @@ module.exports = {
       lines.push(`Next: send these chunks to an extractor once; set aside what carries nothing: fi set-aside ${slug} <chunk...> --reason <text>`);
     }
     if (!pass) lines.push(`Below the minimum of ${pct(min)}.`);
-    return { text: lines.join('\n'), json: { ...c, min: min === undefined ? null : min, pass }, exitCode: pass ? 0 : 1 };
+    // The JSON carries a preview of each unaccounted chunk, never its full text.
+    const unaccounted = c.unaccounted.map((u) => ({
+      id: u.id, anchor: u.anchor, unreadable: u.unreadable, preview: u.text == null ? null : oneLine(u.text).slice(0, 80),
+    }));
+    return { text: lines.join('\n'), json: { ...c, unaccounted, min: min === undefined ? null : min, pass }, exitCode: pass ? 0 : 1 };
   },
 };

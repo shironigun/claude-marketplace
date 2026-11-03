@@ -2,7 +2,7 @@
 const { nextId } = require('./ids');
 const { MODEL_TYPES } = require('./schema');
 const { validateModel } = require('./validate');
-const { linkKey } = require('./workspace');
+const { linkKey, assertUniqueIds } = require('./workspace');
 const { checkError, usageError } = require('./errors');
 
 const TEMP_RE = /^\+[\w-]+$/;
@@ -18,12 +18,7 @@ function applyAdd(state, input, { now }) {
     if (!Array.isArray(v) || v.some((x) => !x || typeof x !== 'object' || Array.isArray(x))) throw usageError(`${k} must be a list of objects`);
     return v;
   });
-  const counts = new Map();
-  for (const n of state.nodes) counts.set(n.id, (counts.get(n.id) || 0) + 1);
-  const twins = [...counts].filter(([, c]) => c > 1).map(([id]) => id);
-  if (twins.length) {
-    throw checkError(`the model holds ${twins.join(', ')} more than once; fix model/nodes.jsonl by hand first, since any write would keep only one copy`);
-  }
+  assertUniqueIds(state.nodes);
   const today = now.slice(0, 10);
   const nodes = new Map(state.nodes.map((n) => [n.id, n]));
   const nodeIds = state.nodes.map((n) => n.id);

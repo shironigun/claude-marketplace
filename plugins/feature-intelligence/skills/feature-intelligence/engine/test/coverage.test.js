@@ -31,6 +31,20 @@ test('coverage: an unreadable source is unaccounted; superseded nodes do not cou
   must(runFi(root, ['add', 'csv', write(root, 'sup.json', { nodes: [{ id: 'RULE-002', supersededBy: 'RULE-001' }] })]));
   const c = must(runFi(root, ['coverage', 'csv', '--json'])).json;
   assert.deepEqual([c.chunks, c.covered], [18, 9]);
-  assert.deepEqual(c.unaccounted.find((u) => u.id === 'SRC-004#1'), { id: 'SRC-004#1', anchor: 'whole file', text: null, unreadable: true });
+  assert.deepEqual(c.unaccounted.find((u) => u.id === 'SRC-004#1'), { id: 'SRC-004#1', anchor: 'whole file', unreadable: true, preview: null });
   assert.match(runFi(root, ['coverage', 'csv']).stdout, /SRC-004#1 whole file: \(unreadable source\)/);
+});
+
+test('coverage: the JSON lists each unaccounted chunk with a short preview, never the full text', () => {
+  const root = buildModel();
+  const first = must(runFi(root, ['coverage', 'csv', '--json'])).json;
+  for (const u of first.unaccounted) {
+    assert.deepEqual(Object.keys(u).sort(), ['anchor', 'id', 'preview', 'unreadable']);
+    assert.ok(u.preview === null || u.preview.length <= 80);
+  }
+  fs.writeFileSync(path.join(root, 'long.md'), `# Long\n\n${'word '.repeat(60)}\n`);
+  must(runFi(root, ['ingest', 'csv', 'long.md']));
+  const after = must(runFi(root, ['coverage', 'csv', '--json'])).json;
+  const preview = after.unaccounted.find((u) => u.id.startsWith('SRC-004#')).preview;
+  assert.equal(preview.length, 80);
 });

@@ -22,17 +22,18 @@ function rowCells(rowXml) {
   const cells = [];
   for (const c of rowXml.matchAll(/<w:tc\b[^>]*>([\s\S]*?)<\/w:tc>/g)) {
     cells.push([...c[1].matchAll(/<w:p\b[^>]*>([\s\S]*?)<\/w:p>/g)].map((p) => clean(paragraphText(p[0]))).filter(Boolean).join(' '));
-    const span = Number((/<w:gridSpan w:val="(\d+)"/.exec(c[1]) || [])[1] || 1);
+    const span = Math.min(64, Number((/<w:gridSpan w:val="(\d+)"/.exec(c[1]) || [])[1] || 1));
     for (let k = 1; k < span; k += 1) cells.push('');
   }
   return cells;
 }
 
 function tableBlocks(tableXml, blocks) {
-  const [first, ...rest] = [...tableXml.matchAll(/<w:tr\b[^>]*>([\s\S]*?)<\/w:tr>/g)].map((r) => rowCells(r[1]));
+  const [first, ...all] = [...tableXml.matchAll(/<w:tr\b[^>]*>([\s\S]*?)<\/w:tr>/g)].map((r) => rowCells(r[1]));
+  const rest = all.filter((cells) => cells.some((c) => c)); // a blank row carries nothing
   const header = first && first.some((c) => c) ? first : null; // an all-blank first row is no header (writeDocx writes one for a headerless table)
   if (!rest.length && header) blocks.push({ kind: 'row', cells: header, header: null }); // a one-row table still says something
-  for (const cells of rest) if (cells.some((c) => c)) blocks.push({ kind: 'row', cells, header }); // a blank row carries nothing
+  for (const cells of rest) blocks.push({ kind: 'row', cells, header });
 }
 
 function paragraphBlock(xml, blocks) {
