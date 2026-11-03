@@ -5,7 +5,7 @@ const fs = require('fs');
 const path = require('path');
 const { execFileSync } = require('child_process');
 const { tempDir, runFi } = require('./helpers');
-const { readStamp } = require('../lib/forks');
+const { readStamp, checkForks } = require('../lib/forks');
 
 test('forks: stamps in Markdown, code and JSON', () => {
   const dir = tempDir();
@@ -53,4 +53,16 @@ test('forks: upstream commits since the stamp, absent sources, unknown commits, 
   fs.writeFileSync(path.join(alone, 'a.md'), `<!-- forked-from: up/skills/a.md @ ${base}; forked-on: 2026-10-30; local-changes: none -->\n`);
   const outside = runFi(alone, ['forks', '--plugin', '.', '--json'], { GIT_CEILING_DIRECTORIES: path.dirname(alone) });
   assert.deepEqual([outside.code, outside.json.forks.map((f) => f.state)], [0, ['no-repo']]);
+});
+
+test('forks: a stamp inside a string or with a path leaving the plugin is not a stamp', () => {
+  const dir = tempDir();
+  const file = (name, text) => {
+    fs.writeFileSync(path.join(dir, name), text);
+    return path.join(dir, name);
+  };
+  assert.equal(readStamp(file('e.js', "const s = '<!-- forked-from: up/a.md @ 1234567; forked-on: 2026-10-30; local-changes: none -->';\n")), null);
+  assert.equal(readStamp(file('f.md', '<!-- forked-from: up/../../etc/a.md @ 1234567; forked-on: 2026-10-30; local-changes: none -->\n')), null);
+  const plugin = path.join(__dirname, '..', '..', '..', '..');
+  assert.deepEqual(checkForks(plugin).filter((f) => f.file.includes('/test/')), []);
 });
