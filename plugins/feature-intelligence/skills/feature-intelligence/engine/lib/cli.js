@@ -12,7 +12,7 @@ function usage(commands) {
   return `Usage: fi <command> [args] [--json] [--root <dir>]\n\n${lines.join('\n')}\n`;
 }
 
-// Runs one command and returns the exit code: 0 success, 1 a check failed, 2 the command was used wrongly.
+// Runs one command and returns the exit code: 0 success, 1 a check failed, 2 the command was used wrongly, 3 an internal error.
 function main(argv, io) {
   const commands = loadCommands();
   const [name, ...rest] = argv;
@@ -40,9 +40,12 @@ function main(argv, io) {
     else if (result.text) io.stdout.write(`${result.text}\n`);
     return result.exitCode || 0;
   } catch (e) {
-    if (!(e instanceof FiError)) throw e;
-    io.stderr.write(`fi ${name}: ${e.message}\n`);
-    return e.code;
+    const known = e instanceof FiError;
+    const code = known ? e.code : 3;
+    const message = known ? e.message : `internal error: ${e && e.message !== undefined ? e.message : e}`;
+    io.stderr.write(`fi ${name}: ${message}\n`);
+    if (rest.includes('--json')) io.stdout.write(`${JSON.stringify({ error: { code, message } }, null, 2)}\n`);
+    return code;
   }
 }
 

@@ -1,6 +1,6 @@
 'use strict';
 const { loadSources, saveSources, loadChunks, loadModel } = require('./workspace');
-const { checkError } = require('./errors');
+const { checkError, usageError } = require('./errors');
 
 // Every "<source> <anchor>" a live node cites.
 function citedAnchors(nodes) {
@@ -47,11 +47,12 @@ function setAsideChunks(p, chunkIds, reason) {
   const byChunk = new Map();
   for (const s of sources) for (const c of s.chunks) byChunk.set(c.id, { s, c });
   const cited = citedAnchors(loadModel(p).nodes);
+  const unknown = chunkIds.filter((id) => !byChunk.has(id));
+  if (unknown.length) throw usageError(unknown.map((id) => `no chunk ${id}`).join('; '));
   const errors = [];
   for (const id of chunkIds) {
-    const hit = byChunk.get(id);
-    if (!hit) errors.push(`no chunk ${id}`);
-    else if (cited.has(`${hit.s.id} ${hit.c.anchor}`)) errors.push(`${id} is cited by the model; nothing to set aside`);
+    const { s, c } = byChunk.get(id);
+    if (cited.has(`${s.id} ${c.anchor}`)) errors.push(`${id} is cited by the model; nothing to set aside`);
   }
   if (errors.length) throw checkError(errors.join('; '));
   for (const id of chunkIds) byChunk.get(id).c.setAside = reason;

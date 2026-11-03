@@ -57,7 +57,11 @@ function loadWorkspace(root, slug) {
 }
 
 const saveManifest = (p, manifest) => writeJson(p.manifest, manifest);
-const loadSources = (p) => readJson(p.sources, []);
+function loadSources(p) {
+  const list = readJson(p.sources, []);
+  if (!Array.isArray(list)) throw checkError('sources.json must hold a list');
+  return list;
+}
 const saveSources = (p, list) => writeJson(p.sources, list);
 const loadChunks = (p, srcId) => readJsonl(path.join(p.chunks, `${srcId}.jsonl`));
 const saveChunks = (p, srcId, chunks) => writeJsonl(path.join(p.chunks, `${srcId}.jsonl`), chunks);
