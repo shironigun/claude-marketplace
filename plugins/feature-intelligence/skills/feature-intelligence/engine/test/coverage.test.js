@@ -21,7 +21,7 @@ test('coverage: counts, unaccounted chunks, the minimum, and set-aside', () => {
   assert.equal(cited.code, 1);
   assert.match(cited.stderr, /SRC-001#2 is cited by the model/);
   assert.equal(runFi(root, ['set-aside', 'csv', 'SRC-002#6']).code, 2);
-  assert.equal(runFi(root, ['set-aside', 'csv', 'SRC-009#1', '--reason', 'x']).code, 1);
+  assert.equal(runFi(root, ['set-aside', 'csv', 'SRC-009#1', '--reason', 'x']).code, 2);
 });
 
 test('coverage: an unreadable source is unaccounted; superseded nodes do not count', () => {

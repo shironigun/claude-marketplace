@@ -1,7 +1,8 @@
 'use strict';
 const { validateNode, validateLink, validateDecision } = require('./schema');
 const { normalizeQuote } = require('./text');
-const { loadModel, loadSources, loadChunks, loadDecisions } = require('./workspace');
+const { readJson } = require('./jsonl');
+const { loadModel, loadChunks, loadDecisions } = require('./workspace');
 
 const FLAG_RE = /^F-\d+$/;
 
@@ -12,7 +13,8 @@ function loadState(p) {
     if (!cache.has(srcId)) cache.set(srcId, new Map(loadChunks(p, srcId).map((c) => [c.anchor, c])));
     return cache.get(srcId);
   };
-  return { ...loadModel(p), sources: loadSources(p), decisions: loadDecisions(p), chunksAt };
+  // sources.json is read raw here, so validateModel can report a damaged one instead of throwing.
+  return { ...loadModel(p), sources: readJson(p.sources, []), decisions: loadDecisions(p), chunksAt };
 }
 
 function checkProvenance(n, state, sources, decisions, errors) {
