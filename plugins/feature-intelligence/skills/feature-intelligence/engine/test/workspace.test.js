@@ -153,3 +153,13 @@ test('init: runs under the workspace lock and clears a stale one', () => {
   assert.equal(fs.existsSync(p.lock), false);
   assert.equal(fs.existsSync(`${p.lock}.takeover`), false);
 });
+
+test('init: the .gitignore entry is appended; the existing bytes are never rewritten', () => {
+  const root = tempDir();
+  const before = Buffer.from([0x63, 0xe9, 0x0d, 0x0a, 0x61]); // not valid UTF-8, CRLF, no final newline
+  fs.writeFileSync(path.join(root, '.gitignore'), before);
+  assert.equal(runFi(root, ['init', 'csv', '--mode', 'new']).code, 0);
+  const after = fs.readFileSync(path.join(root, '.gitignore'));
+  assert.deepEqual(after.subarray(0, before.length), before);
+  assert.equal(after.subarray(before.length).toString(), '\n.feature-intelligence/\n');
+});

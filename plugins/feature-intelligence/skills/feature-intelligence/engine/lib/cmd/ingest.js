@@ -36,7 +36,7 @@ module.exports = {
       text: lines.join('\n'),
       json: {
         sources: results.map(({ source: s, skipped }) => ({
-          id: s.id, kind: s.kind, title: s.title, status: s.status, chunks: s.chunks.length, skipped,
+          id: s.id, kind: s.kind, title: s.title, status: s.status, chunkCount: s.chunks.length, skipped,
           ...(s.error ? { error: s.error } : {}), ...(s.origin && s.origin.dirty ? { dirty: true } : {}),
         })),
       },

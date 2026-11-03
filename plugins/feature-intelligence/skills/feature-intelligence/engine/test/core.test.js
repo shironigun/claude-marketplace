@@ -5,7 +5,7 @@ const fs = require('fs');
 const os = require('os');
 const path = require('path');
 const { parseId, formatId, nextId, compareIds } = require('../lib/ids');
-const { readJsonl, writeJsonl, appendJsonl, readJson, writeJson } = require('../lib/jsonl');
+const { readJsonl, writeJsonl, readJson, writeJson } = require('../lib/jsonl');
 const { sha256, shortHash } = require('../lib/hash');
 const { readText, normalizeQuote, wordCount, tokens, jaccard, numbers } = require('../lib/text');
 const { FiError, checkError, usageError } = require('../lib/errors');
@@ -20,12 +20,12 @@ test('ids: parse, format, next and natural order', () => {
   assert.deepEqual(['RULE-010', 'FR-002', 'RULE-002'].sort(compareIds), ['FR-002', 'RULE-002', 'RULE-010']);
 });
 
-test('jsonl: write, read, append, and a bad line names its line number', () => {
+test('jsonl: write, read, and a bad line names its line number', () => {
   const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'fi-core-'));
   const file = path.join(dir, 'a', 'rows.jsonl');
   assert.deepEqual(readJsonl(file), []);
   writeJsonl(file, [{ id: 'A' }, { id: 'B' }]);
-  appendJsonl(file, [{ id: 'C' }]);
+  fs.appendFileSync(file, `${JSON.stringify({ id: 'C' })}\n`);
   assert.deepEqual(readJsonl(file).map((r) => r.id), ['A', 'B', 'C']);
   fs.appendFileSync(file, '{broken\n');
   assert.throws(() => readJsonl(file), (e) => e.code === 1 && /rows\.jsonl:4: invalid JSON/.test(e.message));

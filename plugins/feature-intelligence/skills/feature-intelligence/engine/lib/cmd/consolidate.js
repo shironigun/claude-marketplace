@@ -42,7 +42,7 @@ module.exports = {
     const decisions = readJsonFile(ctx.root, args.flags.apply);
     const r = withLock(paths, () => apply(paths, decisions, { now: ctx.now }));
     return {
-      text: `Applied ${r.clusters} clusters: created ${r.created.join(', ') || 'none'}; updated ${r.updated.join(', ') || 'none'}; `
+      text: `Applied ${r.clusterCount} clusters: created ${r.created.join(', ') || 'none'}; updated ${r.updated.join(', ') || 'none'}; `
         + `dropped ${r.dropped} claims.\nNext: fi coverage ${slug}`,
       json: r,
     };

@@ -25,7 +25,7 @@ const IGNORE_LINES = ['.feature-intelligence', '.feature-intelligence/', '/.feat
 function ensureGitignore(file) {
   const text = fs.existsSync(file) ? fs.readFileSync(file, 'utf8') : '';
   if (text.split(/\r?\n/).some((l) => IGNORE_LINES.includes(l.trim()))) return false;
-  fs.writeFileSync(file, `${text}${text && !text.endsWith('\n') ? '\n' : ''}.feature-intelligence/\n`);
+  fs.appendFileSync(file, `${text && !text.endsWith('\n') ? '\n' : ''}.feature-intelligence/\n`);
   return true;
 }
 

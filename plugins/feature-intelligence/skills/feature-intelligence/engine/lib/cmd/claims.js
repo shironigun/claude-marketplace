@@ -28,7 +28,7 @@ module.exports = {
     if (r.errors.length) {
       return {
         text: `Rejected ${file}; nothing was stored:\n${r.errors.map((e) => `  ${e}`).join('\n')}`,
-        json: { added: 0, errors: r.errors },
+        json: { addedCount: 0, errors: r.errors },
         exitCode: 1,
       };
     }
@@ -39,7 +39,7 @@ module.exports = {
     return {
       text: `Added ${r.added.length} claims (${first}..${last}) from ${chunks} chunks as ${r.batch}`
         + `${unverified ? `; ${unverified} quotes could not be checked (PDF page, image or code)` : ''}`,
-      json: { added: r.added.length, first, last, batch: r.batch, unverified, errors: [] },
+      json: { addedCount: r.added.length, first, last, batch: r.batch, unverified, errors: [] },
     };
   },
 };

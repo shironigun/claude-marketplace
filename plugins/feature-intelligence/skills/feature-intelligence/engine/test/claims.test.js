@@ -35,7 +35,7 @@ test('claims: valid claims are stored with ids, sources and hashes', () => {
   const pdfClaim = claim({ chunk: 'SRC-002#1', anchor: 'p1', quote: 'one', type: 'FR', title: 'Page one', statement: 'Page one says one.' });
   const r = add(root, 'c.jsonl', [claim(), pdfClaim]);
   assert.equal(r.code, 0, r.stderr);
-  assert.deepEqual(r.json, { added: 2, first: 'CL-001', last: 'CL-002', batch: 'batch-001', unverified: 1, errors: [] });
+  assert.deepEqual(r.json, { addedCount: 2, first: 'CL-001', last: 'CL-002', batch: 'batch-001', unverified: 1, errors: [] });
   const stored = loadClaims(workspacePaths(root, 'csv'));
   assert.deepEqual([stored[0].src, stored[0].quoteVerified, typeof stored[0].hash], ['SRC-001', true, 'string']);
   assert.deepEqual([stored[1].src, stored[1].quoteVerified, stored[1].hash], ['SRC-002', false, null]);

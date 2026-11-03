@@ -27,7 +27,7 @@ function sourcesOf(root, args) {
 test('ingest: a Markdown file; unchanged again is skipped; a changed file is refused', () => {
   const root = workspace();
   fs.copyFileSync(path.join(FIXTURES, 'mini-frd.md'), path.join(root, 'frd.md'));
-  assert.deepEqual(sourcesOf(root, ['ingest', 'csv', 'frd.md']), [{ id: 'SRC-001', kind: 'file', title: 'frd.md', status: 'ok', chunks: 9, skipped: false }]);
+  assert.deepEqual(sourcesOf(root, ['ingest', 'csv', 'frd.md']), [{ id: 'SRC-001', kind: 'file', title: 'frd.md', status: 'ok', chunkCount: 9, skipped: false }]);
   const p = workspacePaths(root, 'csv');
   const [src] = loadSources(p);
   assert.equal(src.origin.path, 'frd.md');
@@ -53,12 +53,12 @@ test('ingest: Word, PDF, image, HTML, ADO, pasted text and a repository', () => 
   fs.writeFileSync(path.join(root, 'shot.png'), Buffer.from([0x89, 0x50, 0x4e, 0x47]));
   fs.writeFileSync(path.join(root, 'page.html'), '<h2>2 File rules</h2><p>Files are limited to 10,000 rows.</p>');
   fs.writeFileSync(path.join(root, 'teams.txt'), 'Can managers import too?\n\nYes, but only into their own region.');
-  assert.equal(sourcesOf(root, ['ingest', 'csv', 'frd.docx'])[0].chunks, 9);
-  assert.deepEqual(sourcesOf(root, ['ingest', 'csv', 'frd.pdf'])[0], { id: 'SRC-002', kind: 'file', title: 'frd.pdf', status: 'ok', chunks: 2, skipped: false });
+  assert.equal(sourcesOf(root, ['ingest', 'csv', 'frd.docx'])[0].chunkCount, 9);
+  assert.deepEqual(sourcesOf(root, ['ingest', 'csv', 'frd.pdf'])[0], { id: 'SRC-002', kind: 'file', title: 'frd.pdf', status: 'ok', chunkCount: 2, skipped: false });
   assert.equal(sourcesOf(root, ['ingest', 'csv', 'shot.png'])[0].kind, 'screenshot');
-  assert.equal(sourcesOf(root, ['ingest', 'csv', 'page.html'])[0].chunks, 1);
+  assert.equal(sourcesOf(root, ['ingest', 'csv', 'page.html'])[0].chunkCount, 1);
   const ado = sourcesOf(root, ['ingest', 'csv', '--ado', path.join(FIXTURES, 'ado-stories.json')]);
-  assert.deepEqual(ado.map((s) => [s.id, s.title, s.chunks]), [['SRC-005', 'Reject oversized files', 6], ['SRC-006', 'Download the error report', 2]]);
+  assert.deepEqual(ado.map((s) => [s.id, s.title, s.chunkCount]), [['SRC-005', 'Reject oversized files', 6], ['SRC-006', 'Download the error report', 2]]);
   assert.deepEqual(sourcesOf(root, ['ingest', 'csv', '--ado', path.join(FIXTURES, 'ado-stories.json')]).map((s) => s.skipped), [true, true]);
   const [story] = JSON.parse(fs.readFileSync(path.join(FIXTURES, 'ado-stories.json'), 'utf8'));
   const item = (id, rev) => ({ ...story, workItem: { ...story.workItem, id, rev } });
@@ -72,12 +72,12 @@ test('ingest: Word, PDF, image, HTML, ADO, pasted text and a repository', () => 
   assert.equal(norev.code, 2);
   assert.match(norev.stderr, /work item 3002 has no rev/);
   fs.writeFileSync(path.join(root, 'titleonly.json'), JSON.stringify([{ workItem: { id: 3003, rev: 1, fields: { 'System.Title': 'Add an export button' } } }]));
-  assert.deepEqual(sourcesOf(root, ['ingest', 'csv', '--ado', 'titleonly.json']).map((s) => [s.title, s.chunks]), [['Add an export button', 1]]);
+  assert.deepEqual(sourcesOf(root, ['ingest', 'csv', '--ado', 'titleonly.json']).map((s) => [s.title, s.chunkCount]), [['Add an export button', 1]]);
   assert.equal(runFi(root, ['ingest', 'csv', '--ado', '']).code, 2);
   fs.writeFileSync(path.join(root, 'same.json'), JSON.stringify([item(3002, 1), item(3002, 1)]));
   assert.deepEqual(sourcesOf(root, ['ingest', 'csv', '--ado', 'same.json']).map((s) => s.skipped), [false, true]);
   const pasted = sourcesOf(root, ['ingest', 'csv', '--paste', 'teams.txt', '--by', 'Product owner'])[0];
-  assert.deepEqual([pasted.kind, pasted.title, pasted.chunks], ['paste', 'Pasted text', 2]);
+  assert.deepEqual([pasted.kind, pasted.title, pasted.chunkCount], ['paste', 'Pasted text', 2]);
   const app = path.join(root, 'app');
   fs.mkdirSync(app);
   fs.writeFileSync(path.join(app, 'a.js'), 'x');
@@ -87,7 +87,7 @@ test('ingest: Word, PDF, image, HTML, ADO, pasted text and a repository', () => 
   git('-c', 'user.name=t', '-c', 'user.email=t@example.com', 'commit', '-qm', 'x');
   fs.writeFileSync(path.join(app, 'b.js'), 'not committed');
   const repo = sourcesOf(root, ['ingest', 'csv', '--repo', 'app'])[0];
-  assert.deepEqual([repo.kind, repo.chunks], ['repo', 0]);
+  assert.deepEqual([repo.kind, repo.chunkCount], ['repo', 0]);
   assert.equal(loadSources(workspacePaths(root, 'csv')).find((s) => s.kind === 'repo').coverageExempt, true);
   assert.equal(loadSources(workspacePaths(root, 'csv')).find((s) => s.kind === 'repo').origin.dirty, true);
   assert.match(runFi(root, ['ingest', 'csv', '--repo', 'app']).stdout, /Skipped/);
@@ -100,13 +100,13 @@ test('ingest: an unreadable file is registered, reported, and replaced once it c
   const bad = runFi(root, ['ingest', 'csv', 'bad.docx', '--json']);
   assert.equal(bad.code, 1);
   const { error, ...row } = bad.json.sources[0];
-  assert.deepEqual(row, { id: 'SRC-001', kind: 'file', title: 'bad.docx', status: 'unreadable', chunks: 1, skipped: false });
+  assert.deepEqual(row, { id: 'SRC-001', kind: 'file', title: 'bad.docx', status: 'unreadable', chunkCount: 1, skipped: false });
   assert.match(error, /not a zip archive/);
   fs.writeFileSync(path.join(root, 'bad.docx'), writeDocx([{ kind: 'para', text: 'Now readable.' }]));
-  assert.deepEqual(sourcesOf(root, ['ingest', 'csv', 'bad.docx'])[0], { id: 'SRC-001', kind: 'file', title: 'bad.docx', status: 'ok', chunks: 1, skipped: false });
+  assert.deepEqual(sourcesOf(root, ['ingest', 'csv', 'bad.docx'])[0], { id: 'SRC-001', kind: 'file', title: 'bad.docx', status: 'ok', chunkCount: 1, skipped: false });
   fs.writeFileSync(path.join(root, 'scan.pdf'), '%PDF-1.4\n%%EOF\n');
   assert.equal(runFi(root, ['ingest', 'csv', 'scan.pdf']).code, 1);
-  assert.equal(sourcesOf(root, ['ingest', 'csv', 'scan.pdf', '--pages', '3'])[0].chunks, 3);
+  assert.equal(sourcesOf(root, ['ingest', 'csv', 'scan.pdf', '--pages', '3'])[0].chunkCount, 3);
   assert.deepEqual(loadSources(workspacePaths(root, 'csv')).map((s) => [s.id, s.status]), [['SRC-001', 'ok'], ['SRC-002', 'ok']]);
   fs.writeFileSync(path.join(root, 'empty.md'), '\n\n');
   const empty = runFi(root, ['ingest', 'csv', 'empty.md', '--json']);

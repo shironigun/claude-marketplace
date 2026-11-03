@@ -262,7 +262,7 @@ function apply(p, decisions, { now }) {
   saveModel(p, { nodes: [...nodes.values()], links });
   writeJson(p.consolidated, record);
   fs.rmSync(p.proposals, { force: true });
-  return { clusters: plan.length, created, updated: [...updated], dropped };
+  return { clusterCount: plan.length, created, updated: [...updated], dropped };
 }
 
 module.exports = { pendingClaims, propose, apply };

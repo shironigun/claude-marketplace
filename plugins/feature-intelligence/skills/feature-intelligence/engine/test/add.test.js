@@ -34,7 +34,7 @@ test('add: temporary ids, a patch, links and a decision', () => {
   const root = buildModel();
   const r = must(runFi(root, ['add', 'csv', write(root, 'add.json', ROW_LIMIT_DECIDED), '--json'])).json;
   assert.deepEqual(r.ids, { '+d1': 'DL-001', '+q1': 'Q-002', '+t1': 'TS-001' });
-  assert.deepEqual([r.changed, r.links, r.decisions], [['Q-002', 'TS-001', 'RULE-001'], 3, ['DL-001']]);
+  assert.deepEqual([r.changed, r.linksAdded, r.decisions], [['Q-002', 'TS-001', 'RULE-001'], 3, ['DL-001']]);
   const p = workspacePaths(root, 'csv');
   const { nodes, links } = loadModel(p);
   const rule = nodes.find((n) => n.id === 'RULE-001');
@@ -43,7 +43,7 @@ test('add: temporary ids, a patch, links and a decision', () => {
   assert.deepEqual(loadDecisions(p).map((d) => [d.id, d.decidedAt]), [['DL-001', '2026-10-30T10:00:00.000Z']]);
   assert.deepEqual(must(runFi(root, ['validate', 'csv', '--json'])).json.errors, []);
   const removed = must(runFi(root, ['add', 'csv', write(root, 'rm.json', { removeLinks: [{ from: 'TS-001', type: 'covers', to: 'RULE-001' }] }), '--json'])).json;
-  assert.equal(removed.removed, 1);
+  assert.equal(removed.linksRemoved, 1);
   const same = must(runFi(root, ['add', 'csv', write(root, 'same.json', { nodes: [{ id: 'TS-001', title: 'Reject a file over the limit' }] }), '--json'])).json;
   assert.deepEqual(same.changed, []);
 });
