@@ -5,7 +5,7 @@ const { nextId, formatId } = require('./ids');
 const { sha256 } = require('./hash');
 const { readJson, writeJson } = require('./jsonl');
 const { validateNode, CLAIM_TYPES } = require('./schema');
-const { loadModel, saveModel } = require('./workspace');
+const { loadModel, saveModel, assertUniqueIds } = require('./workspace');
 const { loadClaims } = require('./claims');
 const { checkError, usageError } = require('./errors');
 
@@ -184,6 +184,7 @@ function apply(p, decisions, { now }) {
 
   const claims = new Map(loadClaims(p).map((c) => [c.id, c]));
   const model = loadModel(p);
+  assertUniqueIds(model.nodes);
   const nodes = new Map(model.nodes.map((n) => [n.id, n]));
   const ids = model.nodes.map((n) => n.id);
   const record = loadRecord(p);

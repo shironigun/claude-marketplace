@@ -84,8 +84,8 @@ function htmlBlocks(html) {
   // The <fi-pre N> and <fi-table N> markers are the converter's own, so any "<fi-" in the input is turned into text.
   const cleaned = String(html ?? '')
     .replace(/<!--[\s\S]*?-->/g, '')
-    .replace(/<[!?][^>]*>/g, '') // declarations, XML prologs and Word's conditional markers
     .replace(/<(script|style|head|noscript|template)\b[\s\S]*?<\/\1\s*>/gi, '')
+    .replace(/<[!?][^>]*>/g, '') // declarations, XML prologs and Word's conditional markers
     .replace(/<(\/?fi-)/gi, '&lt;$1');
   const { html: rest, tables } = takeTables(cleaned);
   const pres = [];

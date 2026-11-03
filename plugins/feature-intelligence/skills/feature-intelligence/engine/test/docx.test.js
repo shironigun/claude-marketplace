@@ -61,3 +61,13 @@ test('docx: text boxes, tracked moves, merged cells, contents lists and other Wo
     + `<w:p><w:pPr><w:numPr><w:ilvl w:val="0"/><w:numId w:val="0"/></w:numPr></w:pPr>${run('Not a list item')}</w:p>`)),
   [{ kind: 'para', text: 're-upload' }, { kind: 'para', text: 'Not a list item' }]);
 });
+
+test('docx: a header followed only by blank rows reads like a one-row table; gridSpan is capped', () => {
+  const doc = (body) => writeZip([{ name: 'word/document.xml', data: `<w:document xmlns:w="x"><w:body>${body}</w:body></w:document>` }]);
+  const tc = (t, span) => `<w:tc>${span ? `<w:tcPr><w:gridSpan w:val="${span}"/></w:tcPr>` : ''}<w:p><w:r><w:t>${t}</w:t></w:r></w:p></w:tc>`;
+  const blankRow = `<w:tr>${tc('')}${tc('')}</w:tr>`;
+  assert.deepEqual(readDocxBlocks(doc(`<w:tbl><w:tr>${tc('Column')}${tc('Required')}</w:tr>${blankRow}${blankRow}</w:tbl>`)),
+    [{ kind: 'row', cells: ['Column', 'Required'], header: null }]);
+  const wide = readDocxBlocks(doc(`<w:tbl><w:tr>${tc('Wide', 100000)}</w:tr></w:tbl>`));
+  assert.equal(wide[0].cells.length, 64);
+});

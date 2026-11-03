@@ -68,6 +68,15 @@ const saveChunks = (p, srcId, chunks) => writeJsonl(path.join(p.chunks, `${srcId
 const loadDecisions = (p) => readJsonl(p.decisions);
 const saveDecisions = (p, list) => writeJsonl(p.decisions, list);
 const loadModel = (p) => ({ nodes: readJsonl(p.nodes), links: readJsonl(p.links) });
+// A model holding one id twice cannot be written back: saveModel would keep only one copy.
+function assertUniqueIds(nodes) {
+  const counts = new Map();
+  for (const n of nodes) counts.set(n.id, (counts.get(n.id) || 0) + 1);
+  const twins = [...counts].filter(([, c]) => c > 1).map(([id]) => id);
+  if (twins.length) {
+    throw checkError(`the model holds ${twins.join(', ')} more than once; fix model/nodes.jsonl by hand first, since any write would keep only one copy`);
+  }
+}
 const linkKey = (l) => `${l.from} ${l.type} ${l.to}`;
 
 // Nodes sorted by id, links sorted and de-duplicated, so diffs of the committed files stay small.
@@ -176,5 +185,5 @@ function withLock(p, fn, { timeoutMs = LOCK_TIMEOUT_MS, staleMs = LOCK_STALE_MS 
 
 module.exports = {
   MODES, PROFILE_STUB, initWorkspace, loadWorkspace, saveManifest, loadSources, saveSources, loadChunks, saveChunks,
-  loadModel, saveModel, loadDecisions, saveDecisions, linkKey, withLock,
+  loadModel, saveModel, loadDecisions, saveDecisions, linkKey, assertUniqueIds, withLock,
 };
