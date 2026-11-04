@@ -23,6 +23,7 @@ Decide each cluster that needs it:
 - Give a `statement` (and a `title` if useful) when the default wording is not the best plain sentence. For a
   conflict, name every value and where it comes from: "An import file may contain at most 10,000 rows (FRD) or
   5,000 rows (story 2104)."
+- `separate` on a cluster of several claims makes one node per claim, so it takes no `title` or `statement`.
 - `type` changes the node type when the extractor chose wrongly.
 
 Write the decisions to the inbox and apply them:
@@ -37,7 +38,9 @@ claims were added after the proposal, it refuses: run `--propose` again.
 
 ## 2. Turn every conflict into a question
 
-A conflict is a question someone must answer. For each node that became `conflict`, add through `fi add` a
+A conflict is a question someone must answer. A `conflict` decision on a cluster that already has a node updates
+that node, so it shows in `updated`, not `created`: find the conflict nodes with `fi query <slug> --status conflict`.
+For each node that became `conflict`, add through `fi add` a
 `Q` node that asks it plainly, with the options ("Which row limit applies: 10,000 rows (FRD) or 5,000 rows
 (story 2104)?"), `status: "open"`, `derivedFrom` the conflict node, and a `blocks` link to the conflict node.
 Section 4 adds `blocks` links to what rests on it.

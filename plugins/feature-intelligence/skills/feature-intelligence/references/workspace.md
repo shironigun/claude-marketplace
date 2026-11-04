@@ -19,9 +19,14 @@ Run `fi` from the root of the user's repository (or pass `--root <dir>`): the wo
 - Add `--json` whenever you read the result; show the user the plain text form only when it helps them.
 - Exit codes: `0` success; `1` a check failed (validation, coverage below `--min`, an unreadable source, a busy
   workspace); `2` the command was used wrongly (unknown id, bad flag, missing file); `3` an internal error.
-- With `--json`, a failure prints `{"error": {"code": <exit code>, "message": "..."}}` on stdout. Read the
-  message, fix the input, and run the command again. Never edit workspace files to get around a refusal.
-- Counts in JSON are named as counts: `chunkCount`, `clusterCount`, `addedCount`, `linksAdded`, `linksRemoved`.
+- With `--json`, a command that is refused (exit 2 or 3, or a thrown check such as a busy workspace) prints
+  `{"error": {"code": <exit code>, "message": "..."}}` on stdout. Read the message, fix the input, and run the
+  command again. Never edit workspace files to get around a refusal.
+- An exit 1 that is a *result* prints the command's normal JSON instead, so read the field: `pass` for
+  `fi coverage --min`, `errors` for `fi validate` and for `fi claims add` (rejected claims; nothing stored),
+  and the sources' `status` for `fi ingest` (`unreadable`, with its `error`).
+- Counts in JSON are mostly named as counts: `chunkCount`, `clusterCount`, `addedCount`, `linksAdded`,
+  `linksRemoved`. The exception is `fi set-aside`, whose `setAside` is the list of chunk ids.
 - "the workspace is busy" means another `fi` call holds the lock; wait a few seconds and retry. Parallel
   subagents may all call `fi`; writes are serialised by the lock.
 
@@ -29,7 +34,7 @@ Run `fi` from the root of the user's repository (or pass `--root <dir>`): the wo
 
 | Path | What | Who writes it |
 |---|---|---|
-| `knowledge-base/features/<slug>/workspace.json` | the manifest: name, mode, lens, version, coverage | `fi` |
+| `knowledge-base/features/<slug>/workspace.json` | the manifest: name, mode, `lensDefault` (set to `all` by `fi init`; no command changes it), version, coverage | `fi` |
 | `knowledge-base/features/<slug>/sources.json` | the source registry with fingerprints and chunk ids | `fi` |
 | `knowledge-base/features/<slug>/model/nodes.jsonl`, `links.jsonl` | the Feature Model | `fi` only |
 | `knowledge-base/features/<slug>/decisions.jsonl` | the decision log | `fi` only |

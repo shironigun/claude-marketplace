@@ -33,17 +33,18 @@ A `TS` node:
   settled: for a `conflict` node, write one scenario per value, each `assumed` and `derivedFrom` the question.
 - `derivedFrom`: the nodes it tests.
 
-And a `covers` link from the scenario to each `AC`, `FR` or `RULE` it tests.
+Give each scenario a temporary id (`"id": "+t1"`), and add a `covers` link in the same file from that id to each
+`AC`, `FR` or `RULE` it tests.
 
 ```json
-{"type": "TS", "title": "One row over the limit", "statement": "Given a file with 10,001 rows, when the admin uploads it, then it is rejected and the message names the 10,000-row limit.", "status": "inferred", "confidence": "high", "category": "boundary", "derivedFrom": ["RULE-001"]}
+{"id": "+t1", "type": "TS", "title": "One row over the limit", "statement": "Given a file with 10,001 rows, when the admin uploads it, then it is rejected and the message names the 10,000-row limit.", "status": "inferred", "confidence": "high", "category": "boundary", "derivedFrom": ["RULE-001"]}
 ```
 
 ## Coverage of the requirements
 
 When the scenarios are written, check that every `AC`, `FR` and `RULE` has at least one scenario covering it:
-`fi query <slug> --type AC,FR,RULE --limit 500` and `fi trace <slug> <id>` show each node's incoming `covers`
-links. A node that cannot be covered (it is ambiguous or blocked) is listed with the question that blocks it;
+`fi query <slug> --type AC,FR,RULE --limit 500` lists the ids, and `fi trace <slug> <id>` on each one shows its
+incoming `covers` links (`fi query` does not). A node that cannot be covered (it is ambiguous or blocked) is listed with the question that blocks it;
 that is the QA lens's open list.
 
 Tickets come later: plan 4's tickets flow adds `maps-to` links from scenarios to the stories and tasks that

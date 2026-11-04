@@ -1,4 +1,4 @@
-<!-- forked-from: qa-engineering/skills/story-intelligence/SKILL.md @ 8d1cd40; forked-on: 2026-11-04; local-changes: only the read sequence (the specifics table and section a), adapted to the profile, the bundled server's tool names and fi ingest --ado; knowledge-base grounding dropped (phase 3) -->
+<!-- forked-from: qa-engineering/skills/story-intelligence/SKILL.md @ 8d1cd40; forked-on: 2026-11-04; local-changes: only the read sequence (the specifics table and section a), adapted to the profile, the bundled server's tool names and fi ingest --ado; knowledge-base grounding dropped (phase 3); an unreadable item becomes an open question derivedFrom its story -->
 # Reading Azure DevOps work items
 
 How to read a story, an epic or a set of work items with its whole context. **Read-only**: every call below
@@ -35,7 +35,8 @@ Rules for the retrieval:
 - **Follow the graph, don't stop at the node.** A story's real requirement often lives in its parent's intent, a
   sibling's decision, a linked bug's history or a buried comment.
 - **Record what you could not read** (a linked item you cannot open, an empty acceptance criteria field, a
-  missing design link) as an `open` question; never fill it with a guess.
+  missing design link) as an `open` question `derivedFrom` the STORY node that links it (an open node needs
+  provenance or derivedFrom); never fill it with a guess.
 - **Ask before widening.** Step 5 can pull in many items. List what it found and let the user choose which
   become sources; an item that is only context is mentioned, not ingested.
 

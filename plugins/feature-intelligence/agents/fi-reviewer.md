@@ -22,6 +22,10 @@ The workspace slug, the repository root, and the folder `.feature-intelligence/c
 - `questions.json`: the output of `fi questions <slug> --json`;
 - `summary.md`: the draft run summary the session wants to show.
 
+Open the review files, `nodes.jsonl`, `links.jsonl`, `sources.json` and the chunk files by their explicit path
+with Read: Grep and Glob may skip the git-ignored `.feature-intelligence/` tree. When you read `nodes.jsonl` raw,
+skip rows that have `supersededBy`: they are retired revisions.
+
 The model itself is in `knowledge-base/features/<slug>/` (`model/nodes.jsonl`, `model/links.jsonl`,
 `decisions.jsonl`, `sources.json`), and the chunk text in `.feature-intelligence/cache/<slug>/chunks/`.
 
