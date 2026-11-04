@@ -13,7 +13,7 @@ each `RULE` that applies to it with `governs`.
 
 ## Messages and content
 
-For every screen, list what it must say, and link each `MSG` or `CNT` node to its screen with `shows`:
+For every screen, list what it must say, and link each screen to the `MSG` and `CNT` nodes it shows (`SCR` `shows` `MSG`):
 
 | Kind | Where it comes from |
 |---|---|
