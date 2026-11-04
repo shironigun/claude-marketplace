@@ -35,7 +35,7 @@ test('e2e: from sources to a fully accounted model with ranked questions', () =>
   assert.deepEqual(fi(root, 'consolidate', slug, '--apply', write(root, 'd2.json', {})).created, ['RULE-006', 'RULE-007', 'ACT-001', 'MSG-001', 'Q-002', 'FR-001']);
   fi(root, 'set-aside', slug, 'SRC-002#5', '--reason', 'a thank-you, no requirement content');
   const coverage = fi(root, 'coverage', slug, '--min', '1');
-  assert.deepEqual([coverage.chunks, coverage.covered, coverage.setAside, coverage.pass], [17, 16, 1, true]);
+  assert.deepEqual([coverage.chunkCount, coverage.covered, coverage.setAside, coverage.pass], [17, 16, 1, true]);
 
   // Derived nodes: a question blocking the row-limit rule, a scenario covering it, a decision answering Q-001.
   const added = fi(root, 'add', slug, write(root, 'derive.json', {

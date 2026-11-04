@@ -10,7 +10,8 @@ const { loadWorkspace } = require('../lib/workspace');
 test('coverage: counts, unaccounted chunks, the minimum, and set-aside', () => {
   const root = buildModel();
   const first = must(runFi(root, ['coverage', 'csv', '--json'])).json;
-  assert.deepEqual([first.chunks, first.covered, first.setAside], [17, 10, 0]);
+  assert.deepEqual([first.chunkCount, first.covered, first.setAside], [17, 10, 0]);
+  assert.ok(!('chunks' in first) && first.perSource.every((s) => Number.isInteger(s.chunkCount) && !('chunks' in s)));
   assert.deepEqual(first.unaccounted.map((u) => u.id), ['SRC-001#6', 'SRC-001#7', 'SRC-002#2', 'SRC-002#4', 'SRC-002#5', 'SRC-002#6', 'SRC-003#2']);
   assert.equal(runFi(root, ['coverage', 'csv', '--min', '0.95']).code, 1);
   must(runFi(root, ['set-aside', 'csv', 'SRC-002#5', '--reason', 'a thank-you, no requirement content']));
@@ -30,7 +31,7 @@ test('coverage: an unreadable source is unaccounted; superseded nodes do not cou
   assert.equal(runFi(root, ['ingest', 'csv', 'bad.docx']).code, 1);
   must(runFi(root, ['add', 'csv', write(root, 'sup.json', { nodes: [{ id: 'RULE-002', supersededBy: 'RULE-001' }] })]));
   const c = must(runFi(root, ['coverage', 'csv', '--json'])).json;
-  assert.deepEqual([c.chunks, c.covered], [18, 9]);
+  assert.deepEqual([c.chunkCount, c.covered], [18, 9]);
   assert.deepEqual(c.unaccounted.find((u) => u.id === 'SRC-004#1'), { id: 'SRC-004#1', anchor: 'whole file', unreadable: true, preview: null });
   assert.match(runFi(root, ['coverage', 'csv']).stdout, /SRC-004#1 whole file: \(unreadable source\)/);
 });

@@ -35,6 +35,9 @@ module.exports = {
     const unaccounted = c.unaccounted.map((u) => ({
       id: u.id, anchor: u.anchor, unreadable: u.unreadable, preview: u.text == null ? null : oneLine(u.text).slice(0, 80),
     }));
-    return { text: lines.join('\n'), json: { ...c, unaccounted, min: min === undefined ? null : min, pass }, exitCode: pass ? 0 : 1 };
+    // Counts are named as counts: in sources.json `chunks` is a list.
+    const perSource = c.perSource.map(({ chunks, ...s }) => ({ ...s, chunkCount: chunks }));
+    const json = { chunkCount: c.chunks, covered: c.covered, setAside: c.setAside, ratio: c.ratio, perSource, unaccounted };
+    return { text: lines.join('\n'), json: { ...json, min: min === undefined ? null : min, pass }, exitCode: pass ? 0 : 1 };
   },
 };

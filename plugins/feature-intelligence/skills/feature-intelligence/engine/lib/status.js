@@ -19,7 +19,7 @@ function nextStep(s) {
   if (s.claims.pending) {
     return s.proposal ? `decide the proposed clusters, then fi consolidate ${slug} --apply <decisions.json>` : `fi consolidate ${slug} --propose`;
   }
-  const unaccounted = s.coverage.chunks - s.coverage.covered - s.coverage.setAside;
+  const unaccounted = s.coverage.chunkCount - s.coverage.covered - s.coverage.setAside;
   if (unaccounted) return `fi coverage ${slug}: ${unaccounted} chunks unaccounted`;
   if (s.openQuestions) return `fi questions ${slug}: ask the top five`;
   return 'analyse the model, then derive what the lens needs';
@@ -38,7 +38,7 @@ function workspaceStatus(p, manifest) {
     nodes: { live: live.length, superseded: nodes.length - live.length, byStatus: tally(live, 'status') },
     links: links.length,
     decisions: loadDecisions(p).length,
-    coverage: { chunks: coverage.chunks, covered: coverage.covered, setAside: coverage.setAside, ratio: coverage.ratio },
+    coverage: { chunkCount: coverage.chunks, covered: coverage.covered, setAside: coverage.setAside, ratio: coverage.ratio },
     openQuestions: rankQuestions({ nodes, links }).length,
   };
   return { ...s, next: nextStep(s) };

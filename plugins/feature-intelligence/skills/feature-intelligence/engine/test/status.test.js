@@ -24,6 +24,7 @@ test('status: each stage names the next step', () => {
   assert.equal(next(), 'fi questions csv: ask the top five');
   const s = must(runFi(root, ['status', 'csv', '--json'])).json;
   assert.deepEqual([s.sources.total, s.claims.total, s.claims.pending, s.nodes.live, s.openQuestions], [1, 7, 0, 7, 1]);
+  assert.deepEqual([s.coverage.chunkCount, 'chunks' in s.coverage], [9, false]);
   assert.match(runFi(root, ['status', 'csv']).stdout, /^csv "Import customers from CSV" \(mode new, lens all, version 0\)$/m);
   must(runFi(root, ['add', 'csv', write(root, 'a.json', {
     decisions: [{ id: '+d1', question: 'Which date formats are accepted?', answer: 'ISO 8601 dates only.', decidedBy: 'Product owner', via: 'session' }],

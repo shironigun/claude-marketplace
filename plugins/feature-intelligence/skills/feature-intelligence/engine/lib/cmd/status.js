@@ -18,7 +18,7 @@ module.exports = {
       `Sources: ${s.sources.total} (${list(s.sources.kinds)})${s.sources.unreadable ? `, ${s.sources.unreadable} unreadable` : ''}`,
       `Claims: ${s.claims.total}, ${s.claims.pending} pending`,
       `Model: ${s.nodes.live} nodes (${list(s.nodes.byStatus)}), ${s.nodes.superseded} superseded, ${s.links} links, ${s.decisions} decisions`,
-      `Coverage: ${s.coverage.covered + s.coverage.setAside}/${s.coverage.chunks} chunks (${(s.coverage.ratio * 100).toFixed(1)}%)`,
+      `Coverage: ${s.coverage.covered + s.coverage.setAside}/${s.coverage.chunkCount} chunks (${(s.coverage.ratio * 100).toFixed(1)}%)`,
       `Open questions: ${s.openQuestions}`,
       `Next: ${s.next}`,
     ];
