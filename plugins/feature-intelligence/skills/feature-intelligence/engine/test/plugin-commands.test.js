@@ -24,3 +24,8 @@ test('plugin commands: the skill lists exactly these commands', () => {
   const listed = [...text.matchAll(/`(?:\/feature-intelligence)?:([a-z]+)`/g)].map((m) => m[1]).sort();
   assert.deepEqual(listed, COMMANDS.map((f) => path.basename(f, '.md')));
 });
+
+test('plugin commands: the README shows every command', () => {
+  const readme = fs.readFileSync(path.join(SKILL_DIR, '..', '..', 'README.md'), 'utf8');
+  for (const f of COMMANDS) assert.ok(readme.includes(`/feature-intelligence:${path.basename(f, '.md')}`), `README shows ${path.basename(f)}`);
+});
