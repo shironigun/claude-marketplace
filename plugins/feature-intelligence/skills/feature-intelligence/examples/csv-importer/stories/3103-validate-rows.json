@@ -1,0 +1,20 @@
+[
+  {
+    "workItem": {
+      "id": 3103,
+      "rev": 3,
+      "fields": {
+        "System.WorkItemType": "User Story",
+        "System.Title": "Validate rows",
+        "System.State": "New",
+        "System.Description": "<div>As an admin, I want invalid rows reported with a reason, so that I can fix them and import them again.</div>",
+        "Microsoft.VSTS.Common.AcceptanceCriteria": "<ol><li>A row without a name is rejected.</li><li>A row whose email is not a valid email address is rejected.</li><li>Every rejected row appears in the error report with its row number and the reason.</li></ol>"
+      }
+    },
+    "comments": {
+      "totalCount": 0,
+      "count": 0,
+      "comments": []
+    }
+  }
+]

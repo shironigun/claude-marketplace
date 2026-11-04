@@ -1,0 +1,250 @@
+%PDF-1.4
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [5 0 R 7 0 R 9 0 R 11 0 R] /Count 4 >>
+endobj
+3 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica /Encoding /WinAnsiEncoding >>
+endobj
+4 0 obj
+<< /Length 1849 >>
+stream
+BT
+/F1 11 Tf
+14 TL
+72 770 Td
+(Import customers from a CSV file: functional requirements) Tj
+T* () Tj
+T* (Version 0.3, draft for review. This is a synthetic document for testing; it describes no) Tj
+T* (real product.) Tj
+T* () Tj
+T* (1 Purpose and scope) Tj
+T* () Tj
+T* (1.1 Purpose) Tj
+T* () Tj
+T* (Admins import customers from a CSV file instead of entering them one by one. Sales teams) Tj
+T* (often receive customer lists from events and partners, and typing hundreds of records by) Tj
+T* (hand is slow and error prone.) Tj
+T* () Tj
+T* (1.2 Goals) Tj
+T* () Tj
+T* (- An admin can import a list of up to several thousand customers in one go.) Tj
+T* (- Rows that cannot be imported are reported with a reason, so the admin can fix them and) Tj
+T* (try again.) Tj
+T* (- Nothing is imported until the admin has seen a preview and confirmed it.) Tj
+T* () Tj
+T* (1.3 In scope) Tj
+T* () Tj
+T* (- Uploading one CSV file at a time from the Customers page.) Tj
+T* (- Mapping the file's columns to customer fields.) Tj
+T* (- Validating every row before anything is written.) Tj
+T* (- A preview, the import itself, a summary and a downloadable error report.) Tj
+T* () Tj
+T* (1.4 Out of scope) Tj
+T* () Tj
+T* (- Importing from Excel files or from other systems through an API.) Tj
+T* (- Updating customers in bulk by any other means.) Tj
+T* (- Scheduled or recurring imports.) Tj
+T* () Tj
+T* (2 Users and permissions) Tj
+T* () Tj
+T* (Only admins can import customers. The Import button is shown on the Customers page to) Tj
+T* (admins only.) Tj
+T* () Tj
+T* (An admin can see the imports they started and their error reports.) Tj
+T* () Tj
+T* (3 Uploading a file) Tj
+T* () Tj
+T* (3.1 Choosing a file) Tj
+T* () Tj
+T* (The admin opens the Customers page, selects Import and chooses a file from their computer,) Tj
+T* (or drags the file onto the upload area.) Tj
+ET
+endstream
+endobj
+5 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R >> >> /Contents 4 0 R >>
+endobj
+6 0 obj
+<< /Length 1399 >>
+stream
+BT
+/F1 11 Tf
+14 TL
+72 770 Td
+(Files must be CSV files encoded in UTF-8. A comma separates the values, and a value that) Tj
+T* (contains a comma is wrapped in double quotes.) Tj
+T* () Tj
+T* (3.2 Limits) Tj
+T* () Tj
+T* (Files are limited to 10,000 rows.) Tj
+T* () Tj
+T* (The maximum file size is 5 MB.) Tj
+T* () Tj
+T* (A file over either limit is rejected before it is uploaded, with a message that names the) Tj
+T* (limit.) Tj
+T* () Tj
+T* (Large files should import quickly.) Tj
+T* () Tj
+T* (3.3 Progress) Tj
+T* () Tj
+T* (While the file uploads, the page shows a progress bar with the percentage sent.) Tj
+T* () Tj
+T* (4 Mapping columns) Tj
+T* () Tj
+T* (4.1 Headers) Tj
+T* () Tj
+T* (The first row of the file holds the column headers. The importer reads the headers and) Tj
+T* (suggests a customer field for each one by its name.) Tj
+T* () Tj
+T* (4.2 Accepted columns) Tj
+T* () Tj
+T* (The accepted columns are Email, Name, Phone, Company, Date of birth, etc.) Tj
+T* () Tj
+T* (Each customer field can be mapped to at most one column. A column the admin does not map) Tj
+T* (is ignored.) Tj
+T* () Tj
+T* (4.3 Saving a mapping) Tj
+T* () Tj
+T* (The admin can save a mapping and choose it again for the next import from the same source.) Tj
+T* () Tj
+T* (5 Validating rows) Tj
+T* () Tj
+T* (5.1 Required fields) Tj
+T* () Tj
+T* (The email column is required.) Tj
+T* () Tj
+T* (Name is required.) Tj
+T* () Tj
+ET
+endstream
+endobj
+7 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R >> >> /Contents 6 0 R >>
+endobj
+8 0 obj
+<< /Length 1629 >>
+stream
+BT
+/F1 11 Tf
+14 TL
+72 770 Td
+(5.2 Formats) Tj
+T* () Tj
+T* (Every email must be a valid email address.) Tj
+T* () Tj
+T* (Phone numbers contain digits only; spaces and dashes are removed before the check.) Tj
+T* () Tj
+T* (The importer accepts common date formats.) Tj
+T* () Tj
+T* (5.3 Field rules) Tj
+T* () Tj
+T* (Column | Required | Rule) Tj
+T* (Email | yes | must be a valid email address) Tj
+T* (Name | yes | at most 120 characters) Tj
+T* (Phone | no | digits only after spaces and dashes are removed) Tj
+T* (Company | no | at most 200 characters) Tj
+T* (Date of birth | no | a date in the past) Tj
+T* () Tj
+T* (5.4 Rejected rows) Tj
+T* () Tj
+T* (A row that fails validation is not imported. It is listed in the error report with its row) Tj
+T* (number, the column and the reason.) Tj
+T* () Tj
+T* (Error messages must be user-friendly.) Tj
+T* () Tj
+T* (6 Duplicates) Tj
+T* () Tj
+T* (Rows whose email matches an existing customer are skipped.) Tj
+T* () Tj
+T* (When two rows in the same file have the same email, the first row is imported and the) Tj
+T* (later rows are reported as duplicates.) Tj
+T* () Tj
+T* (7 Preview) Tj
+T* () Tj
+T* (Before anything is imported, the admin sees a preview of the first 20 rows, each with its) Tj
+T* (validation result.) Tj
+T* () Tj
+T* (The preview also shows how many rows will be imported, skipped and rejected.) Tj
+T* () Tj
+T* (The admin can cancel at the preview. Nothing is imported after a cancel.) Tj
+T* () Tj
+T* (8 Importing) Tj
+T* () Tj
+T* (8.1 Running the import) Tj
+T* () Tj
+T* (When the admin confirms the preview, the importer writes every valid row as a new) Tj
+T* (customer.) Tj
+ET
+endstream
+endobj
+9 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R >> >> /Contents 8 0 R >>
+endobj
+10 0 obj
+<< /Length 1266 >>
+stream
+BT
+/F1 11 Tf
+14 TL
+72 770 Td
+(8.2 The summary) Tj
+T* () Tj
+T* (When the import ends, the admin sees a summary with the number of rows imported, skipped) Tj
+T* (as duplicates and rejected.) Tj
+T* () Tj
+T* (When every row is imported, the summary says: "All 1,250 customers were imported.") Tj
+T* () Tj
+T* (When some rows are rejected, the summary says: "1,180 customers were imported. 70 rows) Tj
+T* (were rejected; download the error report to see why.") Tj
+T* () Tj
+T* (8.3 Notifications) Tj
+T* () Tj
+T* (Admins are notified as appropriate.) Tj
+T* () Tj
+T* (9 The error report) Tj
+T* () Tj
+T* (The error report is a CSV file with one line per rejected or duplicate row: the row) Tj
+T* (number, the column and the reason.) Tj
+T* () Tj
+T* (The error report can be downloaded for 7 days after the import.) Tj
+T* () Tj
+T* (10 Non-functional requirements) Tj
+T* () Tj
+T* (The Import page works in the current versions of Chrome, Edge, Firefox and Safari.) Tj
+T* () Tj
+T* (Uploaded files are deleted from temporary storage when the import ends.) Tj
+T* () Tj
+T* (Every import is recorded in the audit log with the admin, the time, the file name and the) Tj
+T* (counts.) Tj
+T* () Tj
+T* (11 Open points) Tj
+T* () Tj
+T* (The date formats to accept are to be confirmed.) Tj
+ET
+endstream
+endobj
+11 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R >> >> /Contents 10 0 R >>
+endobj
+xref
+0 12
+0000000000 65535 f 
+0000000009 00000 n 
+0000000058 00000 n 
+0000000134 00000 n 
+0000000231 00000 n 
+0000002132 00000 n 
+0000002258 00000 n 
+0000003709 00000 n 
+0000003835 00000 n 
+0000005516 00000 n 
+0000005642 00000 n 
+0000006961 00000 n 
+trailer
+<< /Size 12 /Root 1 0 R >>
+startxref
+7089
+%%EOF

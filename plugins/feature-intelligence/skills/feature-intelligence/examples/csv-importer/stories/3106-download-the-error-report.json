@@ -1,0 +1,20 @@
+[
+  {
+    "workItem": {
+      "id": 3106,
+      "rev": 2,
+      "fields": {
+        "System.WorkItemType": "User Story",
+        "System.Title": "Download the error report",
+        "System.State": "New",
+        "System.Description": "<div>As an admin, I want to download a CSV of rejected rows with the reason for each, so that I can fix them and import them again.</div>",
+        "Microsoft.VSTS.Common.AcceptanceCriteria": "<ol><li>The report lists the row number, the column and the reason for each rejected row.</li><li>The report can be downloaded from the import summary.</li></ol>"
+      }
+    },
+    "comments": {
+      "totalCount": 0,
+      "count": 0,
+      "comments": []
+    }
+  }
+]

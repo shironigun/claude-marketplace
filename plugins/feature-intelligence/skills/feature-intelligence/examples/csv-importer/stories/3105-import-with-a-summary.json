@@ -1,0 +1,27 @@
+[
+  {
+    "workItem": {
+      "id": 3105,
+      "rev": 5,
+      "fields": {
+        "System.WorkItemType": "User Story",
+        "System.Title": "Import with a summary",
+        "System.State": "New",
+        "System.Description": "<div>As an admin, I want a summary when the import ends, so that I know what happened to every row.</div>",
+        "Microsoft.VSTS.Common.AcceptanceCriteria": "<ol><li>Given a row whose email matches an existing customer, then the existing customer is updated with the row's values.</li><li>The summary shows the number of rows imported, updated and rejected.</li></ol>"
+      }
+    },
+    "comments": {
+      "totalCount": 1,
+      "count": 1,
+      "comments": [
+        {
+          "id": 1,
+          "workItemId": 3105,
+          "text": "<p>Thanks, looks good to me.</p>",
+          "createdDate": "2026-10-23T09:15:00Z"
+        }
+      ]
+    }
+  }
+]

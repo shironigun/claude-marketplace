@@ -1,0 +1,133 @@
+{
+  "fixture": "csv-importer",
+  "about": "Every fault planted in the synthetic CSV importer sources (spec 10.1), with quotes that reveal it. Each quote appears verbatim in the named file; fixture.test.js checks it.",
+  "faults": [
+    {
+      "id": "PF-01",
+      "kind": "conflict",
+      "summary": "The row limit is 10,000 in the FRD and 5,000 in the upload story.",
+      "evidence": [
+        { "file": "frd.md", "quote": "Files are limited to 10,000 rows." },
+        { "file": "stories/3101-upload-a-file.json", "quote": "Given a file with more than 5,000 rows, when it is uploaded, then it is rejected." }
+      ]
+    },
+    {
+      "id": "PF-02",
+      "kind": "conflict",
+      "summary": "A row whose email matches an existing customer is skipped in the FRD but updates the customer in the import story.",
+      "evidence": [
+        { "file": "frd.md", "quote": "Rows whose email matches an existing customer are skipped." },
+        { "file": "stories/3105-import-with-a-summary.json", "quote": "then the existing customer is updated with the row's values." }
+      ]
+    },
+    {
+      "id": "PF-03",
+      "kind": "conflict",
+      "summary": "The file size limit is 5 MB in the FRD and 10 MB in the meeting notes.",
+      "evidence": [
+        { "file": "frd.md", "quote": "The maximum file size is 5 MB." },
+        { "file": "notes.md", "quote": "The file size limit is 10 MB." }
+      ]
+    },
+    {
+      "id": "PF-04",
+      "kind": "ambiguity",
+      "summary": "\"Quickly\" has no measure: no time, size or percentile is given.",
+      "evidence": [{ "file": "frd.md", "quote": "Large files should import quickly." }]
+    },
+    {
+      "id": "PF-05",
+      "kind": "ambiguity",
+      "summary": "\"User-friendly\" error messages are not defined; no wording or rule is given.",
+      "evidence": [{ "file": "frd.md", "quote": "Error messages must be user-friendly." }]
+    },
+    {
+      "id": "PF-06",
+      "kind": "ambiguity",
+      "summary": "\"Common date formats\" does not say which formats are accepted.",
+      "evidence": [{ "file": "frd.md", "quote": "The importer accepts common date formats." }]
+    },
+    {
+      "id": "PF-07",
+      "kind": "ambiguity",
+      "summary": "The list of accepted columns ends in \"etc.\", so the full set of columns is unknown.",
+      "evidence": [{ "file": "frd.md", "quote": "The accepted columns are Email, Name, Phone, Company, Date of birth, etc." }]
+    },
+    {
+      "id": "PF-08",
+      "kind": "ambiguity",
+      "summary": "\"As appropriate\" does not say who is notified, when or how.",
+      "evidence": [{ "file": "frd.md", "quote": "Admins are notified as appropriate." }]
+    },
+    {
+      "id": "PF-09",
+      "kind": "duplicate",
+      "summary": "The email format rule is stated twice in the FRD (section 5.2 and the field rules table) and again in the validation story.",
+      "evidence": [
+        { "file": "frd.md", "quote": "Every email must be a valid email address." },
+        { "file": "frd.md", "quote": "must be a valid email address" },
+        { "file": "stories/3103-validate-rows.json", "quote": "A row whose email is not a valid email address is rejected." }
+      ]
+    },
+    {
+      "id": "PF-10",
+      "kind": "duplicate",
+      "summary": "\"Name is required\" is stated in the FRD and again in the validation story.",
+      "evidence": [
+        { "file": "frd.md", "quote": "Name is required." },
+        { "file": "stories/3103-validate-rows.json", "quote": "A row without a name is rejected." }
+      ]
+    },
+    {
+      "id": "PF-11",
+      "kind": "missing-error-behavior",
+      "summary": "Nothing says what happens to a file that is not UTF-8.",
+      "evidence": [{ "file": "frd.md", "quote": "Files must be CSV files encoded in UTF-8." }]
+    },
+    {
+      "id": "PF-12",
+      "kind": "missing-error-behavior",
+      "summary": "Nothing says what happens to a row with more fields than the header row.",
+      "evidence": [{ "file": "frd.md", "quote": "The first row of the file holds the column headers." }]
+    },
+    {
+      "id": "PF-13",
+      "kind": "missing-error-behavior",
+      "summary": "Nothing says what happens when an import fails halfway: whether written rows stay, and what the admin sees.",
+      "evidence": [{ "file": "frd.md", "quote": "When the admin confirms the preview, the importer writes every valid row as a new customer." }]
+    },
+    {
+      "id": "PF-14",
+      "kind": "missing-error-behavior",
+      "summary": "Nothing says what happens when an upload is interrupted or the connection drops.",
+      "evidence": [{ "file": "frd.md", "quote": "While the file uploads, the page shows a progress bar with the percentage sent." }]
+    },
+    {
+      "id": "PF-15",
+      "kind": "terminology",
+      "summary": "The preview story says \"contacts\" for what every other source calls customers.",
+      "evidence": [
+        { "file": "stories/3104-preview-before-importing.json", "quote": "I want to preview the contacts before they are imported" },
+        { "file": "frd.md", "quote": "Admins import customers from a CSV file" }
+      ]
+    },
+    {
+      "id": "PF-16",
+      "kind": "permission-gap",
+      "summary": "The FRD lets only admins import, the upload story says managers can start imports, and no rule covers managers.",
+      "evidence": [
+        { "file": "frd.md", "quote": "Only admins can import customers." },
+        { "file": "stories/3101-upload-a-file.json", "quote": "Managers can also start imports." }
+      ]
+    },
+    {
+      "id": "PF-17",
+      "kind": "missing-content",
+      "summary": "There is a summary message for all rows imported and for some rows rejected, but none for a file with zero valid rows.",
+      "evidence": [
+        { "file": "frd.md", "quote": "When every row is imported, the summary says:" },
+        { "file": "frd.md", "quote": "When some rows are rejected, the summary says:" }
+      ]
+    }
+  ]
+}
