@@ -120,7 +120,8 @@ evals/                             trigger, guard and pipeline cases (see evals/
 skills/feature-intelligence/
   SKILL.md                         the orchestrator
   references/                      workspace, model, ingest, requirements, quality, discovery, flows,
-                                   design-content, scenarios, lenses; forks/ (stamped forked material);
+                                   design-content, scenarios, lenses; research (read its
+                                   "Where to look" list only); forks/ (stamped forked material);
                                    ado-operations; the page-building references for plan 3
   engine/                          fi.js, lib/, test/, tools/ (tool lister, fixture generator)
   examples/csv-importer/           the synthetic fixture: FRD in three formats, notes, six stories, expected findings

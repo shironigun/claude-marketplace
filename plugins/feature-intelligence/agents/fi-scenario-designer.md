@@ -29,10 +29,10 @@ absolute path of this skill's `references` folder, and the scope: all stories, o
    the `TS` nodes (temporary ids) and their `covers` links, and run `fi add <slug> <file> --json`. On a refusal,
    fix every problem it lists and run it again.
 
-A scenario:
+A scenario, with a temporary id that a `covers` link in the same file uses (`{"from": "+t1", "type": "covers", "to": "<AC, FR or RULE id>"}`):
 
 ```json
-{"type": "TS", "title": "Manager is refused", "statement": "Given a signed-in manager, when they open the customer import, then the import is not offered.", "status": "assumed", "category": "permission", "derivedFrom": ["Q-003"]}
+{"id": "+t1", "type": "TS", "title": "Manager is refused", "statement": "Given a signed-in manager, when they open the customer import, then the import is not offered.", "status": "assumed", "category": "permission", "derivedFrom": ["Q-003"]}
 ```
 
 ## Rules

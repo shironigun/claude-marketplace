@@ -10,7 +10,7 @@ One `fi ingest` call per source. Re-ingesting an unchanged file is skipped, so i
 | Source | How |
 |---|---|
 | Markdown, text, HTML, Word (`.docx`) | `fi ingest <slug> <file> --json`. Headings become section anchors (`§3 ¶2`). |
-| PDF | Find the page count first: read page 1 with the Read tool (its result names the page count), then `fi ingest <slug> <file> --pages <N> --json`. Pages are anchored `p1` to `pN` and read by the extractor. |
+| PDF | `fi ingest <slug> <file> --json`: the engine counts the pages itself. Only if it reports that it could not count them, run it again with `--pages <N>`, the page count the user gives. Pages are anchored `p1` to `pN` and read by the extractor; the main session never reads a page. |
 | Screenshot or image | `fi ingest <slug> <file> --json`: one chunk, anchored `image`, which the extractor views. |
 | Azure DevOps work items | Read them as `references/forks/qa-engineering/ado-read-sequence.md` describes, save the bundle to the inbox, then `fi ingest <slug> --ado <file> --json`. |
 | Pasted text | Save it unchanged to the inbox as `paste-<n>.md`, then `fi ingest <slug> --paste <file> --by "<who pasted it>" --json`. |
