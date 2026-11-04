@@ -1,0 +1,3 @@
+# Generated binary fixtures: never rewrite their line endings (a PDF holds byte offsets).
+*.pdf binary
+*.docx binary
