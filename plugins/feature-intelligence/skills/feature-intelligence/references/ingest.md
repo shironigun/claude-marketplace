@@ -21,8 +21,8 @@ After each call, check the JSON:
 
 - `status: "unreadable"` (exit 1): tell the user which file, and ask for another copy or format. An unreadable
   source stays unaccounted in coverage until it is replaced.
-- `chunkCount: 0`, or 1 for a file that should hold pages of text: treat it as suspect (a Word file whose text
-  sits in an unusual place, a scanned PDF). Look at the file and tell the user before going on.
+- `chunkCount: 0` (except a repository, which has no chunks by design), or 1 for a file that should hold pages of
+  text: treat it as suspect (a Word file whose text sits in an unusual place, a scanned PDF). Look at the file and tell the user before going on.
 - `dirty: true` on a repository: the working tree has uncommitted changes. Read code with `git show` at the
   recorded commit, never from the working tree, so the anchors stay true.
 
