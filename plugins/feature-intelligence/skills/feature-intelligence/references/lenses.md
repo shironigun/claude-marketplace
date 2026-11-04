@@ -29,7 +29,7 @@ with. Several lenses deepen several sections of the same workspace.
 |---|---|---|---|---|
 | `all` (default) | A | A, B, D, I | flows, scenarios | nothing; technical detail stays brief |
 | `product` | A | A, B, C, I, K | discovery, story map, readiness | code, scenario detail |
-| `development` | F | F, B, D, H, K | technical impact (from a repository source), flows | release-note drafts |
+| `development` | F | F, B, D, H, K | flows, and section F nodes that an `fi-extractor` takes from a repository source as claims (technical impact comes in a later release) | release-note drafts |
 | `qa` | G | G, B, D | scenarios by technique | test cases, scripts, automation |
 | `design` | D | D, E | flows, design content | APIs, storage, code, scenarios |
 

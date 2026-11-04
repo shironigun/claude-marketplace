@@ -34,7 +34,7 @@ or just ask: "analyse epic 4100 for my team", "break this idea into stories", "w
 |---|---|---|
 | all (default) | the overview, requirements, flows and questions | flows, scenarios |
 | product | the overview, requirements, story analysis and questions | discovery, story map, readiness |
-| development | technical content, requirements, flows, dependencies | technical impact, flows |
+| development | technical content, requirements, flows, dependencies | flows, and section F nodes taken from a repository source as claims (technical impact comes in a later release) |
 | qa | test scenarios, requirements, flows | scenarios by technique |
 | design | flows and design content | flows, labels, messages, content |
 
