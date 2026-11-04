@@ -34,8 +34,12 @@ Azure DevOps ticket creation in plan 4: if the user asks for them, say they are 
 ## Start every session here
 
 1. Read `references/workspace.md`. Resolve the engine's absolute path (`<this skill's base directory>/engine/fi.js`).
-2. If the user names a workspace or one exists for this feature, run `fi status <slug> --json` and continue from
-   its `next` step. Do not restart a stage that is done.
+2. If the user names a workspace or one exists for this feature, run `fi status <slug> --json`. Its `next` is the
+   earliest gap the engine can see (ingest, claims, consolidation, unaccounted chunks, open questions), not the
+   stage to resume. Place the later stages from what exists in the model (the `fi status` counts, or
+   `fi query <slug> --type ...`): FND nodes exist, so the analysis ran; DL or ASM nodes exist, so clarify ran;
+   WF, SCR or TS nodes exist, so those derivations ran; unaccounted chunks already reported to the user, so
+   accounting is done. Do not restart a stage that is done.
 3. Otherwise run the intake.
 
 ## Intake
@@ -80,16 +84,19 @@ definitions in the plugin's `agents` folder.
    nodes it settles. A settled conflict gets the agreed statement, `status: "confirmed"`, and its old quotes plus
    one from the decision.
 4. If the user says to proceed on assumptions, add for each open question an `ASM` node (`status: "assumed"`,
-   `derivedFrom` the question) stating the assumption you recommended, and mark the nodes it unblocks
-   `assumed` the same way. They stay listed until someone confirms them.
+   `derivedFrom` the question) stating the assumption you recommended. Conflict nodes and source-confirmed nodes
+   keep their status, so a conflict still shows both values. Only the nodes derived from the assumed value, or
+   written afterwards and resting on it, are `assumed`, `derivedFrom` the question. They stay listed until
+   someone confirms them.
 5. The questions not asked wait for the board (plan 3); list how many in the summary.
 
 ## Existing-feature mode
 
 Register the repository with `fi ingest <slug> --repo <dir>`. Research it read-only: the "Where to look" list
 in `references/research.md` says where (existing docs, the code's entry points, data, rules, outside calls and
-states, other branches with `git show` and `git grep`, tickets, the live system only if allowed). Facts become
-claims through an `fi-extractor` with code anchors (`path:line@commit`), and flow through stages 3 to 8. There is
+states, other branches with `git show` and `git grep`, tickets, the live system only if allowed). Read only that
+list: the rest of the file describes the page-building workflow. Facts found there go to an `fi-extractor` as
+claims with code anchors (`path:line@commit`), and flow through stages 3 to 8. There is
 no ticket tree and no ticket creation in this mode.
 
 ## Review and the run summary (stage 8)

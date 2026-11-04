@@ -51,7 +51,12 @@ once at `fi init` and never changes.
 
 - **A new feature:** `fi init <slug> --mode new|existing --name "<feature name>"`, then the intake in SKILL.md.
 - **Any later session:** run `fi status <slug> --json` before anything else. Its `next` field names the next
-  step; its counts tell you what exists. Continue from there; never start a stage over because a session ended.
+  step; its counts tell you what exists. `next` is the earliest gap the engine can see (ingest, claims,
+  consolidation, unaccounted chunks, open questions), not the stage to resume: once coverage is complete it can
+  say to ask the questions although structure and analysis have not run. Place later stages from what exists
+  (`fi status` counts, or `fi query <slug> --type ...`): FND nodes mean the analysis ran; DL or ASM nodes mean
+  clarify ran; WF, SCR or TS nodes mean those derivations ran; unaccounted chunks already reported to the user
+  mean accounting is done. Never start a stage over because a session ended.
 - **Which workspace:** if the user does not name one, list `knowledge-base/features/*/workspace.json` and ask.
 
 ## How the session reads the model
