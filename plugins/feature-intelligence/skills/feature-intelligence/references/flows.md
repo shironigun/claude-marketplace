@@ -16,8 +16,8 @@ case, or a group of stories along one journey):
 3. **`DP` nodes** where the path splits ("Is every row valid?"), with a `next` link to the first step of each
    branch. Every rule that can reject or redirect is a decision point.
 4. **Error and cancel branches**: for each decision point, the path when the check fails. When the sources
-   describe it, model it; when they do not, the gap belongs to discovery: link the step to the `Q` that asks
-   about it (or add one) instead of inventing the branch.
+   describe it, model it; when they do not, the gap belongs to discovery: add a `blocks` link from the `Q` that
+   asks about it (or add one) to the step instead of inventing the branch.
 5. **`governs` links** from each `RULE` to the steps it applies to, and **`calls`/`reads`/`writes`** links to `API`
    and `ENT` nodes when the model has them.
 
