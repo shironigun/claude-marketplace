@@ -38,3 +38,9 @@ test('plugin docs: the checker catches what it is for', () => {
     'references/nowhere.md does not exist', 'wit_delete_work_item is not in ado-expected-tools.txt',
   ].sort());
 });
+
+test('plugin docs: the consolidation decisions in requirements.md are the ones the test model applies', () => {
+  const md = fs.readFileSync(path.join(SKILL_DIR, 'references', 'requirements.md'), 'utf8');
+  const example = JSON.parse(/```json\r?\n([\s\S]*?)\r?\n```/.exec(md)[1]);
+  assert.deepEqual(example, DECISIONS);
+});
