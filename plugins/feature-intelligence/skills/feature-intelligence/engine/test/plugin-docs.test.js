@@ -57,3 +57,11 @@ test('plugin docs: node examples in playbooks pass the engine schema', () => {
   }
   assert.ok(checked >= 1);
 });
+
+test('plugin docs: the section table in lenses.md matches the engine', () => {
+  const { SECTION_TYPES } = require('../lib/query');
+  const md = fs.readFileSync(path.join(SKILL_DIR, 'references', 'lenses.md'), 'utf8');
+  const table = {};
+  for (const m of md.matchAll(/^\| ([A-K]) [^|]+\| ([A-Z, ]+?)(?:, and [^|]+)?(?: with [^|]+)? \|/gm)) table[m[1]] = m[2].split(', ');
+  assert.deepEqual(table, SECTION_TYPES);
+});
