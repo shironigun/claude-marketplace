@@ -39,6 +39,11 @@ test('cli: a corrupted sources.json is a check failure, not a stack trace', () =
   const v = runFi(root, ['validate', 'csv', '--json']);
   assert.equal(v.code, 1);
   assert.ok(v.json.errors.includes('sources.json must hold a list'));
+  for (const args of [['trace', 'csv', 'RULE-001'], ['add', 'csv', write(root, 'none.json', { nodes: [] })]]) {
+    const r2 = runFi(root, args);
+    assert.equal(r2.code, 1, args.join(' '));
+    assert.match(r2.stderr, /sources.json must hold a list/);
+  }
 });
 
 test('cli: set-aside of an unknown chunk is a usage error', () => {

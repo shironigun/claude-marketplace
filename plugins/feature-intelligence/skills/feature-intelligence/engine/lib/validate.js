@@ -2,19 +2,20 @@
 const { validateNode, validateLink, validateDecision } = require('./schema');
 const { normalizeQuote } = require('./text');
 const { readJson } = require('./jsonl');
-const { loadModel, loadChunks, loadDecisions } = require('./workspace');
+const { loadModel, loadChunks, loadDecisions, loadSources } = require('./workspace');
 
 const FLAG_RE = /^F-\d+$/;
 
 // Everything a whole-model check needs. Chunks are read per source, on first use.
-function loadState(p) {
+function loadState(p, { raw = false } = {}) {
   const cache = new Map();
   const chunksAt = (srcId) => {
     if (!cache.has(srcId)) cache.set(srcId, new Map(loadChunks(p, srcId).map((c) => [c.anchor, c])));
     return cache.get(srcId);
   };
-  // sources.json is read raw here, so validateModel can report a damaged one instead of throwing.
-  return { ...loadModel(p), sources: readJson(p.sources, []), decisions: loadDecisions(p), chunksAt };
+  // validate reads sources.json raw, so it can report a damaged one; every other caller refuses it with a check error.
+  const sources = raw ? readJson(p.sources, []) : loadSources(p);
+  return { ...loadModel(p), sources, decisions: loadDecisions(p), chunksAt };
 }
 
 function checkProvenance(n, state, sources, decisions, errors) {

@@ -10,7 +10,7 @@ module.exports = {
   run(ctx, args) {
     const [slug] = args._;
     const { paths } = loadWorkspace(ctx.root, slug);
-    const state = loadState(paths);
+    const state = loadState(paths, { raw: true });
     const errors = validateModel(state);
     const counts = { nodes: state.nodes.length, links: state.links.length, decisions: state.decisions.length };
     return {
