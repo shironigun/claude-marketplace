@@ -1,7 +1,7 @@
 {
   "name": "feature-intelligence",
-  "version": "0.0.1",
-  "description": "IN DEVELOPMENT, not yet registered in the marketplace. Being built into an AI requirements-engineering and product-intelligence workspace: stories, epics, documents or a rough idea in; one traceable, audience-aware feature workspace out. Forked from feature-explainer 0.1.0 (commit 76f8f9a); until the redesign lands it runs feature-explainer's engine unchanged. For the small, concise explainer, install feature-explainer.",
+  "version": "0.0.2",
+  "description": "IN DEVELOPMENT, not yet registered in the marketplace. An AI requirements-engineering and product-intelligence workspace: stories, epics, FRD or PRD documents, notes, screenshots, code or a rough idea in; one traceable Feature Model out, where every statement carries its source quote and evidence status. It proves no source text was dropped, finds conflicts, ambiguities, gaps and permission holes, asks the highest-impact questions, and derives flows, design content and test scenarios for product, development, QA and design. The shareable reference page and Azure DevOps ticket creation arrive in later releases.",
   "author": {
     "name": "shironigun"
   },
