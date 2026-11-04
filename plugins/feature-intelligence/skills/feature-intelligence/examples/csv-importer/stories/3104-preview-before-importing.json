@@ -1,0 +1,20 @@
+[
+  {
+    "workItem": {
+      "id": 3104,
+      "rev": 2,
+      "fields": {
+        "System.WorkItemType": "User Story",
+        "System.Title": "Preview before importing",
+        "System.State": "New",
+        "System.Description": "<div>As an admin, I want to preview the contacts before they are imported, so that I can catch mistakes early.</div>",
+        "Microsoft.VSTS.Common.AcceptanceCriteria": "<ol><li>The preview lists the first 20 contacts with their validation result.</li><li>Given the admin cancels at the preview, then no contact is imported.</li></ol>"
+      }
+    },
+    "comments": {
+      "totalCount": 0,
+      "count": 0,
+      "comments": []
+    }
+  }
+]

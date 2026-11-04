@@ -1,0 +1,33 @@
+[
+  {
+    "workItem": {
+      "id": 3101,
+      "rev": 4,
+      "fields": {
+        "System.WorkItemType": "User Story",
+        "System.Title": "Upload a file",
+        "System.State": "New",
+        "System.Description": "<div>As an admin, I want to upload a CSV file of customers, so that I can import them without typing them in.</div><div>Managers can also start imports.</div>",
+        "Microsoft.VSTS.Common.AcceptanceCriteria": "<ol><li>Given a CSV file of up to 5,000 rows, when the admin uploads it, then the column mapping step opens.</li><li>Given a file with more than 5,000 rows, when it is uploaded, then it is rejected.</li><li>The rejection message names the row limit.</li></ol>"
+      }
+    },
+    "comments": {
+      "totalCount": 2,
+      "count": 2,
+      "comments": [
+        {
+          "id": 2,
+          "workItemId": 3101,
+          "text": "<p>Can the admin drag a file onto the page?</p>",
+          "createdDate": "2026-10-20T10:00:00Z"
+        },
+        {
+          "id": 3,
+          "workItemId": 3101,
+          "text": "<p>Yes, both drag and drop and the file picker.</p>",
+          "createdDate": "2026-10-20T11:30:00Z"
+        }
+      ]
+    }
+  }
+]
