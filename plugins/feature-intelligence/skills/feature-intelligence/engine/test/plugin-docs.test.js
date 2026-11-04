@@ -44,3 +44,16 @@ test('plugin docs: the consolidation decisions in requirements.md are the ones t
   const example = JSON.parse(/```json\r?\n([\s\S]*?)\r?\n```/.exec(md)[1]);
   assert.deepEqual(example, DECISIONS);
 });
+
+test('plugin docs: node examples in playbooks pass the engine schema', () => {
+  let checked = 0;
+  for (const f of PLAYBOOKS) {
+    for (const m of fs.readFileSync(f, 'utf8').matchAll(/```json\r?\n([\s\S]*?)\r?\n```/g)) {
+      const ex = JSON.parse(m[1]);
+      if (!('type' in ex && 'statement' in ex)) continue;
+      assert.deepEqual(validateNode({ ...ex, id: `${ex.type}-001`, rev: 1, updated: '2026-11-04' }), [], `${rel(f)} node example`);
+      checked += 1;
+    }
+  }
+  assert.ok(checked >= 1);
+});
