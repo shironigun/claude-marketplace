@@ -33,7 +33,7 @@ Write a work-item comment the way the QA analyst does: structured, headed, with 
 The house phrasing, to match:
 > **Bug Details:** This bug has been inspected. The issue happened because, during the DMS-D QA deployment, the `IdentityServerUrl` in the configs was updated to "…". Due to this, the token issuer changed and the CRM was getting a 401 Unauthorized error. We have now corrected it, redeployed, and verified the fix through QA testing.
 > **Status:** Tested and resolved.
-> **CC:** @Hassan Iftikhar @Richard Pineault @Muhammad Ahmad
+> **CC:** @Dev Owner @Stakeholder @Team Lead
 
 ## @Mentions
 
