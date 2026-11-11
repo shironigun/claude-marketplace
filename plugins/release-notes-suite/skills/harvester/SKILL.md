@@ -1,6 +1,6 @@
 ---
 name: harvester
-description: Build the complete ENGINEERING RELEASE INVENTORY for the product and its PARTNER-facing variant — pull everything that shipped in a date window or for an initiative: User Stories, Bugs, and Defects across BOTH the Delivery Team and SUPPORT boards, PLUS the git layer (merged PRs, commits, deployments), catching work that shipped with NO linked work item, then group it into the house inventory format (numbered themes -> items with ID, date, PRs, code touchpoints, one-liner). Use this skill WHENEVER the user wants to know what shipped / released / deployed, build a release inventory or changelog, round up everything for an initiative, or says things like "what did we ship since the last notes", "get all the PARTNER-A releases including deployments not tracked as tickets", "round up everything released for X between these dates". Upstream feeder to `releaser` (which turns the inventory into the client note). Sibling of releaser, storyteller, buggy, bugger, defector, commentor.
+description: Build the complete ENGINEERING RELEASE INVENTORY for the product and its PARTNER-facing variant — pull everything that shipped in a date window or for an initiative: User Stories, Bugs, and Defects across BOTH the Delivery Team and Support Board boards, PLUS the git layer (merged PRs, commits, deployments), catching work that shipped with NO linked work item, then group it into the house inventory format (numbered themes -> items with ID, date, PRs, code touchpoints, one-liner). Use this skill WHENEVER the user wants to know what shipped / released / deployed, build a release inventory or changelog, round up everything for an initiative, or says things like "what did we ship since the last notes", "get all the PARTNER-A releases including deployments not tracked as tickets", "round up everything released for X between these dates". Upstream feeder to `releaser` (which turns the inventory into the client note). Sibling of releaser, storyteller, buggy, bugger, defector, commentor.
 ---
 
 # Release Inventory (harvester)
@@ -16,7 +16,7 @@ Produce the **complete, grouped engineering inventory** of everything that shipp
 ## Context you can assume (project memory)
 
 - **Org:** your-org · **Project:** Example Project (GUID `00000000-0000-0000-0000-000000000000`).
-- **Boards / area paths:** `Example Project\Delivery Team` (sprint/feature work) and `Example Project\SUPPORT` (production/support). **harvester pulls BOTH** — the inventory is exhaustive (this is where it differs from `releaser`, which ignores SUPPORT).
+- **Boards / area paths:** `Example Project\Delivery Team` (sprint/feature work) and `Example Project\Support Board` (production/support). **harvester pulls BOTH** — the inventory is exhaustive (this is where it differs from `releaser`, which ignores Support Board).
 - **PARTNER / brands:** `PARTNER-A`, `PARTNER-B`, `PARTNER-C`, `PARTNER-D`, `PARTNER-E`. Two client-facing brands: a **general brand** and a **PARTNER-facing brand** (the one PARTNER-A clients see) — same platform. The inventory itself is brand-neutral; branding is applied downstream by `releaser`.
 - **Repos:** under the Example Project project — list with `ado:repo_list_repos_by_project`. Core sync code lives in services like `SyncService`/`ISyncService`, `CustomerApi`, `ReviewHubApi`, `LeadWebhookService`/`LeadWebhookApi`, `PhoneLookupApi`.
 - **Auth:** use the connected Azure DevOps MCP tools (`ado:wit_*`, `ado:repo_*`, `ado:search_*`). If a tool returns "not found", hangs after reconnect, or a permission prompt is declined, the connector/permission isn't available — see **Graceful degradation**. There is no bash fallback (ADO is off the network allowlist).
@@ -77,7 +77,7 @@ Close with one line: this inventory is exhaustive on purpose; `releaser` will su
 
 ## Hard rules
 
-- **Exhaustive, not curated.** Curation is `releaser`'s job. Include SUPPORT here (releaser excludes it). When unsure whether something shipped in-window, include it and mark the date/uncertainty.
+- **Exhaustive, not curated.** Curation is `releaser`'s job. Include Support Board here (releaser excludes it). When unsure whether something shipped in-window, include it and mark the date/uncertainty.
 - **Never claim completeness the git sweep didn't achieve** — flag the gap (Step 3).
 - **Verify against ADO. Don't invent PR numbers, IDs, or dates.** If you assert a PR touched a file, it must come from the PR's changed-files, not a guess.
 - **Internal/technical voice** — IDs, PRs, file paths, dates, environments. No client framing, no benefit copy, no emojis. (That transformation is `releaser`.)

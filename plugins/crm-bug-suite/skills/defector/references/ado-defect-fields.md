@@ -1,13 +1,13 @@
-# Defect field reference (SUPPORT)
+# Defect field reference (Support Board)
 
-Derived from the team's actual Defects on `Example Project\SUPPORT`.
+Derived from the team's actual Defects on `Example Project\Support Board`.
 
 ## Bug vs Defect — the deciding split
 
 | Dimension | **Bug** (`bugger`) | **Defect** (this skill) |
 |---|---|---|
 | Where found | QA / Staging, testing a story or regression | **Production / live clients** |
-| Area path | `Example Project\Delivery Team` | `Example Project\SUPPORT` (Kanban `Inbox → Done`) |
+| Area path | `Example Project\Delivery Team` | `Example Project\Support Board` (Kanban `Inbox → Done`) |
 | Parent | linked to a **User Story** | usually **standalone**, no parent |
 | Severity | set (`3 - Medium`) + `ValueArea = Business` | often unset; set `2 - Medium`/`1 - High` for impact |
 | Defect taxonomy | not set | `DefectType1=Web`, `PARTNER=PARTNER-A`, `Hosted=N/A`, `DataSyncIssue` |
@@ -20,7 +20,7 @@ Derived from the team's actual Defects on `Example Project\SUPPORT`.
 | Field | Reference name | Value |
 |-------|---------------|-------|
 | Type | `System.WorkItemType` | `Defect` |
-| Area path | `System.AreaPath` | `Example Project\SUPPORT` |
+| Area path | `System.AreaPath` | `Example Project\Support Board` |
 | Priority | `Microsoft.VSTS.Common.Priority` | `2` |
 | Severity | `Microsoft.VSTS.Common.Severity` | usually unset; `2 - Medium` / `1 - High` for high impact |
 | QA owner | `Custom.ExampleOwner` | the QA analyst |
@@ -33,7 +33,7 @@ Derived from the team's actual Defects on `Example Project\SUPPORT`.
 | Acceptance | `Microsoft.VSTS.Common.AcceptanceCriteria` | "I know this defect is resolved when:" |
 | Sys info | `Microsoft.VSTS.TCM.SystemInfo` | creds block |
 | Tags | `System.Tags` | `By QA Team; QA; <Module>` |
-| Release note (post-fix) | `Client.ReleaseNote` | `<id>_<version>_<date>` e.g. `151089_3.4.0_06_March` |
+| Release note (post-fix) | `Client.ReleaseNote` | `<id>_<version>_<date>` e.g. `000000_1.0.0_01_January` |
 | Root cause (post-fix) | `Custom.ExampleRootCause` | short dev RCA |
 
 ## Verbatim repro example (Defect 123456, production crash)
@@ -42,7 +42,7 @@ Derived from the team's actual Defects on `Example Project\SUPPORT`.
 <ul><li>Login to the production environment. </li><li>Navigate to <b>Settings &gt; EMAIL.</b> </li><li>Upload any attachment from local storage. </li><li>Click on the upload button. </li></ul>
 <div><b>Observation:</b></div>
 <div><ul><li>The app crashed on uploading any attachment. </li></ul>
-<div><img src="…/attachments/429c7119-…?fileName=1.gif" alt=1.gif></div></div>
+<div><img src="…/attachments/<attachment-id>?fileName=1.gif" alt=1.gif></div></div>
 ```
 
 ## Verbatim repro example (Defect 123456, multiple live clients)
@@ -50,7 +50,7 @@ Derived from the team's actual Defects on `Example Project\SUPPORT`.
 ```html
 <div>I have checked on multiple live clients and for some of them, the EQUIPMENT &amp; PARTS LOCATOR is not working. </div>
 <div>For reference, check the following clients: </div>
-<ul><li>SOHAR'S ALL SEASON MOWER SERVICE, INC. [10098004] </li></ul>
+<ul><li>EXAMPLE MOWER SERVICE, INC. [00000000] </li></ul>
 <div><img src="…/attachments/6cff4d08-…?fileName=1.gif" alt=1.gif></div>
 ```
 

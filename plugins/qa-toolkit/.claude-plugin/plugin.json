@@ -8,6 +8,5 @@
   },
   "homepage": "https://github.com/shironigun/claude-marketplace/tree/main/plugins/qa-toolkit",
   "repository": "https://github.com/shironigun/claude-marketplace",
-  "license": "MIT",
   "keywords": ["testing", "qa", "automation", "test-cases", "bug-tracker"]
 }
