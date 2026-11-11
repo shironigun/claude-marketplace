@@ -45,7 +45,7 @@ Version `0.7.0 → 0.8.0`.
 Spec: [`SP19-spec.md`](./SP19-spec.md) · Plan: [`SP19-plan.md`](./SP19-plan.md). Makes the plugin useful to QAs
 on **legacy/desktop products** (VB.NET, Delphi, WinForms/WPF) that **cannot** be Playwright-automated — story
 analysis, the Knowledge Base/atlas, test-case authoring and all Azure DevOps work (Test Plans/Suites, sprints,
-SWAT/bug boards) are relevant to them even though the automation pillar is not. Adds a **`productKind`**
+Production Support/bug boards) are relevant to them even though the automation pillar is not. Adds a **`productKind`**
 dimension to `system-map.json` (`web` | `api` | `desktop` | `mixed`) and a derived **`automation`**
 (`applicable` | `manual` | `partial`) that **gates which loop applies**. `scan-and-confirm` confirms the product
 kind first (question 2, default `web`, never silently inferred) and discovers modules **surface-first** — web

@@ -1,18 +1,18 @@
 ---
 name: defector
-description: File a production Defect work item on the "Agile Project" Azure DevOps project (SWAT board), in the team's QA house style. Use this skill WHENEVER the user wants to log, file, raise, draft, or create a DEFECT found on PRODUCTION / live clients — e.g. "log a production defect", "file a defect for this live issue", "raise a SWAT defect", "customers are seeing X on prod, log it", or pastes a production issue and asks to turn it into a Defect. For issues found while testing a story or in regression on QA/Staging use `bugger` (Bug) instead; for posting a comment on an existing ticket use `commentor`.
+description: File a production Defect work item on the "Agile Project" Azure DevOps project (Production Support board), in the team's QA house style. Use this skill WHENEVER the user wants to log, file, raise, draft, or create a DEFECT found on PRODUCTION / live clients — e.g. "log a production defect", "file a defect for this live issue", "raise a Production Support defect", "customers are seeing X on prod, log it", or pastes a production issue and asks to turn it into a Defect. For issues found while testing a story or in regression on QA/Staging use `bugger` (Bug) instead; for posting a comment on an existing ticket use `commentor`.
 ---
 
 # Production Defect Filing
 
-File a **Defect** the way the QA analyst files production issues: a sharp negative-state title, production-first repro bullets ("Login to the production environment" / "checked on multiple live clients [ID]"), a bolded `OBSERVATION`/`FINDINGS` block, a screenshot, and a "I know this is resolved when:" acceptance line — then create it as a **Defect** work item on the **SWAT** board with the production defect-taxonomy fields populated.
+File a **Defect** the way the QA analyst files production issues: a sharp negative-state title, production-first repro bullets ("Login to the production environment" / "checked on multiple live clients [ID]"), a bolded `OBSERVATION`/`FINDINGS` block, a screenshot, and a "I know this is resolved when:" acceptance line — then create it as a **Defect** work item on the **Production Support** board with the production defect-taxonomy fields populated.
 
 Defector is the production sibling of `bugger`: same voice and repro anatomy, but a different work-item type, board, and field set. The deciding test: **was it found on production / a live client?** → Defect (this skill). Found in QA/Staging against a story or in regression? → Bug (`bugger`).
 
 ## Context you can assume (from project memory)
 
 - **Org:** your-org · **Project:** Agile Project (GUID `00000000-0000-0000-0000-000000000000`)
-- **Board / area path:** `Agile Project\SWAT` — the production-support / SWAT Kanban board (`Inbox → Done`).
+- **Board / area path:** `Agile Project\Production Support` — the production-support / Production Support Kanban board (`Inbox → Done`).
 - **Author / QA identity:** the QA analyst (`qa@example.com`). Never a "QA"-prefixed display name.
 - **Auth:** this plugin **bundles** the `azure-devops` MCP (Azure Identity / `az login`, no PAT or token); use its `mcp__azure-devops__*` tools — never the Cowork OAuth ADO plugin.
 - **spec docs knowledgebase:** behaviour/flow docs at `docs/specs`. Read the relevant `modules\*.md` + `RULES.md` before analysing the issue. Verify any `[UNCLEAR]`/`[ASSUMED]` flags.
@@ -58,7 +58,7 @@ Multi-client variant (narrative + client list):
 ```html
 <div>I have checked on multiple live clients and for some of them, the EQUIPMENT &amp; PARTS LOCATOR is not working.</div>
 <div>For reference, check the following clients:</div>
-<ul><li>SOHAR'S ALL SEASON MOWER SERVICE, INC. [10098004]</li></ul>
+<ul><li>EXAMPLE MOWER SERVICE, INC. [00000000]</li></ul>
 <div><img src="PASTE_ATTACHMENT_URL?fileName=1.gif" alt=1.gif></div>
 ```
 
@@ -76,7 +76,7 @@ Field defaults for a **Defect** (full table in `references/ado-defect-fields.md`
 | Field | Value |
 |-------|-------|
 | `workItemType` | `Defect` |
-| `areaPath` | `Agile Project\SWAT` |
+| `areaPath` | `Agile Project\Production Support` |
 | `priority` | `2` |
 | `Microsoft.VSTS.Common.Severity` | usually left unset; set `2 - Medium` (or `1 - High`) for high-impact prod issues |
 | `Custom.QA` | `qa@example.com` |
@@ -96,7 +96,7 @@ mcp__azure-devops__create_work_item
   workItemType: "Defect"
   title: "<title per house style>"
   projectId: "Agile Project"
-  areaPath: "Agile Project\\SWAT"
+  areaPath: "Agile Project\\Production Support"
   priority: 2
   additionalFields:
     "Microsoft.VSTS.TCM.ReproSteps": "<repro HTML>"

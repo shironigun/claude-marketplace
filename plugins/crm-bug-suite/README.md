@@ -1,11 +1,11 @@
 # Bug Suite
 
-Three skills for the **Agile Project** Azure DevOps project, modeled on the team's actual authoring patterns (analyzed across 400+ Bugs and 180+ Defects created).
+Three skills for the **Agile Project** Azure DevOps project, modeled on the team's actual authoring patterns.
 
 | Skill | Files what | Board / type | Trigger examples |
 |-------|-----------|--------------|------------------|
 | **bugger** | A **Bug** found while testing a story or during regression (QA/Staging) | CRM Team · `Bug` | "file a bug for story 123456", "log this regression", "raise a bug on QA" |
-| **defector** | A **Defect** found on **production**/live clients | SWAT · `Defect` | "log a production defect", "file a defect for the live issue", "SWAT defect" |
+| **defector** | A **Defect** found on **production**/live clients | Production Support · `Defect` | "log a production defect", "file a defect for the live issue", "Production Support defect" |
 | **commentor** | A **comment** on any work item, in the team's voice | any | "comment on 123456", "post an update/RCA on this ticket", "CC the dev team" |
 
 ## How they relate to the existing skills

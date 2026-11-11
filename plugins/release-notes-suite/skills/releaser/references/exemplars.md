@@ -142,7 +142,7 @@ Use this to gut-check how ruthless the suppression is.
 
 - **Related-Contacts window, CRM Team board:** ~40 items closed the day before release — almost all Bugs about the feature's internals (analytics fields, DMS-B parity, over-sending control breaking customer groups, tree dupes, export), plus User Stories that were pure plumbing (an inventory screen now fetching from a new API, a mobile build, test endpoints). **Client note announced: one feature.**
 - **Later window, CRM Team board:** announced overpayment + mobile video + a messaging-performance paragraph. Shipped same window but **not announced:** widget search + its bugs, a "privacy policy shown twice" fix, user-sync plumbing, publishing-details tasks, a per-client survey defect.
-- **SWAT board (any window):** phone validation, add a text-enabled number, block a spam number, add users, remove a location, "broadcast sent at 2am," "message stuck In Progress," "user cannot login." **Zero of these are release-note material.** SWAT = firefighting.
+- **Production Support board (any window):** phone validation, add a text-enabled number, block a spam number, add users, remove a location, "broadcast sent at 2am," "message stuck In Progress," "user cannot login." **Zero of these are release-note material.** Production Support = firefighting.
 
 Ratio to internalize: **one client-facing feature can sit on top of dozens of closed items.** The note names the one; the rest stay invisible.
 
