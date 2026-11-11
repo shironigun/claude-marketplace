@@ -9,7 +9,7 @@ harvester  ->  releaser  ->  Acme Notify note + Acme CRM note
 
 ## Skills
 
-- **harvester** — builds the *complete* engineering release inventory for a date window or an initiative (e.g. "DMS-A Two-Way Sync"). Pulls User Stories, Bugs and Defects across **both** the CRM Team and SWAT boards, plus the git layer (merged PRs / commits / deployments), and deliberately catches work that shipped with **no linked ticket**. Output is the internal, exhaustive, grouped inventory — the raw material for notes. This is the opposite discipline to `releaser`: completeness, not curation.
+- **harvester** — builds the *complete* engineering release inventory for a date window or an initiative (e.g. "DMS-A Two-Way Sync"). Pulls User Stories, Bugs and Defects across **both** the CRM Team and Production Support boards, plus the git layer (merged PRs / commits / deployments), and deliberately catches work that shipped with **no linked ticket**. Output is the internal, exhaustive, grouped inventory — the raw material for notes. This is the opposite discipline to `releaser`: completeness, not curation.
 - **releaser** — turns an inventory or a technical draft into the short, benefit-led client note in the support lead / support-team house style, deciding what to announce vs. suppress. Emits **Acme Notify** (DMS-A-facing brand) and **Acme CRM** variants from one run; branding is a profile, not a separate skill.
 
 ## Install note

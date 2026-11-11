@@ -18,7 +18,7 @@ the KB/atlas maps routes→controllers→API, UI cases use Playwright web locato
 framework build + run. But a real cohort of QAs test **legacy/desktop apps that Playwright cannot drive** — and
 for them most of the plugin's value still applies: analyzing an ADO story, building a feature **Knowledge Base
 + atlas** (they have the source), writing **test cases**, publishing them to **ADO Test Plans/Suites**, and
-filing **bugs** to the SWAT/bug boards. Today those QAs hit web/automation assumptions that don't fit. SP19
+filing **bugs** to the Production Support/bug boards. Today those QAs hit web/automation assumptions that don't fit. SP19
 makes the plugin **assist everyone to the extent their product allows**: automation where a surface can be
 automated, the full manual-QA + ADO loop everywhere else.
 

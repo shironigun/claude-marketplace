@@ -18,7 +18,7 @@ the QA analyst (QA->BA) writes the exhaustive technical draft — every behavior
 ## Context you can assume (from project memory)
 
 - **Org:** acme-org · **Project:** Agile Project (GUID `00000000-0000-0000-0000-000000000000`).
-- **Boards / area paths:** `Agile Project\CRM Team` (sprint/feature work — **the only real source for release-note candidates**) and `Agile Project\SWAT` (production firefighting + per-client support — **essentially never client-announcement material**; treat as omit-by-default).
+- **Boards / area paths:** `Agile Project\CRM Team` (sprint/feature work — **the only real source for release-note candidates**) and `Agile Project\Production Support` (production firefighting + per-client support — **essentially never client-announcement material**; treat as omit-by-default).
 - **DMS / plans:** `DMS-A`, `DMS-C` (a.k.a. DMS-C/DMS-C), `DMS-B`, `DMS-A`, `DMS-D`. Feature availability differs by DMS and by tier (`Connect` / `Engage` / `Complete`). Getting the availability line right matters more to clients than the feature copy.
 - **Product surface:** Acme CRM / Acme Notify — Messenger, Broadcasts, Surveys, Feedback, Customers, Customer Groups, Tasks, Automations, Deals, Payments (Text-to-Pay), Inventory, Settings, Dashboard, Website Widget.
 - **People:** the QA analyst (`qa@example.com`, QA->BA, drafts + accuracy), the support lead (support/training lead, owns client notes + webinars, final editorial authority — "you're the expert here"), the editor (presentation edits/approval), the release manager (timing, tiers, approval), a developer / a developer (dev).
@@ -32,7 +32,7 @@ Two entry modes — detect which from the request.
 **Mode A — Transform (user pastes material).** They give you a technical draft, an spec docs/flow doc, a changelog, or a ticket. Skip straight to Triage -> Draft.
 
 **Mode B — Pull from ADO (user says "what shipped since last notes" / "prep this week's release notes" / gives a date window).**
-1. Query **closed CRM Team** items in the window (WIQL below). Ignore SWAT unless the user explicitly says a production fix is broadly client-relevant.
+1. Query **closed CRM Team** items in the window (WIQL below). Ignore Production Support unless the user explicitly says a production fix is broadly client-relevant.
 2. Batch-fetch titles + type + tags; group by feature area.
 3. Run **Triage** on the grouped list. Collapse a feature + its supporting bug pile into a single announce candidate.
 4. Present the triage table (announce / fold-in / omit / defer, with one-line reasons) **before drafting** — this is where the support lead's judgment gets confirmed and where you flag "is there even enough to announce?"
@@ -72,7 +72,7 @@ Classify every item into one of four buckets. The reasoning behind each rule mat
 - **Pure internal / plumbing** — API-source swaps (Wholegoods from DMS-E), build numbers, endpoint config, iOS/Android publishing tasks, role-retrieval/DMS-D API work, user-sync internals. "Nothing new for clients — just keeping everyone informed."
 - **Rare edge cases** — the Facebook double-account-merge scenario ("infrequent enough that this should not be an issue"). Don't teach clients to fear corners they'll rarely hit.
 - **Narrow fixes in lightly-used features — especially ones nobody noticed.** A bug fix that touches only a feature a small minority uses stays out of the note. the support lead cut the whole "Add your own links to messages" section (embedding links in *email* broadcasts) because maybe 1 in 10 clients use email broadcasts at all: for the majority it changes nothing, and announcing it only alerts people to a problem they never knew existed. Weigh usage share, not just whether the fix is real.
-- **The entire SWAT board** — per-client support (phone validation, add number, block spam, add users) and production defects (broadcast at 2am, MMS stuck). Firefighting is not a feature.
+- **The entire Production Support board** — per-client support (phone validation, add number, block spam, add users) and production defects (broadcast at 2am, MMS stuck). Firefighting is not a feature.
 
 **DEFER TO KB** — true and useful, but too deep or too niche for the note.
 - Workflow depth and lightly-used paths (e.g. the Email Type filter): "I discuss that in the KB. I'm trying not to let the notes get too long." Notes stay short and screenshot-scannable because **clients mostly skim shared screenshots to see what changed.** Put the detail in learn.example.com and keep the note to the headline.
@@ -164,7 +164,7 @@ Client-facing upgrade/paywall copy (the "module blocked" popup: a one-line modul
 ## Hard rules
 
 - **Suppress aggressively.** The default for any given shipped item is *omit*. Announce only what earns it. A short note that says one true thing beats a long one that dumps the sprint.
-- **Never announce a bug fix as a feature**, never announce internal/plumbing work, never pull from SWAT by default.
+- **Never announce a bug fix as a feature**, never announce internal/plumbing work, never pull from Production Support by default.
 - **Name features by client benefit**, not internal/subsystem names.
 - **Get the availability line right or flag it** — never guess DMS/tier scope.
 - **Never auto-publish or imply published.** Draft -> user/the support lead review -> approval. Screenshots and the live webinar/KB links are added by the support lead.

@@ -10,7 +10,7 @@ Write test cases the way the QA analyst (QA→BA on Acme CRM) writes them: preci
 ## Context you can assume (from project memory)
 
 - **Org:** acme-org · **Project:** Agile Project (ID `00000000-0000-0000-0000-000000000000`)
-- **Boards:** SWAT (#30, production defects) and CRM Team (#44, sprint/feature work)
+- **Boards:** Production Support (production defects) and CRM Team (#44, sprint/feature work)
 - **Test Plan:** planId=57868 · suiteId=57869
 - **Author identity:** the QA analyst (`qa@example.com`)
 - **Flow docs** (if the user built them): a folder of linked Markdown — `README.md` (index/mindmap), `RULES.md` (business-rule registry), `modules/*.md`, `integrations/*.md`. These are the source of truth for behavior; read the relevant module file + its linked neighbors + the cited RULES anchors before writing.
@@ -96,7 +96,7 @@ azure-devops:create_work_item
   workItemType: "Test Case"
   title: "<title per format above>"
   projectId: "Agile Project"
-  areaPath: <SWAT or CRM Team area, matching the source ticket>
+  areaPath: <Production Support or CRM Team area, matching the source ticket>
   assignedTo: "qa@example.com"   # unless told otherwise
   additionalFields:
     "Microsoft.VSTS.TCM.Steps": "<steps as HTML — see references/ado-steps-format.md>"

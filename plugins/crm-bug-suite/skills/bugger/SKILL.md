@@ -12,7 +12,7 @@ This is the bug-filing sibling of the `buggy` test-case skill: same voice, same 
 ## Context you can assume (from project memory)
 
 - **Org:** acme-org · **Project:** Agile Project (GUID `00000000-0000-0000-0000-000000000000`)
-- **Board / area path:** `Agile Project\CRM Team` — the QA/feature-testing board where regression and story bugs live. (SWAT is for production defects — that's `defector`.)
+- **Board / area path:** `Agile Project\CRM Team` — the QA/feature-testing board where regression and story bugs live. (Production Support is for production defects — that's `defector`.)
 - **Author / QA identity:** the QA analyst (`qa@example.com`). Never a "QA"-prefixed display name.
 - **Auth:** this plugin **bundles** the `azure-devops` MCP (Azure Identity / `az login`, no PAT or token); use its `mcp__azure-devops__*` tools — never the Cowork OAuth ADO plugin.
 - **spec docs knowledgebase:** behaviour/flow docs at `docs/specs`. Read the relevant `modules\*.md` + `RULES.md` before analysing the ticket. Verify any `[UNCLEAR]`/`[ASSUMED]` flags before asserting behaviour.
@@ -35,7 +35,7 @@ Declarative bug **statement** (not imperative, not "Verify that…"). State what
 - **ALL-CAPS the domain keywords**: states and entities (`CLOSED`, `OPEN`, `EMAIL`, `MMS`, `PDF`, `CSV`, `FB`), DMS names (`DMS-B`, `DMS-C`, `DMS-E`, `DMS-A`, `ACME`), environments (`QA`, `STAGING`, `PRODUCTION`).
 - **Name the module/screen**, using breadcrumb arrows when nested: `Settings > EMAIL`, `Notification panel > Task detail`.
 - **End with the environment**: `… on QA environment.`, `… on STAGING & QA`, `… on DMS-B QA environment.`
-- Include the bracketed **client ID** when client-specific: `Sosebees Outdoor Power and Repair [11928]`.
+- Include the bracketed **client ID** when client-specific: `Example Outdoor Equipment [00000]`.
 
 Real examples:
 - `EMAIL Automations are not working on QA environment`
