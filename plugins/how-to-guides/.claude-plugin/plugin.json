@@ -1,0 +1,20 @@
+{
+  "name": "how-to-guides",
+  "version": "0.1.0",
+  "description": "Write complete customer-facing how-to guides for one feature of a B2B software product (dealership software, CRM, scheduling, field service, any B2B SaaS) and build them as branded PDFs. Follows a researched standard (DITA, Microsoft and Google style guides, Diátaxis, minimalism, plus lessons from real support-team reviews): problem first, one How it works section, three-part steps with what you'll see, an AI callout for AI features, who a message comes from, and a troubleshooting table. Learns each behaviour from the code and the app read-only, and hands back questions, change requests and bugs for product. The build turns Markdown into a tagged PDF with covers, numbered steps, callouts and framed screenshots, and checks the guide against the standard. Includes a demo-data screenshot driver and a callout tool. Product-neutral: ships no brand; your logo, colours, font and house rules live in your own howto-brand.json.",
+  "author": { "name": "shironigun" },
+  "keywords": [
+    "documentation",
+    "how-to",
+    "user-guide",
+    "help-center",
+    "customer-education",
+    "training",
+    "pdf",
+    "b2b",
+    "saas",
+    "dealership",
+    "technical-writing",
+    "style-guide"
+  ]
+}

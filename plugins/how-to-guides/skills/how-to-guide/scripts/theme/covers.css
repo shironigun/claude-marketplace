@@ -1,0 +1,183 @@
+/* Document covers: every first-page style lives here, separate from the page theme (theme.css).
+   Pick one per guide with "cover:" in front matter, or --cover=<style>. See them all with: node build.mjs <guide.md> --covers */
+
+@page cover {
+  margin: 0;
+  @top-left { content: none; } @top-right { content: none; }
+  @bottom-left { content: none; } @bottom-right { content: none; }
+}
+
+/* ---------- Cover: white page, logo, feature name, the task as a subheading ----------
+   Pick a style with "cover:" in front matter or --cover=. Every style stays white: brand colour only
+   as the logo, a short accent rule and a light background pattern, never a coloured block. */
+.cover {
+  page: cover; break-after: page; position: relative; width: 8.5in; height: 11in; overflow: hidden;
+  box-sizing: border-box; background: var(--paper); color: var(--ink);
+}
+.cover-bar, .cover-mark, .cover-logo-white { display: none; }
+.cover-logo { position: absolute; left: 0.9in; top: 0.9in; height: 30pt; width: auto; }
+.cover-title { position: absolute; left: 0.9in; right: 0.9in; top: 4.2in; }
+.cover-type { font-size: 8.5pt; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; color: var(--main); }
+.cover h1 { margin: 12pt 0 0; max-width: 6.4in; font-size: 44pt; line-height: 1.06; font-weight: 700; letter-spacing: -.025em; color: var(--ink); }
+.cover h1::after { content: ""; display: block; width: 44pt; height: 4pt; border-radius: 2pt; margin-top: 18pt; background: var(--accent); }
+.cover-sub { margin: 14pt 0 0; max-width: 5.8in; font-size: 16pt; line-height: 1.4; font-weight: 500; color: var(--muted); }
+.cover-foot {
+  position: absolute; left: 0.9in; right: 0.9in; bottom: 0.8in; display: flex; justify-content: space-between;
+  padding-top: 10pt; border-top: 1pt solid var(--divider);
+  font-size: 8.5pt; font-weight: 600; letter-spacing: .04em; color: #78909c;
+}
+
+/* classic: a thin brand line along the top edge */
+.cover-classic .cover-bar { display: block; position: absolute; left: 0; right: 0; top: 0; height: 6pt; background: linear-gradient(90deg, var(--main) 0 86%, var(--accent) 86%); }
+.cover-classic h1::after { background: var(--main); }
+
+/* centered: everything on the centre line, logo above the title */
+.cover-centered .cover-logo { left: 50%; top: 3.2in; height: 34pt; transform: translateX(-50%); }
+.cover-centered .cover-title { top: 4.6in; text-align: center; }
+.cover-centered h1, .cover-centered .cover-sub { margin-left: auto; margin-right: auto; }
+.cover-centered h1::after { margin: 18pt auto 0; }
+.cover-centered .cover-foot { justify-content: center; gap: 18pt; border-top: 0; }
+
+/* corner (needs a brand "mark"): the mark large in the bottom-right corner */
+.cover-corner .cover-mark { display: block; position: absolute; right: -1.5in; bottom: -1.3in; width: 6.2in; opacity: .14; }
+.cover-corner .cover-foot { right: 4.6in; justify-content: flex-start; gap: 18pt; }
+
+/* watermark (needs a brand "mark"): centred, the mark as an emblem above the title */
+.cover-watermark .cover-mark { display: block; position: absolute; left: 50%; top: 2.05in; width: 3.4in; transform: translateX(-50%); opacity: .14; }
+.cover-watermark .cover-logo { left: 50%; transform: translateX(-50%); }
+.cover-watermark .cover-title { top: 6.05in; text-align: center; }
+.cover-watermark h1, .cover-watermark .cover-sub { margin-left: auto; margin-right: auto; }
+.cover-watermark h1::after { margin: 18pt auto 0; }
+.cover-watermark .cover-foot { justify-content: center; gap: 18pt; border-top: 0; }
+
+/* frame: a thin brand-colour frame around the page with an accent corner */
+.cover-frame .cover-bar { display: block; position: absolute; inset: 0.45in; border: 1.2pt solid var(--main); border-radius: 4pt; }
+.cover-frame .cover-bar::after { content: ""; position: absolute; left: -1.2pt; top: -1.2pt; width: 1.1in; height: 5pt; background: var(--accent); border-radius: 4pt 0 0 0; }
+.cover-frame .cover-logo { top: 1.05in; }
+.cover-frame .cover-foot { bottom: 0.95in; }
+
+/* tint (needs a brand "mark"): a light grey page with the mark resting on the right edge */
+.cover-tint { background: var(--ground); }
+.cover-tint .cover-mark { display: block; position: absolute; right: -2.7in; top: 5.75in; width: 5.4in; opacity: .18; }
+.cover-tint .cover-title { right: 2.6in; }
+.cover-tint .cover-foot { right: 4.6in; justify-content: flex-start; gap: 18pt; border-top-color: #dfe3e8; }
+
+/* ---- Background patterns: drawn on the page itself and faded out before they reach the title.
+   The pattern is an inline SVG mask over a fading brand-colour gradient (Chrome won't mask with a local file, and its PDF output ignores mask-composite). ---- */
+.cover-dots::before, .cover-rings::before, .cover-crosshair::before,
+.cover-lines::before, .cover-glow::before { content: ""; position: absolute; inset: 0; }
+
+/* dots: a dot grid, strongest in the bottom-right corner */
+.cover-dots::before {
+  background: radial-gradient(circle at 100% 100%, var(--main) 0, color-mix(in srgb, var(--main) 55%, transparent) 35%, transparent 72%);
+  -webkit-mask: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2220%22%20height%3D%2220%22%3E%3Ccircle%20cx%3D%2210%22%20cy%3D%2210%22%20r%3D%221.5%22%20fill%3D%22%23000%22%20fill-opacity%3D%22.32%22%2F%3E%3C%2Fsvg%3E") 0 0 / 14pt 14pt;
+}
+
+/* rings: thin concentric rings, centred on the bottom-right corner */
+.cover-rings::before { inset: auto; right: -4.1in; bottom: -4.1in; width: 8.2in; height: 8.2in; border-radius: 50%;
+  background: repeating-radial-gradient(circle closest-side, transparent 0 24.4pt, var(--main) 24.4pt 25.4pt);
+  mask-image: radial-gradient(circle closest-side, rgba(0, 0, 0, .3), rgba(0, 0, 0, .08) 99%, transparent 100%); }
+
+.cover-rings .cover-foot { right: 4.6in; justify-content: flex-start; gap: 18pt; }
+
+/* crosshair: a grid of small crosshairs fading out from the top-right corner */
+.cover-crosshair::before {
+  background: radial-gradient(circle at 100% 0, var(--main) 0, color-mix(in srgb, var(--main) 50%, transparent) 22%, transparent 38%);
+  -webkit-mask: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2240%22%20height%3D%2240%22%3E%3Cpath%20d%3D%22M20%2014v12M14%2020h12%22%20stroke%3D%22%23000%22%20stroke-opacity%3D%22.34%22%20stroke-width%3D%221.4%22%20stroke-linecap%3D%22round%22%20fill%3D%22none%22%2F%3E%3C%2Fsvg%3E") 0 0 / 22pt 22pt;
+}
+
+/* lines: fine diagonal hairlines across the top-right corner */
+.cover-lines::before {
+  background: repeating-linear-gradient(135deg, color-mix(in srgb, var(--main) 16%, transparent) 0 .7pt, transparent .7pt 8pt);
+  -webkit-mask-image: radial-gradient(circle at 100% 0, #000 0, rgba(0, 0, 0, .6) 24%, transparent 40%);
+          mask-image: radial-gradient(circle at 100% 0, #000 0, rgba(0, 0, 0, .6) 24%, transparent 40%);
+}
+
+/* glow: two soft light washes, brand colour low and accent high, no shapes */
+.cover-glow::before {
+  background:
+    radial-gradient(75% 55% at 100% 100%, color-mix(in srgb, var(--main) 16%, transparent), transparent 70%),
+    radial-gradient(55% 40% at 100% 0, color-mix(in srgb, var(--accent) 18%, transparent), transparent 70%),
+    radial-gradient(45% 35% at 0 100%, color-mix(in srgb, var(--main) 7%, transparent), transparent 70%);
+}
+
+/* ---- title-card: a centred title card on a calm grey dotted page ---- */
+.cover-title-card { background: var(--ground) url("patterns/desk-dots.svg") 0 0 / 15pt 15pt; }
+.cover-title-card .cover-type {
+  display: inline-block; padding: 5pt 13pt; border-radius: 999pt; background: var(--paper); color: var(--main);
+  box-shadow: 0 6pt 16pt rgba(38, 50, 56, .12), 0 0 0 1.5pt color-mix(in srgb, var(--main) 22%, transparent);
+}
+.cover-title-card .cover-logo { left: 50%; top: 2.7in; height: 36pt; transform: translateX(-50%); }
+.cover-title-card .cover-title { top: 4.15in; text-align: center; }
+.cover-title-card h1 { margin: 18pt auto 0; font-size: 46pt; font-weight: 600; }
+.cover-title-card h1::after { margin: 18pt auto 0; }
+.cover-title-card .cover-sub { margin-left: auto; margin-right: auto; }
+.cover-title-card .cover-foot { justify-content: center; gap: 18pt; border-top: 0; }
+
+/* ---- Brochure covers: drawn artwork from theme/cover-art.mjs (an inline SVG under everything else),
+   with the guide's coverImage as the photo. The brand colour first, a softer shade of it second. ---- */
+.cover-ver, .cover-blurb { display: none; }
+.cover-art { position: absolute; inset: 0; width: 8.5in; height: 11in; }
+.cover-orbit, .cover-hexagon, .cover-facets, .cover-profile { --strong: var(--main); }
+.cover-orbit h1::after, .cover-hexagon h1::after, .cover-facets h1::after, .cover-profile h1::after { display: none; }
+
+/* orbit: logo on the arc, two-tone stacked name, the version large at the foot */
+.cover-orbit .cover-logo { display: none; }
+.cover-orbit .cover-logo-white { display: block; position: absolute; left: 0.9in; top: 0.85in; height: 30pt; width: auto; }
+.cover-orbit .cover-title { top: 6.55in; right: 2in; }
+.cover-orbit .cover-type { color: var(--muted); }
+.cover-orbit h1 { margin-top: 8pt; font-size: 46pt; line-height: 1.02; text-transform: uppercase; letter-spacing: .005em; color: var(--strong); }
+.cover-orbit .h1-last { display: block; color: var(--soft); }
+.cover-orbit .cover-sub { font-size: 14pt; }
+.cover-orbit .cover-foot { right: 4in; bottom: 0.85in; justify-content: flex-start; align-items: baseline; gap: 14pt; border-top: 0; padding-top: 0; }
+.cover-orbit .foot-version { font-size: 17pt; font-weight: 700; letter-spacing: 0; color: var(--strong); }
+
+/* hexagon: white logo and summary on the blue, the title inside the hexagon above the photo */
+.cover-hexagon .cover-logo { display: none; }
+.cover-hexagon .cover-logo-white { display: block; position: absolute; left: 0.9in; top: 0.75in; height: 28pt; width: auto; }
+.cover-hexagon .cover-blurb {
+  display: block; position: absolute; left: 0.9in; top: 1.45in; width: 2.5in; margin: 0;
+  font-size: 9pt; line-height: 1.5; font-weight: 500; color: rgba(255, 255, 255, .85);
+}
+.cover-hexagon .cover-title { left: 2.25in; right: 2.25in; top: 3.5in; text-align: center; }
+.cover-hexagon .cover-type { color: var(--strong); font-size: 8pt; }
+.cover-hexagon h1 { margin: 7pt auto 0; font-size: 28pt; line-height: 1.1; color: var(--ink); }
+.cover-hexagon .cover-sub { margin: 7pt auto 0; max-width: 3.3in; font-size: 11pt; line-height: 1.4; }
+.cover-hexagon .cover-foot {
+  left: 2.4in; right: 2.4in; bottom: 0.65in; justify-content: center; gap: 0; border-top: 0; padding: 0;
+  font-size: 8.5pt; color: var(--muted); text-align: center;
+}
+.cover-hexagon .cover-foot span { padding: 0 14pt; }
+.cover-hexagon .cover-foot span + span { border-left: 1pt solid var(--divider); }
+.cover-hexagon .foot-version { font-size: 10pt; font-weight: 700; color: var(--strong); }
+
+/* facets: the title in white on the blue diamond, a short white rule under the subheading */
+.cover-facets .cover-title { top: 7.75in; right: 3.4in; }
+.cover-facets .cover-type { color: var(--tint); font-weight: 600; }
+.cover-facets h1 { margin-top: 6pt; font-size: 38pt; color: #fff; }
+.cover-facets .cover-sub { font-size: 13.5pt; color: rgba(255, 255, 255, .86); }
+.cover-facets .cover-sub::after { content: ""; display: block; width: 1.9in; height: 2pt; margin-top: 14pt; background: rgba(255, 255, 255, .85); }
+.cover-facets .cover-foot { bottom: 0.6in; right: 4.6in; justify-content: flex-start; gap: 18pt; border-top: 0; color: rgba(255, 255, 255, .72); }
+
+/* profile: white logo on the photo, the summary in the brand panel, a stacked two-tone name and a version rule */
+.cover-profile .cover-logo { display: none; }
+.cover-profile .cover-logo-white { display: block; position: absolute; left: 0.9in; top: 0.6in; height: 28pt; width: auto; }
+.cover-profile .cover-blurb {
+  display: block; position: absolute; left: 5.8in; top: 3.9in; width: 2.35in; margin: 0;
+  font-size: 8.5pt; line-height: 1.45; font-weight: 500; color: #fff;
+}
+.cover-profile .cover-title { top: 6.15in; right: 1.4in; }
+.cover-profile .cover-type { color: var(--muted); }
+.cover-profile h1 { margin-top: 8pt; font-size: 50pt; line-height: 1.02; text-transform: uppercase; letter-spacing: .005em; color: var(--soft); }
+.cover-profile .h1-last { display: block; color: var(--strong); }
+.cover-profile .cover-ver { display: flex; align-items: center; gap: 12pt; margin-top: 12pt; font-size: 19pt; font-weight: 700; color: var(--soft); }
+.cover-profile .cover-ver::after { content: ""; width: 1.1in; height: 3pt; border-radius: 2pt; background: var(--soft); }
+.cover-profile .cover-sub { font-size: 14pt; }
+.cover-profile .cover-foot { right: 4.6in; justify-content: flex-start; border-top: 0; }
+.cover-profile .foot-version { display: none; }
+
+/* Option label, printed only in the --covers catalog */
+.cover-note {
+  position: absolute; left: 0; right: 0; bottom: 0.28in; text-align: center;
+  font-size: 7.5pt; font-weight: 700; letter-spacing: .08em; color: #90a4ae;
+}

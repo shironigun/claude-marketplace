@@ -1,0 +1,8 @@
+{
+  "product": "Your product",
+  "logo": "brand/logo.png",
+  "colors": { "primary": "#2b59c3", "accent": "#f0b323" },
+  "cover": "classic",
+  "help": "**Still stuck?** Contact our support team, or visit [our help centre](https://example.com/help).",
+  "rules": "house-rules.md"
+}
