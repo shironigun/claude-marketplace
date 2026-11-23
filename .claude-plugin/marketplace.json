@@ -48,6 +48,12 @@
       "description": "Name a feature and a reader (product, QA, design, dev, sales) and get a visual explainer page for them: researched read-only, drawn as journeys, grids and annotated screens, the right detail collapsed or left out",
       "source": "./plugins/feature-explainer",
       "category": "documentation"
+    },
+    {
+      "name": "how-to-guides",
+      "description": "Customer how-to guides for B2B software (dealerships and any B2B SaaS): one feature, researched read-only, written to a standard and built as a branded PDF. Your brand and house rules stay in your own howto-brand.json",
+      "source": "./plugins/how-to-guides",
+      "category": "documentation"
     }
   ]
 }

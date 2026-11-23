@@ -117,6 +117,7 @@ remove one first (`claude plugin marketplace remove shironigun`).
 | [crm-bug-suite](#crm-bug-suite) | bug-tracking | Files Bugs/Defects and ticket comments on a specific ADO project in a house style. |
 | [release-notes-suite](#release-notes-suite) | release-management | Two-stage release pipeline: harvest the engineering inventory → write audience-facing release notes. |
 | [feature-explainer](#feature-explainer) | documentation | Name a feature and a reader (product, QA, design, dev, sales) → a visual explainer page for them, researched read-only. **Product-neutral.** |
+| [how-to-guides](#how-to-guides) | documentation | Customer how-to guides for B2B software (dealerships and any B2B SaaS) to a researched standard, built as branded PDFs. **Product-neutral.** |
 
 > Several plugins (`api-testing`, `ui-testing`, `crm-bug-suite`, `release-notes-suite`) are tailored to
 > a specific product and Azure DevOps project; `qa-toolkit` and **`qa-engineering`** are product-neutral and
@@ -204,6 +205,15 @@ edition leads with what that reader needs (journeys and decisions, testable rule
 architecture and contract, or a customer-facing overview) as pictures, with the right detail collapsed or
 left out, and an audience-aware lint checks it before it is built. Bundles a drawing kit, a build script and layout checks. See
 `plugins/feature-explainer/README.md`.
+
+### how-to-guides
+
+Name a feature and **how-to-guide** writes the complete customer guide for it: what it does, how it works,
+every task as checked steps, the questions readers ask and what to do when something goes wrong. It learns
+the feature from the code and the app (read-only), keeps lists of open questions, change requests and bugs
+for product, and builds a branded PDF from Markdown with checks against the standard. Your logo, colours,
+font and house rules live in your own `howto-brand.json`, never in the plugin. See
+`plugins/how-to-guides/README.md`.
 
 ---
 
