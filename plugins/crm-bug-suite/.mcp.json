@@ -1,5 +1,5 @@
 {
-  "_comment": "Self-contained + secret-free. Bundles the azure-devops MCP with Azure Identity auth (DefaultAzureCredential), so NO PAT or token lives here or is required. Run 'az login' once; the org defaults to acme-org (edit AZURE_DEVOPS_ORG_URL for another org). Windows 'cmd /c npx' launcher shown; on macOS/Linux use command 'npx' with the args after '/c' (see README.md).",
+  "_comment": "Self-contained + secret-free. Bundles the azure-devops MCP with Azure Identity auth (DefaultAzureCredential), so NO PAT or token lives here or is required. Run 'az login' once; the org defaults to your-org (edit AZURE_DEVOPS_ORG_URL for another org). Windows 'cmd /c npx' launcher shown; on macOS/Linux use command 'npx' with the args after '/c' (see README.md).",
   "mcpServers": {
     "azure-devops": {
       "type": "stdio",

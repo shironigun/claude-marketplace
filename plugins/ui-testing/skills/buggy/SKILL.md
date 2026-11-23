@@ -1,15 +1,15 @@
 ---
 name: buggy
-description: Write test cases for Acme APP (Acme) tickets in the team's QA style and push them into Azure DevOps. Use this skill WHENEVER the user asks to write, draft, generate, or create test cases for an Acme APP ticket, defect, bug, or user story — or mentions a work item ID and testing, a Test Plan/Suite, test steps, expected/actual results, or QA verification on the Example Project project. Trigger it even if the user only says "write tests for #123456" or "I need test cases for this story," and also when they paste a ticket description or flow doc and ask how to test it.
+description: Write test cases for APP tickets in the team's QA style and push them into Azure DevOps. Use this skill WHENEVER the user asks to write, draft, generate, or create test cases for a ticket, defect, bug, or user story — or mentions a work item ID and testing, a Test Plan/Suite, test steps, expected/actual results, or QA verification on the Example Project project. Trigger it even if the user only says "write tests for #123456" or "I need test cases for this story," and also when they paste a ticket description or flow doc and ask how to test it.
 ---
 
-# Acme APP Test Case Authoring
+# Test Case Authoring
 
-Write test cases the way the QA analyst (QA→BA on Acme APP) writes them: precise, behavior-driven, no ceremony — then create them as Test Case work items in Azure DevOps and link them to the source ticket.
+Write test cases the way the QA analyst (QA→BA on the product) writes them: precise, behavior-driven, no ceremony — then create them as Test Case work items in Azure DevOps and link them to the source ticket.
 
 ## Context you can assume (from project memory)
 
-- **Org:** acme-org · **Project:** Example Project (ID `00000000-0000-0000-0000-000000000000`)
+- **Org:** your-org · **Project:** Example Project (ID `00000000-0000-0000-0000-000000000000`)
 - **Boards:** Support Board (production defects) and Delivery Team (#44, sprint/feature work)
 - **Test Plan:** planId=57868 · suiteId=57869
 - **Author identity:** the QA analyst (`qa@example.com`)
@@ -49,7 +49,7 @@ Preconditions: Client ID: <id> | Environment: <QA/Staging/Production> | <any set
 
 | # | Action | Expected Result |
 |---|--------|-----------------|
-| 1 | Login to Acme APP | User is logged in and the dashboard loads |
+| 1 | Login to the product | User is logged in and the dashboard loads |
 | 2 | Navigate to Settings | Settings page opens |
 | 3 | Move to the Deals tab | Deals settings tab is displayed |
 | 4 | Click on the Add Pipeline button | Add Pipeline form/drawer opens |

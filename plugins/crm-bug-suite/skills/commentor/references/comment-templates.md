@@ -19,7 +19,7 @@ Mention anchor:
 ```html
 <div><b>Bug Details:</b> This bug has been inspected. The issue happened because <one-line cause naming the exact config key / client ID / error code>.</div>
 <div><ul>
-  <li>Due to this, <consequence, e.g. the token issuer changed and Acme APP got a 401 Unauthorized error>.</li>
+  <li>Due to this, <consequence, e.g. the token issuer changed and the product got a 401 Unauthorized error>.</li>
   <li>We have now <corrective action>, redeployed, and verified the fix through QA testing.</li>
 </ul></div>
 <div><b>Status:</b> Tested and resolved.</div>
@@ -50,7 +50,7 @@ Mention anchor:
 
 Process-escalation tone — state ownership and the approved path:
 ```html
-<div><a href="#" data-vss-mention="version:2.0,GUID">@Owner</a> PARTNER-A can only help sync between PARTNER-A and PARTNER-E as far as PARTNER-D is concerned. If there is any issue with feeds, please involve the PARTNER-E team and have them contact us — that's the approved process. Unless it's the Customer Feed (Acme APP → PARTNER-A) or the Acme APP embedded browser in PARTNER-A, submit that issue to <a href="#" data-vss-mention="version:2.0,GUID">@Owner</a>.</div>
+<div><a href="#" data-vss-mention="version:2.0,GUID">@Owner</a> PARTNER-A can only help sync between PARTNER-A and PARTNER-E as far as PARTNER-D is concerned. If there is any issue with feeds, please involve the PARTNER-E team and have them contact us — that's the approved process. Unless it's the Customer Feed (the product → PARTNER-A) or the embedded browser in PARTNER-A, submit that issue to <a href="#" data-vss-mention="version:2.0,GUID">@Owner</a>.</div>
 <div>@… @… @…</div>
 ```
 

@@ -1,4 +1,4 @@
-# Acme APP Bug Suite
+# APP Bug Suite
 
 <p align="center">
   <img src="../../assets/readme/banners/bug-suite.svg" alt="bug-suite" width="100%">
@@ -28,7 +28,7 @@
 <p align="center"><img src="../../assets/readme/diagrams/bug-suite.svg" alt="How bug-suite works" width="100%"></p>
 
 
-Three skills for the Acme APP **Example Project** Azure DevOps project, modeled on the team's actual authoring patterns.
+Three skills for the **Example Project** Azure DevOps project, modeled on the team's actual authoring patterns.
 
 | Skill | Files what | Board / type | Trigger examples |
 |-------|-----------|--------------|------------------|
