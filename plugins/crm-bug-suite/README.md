@@ -61,7 +61,7 @@ from `"command": "cmd", "args": ["/c", "npx", …]` to `"command": "npx"` with t
 ## Install
 
 ```bash
-claude plugin marketplace add shironigun/claude-marketplace
+claude plugin marketplace add shironigun/marketplace
 claude plugin install crm-bug-suite@shironigun
 ```
 

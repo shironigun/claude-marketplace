@@ -33,7 +33,7 @@ read a guide once and come back to it for one task.
 ## Install
 
 ```
-/plugin install how-to-guides --marketplace shironigun/claude-marketplace
+/plugin install how-to-guides --marketplace shironigun/marketplace
 ```
 
 Then ask for a guide, or run `/how-to-guides:how-to-guide`.
