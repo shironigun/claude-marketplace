@@ -1,5 +1,25 @@
 # qa-engineering
 
+<p align="center">
+  <img src="../../assets/readme/banners/qa-engineering.svg" alt="qa-engineering" width="100%">
+</p>
+
+<p align="center">
+  <a href="../../README.md#the-catalog">← All plugins</a> ·
+  <a href="#install">Install</a> ·
+  <a href="../../README.md#trust--safety">Trust &amp; safety</a>
+</p>
+
+| At a glance | |
+|---|---|
+| **Category** | Testing |
+| **What it does** | The whole QA loop: analyze, author, publish, automate, run, file bugs |
+| **Includes** | 16 skills · 4 agents · 9 commands · 2 MCP servers |
+| **Writes** | Test Cases, suites and bugs in Azure DevOps, each after your OK |
+| **Setup** | Set `ADO_ORG`; interactive sign-in |
+| **Product-neutral** | Yes |
+
+
 The **single AI QA engineering plugin** — one orchestrator for the whole QA loop. Bring it a story and it
 analyzes it, authors and approves test cases, publishes them to a Test Plan/Suite, builds and generates
 API + UI automation, and turns a failing run into a filed bug — **keeping you in control at every tracker
@@ -129,6 +149,16 @@ Format and rules: `knowledge/standards/knowledge-base.md`.
 - The product-specific sibling plugins in the marketplace are **inspiration only**. They are
   never required, and the kit builds and runs without them.
 - Node 20 or later, git, and network access to the system under test.
+
+## Install
+
+```bash
+claude plugin marketplace add shironigun/claude-marketplace
+claude plugin install qa-engineering@shironigun
+```
+
+Then set `ADO_ORG` in the shell that launches Claude Code (see **MCP servers and sign-in**), start a session
+and type `/qa`.
 
 ## How to launch
 
