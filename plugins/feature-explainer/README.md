@@ -19,6 +19,14 @@
 | **Setup** | Node.js, Python 3 |
 | **Product-neutral** | Yes |
 
+## See it in action
+
+<p align="center"><img src="../../assets/readme/usecases/feature-explainer.svg" alt="feature-explainer in action: what you ask and what you get" width="100%"></p>
+
+## How it works at a glance
+
+<p align="center"><img src="../../assets/readme/diagrams/feature-explainer.svg" alt="How feature-explainer works" width="100%"></p>
+
 <p align="center"><img src="../../assets/readme/previews/feature-explainer.png" alt="An example explainer page for a made-up feature" width="100%"></p>
 
 

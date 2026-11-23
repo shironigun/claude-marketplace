@@ -19,6 +19,14 @@
 | **Setup** | None; a tracker connector only to push cases |
 | **Product-neutral** | Yes |
 
+## See it in action
+
+<p align="center"><img src="../../assets/readme/usecases/qa-toolkit.svg" alt="qa-toolkit in action: what you ask and what you get" width="100%"></p>
+
+## How it works at a glance
+
+<p align="center"><img src="../../assets/readme/diagrams/qa-toolkit.svg" alt="How qa-toolkit works" width="100%"></p>
+
 
 QA workflow automation for Claude Code — generate API and UI test cases,
 convert failures to bug reports, and push test cases to your tracker.

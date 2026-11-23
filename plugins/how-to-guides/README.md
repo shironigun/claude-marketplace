@@ -19,6 +19,14 @@
 | **Setup** | Node.js, Chrome |
 | **Product-neutral** | Yes |
 
+## See it in action
+
+<p align="center"><img src="../../assets/readme/usecases/how-to-guides.svg" alt="how-to-guides in action: what you ask and what you get" width="100%"></p>
+
+## How it works at a glance
+
+<p align="center"><img src="../../assets/readme/diagrams/how-to-guides.svg" alt="How how-to-guides works" width="100%"></p>
+
 <p align="center"><img src="../../assets/readme/previews/how-to-guides.png" alt="Three pages of an example guide for a made-up feature" width="100%"></p>
 
 

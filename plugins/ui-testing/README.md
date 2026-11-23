@@ -19,6 +19,14 @@
 | **Setup** | `az login`, for `buggy` only |
 | **Product-neutral** | Template: retarget `references/` |
 
+## See it in action
+
+<p align="center"><img src="../../assets/readme/usecases/ui-testing.svg" alt="ui-testing in action: what you ask and what you get" width="100%"></p>
+
+## How it works at a glance
+
+<p align="center"><img src="../../assets/readme/diagrams/ui-testing.svg" alt="How ui-testing works" width="100%"></p>
+
 
 UI test-case authoring and Playwright + TypeScript UI-script generation for **Acme CRM**
 (Acme), in the team's QA house style.
