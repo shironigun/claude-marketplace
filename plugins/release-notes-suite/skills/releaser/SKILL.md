@@ -1,9 +1,9 @@
 ---
 name: releaser
-description: Write client-facing Acme APP (Acme) RELEASE NOTES and feature announcements in the support lead and the support team's house style — turning the team's technical drafts or closed Azure DevOps tickets into short, benefit-led client notes, and deciding what to announce vs. suppress. Use this skill WHENEVER the user wants to write, draft, prep, review, or finalize release notes, a feature announcement, a "What's New" / the in-app announcements tool post, or a KB announcement — or says things like "turn this into release notes", "draft the announcement for clients", "what do we tell clients about this release", or pastes a technical draft / changelog / ticket list and asks for client notes. Also trigger when deciding whether something is worth announcing or which shipped items to include vs. exclude. Sibling of storyteller, buggy, bugger, defector, commentor — use THIS one for client release notes / announcements.
+description: Write client-facing RELEASE NOTES and feature announcements in the support lead and the support team's house style — turning the team's technical drafts or closed Azure DevOps tickets into short, benefit-led client notes, and deciding what to announce vs. suppress. Use this skill WHENEVER the user wants to write, draft, prep, review, or finalize release notes, a feature announcement, a "What's New" / the in-app announcements tool post, or a KB announcement — or says things like "turn this into release notes", "draft the announcement for clients", "what do we tell clients about this release", or pastes a technical draft / changelog / ticket list and asks for client notes. Also trigger when deciding whether something is worth announcing or which shipped items to include vs. exclude. Sibling of storyteller, buggy, bugger, defector, commentor — use THIS one for client release notes / announcements.
 ---
 
-# Acme APP Release-Notes Authoring
+# Release-Notes Authoring
 
 Turn engineering reality (the team's technical draft, an spec docs/flow doc, a pasted changelog, or a window of closed Azure DevOps tickets) into a **finalized client-facing release note** in the voice the support lead and the support team publish to clients — and make the editorial calls about what clients see.
 
@@ -17,12 +17,12 @@ the QA analyst (QA->BA) writes the exhaustive technical draft — every behavior
 
 ## Context you can assume (from project memory)
 
-- **Org:** acme-org · **Project:** Example Project (GUID `00000000-0000-0000-0000-000000000000`).
+- **Org:** your-org · **Project:** Example Project (GUID `00000000-0000-0000-0000-000000000000`).
 - **Boards / area paths:** `Example Project\Delivery Team` (sprint/feature work — **the only real source for release-note candidates**) and `Example Project\Support Board` (production firefighting + per-client support — **essentially never client-announcement material**; treat as omit-by-default).
 - **PARTNER / plans:** `PARTNER-A`, `PARTNER-C` (a.k.a. PARTNER-C/PARTNER-C), `PARTNER-B`, `PARTNER-A`, `PARTNER-D`. Feature availability differs by PARTNER and by tier (`Connect` / `Engage` / `Complete`). Getting the availability line right matters more to clients than the feature copy.
-- **Product surface:** Acme APP / Acme Notify — Messenger, Broadcasts, Surveys, Feedback, Customers, Customer Groups, Tasks, Automations, Deals, Payments (Pay-by-Link), Inventory, Settings, Dashboard, Website Widget.
+- **Product surface:** the product and its PARTNER-facing variant — Messenger, Broadcasts, Surveys, Feedback, Customers, Customer Groups, Tasks, Automations, Deals, Payments (Pay-by-Link), Inventory, Settings, Dashboard, Website Widget.
 - **People:** the QA analyst (`qa@example.com`, QA->BA, drafts + accuracy), the support lead (support/training lead, owns client notes + webinars, final editorial authority — "you're the expert here"), the editor (presentation edits/approval), the release manager (timing, tiers, approval), a developer / a developer (dev).
-- **Publishing:** notes ship through **the in-app announcements tool** (and the "What's New" panel); depth lives in the Knowledgebase at **learn.example.com**; every note closes with a **webinar CTA** (the team's the scheduling tool — always framed as *our* webinars, never one person's; see Voice) and a **support pointer**. The support pointer is brand-specific: Acme APP notes point to the in-app **chat button** (bottom-left); **Acme Notify has NO chat button — point Acme Notify/PARTNER-A clients to PARTNER-A support instead.** Screenshots are added by the support lead by hand — leave clearly-labeled placeholders.
+- **Publishing:** notes ship through **the in-app announcements tool** (and the "What's New" panel); depth lives in the Knowledgebase at **learn.example.com**; every note closes with a **webinar CTA** (the team's the scheduling tool — always framed as *our* webinars, never one person's; see Voice) and a **support pointer**. The support pointer is brand-specific: general-brand notes point to the in-app **chat button** (bottom-left); **the PARTNER-facing brand has NO chat button — point PARTNER-facing/PARTNER-A clients to PARTNER-A support instead.** Screenshots are added by the support lead by hand — leave clearly-labeled placeholders.
 - **Auth:** use the connected Azure DevOps MCP tools (`ado:wit_*`). If a tool returns "not found" or hangs after a reconnect, the connector hasn't re-registered — tell the user to toggle the Azure DevOps connector off/on; there is no bash fallback (ADO domains are off the network allowlist).
 
 ## Workflow
@@ -83,13 +83,13 @@ When triage leaves nothing but omit/defer items, say so plainly: "there isn't en
 
 Not every section every time; scale to the release. The arc is consistent:
 
-1. **Headline + hook** — emoji + benefit framing. Big items get excitement ("It's Finally Here: Facebook Messenger Is Now Inside Acme APP!"); routine ones stay plain ("Release Notes — Video Call Improvements").
+1. **Headline + hook** — emoji + benefit framing. Big items get excitement ("It's Finally Here: Facebook Messenger Is Now Inside the product!"); routine ones stay plain ("Release Notes — Video Call Improvements").
 2. **One-sentence "what this lets you do"** intro, in client terms.
 3. **What's New** — one block per ANNOUNCE item; emoji subheads; 1-3 short benefit bullets each.
 4. **How it works / How to set it up** — numbered steps; gate admin-only setup clearly ("Admins Only"). Keep to the happy path.
 5. **Availability callout** — PARTNER/tier scope, loud, especially exclusions (see below).
 6. **Why this matters** — 3-4 outcome bullets (respond faster, fewer missed leads, get paid sooner).
-7. **Close** — "That's It!" + webinar CTA (our webinar, the scheduling tool — framed as the team's, never an individual's) + KB link (learn.example.com) + the brand's support pointer (Acme APP: in-app chat button, bottom-left; **Acme Notify: PARTNER-A support — it has no chat button**). Optional forward hook ("AI is coming") only when pre-cleared with the editor.
+7. **Close** — "That's It!" + webinar CTA (our webinar, the scheduling tool — framed as the team's, never an individual's) + KB link (learn.example.com) + the brand's support pointer (general brand: in-app chat button, bottom-left; **PARTNER-facing brand: PARTNER-A support — it has no chat button**). Optional forward hook ("AI is coming") only when pre-cleared with the editor.
 8. **[SCREENSHOT: ...]** placeholders where the support lead will drop images; add an icon legend if the feature introduces new icons.
 
 ## Voice rules (what makes it read as the support lead's client copy)
@@ -133,25 +133,25 @@ Discard the team's exhaustiveness, but **carry the true constraints** he would i
 - **Anchor references to past releases in concrete time.** "Here's what's new since the fresh look arrived **back in June**," not a vague "recently" or an undated "since the fresh look arrived." Give clients a real time marker.
 - Surface unresolved facts as **Open Questions for the support lead/the QA analyst/the release manager to confirm before publish**, with an owner — availability/tier scope, exact PARTNER support, whether a limit is new, real-time vs. delayed data. A note published with a wrong availability line is worse than one held a day for confirmation.
 
-## Brand variants — Acme Notify (PARTNER-A) and Acme APP
+## Brand variants — a general brand and a PARTNER-facing brand
 
-The platform ships under two client-facing brands: **Acme APP** (the general brand) and **Acme Notify / Acme Notify** (the brand PARTNER-A clients see). Same product — the client note usually needs one version per brand. Branding is a **profile you apply at draft time, not a rewrite**: the body stays identical unless a feature genuinely differs by brand/PARTNER (that is an availability call, handled above — not a wording change).
+The platform ships under two client-facing brands: a **general brand** and a **PARTNER-facing brand** (the one PARTNER-A clients see). Same product — the client note usually needs one version per brand. Branding is a **profile you apply at draft time, not a rewrite**: the body stays identical unless a feature genuinely differs by brand/PARTNER (that is an availability call, handled above — not a wording change).
 
 A **brand profile** = { product name used throughout the prose; audience/PARTNER emphasis; KB URL; webinar CTA; **support/help pointer**; any renamed UI terms }. Defaults:
-- **Acme APP** — product name "Acme APP"; general client audience; KB `learn.example.com`; our Acme APP webinar (the scheduling tool, framed as *our* webinar); **support pointer = in-app chat button (bottom-left)**; standard UI terms.
-- **Acme Notify (Acme Notify)** — product name "Acme Notify"; PARTNER-A-client audience (PARTNER-A-facing work usually lands here); its own KB/webinar destinations **if different** (confirm — Open Question if unknown); **support pointer = PARTNER-A support, NOT a chat button** — Acme Notify has no bottom-left chat button, so never tell Acme Notify clients to use one.
+- **General brand** — product name = the general brand name; general client audience; KB `learn.example.com`; our webinar (the scheduling tool, framed as *our* webinar); **support pointer = in-app chat button (bottom-left)**; standard UI terms.
+- **PARTNER-facing brand** — product name = the PARTNER-facing brand name; PARTNER-A-client audience (PARTNER-A-facing work usually lands here); its own KB/webinar destinations **if different** (confirm — Open Question if unknown); **support pointer = PARTNER-A support, NOT a chat button** — this brand has no bottom-left chat button, so never tell its clients to use one.
 
 How to apply:
-- When a release includes **PARTNER-A-facing work, produce both variants by default** (Acme APP + Acme Notify) — the same release reaches both audiences under different names. Otherwise produce the brand the user names.
+- When a release includes **PARTNER-A-facing work, produce both variants by default** (general + PARTNER-facing) — the same release reaches both audiences under different names. Otherwise produce the brand the user names.
 - Swap only the profile fields; keep structure, voice, feature copy, and availability logic **identical** across variants.
 - **Keep the two in sync.** They should differ ONLY by the profile. If you catch yourself changing the substance between them, that is a real feature/PARTNER difference — express it in the Availability callout and flag it, don't let the two notes quietly drift apart.
 - If a brand's KB/webinar link or in-UI product name isn't confirmed, list it as an Open Question rather than guessing.
 
-**Brand-name isolation (hard rule).** A Acme Notify note must never contain the word "Acme APP," and an Acme APP note must never contain "Acme Notify." The other brand’s name (and brand-specific URLs) leaking across is the single most common failure. **Before delivering any note, scan the finished draft for the opposite brand’s name and replace every occurrence** — headlines included, since that is where it slips through.
+**Brand-name isolation (hard rule).** A PARTNER-facing-brand note must never contain the general brand's name, and a general-brand note must never contain the PARTNER-facing brand's name. The other brand’s name (and brand-specific URLs) leaking across is the single most common failure. **Before delivering any note, scan the finished draft for the opposite brand’s name and replace every occurrence** — headlines included, since that is where it slips through.
 
 ## Output & handoff
 
-- Produce the note as clean Markdown by default; offer a `.docx` (via the `docx` skill) when the user wants the reviewable/attachable artifact the support lead circulates, or a the in-app announcements tool-ready block when they're about to publish.
+- Produce the note as clean Markdown by default; offer a `.docx` (via the `docx` skill) when the user wants the reviewable/attachable artifact the support lead circulates, or a block ready for the in-app announcements tool when they're about to publish.
 - Include `[SCREENSHOT: description]` placeholders and, if new icons appear, an icon legend — the support lead adds real images by hand.
 - End your delivery with: the **triage summary** (what you announced vs. omitted/deferred and why), any **Open Questions** blocking publish, and the **suggested timing** note (below). Do not represent the note as published — it goes through the support lead/the editor/the release manager review and managerial approval.
 
@@ -168,9 +168,9 @@ Client-facing upgrade/paywall copy (the "module blocked" popup: a one-line modul
 - **Name features by client benefit**, not internal/subsystem names.
 - **Get the availability line right or flag it** — never guess PARTNER/tier scope.
 - **Never auto-publish or imply published.** Draft -> user/the support lead review -> approval. Screenshots and the live webinar/KB links are added by the support lead.
-- **Never leak the other brand name.** Scan every finished note for the opposite brand (an Acme Notify note says only "Acme Notify"; an Acme APP note says only "Acme APP"), headline included, before delivering.
+- **Never leak the other brand name.** Scan every finished note for the opposite brand's name (each note names only its own brand), headline included, before delivering.
 - **Team framing, never an individual.** In client-facing copy, attribute webinars, training, and support to the team ("our webinars," "our support team") — never to a person ("the support lead's webinar"). Support tiers handle clients, not one named expert.
-- **Get the brand's support pointer right.** Acme APP closes with the in-app chat button (bottom-left); Acme Notify has none — send Acme Notify/PARTNER-A clients to PARTNER-A support. Never tell an Acme Notify client to use a chat button.
+- **Get the brand's support pointer right.** The general brand closes with the in-app chat button (bottom-left); the PARTNER-facing brand has none — send its PARTNER-A clients to PARTNER-A support. Never tell a PARTNER-facing-brand client to use a chat button.
 - **Go easy on em-dashes in the note.** A cluster of em-dashes reads as AI-generated; prefer periods, commas, or labeled sub-headers in the finished client copy.
 - **Don't invent behavior.** If it isn't confirmed real, it's an Open Question, not a sentence in the note.
 - If the ask is a **user story** use `storyteller`; **test cases** `buggy`; a **bug/defect** `bugger`/`defector`; a **comment** `commentor`. This skill is for **client release notes / announcements** only.
