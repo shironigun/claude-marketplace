@@ -1,0 +1,187 @@
+/* Document theme: "Floating desk". Letter size, screenshots floating on a calm grey desk.
+   Used by build.mjs, which overrides the brand colours, font and logo from the brand profile (howto-brand.json). */
+
+:root {
+  --font: "Segoe UI", system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
+  --main: #2b59c3;      /* brand primary */
+  --deep: #1e3f8a;      /* primary, darker */
+  --tint: #e9eef9;      /* primary, very light */
+  --ring: #c9d5f1;      /* primary, light */
+  --soft: #7b97da;      /* primary, softer */
+  --ink: #263238;       /* blue grey 900, body text */
+  --muted: #546e7a;     /* blue grey 600 */
+  --ground: #f4f6f8;    /* app background, the "desk" */
+  --divider: #e3e7eb;
+  --paper: #ffffff;
+  --accent: #f0b323;    /* accent only: small rules and dots */
+  --success: #388e3c; --success-tint: #e8f5e9;
+  --warning: #e65100; --warning-tint: #fff3e0;
+  --error: #c62828;   --error-tint: #ffebee;
+  --shadow: 0 10pt 28pt rgba(38, 50, 56, .14), 0 1pt 3pt rgba(38, 50, 56, .08);
+  --gutter: 0.42in;     /* left gutter that holds section numbers and step markers */
+}
+
+/* ---------- Page ---------- */
+@page {
+  size: letter;
+  margin: 0.9in 0.8in 0.85in 0.8in;
+  @top-left {
+    content: var(--doc-brand, "");
+    width: 1.3in;
+    font: 700 9pt var(--font); color: var(--main);
+    vertical-align: middle; margin-top: 0.42in; margin-bottom: 0.22in;
+  }
+  @top-right {
+    content: var(--doc-title, "");
+    font: 600 8pt var(--font); color: #78909c;
+    vertical-align: middle; margin-top: 0.42in; margin-bottom: 0.22in;
+  }
+  @bottom-left {
+    content: var(--doc-footer, "");
+    font: 600 7.5pt var(--font); color: #90a4ae; letter-spacing: .06em; text-transform: uppercase;
+    vertical-align: top; margin-top: 0.3in;
+  }
+  @bottom-right {
+    content: "Page " counter(page) " of " counter(pages);
+    font: 600 7.5pt var(--font); color: #90a4ae;
+    vertical-align: top; margin-top: 0.3in;
+  }
+}
+
+html { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+body {
+  margin: 0; background: var(--paper); color: var(--ink);
+  font: 500 10.5pt/1.62 var(--font);
+  font-variant-numeric: lining-nums; hyphens: manual; orphans: 3; widows: 3;
+}
+.content { padding-left: var(--gutter); }
+
+/* ---------- Intro: top of page 2 ---------- */
+.intro { margin: 0 0 18pt calc(-1 * var(--gutter)); }
+.kicker {
+  display: inline-flex; align-items: center; gap: 6pt;
+  padding: 4pt 11pt; border-radius: 999pt; background: var(--tint); color: var(--main);
+  font-size: 8pt; font-weight: 700; letter-spacing: .14em; text-transform: uppercase;
+}
+.kicker::before { content: ""; width: 6pt; height: 6pt; border-radius: 50%; background: var(--accent); }
+.lead { margin: 10pt 0 0; max-width: 6in; font-size: 14pt; line-height: 1.45; font-weight: 500; color: var(--ink); }
+.meta {
+  display: grid; grid-template-columns: 1.5fr 1.2fr 1fr 1fr; gap: 16pt;
+  margin: 16pt 0 0; padding: 12pt 0; border-top: 1pt solid var(--divider); border-bottom: 1pt solid var(--divider);
+}
+.meta dt { font-size: 7pt; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: #90a4ae; }
+.meta dd { margin: 3pt 0 0; font-size: 9.5pt; font-weight: 600; color: var(--ink); line-height: 1.35; }
+
+/* ---------- Contents ---------- */
+.toc { margin: 0 0 22pt calc(-1 * var(--gutter)); padding: 16pt 20pt 14pt; background: var(--ground); border-radius: 12pt; break-inside: avoid; }
+.toc-title { font-size: 8pt; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); margin-bottom: 6pt; }
+.toc ol { list-style: none; margin: 0; padding: 0; columns: 2; column-gap: 24pt; }
+.toc li { break-inside: avoid; padding: 3pt 0; font-weight: 600; }
+.toc a { color: var(--ink); text-decoration: none; }
+.toc .n { display: inline-block; width: 20pt; color: var(--main); font-weight: 700; }
+
+/* ---------- Headings ---------- */
+.content { counter-reset: section figure; }
+h2, h3, h4 { color: var(--ink); break-after: avoid; break-inside: avoid; font-weight: 700; letter-spacing: -.01em; }
+h2 { counter-increment: section; counter-reset: step; position: relative; margin: 26pt 0 8pt; font-size: 17pt; line-height: 1.25; }
+h2::before {
+  content: counter(section, decimal-leading-zero); position: absolute; left: calc(-1 * var(--gutter)); top: 2.5pt;
+  font-size: 10pt; font-weight: 700; color: var(--main); letter-spacing: .04em;
+}
+h2::after { content: ""; display: block; width: 26pt; height: 3pt; border-radius: 2pt; margin-top: 6pt; background: var(--main); }
+h3 { margin: 18pt 0 4pt; font-size: 12.5pt; }
+h4 { margin: 14pt 0 2pt; font-size: 10.5pt; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); }
+.content > h2:first-child, .toc + h2 { margin-top: 0; }
+
+p { margin: 0 0 8pt; }
+a { color: var(--main); text-decoration: none; border-bottom: .6pt solid var(--ring); }
+strong { font-weight: 700; color: var(--ink); }
+em { font-style: normal; color: var(--deep); font-weight: 600; }
+hr { border: 0; border-top: 1pt solid var(--divider); margin: 18pt 0; }
+
+/* Keys and inline code */
+kbd {
+  font: 700 8.5pt var(--font); padding: .5pt 5pt; border-radius: 4pt;
+  background: var(--paper); border: .8pt solid #cfd8dc; box-shadow: 0 1pt 0 #cfd8dc;
+}
+code { font: 500 8.8pt Consolas, "Cascadia Mono", monospace; padding: 1pt 4pt; border-radius: 4pt; background: var(--tint); color: var(--deep); }
+pre { margin: 8pt 0 12pt; padding: 10pt 12pt; border-radius: 8pt; background: #263238; color: #eceff1; break-inside: avoid; white-space: pre-wrap; }
+pre code { padding: 0; background: none; color: inherit; font-size: 8.5pt; }
+
+/* ---------- Bulleted lists ---------- */
+ul { margin: 0 0 10pt; padding-left: 14pt; }
+ul > li { margin: 2pt 0; padding-left: 2pt; }
+ul > li::marker { color: var(--main); content: "\25CF  "; font-size: 7pt; }
+
+/* ---------- Steps: every numbered list is a procedure ---------- */
+.content > ol, li > ol { list-style: none; margin: 4pt 0 12pt; padding: 0; counter-reset: step; }
+.content > ol > li, li > ol > li {
+  counter-increment: step; position: relative; padding: 0 0 10pt 0; break-inside: avoid;
+}
+.content > ol > li::before {
+  content: counter(step); position: absolute; left: calc(-1 * var(--gutter)); top: 0;
+  width: 17pt; height: 17pt; border-radius: 50%; background: var(--main); color: var(--paper);
+  font-size: 8.5pt; font-weight: 700; line-height: 17pt; text-align: center;
+}
+.content > ol > li:not(:last-child)::after {
+  content: ""; position: absolute; left: calc(-1 * var(--gutter) + 8pt); top: 19pt; bottom: 1pt;
+  width: 1pt; background: var(--ring);
+}
+li > ol { margin: 4pt 0 0; }
+li > ol > li { padding: 0 0 3pt 18pt; }
+li > ol > li:last-child { padding-bottom: 0; }
+li > ol > li::before { content: counter(step, lower-alpha) "."; position: absolute; left: 2pt; color: var(--main); font-weight: 700; }
+.content > ol > li > p:first-child { margin-bottom: 4pt; }
+
+/* ---------- Callouts (GitHub alert syntax: > [!TIP]) ---------- */
+.callout {
+  margin: 10pt 0 14pt; padding: 10pt 14pt 10pt 14pt; border-radius: 10pt; break-inside: avoid;
+  background: var(--tone-tint); border-left: 3.5pt solid var(--tone);
+}
+.callout-label { display: flex; align-items: center; gap: 6pt; margin-bottom: 3pt; font-size: 8pt; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--tone); }
+.callout-label svg { width: 11pt; height: 11pt; fill: currentColor; }
+.callout p:last-child, .callout ul:last-child { margin-bottom: 0; }
+.callout.note      { --tone: var(--main);    --tone-tint: var(--tint); }
+.callout.tip       { --tone: #00838f;        --tone-tint: #e0f7fa; }
+.callout.important { --tone: var(--deep);    --tone-tint: #ede7f6; }
+.callout.warning   { --tone: var(--warning); --tone-tint: var(--warning-tint); }
+.callout.caution   { --tone: var(--error);   --tone-tint: var(--error-tint); }
+.callout.done      { --tone: var(--success); --tone-tint: var(--success-tint); }
+.callout.ai        { --tone: #7b1fa2;        --tone-tint: #f3e5f5; }
+blockquote { margin: 10pt 0; padding: 2pt 0 2pt 12pt; border-left: 2pt solid var(--divider); color: var(--muted); }
+
+/* ---------- Figures: screenshots float on the desk ---------- */
+figure {
+  counter-increment: figure; margin: 12pt 0 16pt calc(-1 * var(--gutter)); padding: 14pt;
+  border-radius: 12pt; break-inside: avoid;
+  background-color: var(--ground);
+  background-image: radial-gradient(rgba(38, 50, 56, .07) .9pt, transparent 1.1pt); background-size: 12pt 12pt;
+}
+figure .win { width: fit-content; max-width: 100%; margin: 0 auto; border-radius: 8pt; overflow: hidden; background: var(--paper); box-shadow: var(--shadow); }
+figure .win .bar { height: 13pt; background: #eceff1; display: flex; align-items: center; gap: 3.5pt; padding-left: 8pt; }
+figure .win .bar i { width: 5pt; height: 5pt; border-radius: 50%; background: #cfd8dc; }
+/* Screenshots keep their own size up to the column width, and never grow taller than 6.2in, so a tall drawer fits on one page. */
+figure img { display: block; width: auto; height: auto; max-width: 100%; max-height: 4.3in; }
+figure figcaption { text-align: left; }
+figcaption { margin-top: 9pt; font-size: 8.5pt; line-height: 1.45; color: var(--muted); }
+figcaption::before { content: "Figure " counter(figure) "  "; font-weight: 700; color: var(--main); }
+
+/* ---------- Tables ---------- */
+table { width: 100%; border-collapse: separate; border-spacing: 0; margin: 8pt 0 14pt; font-size: 9pt; line-height: 1.45; break-inside: auto; border: 1pt solid var(--divider); border-radius: 8pt; overflow: hidden; }
+thead { display: table-header-group; }
+th { text-align: left; padding: 6pt 9pt; background: var(--tint); color: var(--deep); font-size: 7.5pt; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; }
+td { padding: 6pt 9pt; border-top: 1pt solid var(--divider); vertical-align: top; }
+tbody tr:nth-child(even) td { background: #fafbfc; }
+tr { break-inside: avoid; }
+table.keep { break-inside: avoid; }
+
+/* "You'll see ..." result line after an action */
+.result { position: relative; margin: 2pt 0 6pt; padding-left: 13pt; color: var(--muted); font-size: 9.8pt; }
+.result::before { content: "\2192"; position: absolute; left: 0; top: 0; color: var(--main); font-weight: 700; }
+
+/* Availability: which plans, platforms or integrations a feature works with */
+.callout.availability { --tone: var(--deep); --tone-tint: var(--paper); border: 1pt solid var(--ring); border-left-width: 3.5pt; }
+
+/* Closing help pointer */
+.help { margin: 22pt 0 0 calc(-1 * var(--gutter)); padding: 12pt 16pt; border-radius: 10pt; background: var(--ground); font-size: 9.5pt; break-inside: avoid; break-before: avoid; }
+.help strong { color: var(--main); }

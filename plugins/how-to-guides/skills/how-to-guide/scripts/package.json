@@ -1,0 +1,17 @@
+{
+  "name": "how-to-guide-pdf",
+  "version": "1.0.0",
+  "description": "Markdown how-to guides to branded PDFs",
+  "scripts": {
+    "pdf": "node build.mjs"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "UNLICENSED",
+  "type": "commonjs",
+  "dependencies": {
+    "marked": "^14.1.4",
+    "playwright-core": "^1.49.1"
+  },
+  "private": true
+}
