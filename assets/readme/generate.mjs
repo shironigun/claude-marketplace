@@ -49,7 +49,7 @@ export const PLUGINS = [
     stats: ['2 skills', 'az login'],
   },
   {
-    name: 'crm-bug-suite', color: '#f87171', short: 'Bugs, defects, comments', category: 'bug-tracking', icon: 'BugReport', parallel: true,
+    name: 'bug-suite', color: '#f87171', short: 'Bugs, defects, comments', category: 'bug-tracking', icon: 'BugReport', parallel: true,
     tagline: 'Bugs, defects and comments in house style',
     detail: 'Files story and regression bugs, production defects and ticket comments in Azure DevOps.',
     steps: ['Bug', 'Defect', 'Comment'],
@@ -182,7 +182,7 @@ function map() {
   const W = 1280, H = 560;
   const lanes = [
     { title: 'Test it', cat: 'testing', note: 'Write cases, automate them, run them', items: ['qa-engineering', 'qa-toolkit', 'api-testing', 'ui-testing'] },
-    { title: 'Track it', cat: 'bug-tracking', note: 'File what broke, in house style', items: ['crm-bug-suite'] },
+    { title: 'Track it', cat: 'bug-tracking', note: 'File what broke, in house style', items: ['bug-suite'] },
     { title: 'Ship it', cat: 'release-management', note: 'Tell customers what changed', items: ['release-notes-suite'] },
     { title: 'Explain it', cat: 'documentation', note: 'Pages and guides people read', items: ['feature-explainer', 'how-to-guides'] },
   ];
@@ -267,7 +267,7 @@ const USECASES = {
     footer: 'Created as a Test Case and linked to the story, after your OK',
     why: ['Click-by-click house style', 'Created as Test Cases for you', 'Playwright UI specs too'],
   },
-  'crm-bug-suite': {
+  'bug-suite': {
     ask: 'File a bug for story 123456: the total doesn\'t update.', command: 'bugger',
     title: 'Bug draft · waiting for your approval', kind: 'card',
     sections: [['Title', ['[Orders] Order total doesn\'t update after removing an item']], ['Steps', ['Environment: QA', 'Open an order with two items', 'Remove one item']],
@@ -444,7 +444,7 @@ function diagram(p) {
       const red = node(64, 470, 250, 88, 'Red run', 'An assertion or a zod issue', { tone: '#f87171' });
       const bugger = node(366, 470, 250, 88, 'api-bugger', 'Triages the failure', { accent: true });
       const draft = node(668, 470, 250, 88, 'Bug draft', 'House style, for review');
-      const file = node(966, 470, 250, 88, 'File it', 'with crm-bug-suite or qa-engineering', { dashed: true });
+      const file = node(966, 470, 250, 88, 'File it', 'with bug-suite or qa-engineering', { dashed: true });
       arrow(red, bugger); arrow(bugger, draft); arrow(draft, file, { gate: true });
       key();
     },
@@ -461,7 +461,7 @@ function diagram(p) {
       out.push(`<text x="64" y="598" font-size="14" fill="#c7d0e6">tester needs no setup. buggy needs az login once.</text>`);
       key();
     },
-    'crm-bug-suite': () => {
+    'bug-suite': () => {
       const root = node(64, 300, 240, 110, 'What happened?', 'Pick the skill by where you found it');
       const rows = [['Found while testing a story, or in regression', 'bugger', 'Bug', 'On the team board'], ['Found on production, by a live client', 'defector', 'Defect', 'On Production Support'], ['An update for an existing ticket', 'commentor', 'Comment', 'In the team\'s voice']];
       rows.forEach(([cond, skill, res, where], i) => {
@@ -529,7 +529,7 @@ function diagram(p) {
     'qa-toolkit': 'Four tools that work on their own. Only two need a tracker, and any tracker works.',
     'api-testing': 'Cases at three levels, turned into runnable specs and back, and a bug draft when a run fails.',
     'ui-testing': 'One story, two paths: author cases and specs, or create Test Cases in your tracker.',
-    'crm-bug-suite': 'Pick by where you found it. Every draft waits for your approval before it is created.',
+    'bug-suite': 'Pick by where you found it. Every draft waits for your approval before it is created.',
     'release-notes-suite': 'Gather everything that shipped, then keep only what customers can use.',
     'feature-explainer': 'Research once, read-only, then build the edition for the reader you name.',
     'how-to-guides': 'Facts from the source, written to a standard, built in your brand, with gaps sent back to product.',

@@ -73,9 +73,9 @@ Select a card to open that plugin's folder and its README.
   </tr>
   <tr>
     <td width="50%" valign="top">
-      <a href="plugins/crm-bug-suite/"><img src="assets/readme/cards/crm-bug-suite.svg" alt="crm-bug-suite: bugs, defects and comments in house style" width="100%"></a>
-      <br><b><a href="plugins/crm-bug-suite/">crm-bug-suite</a></b>: files story and regression Bugs, production Defects and ticket comments in a defined house style.
-      <br><code>claude plugin install crm-bug-suite@shironigun</code>
+      <a href="plugins/bug-suite/"><img src="assets/readme/cards/bug-suite.svg" alt="bug-suite: bugs, defects and comments in house style" width="100%"></a>
+      <br><b><a href="plugins/bug-suite/">bug-suite</a></b>: files story and regression Bugs, production Defects and ticket comments in a defined house style.
+      <br><code>claude plugin install bug-suite@shironigun</code>
     </td>
     <td width="50%" valign="top">
       <a href="plugins/release-notes-suite/"><img src="assets/readme/cards/release-notes-suite.svg" alt="release-notes-suite: from what shipped to what customers read" width="100%"></a>
@@ -105,7 +105,7 @@ Select a card to open that plugin's folder and its README.
 | [qa-toolkit](plugins/qa-toolkit/) | Testing | 4 | Cases and bug drafts in the session; Test Cases in your tracker (Azure DevOps, Jira, Linear and more) | A tracker connector, only to push cases | Yes |
 | [api-testing](plugins/api-testing/) | Testing | 2 | Cases, spec files and bug drafts in the session | None | Template |
 | [ui-testing](plugins/ui-testing/) | Testing | 2 | Test Case work items (`buggy`, after your OK); UI specs in the session | `az login` for `buggy` | Template |
-| [crm-bug-suite](plugins/crm-bug-suite/) | Bug tracking | 3 | Bugs, Defects and comments in Azure DevOps | `az login` | Template |
+| [bug-suite](plugins/bug-suite/) | Bug tracking | 3 | Bugs, Defects and comments in Azure DevOps | `az login` | Template |
 | [release-notes-suite](plugins/release-notes-suite/) | Release management | 2 | An inventory and release-note drafts in the session | An Azure DevOps connection to harvest tickets | Template |
 | [feature-explainer](plugins/feature-explainer/) | Documentation | 1 | A private artifact page you choose to share | Node.js, Python 3 | Yes |
 | [how-to-guides](plugins/how-to-guides/) | Documentation | 1 | A PDF guide on your machine | Node.js, Chrome | Yes |
@@ -131,7 +131,7 @@ Here is the flagship. The rest are under [The plugins in detail](#the-plugins-in
 
 - **Building QA from scratch, or want one front door?** Start with **[qa-engineering](plugins/qa-engineering/)** and type `/qa`.
 - **Need one QA job done, no setup?** **[qa-toolkit](plugins/qa-toolkit/)**, or **[api-testing](plugins/api-testing/)** and **[ui-testing](plugins/ui-testing/)** for scripts.
-- **Filing what broke in a team's house style?** **[crm-bug-suite](plugins/crm-bug-suite/)**.
+- **Filing what broke in a team's house style?** **[bug-suite](plugins/bug-suite/)**.
 - **Telling customers what shipped?** **[release-notes-suite](plugins/release-notes-suite/)**.
 - **Explaining a feature?** A page for your team: **[feature-explainer](plugins/feature-explainer/)**. A PDF for your customers: **[how-to-guides](plugins/how-to-guides/)**.
 
@@ -320,17 +320,17 @@ Playwright + TypeScript UI specs (forward and reverse). (Tuned to a specific pro
 <p align="center"><img src="assets/readme/diagrams/ui-testing.svg" alt="How ui-testing works" width="100%"></p>
 </details>
 
-### [crm-bug-suite](plugins/crm-bug-suite/)
+### [bug-suite](plugins/bug-suite/)
 
 Files **Bugs** (against stories / regression) and **Defects** (production) and writes ticket comments on a
 specific "Agile Project" Azure DevOps project, in a defined QA house style.
 
-<p align="center"><a href="plugins/crm-bug-suite/"><img src="assets/readme/usecases/crm-bug-suite.svg" alt="crm-bug-suite in action: what you ask and what you get" width="100%"></a></p>
+<p align="center"><a href="plugins/bug-suite/"><img src="assets/readme/usecases/bug-suite.svg" alt="bug-suite in action: what you ask and what you get" width="100%"></a></p>
 
 <details>
-<summary><b>How crm-bug-suite works</b></summary>
+<summary><b>How bug-suite works</b></summary>
 <br>
-<p align="center"><img src="assets/readme/diagrams/crm-bug-suite.svg" alt="How crm-bug-suite works" width="100%"></p>
+<p align="center"><img src="assets/readme/diagrams/bug-suite.svg" alt="How bug-suite works" width="100%"></p>
 </details>
 
 ### [release-notes-suite](plugins/release-notes-suite/)
@@ -396,7 +396,7 @@ pages, guides or drafts **in the session** with no external dependency: `qa-tool
 The three plugins that **write to Azure DevOps** each **bundle their own ADO MCP server** (in the plugin's
 `.mcp.json`) — **no PAT or token is committed or required**, and there's no manual MCP config:
 
-- **`crm-bug-suite`** (files Bugs/Defects/comments) and **`ui-testing`** (its `buggy` skill creates
+- **`bug-suite`** (files Bugs/Defects/comments) and **`ui-testing`** (its `buggy` skill creates
   Test Cases) bundle the `azure-devops` MCP with **Azure Identity** auth → just run **`az login`** once.
 - **`qa-engineering`** ships the official Azure DevOps + Playwright MCP servers with **interactive** sign-in
   → just set **`ADO_ORG`** in the shell that launches Claude Code.

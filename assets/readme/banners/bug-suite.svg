@@ -1,20 +1,20 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="400" viewBox="0 0 1280 400" role="img" aria-label="crm-bug-suite: Bugs, defects and comments in house style" font-family="'Segoe UI', -apple-system, 'Helvetica Neue', Arial, sans-serif">
-<title>crm-bug-suite: Bugs, defects and comments in house style</title>
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="400" viewBox="0 0 1280 400" role="img" aria-label="bug-suite: Bugs, defects and comments in house style" font-family="'Segoe UI', -apple-system, 'Helvetica Neue', Arial, sans-serif">
+<title>bug-suite: Bugs, defects and comments in house style</title>
 <defs>
-  <linearGradient id="b-crm-bug-suite-bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0b1020"/><stop offset="1" stop-color="#151d3b"/></linearGradient>
-  <radialGradient id="b-crm-bug-suite-glow" cx="1" cy="0" r="0.9"><stop offset="0" stop-color="#f87171" stop-opacity=".28"/><stop offset="1" stop-color="#f87171" stop-opacity="0"/></radialGradient>
-  <pattern id="b-crm-bug-suite-dots" width="22" height="22" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1.1" fill="#ffffff" fill-opacity=".06"/></pattern>
+  <linearGradient id="b-bug-suite-bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0b1020"/><stop offset="1" stop-color="#151d3b"/></linearGradient>
+  <radialGradient id="b-bug-suite-glow" cx="1" cy="0" r="0.9"><stop offset="0" stop-color="#f87171" stop-opacity=".28"/><stop offset="1" stop-color="#f87171" stop-opacity="0"/></radialGradient>
+  <pattern id="b-bug-suite-dots" width="22" height="22" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1.1" fill="#ffffff" fill-opacity=".06"/></pattern>
 </defs>
-<rect width="1280" height="400" rx="28" fill="url(#b-crm-bug-suite-bg)"/>
-<rect width="1280" height="400" rx="28" fill="url(#b-crm-bug-suite-dots)"/>
-<rect width="1280" height="400" rx="28" fill="url(#b-crm-bug-suite-glow)"/>
+<rect width="1280" height="400" rx="28" fill="url(#b-bug-suite-bg)"/>
+<rect width="1280" height="400" rx="28" fill="url(#b-bug-suite-dots)"/>
+<rect width="1280" height="400" rx="28" fill="url(#b-bug-suite-glow)"/>
 <rect x=".5" y=".5" width="1279" height="399" rx="28" fill="none" stroke="#ffffff" stroke-opacity=".08"/>
 <rect x="64" y="64" width="140" height="140" rx="34" fill="#f87171" fill-opacity=".14" stroke="#f87171" stroke-opacity=".5"/>
 <g transform="translate(94 94) scale(3.3333333333333335)" fill="#f87171"><path d="M20 8h-2.81c-.45-.78-1.07-1.45-1.82-1.96L17 4.41 15.59 3l-2.17 2.17C12.96 5.06 12.49 5 12 5s-.96.06-1.41.17L8.41 3 7 4.41l1.62 1.63C7.88 6.55 7.26 7.22 6.81 8H4v2h2.09c-.05.33-.09.66-.09 1v1H4v2h2v1c0 .34.04.67.09 1H4v2h2.81c1.04 1.79 2.97 3 5.19 3s4.15-1.21 5.19-3H20v-2h-2.09c.05-.33.09-.66.09-1v-1h2v-2h-2v-1c0-.34-.04-.67-.09-1H20zm-6 8h-4v-2h4zm0-4h-4v-2h4z"/></g>
 <rect x="232" y="70" width="128.39999999999998" height="29" rx="14.5" fill="#c7d0e6" fill-opacity="0.16" stroke="#c7d0e6" stroke-opacity=".55"/>
 <text x="296.2" y="88" text-anchor="middle" font-size="15" font-weight="600" fill="#c7d0e6">Bug tracking</text><rect x="372.4" y="70" width="311.09999999999997" height="29" rx="14.5" fill="#cbd5e1" fill-opacity="0.16" stroke="#cbd5e1" stroke-opacity=".55"/>
 <text x="527.9499999999999" y="88" text-anchor="middle" font-size="15" font-weight="600" fill="#cbd5e1">House-style template you retarget</text>
-<text x="232" y="152" font-size="54" font-weight="700" fill="#ffffff">crm-bug-suite</text>
+<text x="232" y="152" font-size="54" font-weight="700" fill="#ffffff">bug-suite</text>
 <text x="232" y="194" font-size="24" font-weight="500" fill="#f87171">Bugs, defects and comments in house style</text>
 <text x="64" y="268" font-size="15" font-weight="700" letter-spacing="2" fill="#8b97b8">WHAT IT DOES</text>
 <rect x="64" y="290" width="366.6666666666667" height="44" rx="12" fill="#ffffff" fill-opacity=".05" stroke="#ffffff" stroke-opacity=".12"/>

@@ -35,7 +35,7 @@
 <text x="378" y="180" font-size="14" fill="#c7d0e6">File what broke, in house style</text>
 <rect x="374" y="210" width="238" height="62" rx="14" fill="#ffffff" fill-opacity=".05" stroke="#f87171" stroke-opacity=".3" stroke-width="1"/>
 <g transform="translate(388 227) scale(1.1666666666666667)" fill="#f87171"><path d="M20 8h-2.81c-.45-.78-1.07-1.45-1.82-1.96L17 4.41 15.59 3l-2.17 2.17C12.96 5.06 12.49 5 12 5s-.96.06-1.41.17L8.41 3 7 4.41l1.62 1.63C7.88 6.55 7.26 7.22 6.81 8H4v2h2.09c-.05.33-.09.66-.09 1v1H4v2h2v1c0 .34.04.67.09 1H4v2h2.81c1.04 1.79 2.97 3 5.19 3s4.15-1.21 5.19-3H20v-2h-2.09c.05-.33.09-.66.09-1v-1h2v-2h-2v-1c0-.34-.04-.67-.09-1H20zm-6 8h-4v-2h4zm0-4h-4v-2h4z"/></g>
-<text x="428" y="238" font-size="16" font-weight="700" fill="#ffffff">crm-bug-suite</text>
+<text x="428" y="238" font-size="16" font-weight="700" fill="#ffffff">bug-suite</text>
 <text x="428" y="258" font-size="12.5" fill="#aab4cf">Bugs, defects, comments</text><path d="M632 150h16m-6 -6 6 6-6 6" fill="none" stroke="#8b97b8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
 <rect x="652" y="110" width="270" height="410" rx="20" fill="#ffffff" fill-opacity=".03" stroke="#ffffff" stroke-opacity=".14"/>
 <text x="672" y="152" font-size="24" font-weight="700" fill="#ffffff">Ship it</text>

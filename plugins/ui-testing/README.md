@@ -69,5 +69,5 @@ Then run `az login` if you plan to use `buggy` (the bundled MCP handles the rest
 
 - Tuned to the CRM's "Agile Project" ADO project and the team's house style (identity, area/board,
   title conventions) — retarget those in each skill's `references/` file for another project.
-- Sibling plugins: **api-testing** (the request/response equivalent) and **crm-bug-suite** (filing
+- Sibling plugins: **api-testing** (the request/response equivalent) and **bug-suite** (filing
   Bugs/Defects). For the full product-neutral QA loop in one orchestrator, see **qa-engineering**.

@@ -14,9 +14,9 @@
       "category": "testing"
     },
     {
-      "name": "crm-bug-suite",
+      "name": "bug-suite",
       "description": "File Bugs and Defects on the Agile Project ADO project in the team's QA house style, plus ticket comments",
-      "source": "./plugins/crm-bug-suite",
+      "source": "./plugins/bug-suite",
       "category": "bug-tracking"
     },
     {

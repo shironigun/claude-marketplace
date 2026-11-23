@@ -1,16 +1,16 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="600" viewBox="0 0 1280 600" role="img" aria-label="crm-bug-suite in action: File a bug for story 123456: the total doesn't update." font-family="'Segoe UI', -apple-system, 'Helvetica Neue', Arial, sans-serif">
-<title>crm-bug-suite in action: File a bug for story 123456: the total doesn't update.</title>
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="600" viewBox="0 0 1280 600" role="img" aria-label="bug-suite in action: File a bug for story 123456: the total doesn't update." font-family="'Segoe UI', -apple-system, 'Helvetica Neue', Arial, sans-serif">
+<title>bug-suite in action: File a bug for story 123456: the total doesn't update.</title>
 <defs>
-  <linearGradient id="u-crm-bug-suite-bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0b1020"/><stop offset="1" stop-color="#151d3b"/></linearGradient>
-  <radialGradient id="u-crm-bug-suite-glow" cx="1" cy="0" r="0.9"><stop offset="0" stop-color="#f87171" stop-opacity=".28"/><stop offset="1" stop-color="#f87171" stop-opacity="0"/></radialGradient>
-  <pattern id="u-crm-bug-suite-dots" width="22" height="22" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1.1" fill="#ffffff" fill-opacity=".06"/></pattern>
+  <linearGradient id="u-bug-suite-bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0b1020"/><stop offset="1" stop-color="#151d3b"/></linearGradient>
+  <radialGradient id="u-bug-suite-glow" cx="1" cy="0" r="0.9"><stop offset="0" stop-color="#f87171" stop-opacity=".28"/><stop offset="1" stop-color="#f87171" stop-opacity="0"/></radialGradient>
+  <pattern id="u-bug-suite-dots" width="22" height="22" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1.1" fill="#ffffff" fill-opacity=".06"/></pattern>
 </defs>
-<rect width="1280" height="600" rx="26" fill="url(#u-crm-bug-suite-bg)"/>
-<rect width="1280" height="600" rx="26" fill="url(#u-crm-bug-suite-dots)"/>
-<rect width="1280" height="600" rx="26" fill="url(#u-crm-bug-suite-glow)"/>
+<rect width="1280" height="600" rx="26" fill="url(#u-bug-suite-bg)"/>
+<rect width="1280" height="600" rx="26" fill="url(#u-bug-suite-dots)"/>
+<rect width="1280" height="600" rx="26" fill="url(#u-bug-suite-glow)"/>
 <rect x=".5" y=".5" width="1279" height="599" rx="26" fill="none" stroke="#ffffff" stroke-opacity=".08"/>
 <g transform="translate(64 48) scale(1.25)" fill="#f87171"><path d="M20 8h-2.81c-.45-.78-1.07-1.45-1.82-1.96L17 4.41 15.59 3l-2.17 2.17C12.96 5.06 12.49 5 12 5s-.96.06-1.41.17L8.41 3 7 4.41l1.62 1.63C7.88 6.55 7.26 7.22 6.81 8H4v2h2.09c-.05.33-.09.66-.09 1v1H4v2h2v1c0 .34.04.67.09 1H4v2h2.81c1.04 1.79 2.97 3 5.19 3s4.15-1.21 5.19-3H20v-2h-2.09c.05-.33.09-.66.09-1v-1h2v-2h-2v-1c0-.34-.04-.67-.09-1H20zm-6 8h-4v-2h4zm0-4h-4v-2h4z"/></g>
-<text x="106" y="72" font-size="26" font-weight="700" fill="#ffffff">crm-bug-suite in action</text>
+<text x="106" y="72" font-size="26" font-weight="700" fill="#ffffff">bug-suite in action</text>
 <text x="1216" y="72" text-anchor="end" font-size="14" fill="#8b97b8">Example with made-up data</text>
 <text x="64" y="138" font-size="14" font-weight="700" letter-spacing="2" fill="#8b97b8">YOU ASK</text>
 <rect x="64" y="156" width="380" height="96" rx="20" fill="#f87171" fill-opacity=".16" stroke="#f87171" stroke-opacity=".55"/>

@@ -1,16 +1,16 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="620" viewBox="0 0 1280 620" role="img" aria-label="How crm-bug-suite works" font-family="'Segoe UI', -apple-system, 'Helvetica Neue', Arial, sans-serif">
-<title>How crm-bug-suite works</title>
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="620" viewBox="0 0 1280 620" role="img" aria-label="How bug-suite works" font-family="'Segoe UI', -apple-system, 'Helvetica Neue', Arial, sans-serif">
+<title>How bug-suite works</title>
 <defs>
-  <linearGradient id="d-crm-bug-suite-bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0b1020"/><stop offset="1" stop-color="#151d3b"/></linearGradient>
-  <radialGradient id="d-crm-bug-suite-glow" cx="1" cy="0" r="0.9"><stop offset="0" stop-color="#f87171" stop-opacity=".28"/><stop offset="1" stop-color="#f87171" stop-opacity="0"/></radialGradient>
-  <pattern id="d-crm-bug-suite-dots" width="22" height="22" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1.1" fill="#ffffff" fill-opacity=".06"/></pattern>
+  <linearGradient id="d-bug-suite-bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0b1020"/><stop offset="1" stop-color="#151d3b"/></linearGradient>
+  <radialGradient id="d-bug-suite-glow" cx="1" cy="0" r="0.9"><stop offset="0" stop-color="#f87171" stop-opacity=".28"/><stop offset="1" stop-color="#f87171" stop-opacity="0"/></radialGradient>
+  <pattern id="d-bug-suite-dots" width="22" height="22" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1.1" fill="#ffffff" fill-opacity=".06"/></pattern>
 </defs>
-<rect width="1280" height="620" rx="26" fill="url(#d-crm-bug-suite-bg)"/>
-<rect width="1280" height="620" rx="26" fill="url(#d-crm-bug-suite-dots)"/>
-<rect width="1280" height="620" rx="26" fill="url(#d-crm-bug-suite-glow)"/>
+<rect width="1280" height="620" rx="26" fill="url(#d-bug-suite-bg)"/>
+<rect width="1280" height="620" rx="26" fill="url(#d-bug-suite-dots)"/>
+<rect width="1280" height="620" rx="26" fill="url(#d-bug-suite-glow)"/>
 <rect x=".5" y=".5" width="1279" height="619" rx="26" fill="none" stroke="#ffffff" stroke-opacity=".08"/>
 <g transform="translate(64 46) scale(1.25)" fill="#f87171"><path d="M20 8h-2.81c-.45-.78-1.07-1.45-1.82-1.96L17 4.41 15.59 3l-2.17 2.17C12.96 5.06 12.49 5 12 5s-.96.06-1.41.17L8.41 3 7 4.41l1.62 1.63C7.88 6.55 7.26 7.22 6.81 8H4v2h2.09c-.05.33-.09.66-.09 1v1H4v2h2v1c0 .34.04.67.09 1H4v2h2.81c1.04 1.79 2.97 3 5.19 3s4.15-1.21 5.19-3H20v-2h-2.09c.05-.33.09-.66.09-1v-1h2v-2h-2v-1c0-.34-.04-.67-.09-1H20zm-6 8h-4v-2h4zm0-4h-4v-2h4z"/></g>
-<text x="106" y="70" font-size="26" font-weight="700" fill="#ffffff">How crm-bug-suite works</text>
+<text x="106" y="70" font-size="26" font-weight="700" fill="#ffffff">How bug-suite works</text>
 <text x="64" y="104" font-size="16" fill="#c7d0e6">Pick by where you found it. Every draft waits for your approval before it is created.</text>
 <rect x="64" y="300" width="240" height="110" rx="14" fill="#ffffff" fill-opacity="0.05" stroke="#f87171" stroke-opacity="0.4" />
 <text x="184" y="334" text-anchor="middle" font-size="17" font-weight="700" fill="#ffffff">What happened?</text>

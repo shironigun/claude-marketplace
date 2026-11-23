@@ -44,7 +44,7 @@ into test cases", "the contract test failed, write it up".
 
 **None for the plugin itself** — both skills produce their output in the session (test cases, runnable
 spec files, or a bug draft). To actually **file** a drafted bug into Azure DevOps afterward, hand it to a
-filing skill (**crm-bug-suite**'s `bugger`/`defector`, or **qa-engineering**'s gated `failure-to-bug`) —
+filing skill (**bug-suite**'s `bugger`/`defector`, or **qa-engineering**'s gated `failure-to-bug`) —
 those plugins **bundle** their own ADO MCP (Azure Identity / `az login`, no token), so filing works with no
 extra setup. The generated scripts target the Playwright + TypeScript + zod automation framework;
 running them is done in that framework (`npx playwright test`), not through this plugin.
@@ -59,6 +59,6 @@ claude plugin install api-testing@shironigun
 ## Notes
 
 - Tuned to the automation framework and the team's house style.
-- Sibling plugins: **ui-testing** (the click-by-click UI equivalent) and **crm-bug-suite** (filing
+- Sibling plugins: **ui-testing** (the click-by-click UI equivalent) and **bug-suite** (filing
   Bugs/Defects to ADO). For the full product-neutral QA loop — story → cases → publish → automate → bug — in
   one orchestrator, see **qa-engineering**.

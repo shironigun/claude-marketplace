@@ -1,7 +1,7 @@
-# CRM Bug Suite
+# Bug Suite
 
 <p align="center">
-  <img src="../../assets/readme/banners/crm-bug-suite.svg" alt="crm-bug-suite" width="100%">
+  <img src="../../assets/readme/banners/bug-suite.svg" alt="bug-suite" width="100%">
 </p>
 
 <p align="center">
@@ -21,11 +21,11 @@
 
 ## See it in action
 
-<p align="center"><img src="../../assets/readme/usecases/crm-bug-suite.svg" alt="crm-bug-suite in action: what you ask and what you get" width="100%"></p>
+<p align="center"><img src="../../assets/readme/usecases/bug-suite.svg" alt="bug-suite in action: what you ask and what you get" width="100%"></p>
 
 ## How it works at a glance
 
-<p align="center"><img src="../../assets/readme/diagrams/crm-bug-suite.svg" alt="How crm-bug-suite works" width="100%"></p>
+<p align="center"><img src="../../assets/readme/diagrams/bug-suite.svg" alt="How bug-suite works" width="100%"></p>
 
 
 Three skills for the **Agile Project** Azure DevOps project, modeled on the team's actual authoring patterns.
@@ -70,7 +70,7 @@ from `"command": "cmd", "args": ["/c", "npx", …]` to `"command": "npx"` with t
 
 ```bash
 claude plugin marketplace add shironigun/marketplace
-claude plugin install crm-bug-suite@shironigun
+claude plugin install bug-suite@shironigun
 ```
 
 Then run `az login` (above). These skills are tuned to the "Agile Project" project and the team's house
