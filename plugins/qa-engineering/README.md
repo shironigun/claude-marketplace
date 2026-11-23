@@ -153,7 +153,7 @@ Format and rules: `knowledge/standards/knowledge-base.md`.
 ## Install
 
 ```bash
-claude plugin marketplace add shironigun/claude-marketplace
+claude plugin marketplace add shironigun/marketplace
 claude plugin install qa-engineering@shironigun
 ```
 
