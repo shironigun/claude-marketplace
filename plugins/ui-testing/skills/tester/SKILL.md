@@ -1,11 +1,11 @@
 ---
 name: "tester"
-description: "Review a user story, feature description, or acceptance criteria as a senior SQA analyst and write UI test cases in the team's QA house style — behavior-driven, click-by-click, every step with an explicit expected result — AND generate/parse runnable Playwright + TypeScript UI scripts for the Acme CRM automation framework, working BOTH ways (cases → scripts and scripts → cases), at the three UI levels: smoke, regression, and e2e. Use whenever the user pastes a story, ticket, AC block, feature spec, or flow description and asks for test cases, test coverage, QA review, UI automation/Playwright specs, or to convert between UI test cases and UI scripts — e.g. \"write tests for this\", \"what should I test?\", \"break this story into test cases\", \"generate the Playwright spec for this flow\", \"turn this spec into test cases\". UI sibling of the request/response `api-tester` skill; use `api-tester` for anything request/response and this one for click-by-click UI."
+description: "Review a user story, feature description, or acceptance criteria as a senior SQA analyst and write UI test cases in the team's QA house style — behavior-driven, click-by-click, every step with an explicit expected result — AND generate/parse runnable Playwright + TypeScript UI scripts for the automation framework, working BOTH ways (cases → scripts and scripts → cases), at the three UI levels: smoke, regression, and e2e. Use whenever the user pastes a story, ticket, AC block, feature spec, or flow description and asks for test cases, test coverage, QA review, UI automation/Playwright specs, or to convert between UI test cases and UI scripts — e.g. \"write tests for this\", \"what should I test?\", \"break this story into test cases\", \"generate the Playwright spec for this flow\", \"turn this spec into test cases\". UI sibling of the request/response `api-tester` skill; use `api-tester` for anything request/response and this one for click-by-click UI."
 ---
 
 # Tester — Senior SQA Analyst (UI cases ⇄ scripts)
 
-One mindset, two artifacts, two directions. Reason about the UI behavior once — the happy path, every rule, every edge and negative, the full journey — and express it either as a **house-style test case** (click-by-click, the human-readable spec a reviewer signs off on) or as a **runnable Playwright + TypeScript UI script** that drops into the Acme CRM automation framework. Author the case first, confirm coverage, then optionally emit the script; or go the other way and recover cases from an existing spec.
+One mindset, two artifacts, two directions. Reason about the UI behavior once — the happy path, every rule, every edge and negative, the full journey — and express it either as a **house-style test case** (click-by-click, the human-readable spec a reviewer signs off on) or as a **runnable Playwright + TypeScript UI script** that drops into the automation framework. Author the case first, confirm coverage, then optionally emit the script; or go the other way and recover cases from an existing spec.
 
 ## Direction of work (two-way — support both)
 
@@ -83,7 +83,7 @@ Actual Result:
 ## Voice and Style Rules (mandatory)
 
 - **Childlike granularity — the most important rule.** Every single click, navigation, and field entry is its own step. "Navigate to Settings → Deals tab → Add Pipeline" is three steps. A 10-action flow has 10 rows. If you catch yourself writing "Navigate to X and click Y," split it.
-- **Imperative, third-person, declarative.** "Login to Acme CRM", "Click the SAVE button" — not "The user should log in."
+- **Imperative, third-person, declarative.** "Login to the CRM", "Click the SAVE button" — not "The user should log in."
 - **Exact labels.** Use real button/field/section names verbatim from the story ("Connect to Customer" button, "Social Channels column", "snackbar").
 - **Every step has a concrete expected result.** Not "the page updates" but "the pipeline list refreshes and the new pipeline appears in the list."
 - **One assertion per step.** If three things happen and all matter, that's three verification steps.

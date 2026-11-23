@@ -105,7 +105,7 @@ Use these consistent patterns (not alternatives — pick the one that matches th
 
 | Action type | Verb to use |
 |---|---|
-| Opening the application | Login to Acme CRM |
+| Opening the application | Login to the CRM |
 | Navigating to a module | Navigate to the [Module] module |
 | Switching to a sub-tab | Move to the [Tab] tab |
 | Clicking a button | Click the [Label] button |

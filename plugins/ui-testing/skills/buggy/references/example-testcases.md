@@ -14,7 +14,7 @@ Preconditions: Client ID: 99204001 | Environment: QA
 
 | # | Action | Expected Result |
 |---|--------|-----------------|
-| 1 | Login to Acme CRM | User is logged in and the dashboard loads |
+| 1 | Login to the CRM | User is logged in and the dashboard loads |
 | 2 | Navigate to Settings | Settings page opens |
 | 3 | Move to the Deals tab | Deals settings tab is displayed |
 | 4 | Click on the Add Pipeline button | Add Pipeline form opens |
@@ -44,7 +44,7 @@ Preconditions: Client ID: 99204001 | Environment: QA | An FB conversation exists
 
 | # | Action | Expected Result |
 |---|--------|-----------------|
-| 1 | Login to Acme CRM | User is logged in and the dashboard loads |
+| 1 | Login to the CRM | User is logged in and the dashboard loads |
 | 2 | Navigate to the Messenger module | Messenger opens and the conversation list is displayed |
 | 3 | Locate the FB conversation with an inbound message less than 24 hours old | The conversation is visible in the list |
 | 4 | Click the conversation to open it | The conversation thread opens and the message input field is enabled |
@@ -61,7 +61,7 @@ Preconditions: Client ID: 99204001 | Environment: QA | An FB conversation whose 
 
 | # | Action | Expected Result |
 |---|--------|-----------------|
-| 1 | Login to Acme CRM | User is logged in and the dashboard loads |
+| 1 | Login to the CRM | User is logged in and the dashboard loads |
 | 2 | Navigate to the Messenger module | Messenger opens and the conversation list is displayed |
 | 3 | Locate the FB conversation with last inbound message older than 24 hours | The conversation is visible in the list |
 | 4 | Click the conversation to open it | The conversation thread opens |
@@ -78,7 +78,7 @@ Preconditions: Client ID: 99204001 | Environment: QA | FB conversation with last
 
 | # | Action | Expected Result |
 |---|--------|-----------------|
-| 1 | Login to Acme CRM | User is logged in and the dashboard loads |
+| 1 | Login to the CRM | User is logged in and the dashboard loads |
 | 2 | Navigate to the Messenger module | Messenger opens and the conversation list is displayed |
 | 3 | Locate and open the FB conversation with last inbound older than 24 hours | The conversation thread opens |
 | 4 | Select the Human Agent tag option | The Human Agent tag is applied to the outgoing message |
@@ -95,7 +95,7 @@ Preconditions: Client ID: 99204001 | Environment: QA | An SMS (non-FB) conversat
 
 | # | Action | Expected Result |
 |---|--------|-----------------|
-| 1 | Login to Acme CRM | User is logged in and the dashboard loads |
+| 1 | Login to the CRM | User is logged in and the dashboard loads |
 | 2 | Navigate to the Messenger module | Messenger opens and the conversation list is displayed |
 | 3 | Locate and open an SMS conversation older than 24 hours | The conversation thread opens and the message input field is enabled |
 | 4 | Type a message in the input field | The typed text appears in the input field |

@@ -1,4 +1,4 @@
-# Acme CRM Bug Suite
+# CRM Bug Suite
 
 <p align="center">
   <img src="../../assets/readme/banners/crm-bug-suite.svg" alt="crm-bug-suite" width="100%">
@@ -28,7 +28,7 @@
 <p align="center"><img src="../../assets/readme/diagrams/crm-bug-suite.svg" alt="How crm-bug-suite works" width="100%"></p>
 
 
-Three skills for the Acme CRM **Agile Project** Azure DevOps project, modeled on the team's actual authoring patterns.
+Three skills for the **Agile Project** Azure DevOps project, modeled on the team's actual authoring patterns.
 
 | Skill | Files what | Board / type | Trigger examples |
 |-------|-----------|--------------|------------------|

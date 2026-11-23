@@ -1,11 +1,11 @@
 ---
 name: "api-bugger"
-description: "When an API script fails in the Acme CRM automation project, act as a senior SQA analyst — triage the failure and draft a house-style ADO Bug (the team's voice) to review now and push to Azure DevOps later. Use whenever a Playwright API spec (contract / endpoint / workflow) fails and the user wants a bug drafted, when the user pastes a failed API test's output / assertion error / zod safeParse issues / non-2xx response and asks to log or write it up, or says \"draft a bug for this failure\", \"the contract test failed, write it up\", \"turn this red run into a bug\". Drafts live in the automation project's find-bugs module; the skill drafts and reviews only — it does not auto-push. Sibling of the `api-tester` skill (which authors the API cases/scripts) and the `bugger`/`defector` ADO-filing skills; hand off to those to actually create the work item."
+description: "When an API script fails in the automation project, act as a senior SQA analyst — triage the failure and draft a house-style ADO Bug (the team's voice) to review now and push to Azure DevOps later. Use whenever a Playwright API spec (contract / endpoint / workflow) fails and the user wants a bug drafted, when the user pastes a failed API test's output / assertion error / zod safeParse issues / non-2xx response and asks to log or write it up, or says \"draft a bug for this failure\", \"the contract test failed, write it up\", \"turn this red run into a bug\". Drafts live in the automation project's find-bugs module; the skill drafts and reviews only — it does not auto-push. Sibling of the `api-tester` skill (which authors the API cases/scripts) and the `bugger`/`defector` ADO-filing skills; hand off to those to actually create the work item."
 ---
 
 # API Bugger — Failed API Script → House-Style Bug Draft
 
-When an API script goes red, a senior SQA analyst does not paste the stack trace into ADO. They decide whether it is a real product bug, and if so write a bug a developer can reproduce and a reviewer can approve. This skill does exactly that for the Acme CRM `automation/` project: take a failed Playwright API spec (contract / endpoint / workflow) plus its failure output, **triage** it, and **draft** a bug in the exact house format — saved to the `find-bugs` module to view and push to ADO later. It is the failure-side sibling of `api-tester` (which authors the cases/scripts).
+When an API script goes red, a senior SQA analyst does not paste the stack trace into ADO. They decide whether it is a real product bug, and if so write a bug a developer can reproduce and a reviewer can approve. This skill does exactly that for the `automation/` project: take a failed Playwright API spec (contract / endpoint / workflow) plus its failure output, **triage** it, and **draft** a bug in the exact house format — saved to the `find-bugs` module to view and push to ADO later. It is the failure-side sibling of `api-tester` (which authors the cases/scripts).
 
 **Scope:** this skill runs against the CRM **`automation/`** project. The bug format below was learned from the QA-automation tool's Bug Writer, but this skill does not touch that tool — it drafts into `automation/find-bugs/`.
 
@@ -34,7 +34,7 @@ Draft fields (this is the frozen shape — camelCase): `title`, `severity`, `pre
 
 ### Title — declarative negative-state statement (NOT `[Module] - [Feature]`)
 
-State plainly what is broken, name the endpoint/module, and END with the environment. ALL-CAPS the domain keywords (states/entities like OPEN, CLOSED, EMAIL, PDF, CSV; DMS names DMS-B, DMS-C, DMS-E, DMS-A, ACME; environments QA, STAGING, PRODUCTION). Bracket a client id when client-specific. No "should", no question phrasing, no speculation, no `[Module] - [Feature]` prefix. Pick the frame that fits:
+State plainly what is broken, name the endpoint/module, and END with the environment. ALL-CAPS the domain keywords (states/entities like OPEN, CLOSED, EMAIL, PDF, CSV; DMS names DMS-B, DMS-C, DMS-E, DMS-A, CRM; environments QA, STAGING, PRODUCTION). Bracket a client id when client-specific. No "should", no question phrasing, no speculation, no `[Module] - [Feature]` prefix. Pick the frame that fits:
 
 - `<thing> not working` / `<thing> is/are not <verb>ing`
 - `Unable to <verb>`   ·   `<thing> is not <correct>`
@@ -46,7 +46,7 @@ API-molded examples (match this style):
 - `opportunities response is missing the required id field on QA environment`
 - `Able to CREATE an opportunity without a required customer via POST opportunities on QA environment`
 - `GET opportunities returns 401 for a valid bearer token on QA environment`
-- `CLOSED invoices are syncing as OPEN from DMS-B to ACME`
+- `CLOSED invoices are syncing as OPEN from DMS-B to CRM`
 
 ### Severity (exactly one)
 
@@ -61,7 +61,7 @@ API-molded examples (match this style):
 
 - Imperative, third-person, atomic — ONE action per item. "Send a POST request to /api/cpq-plus/clients/{id}/opportunities with a valid payload." not "POST and check the response".
 - Childlike granularity — each request and each setup action is its own step.
-- **Step 1 names the DMS + environment (and client id when known):** "Authenticate to the Acme CRM API as <role> on Client <id> on the QA environment." or "Go to DMS-B QA environment.", then one step per setup action (mint/seed the required record, capture ids), then the request that triggers the failure as the last step.
+- **Step 1 names the DMS + environment (and client id when known):** "Authenticate to the API as <role> on Client <id> on the QA environment." or "Go to DMS-B QA environment.", then one step per setup action (mint/seed the required record, capture ids), then the request that triggers the failure as the last step.
 - Reference exact routes, methods, params, headers, and field names verbatim (`POST /api/cpq-plus/.../opportunities`, `Authorization` header, `dmsDealerIdCrm`, `stage`). Leave the broken result out of the steps — it belongs in `observations`.
 
 ### Expected vs Observations
@@ -95,7 +95,7 @@ Draft JSON (mirrors the framework's BugDraft; `status` starts `Draft`, `adoBugId
   "title": "POST opportunities returns 500 on QA environment",
   "severity": "High",
   "preconditions": "",
-  "reproSteps": ["Authenticate to the Acme CRM API as an ADMIN on Client 99204001 on the QA environment.", "Send a POST request to /api/cpq-plus/clients/99204001/opportunities with a valid payload.", "Read the response status."],
+  "reproSteps": ["Authenticate to the API as an ADMIN on Client 99204001 on the QA environment.", "Send a POST request to /api/cpq-plus/clients/99204001/opportunities with a valid payload.", "Read the response status."],
   "expected": "POST opportunities returns 201 with the created opportunity.",
   "observations": ["Response status is 500 Internal Server Error", "Response body is empty", "No opportunity is created"],
   "suggestedFix": "",

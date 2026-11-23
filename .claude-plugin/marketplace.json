@@ -15,19 +15,19 @@
     },
     {
       "name": "crm-bug-suite",
-      "description": "File Bugs and Defects on the Acme CRM Agile Project ADO project in the team's QA house style, plus ticket comments",
+      "description": "File Bugs and Defects on the Agile Project ADO project in the team's QA house style, plus ticket comments",
       "source": "./plugins/crm-bug-suite",
       "category": "bug-tracking"
     },
     {
       "name": "release-notes-suite",
-      "description": "Two-stage release pipeline: harvester builds the complete engineering inventory; releaser writes client-facing notes for Acme CRM and Acme Notify",
+      "description": "Two-stage release pipeline: harvester builds the complete engineering inventory; releaser writes client-facing notes for the CRM and its DMS-facing variant",
       "source": "./plugins/release-notes-suite",
       "category": "release-management"
     },
     {
       "name": "ui-testing",
-      "description": "UI test case authoring and Playwright script generation for Acme CRM — buggy (ADO Test Cases) and tester (cases + runnable UI specs)",
+      "description": "UI test case authoring and Playwright script generation for the CRM — buggy (ADO Test Cases) and tester (cases + runnable UI specs)",
       "source": "./plugins/ui-testing",
       "category": "testing"
     },

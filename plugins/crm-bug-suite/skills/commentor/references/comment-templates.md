@@ -19,7 +19,7 @@ Mention anchor:
 ```html
 <div><b>Bug Details:</b> This bug has been inspected. The issue happened because <one-line cause naming the exact config key / client ID / error code>.</div>
 <div><ul>
-  <li>Due to this, <consequence, e.g. the token issuer changed and Acme CRM got a 401 Unauthorized error>.</li>
+  <li>Due to this, <consequence, e.g. the token issuer changed and the CRM got a 401 Unauthorized error>.</li>
   <li>We have now <corrective action>, redeployed, and verified the fix through QA testing.</li>
 </ul></div>
 <div><b>Status:</b> Tested and resolved.</div>
@@ -50,7 +50,7 @@ Mention anchor:
 
 Process-escalation tone — state ownership and the approved path:
 ```html
-<div><a href="#" data-vss-mention="version:2.0,GUID">@Owner</a> DMS-A can only help sync between DMS-A and DMS-E as far as DMS-D is concerned. If there is any issue with feeds, please involve the DMS-E team and have them contact us — that's the approved process. Unless it's the Customer Feed (Acme CRM → DMS-A) or the Acme CRM embedded browser in DMS-A, submit that issue to <a href="#" data-vss-mention="version:2.0,GUID">@Owner</a>.</div>
+<div><a href="#" data-vss-mention="version:2.0,GUID">@Owner</a> DMS-A can only help sync between DMS-A and DMS-E as far as DMS-D is concerned. If there is any issue with feeds, please involve the DMS-E team and have them contact us — that's the approved process. Unless it's the Customer Feed (the CRM → DMS-A) or the embedded browser in DMS-A, submit that issue to <a href="#" data-vss-mention="version:2.0,GUID">@Owner</a>.</div>
 <div>@… @… @…</div>
 ```
 
