@@ -1,4 +1,4 @@
-# APP Bug Suite
+# Bug Suite
 
 <p align="center">
   <img src="../../assets/readme/banners/bug-suite.svg" alt="bug-suite" width="100%">
