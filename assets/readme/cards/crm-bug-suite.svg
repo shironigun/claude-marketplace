@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="340" viewBox="0 0 640 340" role="img" aria-label="bug-suite: Bugs, defects and comments in house style" font-family="'Segoe UI', -apple-system, 'Helvetica Neue', Arial, sans-serif">
+<title>bug-suite: Bugs, defects and comments in house style</title>
+<defs>
+  <linearGradient id="c-bug-suite-bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0b1020"/><stop offset="1" stop-color="#151d3b"/></linearGradient>
+  <radialGradient id="c-bug-suite-glow" cx="1" cy="0" r="0.9"><stop offset="0" stop-color="#f87171" stop-opacity=".28"/><stop offset="1" stop-color="#f87171" stop-opacity="0"/></radialGradient>
+  <pattern id="c-bug-suite-dots" width="22" height="22" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1.1" fill="#ffffff" fill-opacity=".06"/></pattern>
+</defs>
+<rect width="640" height="340" rx="24" fill="url(#c-bug-suite-bg)"/>
+<rect width="640" height="340" rx="24" fill="url(#c-bug-suite-dots)"/>
+<rect width="640" height="340" rx="24" fill="url(#c-bug-suite-glow)"/>
+<rect x=".5" y=".5" width="639" height="339" rx="24" fill="none" stroke="#ffffff" stroke-opacity=".08"/>
+<rect x="44" y="40" width="108" height="108" rx="26" fill="#f87171" fill-opacity=".14" stroke="#f87171" stroke-opacity=".5"/>
+<g transform="translate(68 64) scale(2.5)" fill="#f87171"><path d="M20 8h-2.81c-.45-.78-1.07-1.45-1.82-1.96L17 4.41 15.59 3l-2.17 2.17C12.96 5.06 12.49 5 12 5s-.96.06-1.41.17L8.41 3 7 4.41l1.62 1.63C7.88 6.55 7.26 7.22 6.81 8H4v2h2.09c-.05.33-.09.66-.09 1v1H4v2h2v1c0 .34.04.67.09 1H4v2h2.81c1.04 1.79 2.97 3 5.19 3s4.15-1.21 5.19-3H20v-2h-2.09c.05-.33.09-.66.09-1v-1h2v-2h-2v-1c0-.34-.04-.67-.09-1H20zm-6 8h-4v-2h4zm0-4h-4v-2h4z"/></g>
+<rect x="176" y="44" width="114.47999999999999" height="27" rx="13.5" fill="#c7d0e6" fill-opacity="0.16" stroke="#c7d0e6" stroke-opacity=".55"/>
+<text x="233.24" y="60" text-anchor="middle" font-size="13" font-weight="600" fill="#c7d0e6">Bug tracking</text><rect x="300.48" y="44" width="174.79999999999998" height="27" rx="13.5" fill="#cbd5e1" fill-opacity="0.16" stroke="#cbd5e1" stroke-opacity=".55"/>
+<text x="387.88" y="60" text-anchor="middle" font-size="13" font-weight="600" fill="#cbd5e1">House-style template</text>
+<text x="176" y="112" font-size="34" font-weight="700" fill="#ffffff">bug-suite</text>
+<text x="176" y="140" font-size="17" font-weight="500" fill="#f87171">Bugs, defects and comments in house style</text>
+<text x="44" y="196" font-size="16" fill="#c7d0e6">Files story and regression bugs, production defects and ticket</text>
+<text x="44" y="220" font-size="16" fill="#c7d0e6">comments in Azure DevOps.</text>
+<rect x="44" y="272" width="84.32" height="27" rx="13.5" fill="#e6ebf7" fill-opacity="0" stroke="#e6ebf7" stroke-opacity=".55"/>
+<text x="86.16" y="288" text-anchor="middle" font-size="13" font-weight="600" fill="#e6ebf7">3 skills</text><rect x="138.32" y="272" width="84.32" height="27" rx="13.5" fill="#e6ebf7" fill-opacity="0" stroke="#e6ebf7" stroke-opacity=".55"/>
+<text x="180.48" y="288" text-anchor="middle" font-size="13" font-weight="600" fill="#e6ebf7">az login</text>
+<g transform="translate(570 276) scale(1)" fill="#ffffff"><path d="m12 4-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/></g>
+</svg>

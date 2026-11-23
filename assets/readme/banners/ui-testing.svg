@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="400" viewBox="0 0 1280 400" role="img" aria-label="ui-testing: UI test cases and Playwright UI specs" font-family="'Segoe UI', -apple-system, 'Helvetica Neue', Arial, sans-serif">
+<title>ui-testing: UI test cases and Playwright UI specs</title>
+<defs>
+  <linearGradient id="b-ui-testing-bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0b1020"/><stop offset="1" stop-color="#151d3b"/></linearGradient>
+  <radialGradient id="b-ui-testing-glow" cx="1" cy="0" r="0.9"><stop offset="0" stop-color="#f472b6" stop-opacity=".28"/><stop offset="1" stop-color="#f472b6" stop-opacity="0"/></radialGradient>
+  <pattern id="b-ui-testing-dots" width="22" height="22" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1.1" fill="#ffffff" fill-opacity=".06"/></pattern>
+</defs>
+<rect width="1280" height="400" rx="28" fill="url(#b-ui-testing-bg)"/>
+<rect width="1280" height="400" rx="28" fill="url(#b-ui-testing-dots)"/>
+<rect width="1280" height="400" rx="28" fill="url(#b-ui-testing-glow)"/>
+<rect x=".5" y=".5" width="1279" height="399" rx="28" fill="none" stroke="#ffffff" stroke-opacity=".08"/>
+<rect x="64" y="64" width="140" height="140" rx="34" fill="#f472b6" fill-opacity=".14" stroke="#f472b6" stroke-opacity=".5"/>
+<g transform="translate(94 94) scale(3.3333333333333335)" fill="#f472b6"><path d="M13 1.07V9h7c0-4.08-3.05-7.44-7-7.93M4 15c0 4.42 3.58 8 8 8s8-3.58 8-8v-4H4zm7-13.93C7.05 1.56 4 4.92 4 9h7z"/></g>
+<rect x="232" y="70" width="84.9" height="29" rx="14.5" fill="#c7d0e6" fill-opacity="0.16" stroke="#c7d0e6" stroke-opacity=".55"/>
+<text x="274.45" y="88" text-anchor="middle" font-size="15" font-weight="600" fill="#c7d0e6">Testing</text><rect x="328.9" y="70" width="311.09999999999997" height="29" rx="14.5" fill="#cbd5e1" fill-opacity="0.16" stroke="#cbd5e1" stroke-opacity=".55"/>
+<text x="484.44999999999993" y="88" text-anchor="middle" font-size="15" font-weight="600" fill="#cbd5e1">House-style template you retarget</text>
+<text x="232" y="152" font-size="54" font-weight="700" fill="#ffffff">ui-testing</text>
+<text x="232" y="194" font-size="24" font-weight="500" fill="#f472b6">UI test cases and Playwright UI specs</text>
+<text x="64" y="268" font-size="15" font-weight="700" letter-spacing="2" fill="#8b97b8">HOW IT WORKS</text>
+<rect x="64" y="290" width="268.5" height="44" rx="12" fill="#ffffff" fill-opacity=".05" stroke="#ffffff" stroke-opacity=".12"/>
+<circle cx="84" cy="312" r="11" fill="#f472b6"/><text x="84" y="317" text-anchor="middle" font-size="12" font-weight="700" fill="#0b1020">1</text>
+<text x="102" y="317" font-size="16" font-weight="600" fill="#e6ebf7">Story</text><path d="M338.5 312h14m-6 -5 6 5-6 5" fill="none" stroke="#f472b6" stroke-opacity=".7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<rect x="358.5" y="290" width="268.5" height="44" rx="12" fill="#ffffff" fill-opacity=".05" stroke="#ffffff" stroke-opacity=".12"/>
+<circle cx="378.5" cy="312" r="11" fill="#f472b6"/><text x="378.5" y="317" text-anchor="middle" font-size="12" font-weight="700" fill="#0b1020">2</text>
+<text x="396.5" y="317" font-size="16" font-weight="600" fill="#e6ebf7">UI cases</text><path d="M633 312h14m-6 -5 6 5-6 5" fill="none" stroke="#f472b6" stroke-opacity=".7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<rect x="653" y="290" width="268.5" height="44" rx="12" fill="#ffffff" fill-opacity=".05" stroke="#ffffff" stroke-opacity=".12"/>
+<circle cx="673" cy="312" r="11" fill="#f472b6"/><text x="673" y="317" text-anchor="middle" font-size="12" font-weight="700" fill="#0b1020">3</text>
+<text x="691" y="317" font-size="16" font-weight="600" fill="#e6ebf7">Test Cases</text><path d="M927.5 312h14m-6 -5 6 5-6 5" fill="none" stroke="#f472b6" stroke-opacity=".7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<rect x="947.5" y="290" width="268.5" height="44" rx="12" fill="#ffffff" fill-opacity=".05" stroke="#ffffff" stroke-opacity=".12"/>
+<circle cx="967.5" cy="312" r="11" fill="#f472b6"/><text x="967.5" y="317" text-anchor="middle" font-size="12" font-weight="700" fill="#0b1020">4</text>
+<text x="985.5" y="317" font-size="16" font-weight="600" fill="#e6ebf7">UI specs</text>
+<text x="1216" y="372" text-anchor="end" font-size="14" fill="#8b97b8">2 skills  ·  az login  ·  shironigun/claude-marketplace</text>
+</svg>

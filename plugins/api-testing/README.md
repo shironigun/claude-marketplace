@@ -1,5 +1,25 @@
 # api-testing
 
+<p align="center">
+  <img src="../../assets/readme/banners/api-testing.svg" alt="api-testing" width="100%">
+</p>
+
+<p align="center">
+  <a href="../../README.md#the-catalog">← All plugins</a> ·
+  <a href="#install">Install</a> ·
+  <a href="../../README.md#trust--safety">Trust &amp; safety</a>
+</p>
+
+| At a glance | |
+|---|---|
+| **Category** | Testing |
+| **What it does** | API cases and runnable Playwright + TypeScript + zod specs, both ways, plus bug drafts |
+| **Includes** | 2 skills |
+| **Writes** | Nothing outside the session: cases, specs and drafts |
+| **Setup** | None |
+| **Product-neutral** | Template: retarget `references/` |
+
+
 API test-case authoring and Playwright + TypeScript + zod **script generation** for **Acme APP**
 (Acme), plus failed-test bug drafting, in the team's QA house style.
 

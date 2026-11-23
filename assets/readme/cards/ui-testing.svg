@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="340" viewBox="0 0 640 340" role="img" aria-label="ui-testing: UI test cases and Playwright UI specs" font-family="'Segoe UI', -apple-system, 'Helvetica Neue', Arial, sans-serif">
+<title>ui-testing: UI test cases and Playwright UI specs</title>
+<defs>
+  <linearGradient id="c-ui-testing-bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0b1020"/><stop offset="1" stop-color="#151d3b"/></linearGradient>
+  <radialGradient id="c-ui-testing-glow" cx="1" cy="0" r="0.9"><stop offset="0" stop-color="#f472b6" stop-opacity=".28"/><stop offset="1" stop-color="#f472b6" stop-opacity="0"/></radialGradient>
+  <pattern id="c-ui-testing-dots" width="22" height="22" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1.1" fill="#ffffff" fill-opacity=".06"/></pattern>
+</defs>
+<rect width="640" height="340" rx="24" fill="url(#c-ui-testing-bg)"/>
+<rect width="640" height="340" rx="24" fill="url(#c-ui-testing-dots)"/>
+<rect width="640" height="340" rx="24" fill="url(#c-ui-testing-glow)"/>
+<rect x=".5" y=".5" width="639" height="339" rx="24" fill="none" stroke="#ffffff" stroke-opacity=".08"/>
+<rect x="44" y="40" width="108" height="108" rx="26" fill="#f472b6" fill-opacity=".14" stroke="#f472b6" stroke-opacity=".5"/>
+<g transform="translate(68 64) scale(2.5)" fill="#f472b6"><path d="M13 1.07V9h7c0-4.08-3.05-7.44-7-7.93M4 15c0 4.42 3.58 8 8 8s8-3.58 8-8v-4H4zm7-13.93C7.05 1.56 4 4.92 4 9h7z"/></g>
+<rect x="176" y="44" width="76.78" height="27" rx="13.5" fill="#c7d0e6" fill-opacity="0.16" stroke="#c7d0e6" stroke-opacity=".55"/>
+<text x="214.39" y="60" text-anchor="middle" font-size="13" font-weight="600" fill="#c7d0e6">Testing</text><rect x="262.78" y="44" width="174.79999999999998" height="27" rx="13.5" fill="#cbd5e1" fill-opacity="0.16" stroke="#cbd5e1" stroke-opacity=".55"/>
+<text x="350.17999999999995" y="60" text-anchor="middle" font-size="13" font-weight="600" fill="#cbd5e1">House-style template</text>
+<text x="176" y="112" font-size="34" font-weight="700" fill="#ffffff">ui-testing</text>
+<text x="176" y="140" font-size="17" font-weight="500" fill="#f472b6">UI test cases and Playwright UI specs</text>
+<text x="44" y="196" font-size="16" fill="#c7d0e6">Click-by-click UI cases from a story, created as Test Cases, and</text>
+<text x="44" y="220" font-size="16" fill="#c7d0e6">runnable UI specs.</text>
+<rect x="44" y="272" width="84.32" height="27" rx="13.5" fill="#e6ebf7" fill-opacity="0" stroke="#e6ebf7" stroke-opacity=".55"/>
+<text x="86.16" y="288" text-anchor="middle" font-size="13" font-weight="600" fill="#e6ebf7">2 skills</text><rect x="138.32" y="272" width="84.32" height="27" rx="13.5" fill="#e6ebf7" fill-opacity="0" stroke="#e6ebf7" stroke-opacity=".55"/>
+<text x="180.48" y="288" text-anchor="middle" font-size="13" font-weight="600" fill="#e6ebf7">az login</text>
+<g transform="translate(570 276) scale(1)" fill="#ffffff"><path d="m12 4-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/></g>
+</svg>
