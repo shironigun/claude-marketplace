@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="600" viewBox="0 0 1280 600" role="img" aria-label="release-notes-suite in action: What did we ship since the last notes?" font-family="'Segoe UI', -apple-system, 'Helvetica Neue', Arial, sans-serif">
+<title>release-notes-suite in action: What did we ship since the last notes?</title>
+<defs>
+  <linearGradient id="u-release-notes-suite-bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0b1020"/><stop offset="1" stop-color="#151d3b"/></linearGradient>
+  <radialGradient id="u-release-notes-suite-glow" cx="1" cy="0" r="0.9"><stop offset="0" stop-color="#fbbf24" stop-opacity=".28"/><stop offset="1" stop-color="#fbbf24" stop-opacity="0"/></radialGradient>
+  <pattern id="u-release-notes-suite-dots" width="22" height="22" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1.1" fill="#ffffff" fill-opacity=".06"/></pattern>
+</defs>
+<rect width="1280" height="600" rx="26" fill="url(#u-release-notes-suite-bg)"/>
+<rect width="1280" height="600" rx="26" fill="url(#u-release-notes-suite-dots)"/>
+<rect width="1280" height="600" rx="26" fill="url(#u-release-notes-suite-glow)"/>
+<rect x=".5" y=".5" width="1279" height="599" rx="26" fill="none" stroke="#ffffff" stroke-opacity=".08"/>
+<g transform="translate(64 48) scale(1.25)" fill="#fbbf24"><path d="m23 12-2.44-2.78.34-3.68-3.61-.82-1.89-3.18L12 3 8.6 1.54 6.71 4.72l-3.61.81.34 3.68L1 12l2.44 2.78-.34 3.69 3.61.82 1.89 3.18L12 21l3.4 1.46 1.89-3.18 3.61-.82-.34-3.68zm-10 5h-2v-2h2zm0-4h-2V7h2z"/></g>
+<text x="106" y="72" font-size="26" font-weight="700" fill="#ffffff">release-notes-suite in action</text>
+<text x="1216" y="72" text-anchor="end" font-size="14" fill="#8b97b8">Example with made-up data</text>
+<text x="64" y="138" font-size="14" font-weight="700" letter-spacing="2" fill="#8b97b8">YOU ASK</text>
+<rect x="64" y="156" width="380" height="96" rx="20" fill="#fbbf24" fill-opacity=".16" stroke="#fbbf24" stroke-opacity=".55"/>
+<text x="88" y="192" font-size="21" font-weight="600" fill="#ffffff">What did we ship since the</text>
+<text x="88" y="222" font-size="21" font-weight="600" fill="#ffffff">last notes?</text>
+<text x="64" y="284" font-size="15" fill="#fbbf24" font-family="Consolas, 'Cascadia Mono', Menlo, monospace">harvester, then releaser</text>
+<text x="64" y="344" font-size="14" font-weight="700" letter-spacing="2" fill="#8b97b8">WHY IT HELPS</text>
+<g transform="translate(64 362) scale(0.9166666666666666)" fill="#fbbf24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2m-2 15-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8z"/></g><text x="96" y="379" font-size="17" fill="#e6ebf7">Catches PRs with no ticket</text>
+<g transform="translate(64 402) scale(0.9166666666666666)" fill="#fbbf24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2m-2 15-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8z"/></g><text x="96" y="419" font-size="17" fill="#e6ebf7">Suppression, not prose</text>
+<g transform="translate(64 442) scale(0.9166666666666666)" fill="#fbbf24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2m-2 15-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8z"/></g><text x="96" y="459" font-size="17" fill="#e6ebf7">Brand variants from one run</text>
+<path d="M458 326h28m-10 -10 10 10-10 10" fill="none" stroke="#fbbf24" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+<rect x="500" y="108" width="716" height="436" rx="18" fill="#f8fafc"/>
+<rect x="500" y="108" width="716" height="56" rx="18" fill="#e2e8f0"/><rect x="500" y="146" width="716" height="18" fill="#e2e8f0"/>
+<g transform="translate(524 124) scale(1)" fill="#0f172a"><path d="m23 12-2.44-2.78.34-3.68-3.61-.82-1.89-3.18L12 3 8.6 1.54 6.71 4.72l-3.61.81.34 3.68L1 12l2.44 2.78-.34 3.69 3.61.82 1.89 3.18L12 21l3.4 1.46 1.89-3.18 3.61-.82-.34-3.68zm-10 5h-2v-2h2zm0-4h-2V7h2z"/></g><text x="560" y="143" font-size="17" font-weight="700" fill="#0f172a">Shipped work, triaged</text>
+<text x="1192" y="143" text-anchor="end" font-size="13" fill="#64748b">YOU GET</text>
+<rect x="528" y="170" width="660" height="40" rx="8" fill="#ffffff" stroke="#e2e8f0"/>
+<text x="542" y="196" font-size="13" font-weight="700" fill="#64748b">STORY</text>
+<text x="660" y="196" font-size="16" fill="#0f172a">Text customers when their order is ready</text>
+<rect x="1093.68" y="177" width="82.32" height="26" rx="13" fill="#16a34a"/><text x="1134.84" y="195" text-anchor="middle" font-size="13" font-weight="700" fill="#ffffff">Announce</text>
+<rect x="528" y="216" width="660" height="40" rx="8" fill="#ffffff" stroke="#e2e8f0"/>
+<text x="542" y="242" font-size="13" font-weight="700" fill="#64748b">BUG</text>
+<text x="660" y="242" font-size="16" fill="#0f172a">Ready text used the wrong store name</text>
+<rect x="1123.84" y="223" width="52.16" height="26" rx="13" fill="#64748b"/><text x="1149.92" y="241" text-anchor="middle" font-size="13" font-weight="700" fill="#ffffff">Omit</text>
+<rect x="528" y="262" width="660" height="40" rx="8" fill="#ffffff" stroke="#e2e8f0"/>
+<text x="542" y="288" font-size="13" font-weight="700" fill="#64748b">BUG</text>
+<text x="660" y="288" font-size="16" fill="#0f172a">Ready text missing on the mobile app</text>
+<rect x="1123.84" y="269" width="52.16" height="26" rx="13" fill="#64748b"/><text x="1149.92" y="287" text-anchor="middle" font-size="13" font-weight="700" fill="#ffffff">Omit</text>
+<rect x="528" y="308" width="660" height="40" rx="8" fill="#ffffff" stroke="#e2e8f0"/>
+<text x="542" y="334" font-size="13" font-weight="700" fill="#64748b">PR, NO TICKET</text>
+<text x="660" y="334" font-size="16" fill="#0f172a">Faster loading of the orders list</text>
+<rect x="1101.22" y="315" width="74.78" height="26" rx="13" fill="#2563eb"/><text x="1138.61" y="333" text-anchor="middle" font-size="13" font-weight="700" fill="#ffffff">Fold in</text>
+<rect x="528" y="354" width="660" height="40" rx="8" fill="#ffffff" stroke="#e2e8f0"/>
+<text x="542" y="380" font-size="13" font-weight="700" fill="#64748b">STORY</text>
+<text x="660" y="380" font-size="16" fill="#0f172a">Export ready-text history to CSV</text>
+<rect x="1071.06" y="361" width="104.94" height="26" rx="13" fill="#7c3aed"/><text x="1123.53" y="379" text-anchor="middle" font-size="13" font-weight="700" fill="#ffffff">Defer to KB</text>
+<rect x="528" y="400" width="660" height="40" rx="8" fill="#ffffff" stroke="#e2e8f0"/>
+<text x="542" y="426" font-size="13" font-weight="700" fill="#64748b">TASK</text>
+<text x="660" y="426" font-size="16" fill="#0f172a">Upgrade the build pipeline</text>
+<rect x="1123.84" y="407" width="52.16" height="26" rx="13" fill="#64748b"/><text x="1149.92" y="425" text-anchor="middle" font-size="13" font-weight="700" fill="#ffffff">Omit</text>
+<rect x="528" y="474" width="660" height="48" rx="10" fill="#dcfce7" stroke="#16a34a" stroke-opacity=".5"/><text x="544" y="504" font-size="13" font-weight="700" letter-spacing="1" fill="#166534">THE NOTE</text><text x="638" y="504" font-size="16.5" font-weight="600" fill="#14532d">New: text customers the moment their order is ready.</text>
+</svg>

@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="600" viewBox="0 0 1280 600" role="img" aria-label="feature-explainer in action: Explain the refund flow, for QA." font-family="'Segoe UI', -apple-system, 'Helvetica Neue', Arial, sans-serif">
+<title>feature-explainer in action: Explain the refund flow, for QA.</title>
+<defs>
+  <linearGradient id="u-feature-explainer-bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0b1020"/><stop offset="1" stop-color="#151d3b"/></linearGradient>
+  <radialGradient id="u-feature-explainer-glow" cx="1" cy="0" r="0.9"><stop offset="0" stop-color="#a78bfa" stop-opacity=".28"/><stop offset="1" stop-color="#a78bfa" stop-opacity="0"/></radialGradient>
+  <pattern id="u-feature-explainer-dots" width="22" height="22" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1.1" fill="#ffffff" fill-opacity=".06"/></pattern>
+</defs>
+<rect width="1280" height="600" rx="26" fill="url(#u-feature-explainer-bg)"/>
+<rect width="1280" height="600" rx="26" fill="url(#u-feature-explainer-dots)"/>
+<rect width="1280" height="600" rx="26" fill="url(#u-feature-explainer-glow)"/>
+<rect x=".5" y=".5" width="1279" height="599" rx="26" fill="none" stroke="#ffffff" stroke-opacity=".08"/>
+<g transform="translate(64 48) scale(1.25)" fill="#a78bfa"><path d="m19 1-5 5v11l5-4.5zM1 6v14.65c0 .25.25.5.5.5.1 0 .15-.05.25-.05C3.1 20.45 5.05 20 6.5 20c1.95 0 4.05.4 5.5 1.5V6c-1.45-1.1-3.55-1.5-5.5-1.5S2.45 4.9 1 6m22 13.5V6c-.6-.45-1.25-.75-2-1v13.5c-1.1-.35-2.3-.5-3.5-.5-1.7 0-4.15.65-5.5 1.5v2c1.35-.85 3.8-1.5 5.5-1.5 1.65 0 3.35.3 4.75 1.05.1.05.15.05.25.05.25 0 .5-.25.5-.5z"/></g>
+<text x="106" y="72" font-size="26" font-weight="700" fill="#ffffff">feature-explainer in action</text>
+<text x="1216" y="72" text-anchor="end" font-size="14" fill="#8b97b8">Example with made-up data</text>
+<text x="64" y="138" font-size="14" font-weight="700" letter-spacing="2" fill="#8b97b8">YOU ASK</text>
+<rect x="64" y="156" width="380" height="96" rx="20" fill="#a78bfa" fill-opacity=".16" stroke="#a78bfa" stroke-opacity=".55"/>
+<text x="88" y="192" font-size="21" font-weight="600" fill="#ffffff">Explain the refund flow, for</text>
+<text x="88" y="222" font-size="21" font-weight="600" fill="#ffffff">QA.</text>
+<text x="64" y="284" font-size="15" fill="#a78bfa" font-family="Consolas, 'Cascadia Mono', Menlo, monospace">/feature-explainer:feature-explainer</text>
+<text x="64" y="344" font-size="14" font-weight="700" letter-spacing="2" fill="#8b97b8">WHY IT HELPS</text>
+<g transform="translate(64 362) scale(0.9166666666666666)" fill="#a78bfa"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2m-2 15-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8z"/></g><text x="96" y="379" font-size="17" fill="#e6ebf7">Researched read-only</text>
+<g transform="translate(64 402) scale(0.9166666666666666)" fill="#a78bfa"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2m-2 15-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8z"/></g><text x="96" y="419" font-size="17" fill="#e6ebf7">Pictures first, detail collapsed</text>
+<g transform="translate(64 442) scale(0.9166666666666666)" fill="#a78bfa"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2m-2 15-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8z"/></g><text x="96" y="459" font-size="17" fill="#e6ebf7">Private until you share it</text>
+<path d="M458 326h28m-10 -10 10 10-10 10" fill="none" stroke="#a78bfa" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+<rect x="500" y="108" width="716" height="436" rx="18" fill="#f8fafc"/>
+<rect x="500" y="108" width="716" height="56" rx="18" fill="#e2e8f0"/><rect x="500" y="146" width="716" height="18" fill="#e2e8f0"/>
+<g transform="translate(524 124) scale(1)" fill="#0f172a"><path d="m19 1-5 5v11l5-4.5zM1 6v14.65c0 .25.25.5.5.5.1 0 .15-.05.25-.05C3.1 20.45 5.05 20 6.5 20c1.95 0 4.05.4 5.5 1.5V6c-1.45-1.1-3.55-1.5-5.5-1.5S2.45 4.9 1 6m22 13.5V6c-.6-.45-1.25-.75-2-1v13.5c-1.1-.35-2.3-.5-3.5-.5-1.7 0-4.15.65-5.5 1.5v2c1.35-.85 3.8-1.5 5.5-1.5 1.65 0 3.35.3 4.75 1.05.1.05.15.05.25.05.25 0 .5-.25.5-.5z"/></g><text x="560" y="143" font-size="17" font-weight="700" fill="#0f172a">One feature, an edition for each reader</text>
+<text x="1192" y="143" text-anchor="end" font-size="13" fill="#64748b">YOU GET</text>
+<rect x="528" y="168" width="660" height="42" rx="8" fill="#e2e8f0"/>
+<text x="542" y="195" font-size="13" font-weight="700" letter-spacing="1" fill="#334155">READER</text>
+<text x="692" y="195" font-size="13" font-weight="700" letter-spacing="1" fill="#334155">THE PAGE LEADS WITH</text>
+<rect x="528" y="220" width="660" height="46" fill="#ffffff"/>
+<text x="542" y="249" font-size="16" font-weight="700" fill="#0f172a">Product</text>
+<text x="692" y="249" font-size="16" fill="#1e293b">The journey, rules as decisions, open questions</text>
+<rect x="528" y="270" width="660" height="46" fill="#f1f5f9"/>
+<text x="542" y="299" font-size="16" font-weight="700" fill="#0f172a">QA</text>
+<text x="692" y="299" font-size="16" fill="#1e293b">Rules as grids, what to test, every test case</text>
+<rect x="528" y="320" width="660" height="46" fill="#ffffff"/>
+<text x="542" y="349" font-size="16" font-weight="700" fill="#0f172a">Design</text>
+<text x="692" y="349" font-size="16" fill="#1e293b">Journeys per role, every state, the exact copy</text>
+<rect x="528" y="370" width="660" height="46" fill="#f1f5f9"/>
+<text x="542" y="399" font-size="16" font-weight="700" fill="#0f172a">Development</text>
+<text x="692" y="399" font-size="16" fill="#1e293b">Architecture, the contract, storage, errors</text>
+<rect x="528" y="420" width="660" height="46" fill="#ffffff"/>
+<text x="542" y="449" font-size="16" font-weight="700" fill="#0f172a">Sales</text>
+<text x="692" y="449" font-size="16" fill="#1e293b">The customer problem, 3 benefits, what not to say</text>
+</svg>

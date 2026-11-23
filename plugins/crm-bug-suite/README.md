@@ -19,6 +19,14 @@
 | **Setup** | `az login` |
 | **Product-neutral** | Template: retarget `references/` |
 
+## See it in action
+
+<p align="center"><img src="../../assets/readme/usecases/bug-suite.svg" alt="bug-suite in action: what you ask and what you get" width="100%"></p>
+
+## How it works at a glance
+
+<p align="center"><img src="../../assets/readme/diagrams/bug-suite.svg" alt="How bug-suite works" width="100%"></p>
+
 
 Three skills for the Acme APP **Example Project** Azure DevOps project, modeled on the team's actual authoring patterns.
 

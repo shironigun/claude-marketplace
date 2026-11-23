@@ -19,6 +19,14 @@
 | **Setup** | None |
 | **Product-neutral** | Template: retarget `references/` |
 
+## See it in action
+
+<p align="center"><img src="../../assets/readme/usecases/api-testing.svg" alt="api-testing in action: what you ask and what you get" width="100%"></p>
+
+## How it works at a glance
+
+<p align="center"><img src="../../assets/readme/diagrams/api-testing.svg" alt="How api-testing works" width="100%"></p>
+
 
 API test-case authoring and Playwright + TypeScript + zod **script generation** for **Acme APP**
 (Acme), plus failed-test bug drafting, in the team's QA house style.

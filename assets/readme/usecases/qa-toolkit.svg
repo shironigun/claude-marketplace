@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="600" viewBox="0 0 1280 600" role="img" aria-label="qa-toolkit in action: Write API test cases for POST /orders." font-family="'Segoe UI', -apple-system, 'Helvetica Neue', Arial, sans-serif">
+<title>qa-toolkit in action: Write API test cases for POST /orders.</title>
+<defs>
+  <linearGradient id="u-qa-toolkit-bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0b1020"/><stop offset="1" stop-color="#151d3b"/></linearGradient>
+  <radialGradient id="u-qa-toolkit-glow" cx="1" cy="0" r="0.9"><stop offset="0" stop-color="#38bdf8" stop-opacity=".28"/><stop offset="1" stop-color="#38bdf8" stop-opacity="0"/></radialGradient>
+  <pattern id="u-qa-toolkit-dots" width="22" height="22" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1.1" fill="#ffffff" fill-opacity=".06"/></pattern>
+</defs>
+<rect width="1280" height="600" rx="26" fill="url(#u-qa-toolkit-bg)"/>
+<rect width="1280" height="600" rx="26" fill="url(#u-qa-toolkit-dots)"/>
+<rect width="1280" height="600" rx="26" fill="url(#u-qa-toolkit-glow)"/>
+<rect x=".5" y=".5" width="1279" height="599" rx="26" fill="none" stroke="#ffffff" stroke-opacity=".08"/>
+<g transform="translate(64 48) scale(1.25)" fill="#38bdf8"><path d="m21.67 18.17-5.3-5.3h-.99l-2.54 2.54v.99l5.3 5.3c.39.39 1.02.39 1.41 0l2.12-2.12c.39-.38.39-1.02 0-1.41"/><path d="m17.34 10.19 1.41-1.41 2.12 2.12c1.17-1.17 1.17-3.07 0-4.24l-3.54-3.54-1.41 1.41V1.71l-.7-.71-3.54 3.54.71.71h2.83l-1.41 1.41 1.06 1.06-2.89 2.89-4.13-4.13V5.06L4.83 2.04 2 4.87 5.03 7.9h1.41l4.13 4.13-.85.85H7.6l-5.3 5.3c-.39.39-.39 1.02 0 1.41l2.12 2.12c.39.39 1.02.39 1.41 0l5.3-5.3v-2.12l5.15-5.15z"/></g>
+<text x="106" y="72" font-size="26" font-weight="700" fill="#ffffff">qa-toolkit in action</text>
+<text x="1216" y="72" text-anchor="end" font-size="14" fill="#8b97b8">Example with made-up data</text>
+<text x="64" y="138" font-size="14" font-weight="700" letter-spacing="2" fill="#8b97b8">YOU ASK</text>
+<rect x="64" y="156" width="380" height="96" rx="20" fill="#38bdf8" fill-opacity=".16" stroke="#38bdf8" stroke-opacity=".55"/>
+<text x="88" y="192" font-size="21" font-weight="600" fill="#ffffff">Write API test cases for POST</text>
+<text x="88" y="222" font-size="21" font-weight="600" fill="#ffffff">/orders.</text>
+<text x="64" y="284" font-size="15" fill="#38bdf8" font-family="Consolas, 'Cascadia Mono', Menlo, monospace">/qa-toolkit:api-test-cases</text>
+<text x="64" y="344" font-size="14" font-weight="700" letter-spacing="2" fill="#8b97b8">WHY IT HELPS</text>
+<g transform="translate(64 362) scale(0.9166666666666666)" fill="#38bdf8"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2m-2 15-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8z"/></g><text x="96" y="379" font-size="17" fill="#e6ebf7">No setup to start</text>
+<g transform="translate(64 402) scale(0.9166666666666666)" fill="#38bdf8"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2m-2 15-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8z"/></g><text x="96" y="419" font-size="17" fill="#e6ebf7">Works with any tracker</text>
+<g transform="translate(64 442) scale(0.9166666666666666)" fill="#38bdf8"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2m-2 15-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8z"/></g><text x="96" y="459" font-size="17" fill="#e6ebf7">One job, one skill</text>
+<path d="M458 326h28m-10 -10 10 10-10 10" fill="none" stroke="#38bdf8" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+<rect x="500" y="108" width="716" height="436" rx="18" fill="#f8fafc"/>
+<rect x="500" y="108" width="716" height="56" rx="18" fill="#e2e8f0"/><rect x="500" y="146" width="716" height="18" fill="#e2e8f0"/>
+<g transform="translate(524 124) scale(1)" fill="#0f172a"><path d="m21.67 18.17-5.3-5.3h-.99l-2.54 2.54v.99l5.3 5.3c.39.39 1.02.39 1.41 0l2.12-2.12c.39-.38.39-1.02 0-1.41"/><path d="m17.34 10.19 1.41-1.41 2.12 2.12c1.17-1.17 1.17-3.07 0-4.24l-3.54-3.54-1.41 1.41V1.71l-.7-.71-3.54 3.54.71.71h2.83l-1.41 1.41 1.06 1.06-2.89 2.89-4.13-4.13V5.06L4.83 2.04 2 4.87 5.03 7.9h1.41l4.13 4.13-.85.85H7.6l-5.3 5.3c-.39.39-.39 1.02 0 1.41l2.12 2.12c.39.39 1.02.39 1.41 0l5.3-5.3v-2.12l5.15-5.15z"/></g><text x="560" y="143" font-size="17" font-weight="700" fill="#0f172a">API test cases · POST /orders</text>
+<text x="1192" y="143" text-anchor="end" font-size="13" fill="#64748b">YOU GET</text>
+<rect x="528" y="168" width="660" height="42" rx="8" fill="#e2e8f0"/>
+<text x="542" y="195" font-size="13" font-weight="700" letter-spacing="1" fill="#334155">ID</text>
+<text x="612" y="195" font-size="13" font-weight="700" letter-spacing="1" fill="#334155">CASE</text>
+<text x="942" y="195" font-size="13" font-weight="700" letter-spacing="1" fill="#334155">EXPECTED</text>
+<rect x="528" y="220" width="660" height="46" fill="#ffffff"/>
+<text x="542" y="249" font-size="16" font-weight="700" fill="#0f172a">TC-01</text>
+<text x="612" y="249" font-size="16" fill="#1e293b">Create an order with valid items</text>
+<text x="942" y="249" font-size="16" fill="#1e293b">201 and an order id</text>
+<rect x="528" y="270" width="660" height="46" fill="#f1f5f9"/>
+<text x="542" y="299" font-size="16" font-weight="700" fill="#0f172a">TC-02</text>
+<text x="612" y="299" font-size="16" fill="#1e293b">Items list is empty</text>
+<text x="942" y="299" font-size="16" fill="#1e293b">400 with a validation error</text>
+<rect x="528" y="320" width="660" height="46" fill="#ffffff"/>
+<text x="542" y="349" font-size="16" font-weight="700" fill="#0f172a">TC-03</text>
+<text x="612" y="349" font-size="16" fill="#1e293b">Product id does not exist</text>
+<text x="942" y="349" font-size="16" fill="#1e293b">404 Not Found</text>
+<rect x="528" y="370" width="660" height="46" fill="#f1f5f9"/>
+<text x="542" y="399" font-size="16" font-weight="700" fill="#0f172a">TC-04</text>
+<text x="612" y="399" font-size="16" fill="#1e293b">No auth token</text>
+<text x="942" y="399" font-size="16" fill="#1e293b">401 Unauthorized</text>
+<rect x="528" y="420" width="660" height="46" fill="#ffffff"/>
+<text x="542" y="449" font-size="16" font-weight="700" fill="#0f172a">TC-05</text>
+<text x="612" y="449" font-size="16" fill="#1e293b">Same request id sent twice</text>
+<text x="942" y="449" font-size="16" fill="#1e293b">409 Conflict</text>
+</svg>

@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="600" viewBox="0 0 1280 600" role="img" aria-label="api-testing in action: Generate the Playwright spec for POST /orders." font-family="'Segoe UI', -apple-system, 'Helvetica Neue', Arial, sans-serif">
+<title>api-testing in action: Generate the Playwright spec for POST /orders.</title>
+<defs>
+  <linearGradient id="u-api-testing-bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0b1020"/><stop offset="1" stop-color="#151d3b"/></linearGradient>
+  <radialGradient id="u-api-testing-glow" cx="1" cy="0" r="0.9"><stop offset="0" stop-color="#a3e635" stop-opacity=".28"/><stop offset="1" stop-color="#a3e635" stop-opacity="0"/></radialGradient>
+  <pattern id="u-api-testing-dots" width="22" height="22" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1.1" fill="#ffffff" fill-opacity=".06"/></pattern>
+</defs>
+<rect width="1280" height="600" rx="26" fill="url(#u-api-testing-bg)"/>
+<rect width="1280" height="600" rx="26" fill="url(#u-api-testing-dots)"/>
+<rect width="1280" height="600" rx="26" fill="url(#u-api-testing-glow)"/>
+<rect x=".5" y=".5" width="1279" height="599" rx="26" fill="none" stroke="#ffffff" stroke-opacity=".08"/>
+<g transform="translate(64 48) scale(1.25)" fill="#a3e635"><path d="m14 12-2 2-2-2 2-2zm-2-6 2.12 2.12 2.5-2.5L12 1 7.38 5.62l2.5 2.5zm-6 6 2.12-2.12-2.5-2.5L1 12l4.62 4.62 2.5-2.5zm12 0-2.12 2.12 2.5 2.5L23 12l-4.62-4.62-2.5 2.5zm-6 6-2.12-2.12-2.5 2.5L12 23l4.62-4.62-2.5-2.5z"/></g>
+<text x="106" y="72" font-size="26" font-weight="700" fill="#ffffff">api-testing in action</text>
+<text x="1216" y="72" text-anchor="end" font-size="14" fill="#8b97b8">Example with made-up data</text>
+<text x="64" y="138" font-size="14" font-weight="700" letter-spacing="2" fill="#8b97b8">YOU ASK</text>
+<rect x="64" y="156" width="380" height="96" rx="20" fill="#a3e635" fill-opacity=".16" stroke="#a3e635" stroke-opacity=".55"/>
+<text x="88" y="192" font-size="21" font-weight="600" fill="#ffffff">Generate the Playwright spec</text>
+<text x="88" y="222" font-size="21" font-weight="600" fill="#ffffff">for POST /orders.</text>
+<text x="64" y="284" font-size="15" fill="#a3e635" font-family="Consolas, 'Cascadia Mono', Menlo, monospace">api-tester</text>
+<text x="64" y="344" font-size="14" font-weight="700" letter-spacing="2" fill="#8b97b8">WHY IT HELPS</text>
+<g transform="translate(64 362) scale(0.9166666666666666)" fill="#a3e635"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2m-2 15-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8z"/></g><text x="96" y="379" font-size="17" fill="#e6ebf7">Cases to specs, and back</text>
+<g transform="translate(64 402) scale(0.9166666666666666)" fill="#a3e635"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2m-2 15-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8z"/></g><text x="96" y="419" font-size="17" fill="#e6ebf7">zod checks every response shape</text>
+<g transform="translate(64 442) scale(0.9166666666666666)" fill="#a3e635"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2m-2 15-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8z"/></g><text x="96" y="459" font-size="17" fill="#e6ebf7">A red run becomes a bug draft</text>
+<path d="M458 326h28m-10 -10 10 10-10 10" fill="none" stroke="#a3e635" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+<rect x="500" y="108" width="716" height="436" rx="18" fill="#f8fafc"/>
+<rect x="500" y="108" width="716" height="56" rx="18" fill="#e2e8f0"/><rect x="500" y="146" width="716" height="18" fill="#e2e8f0"/>
+<g transform="translate(524 124) scale(1)" fill="#0f172a"><path d="m14 12-2 2-2-2 2-2zm-2-6 2.12 2.12 2.5-2.5L12 1 7.38 5.62l2.5 2.5zm-6 6 2.12-2.12-2.5-2.5L1 12l4.62 4.62 2.5-2.5zm12 0-2.12 2.12 2.5 2.5L23 12l-4.62-4.62-2.5 2.5zm-6 6-2.12-2.12-2.5 2.5L12 23l4.62-4.62-2.5-2.5z"/></g><text x="560" y="143" font-size="17" font-weight="700" fill="#0f172a">orders.contract.spec.ts</text>
+<text x="1192" y="143" text-anchor="end" font-size="13" fill="#64748b">YOU GET</text>
+<rect x="528" y="170" width="660" height="336" rx="12" fill="#0f172a"/>
+<text x="550" y="200" font-size="15" fill="#e2e8f0" xml:space="preserve" font-family="Consolas, 'Cascadia Mono', Menlo, monospace">test('POST /orders creates an order', async ({ request }) =&gt; {</text>
+<text x="550" y="230" font-size="15" fill="#e2e8f0" xml:space="preserve" font-family="Consolas, 'Cascadia Mono', Menlo, monospace">  const res = await request.post('/orders', { data: order });</text>
+<text x="550" y="260" font-size="15" fill="#e2e8f0" xml:space="preserve" font-family="Consolas, 'Cascadia Mono', Menlo, monospace">  expect(res.status()).toBe(201);</text>
+<text x="550" y="290" font-size="15" fill="#e2e8f0" xml:space="preserve" font-family="Consolas, 'Cascadia Mono', Menlo, monospace">  OrderSchema.parse(await res.json());   <tspan fill="#86efac">// zod contract</tspan></text>
+<text x="550" y="320" font-size="15" fill="#e2e8f0" xml:space="preserve" font-family="Consolas, 'Cascadia Mono', Menlo, monospace">});</text>
+<text x="550" y="350" font-size="15" fill="#e2e8f0" xml:space="preserve" font-family="Consolas, 'Cascadia Mono', Menlo, monospace"></text>
+<text x="550" y="380" font-size="15" fill="#e2e8f0" xml:space="preserve" font-family="Consolas, 'Cascadia Mono', Menlo, monospace">test('POST /orders rejects an empty order', async ({ request }) =&gt; {</text>
+<text x="550" y="410" font-size="15" fill="#e2e8f0" xml:space="preserve" font-family="Consolas, 'Cascadia Mono', Menlo, monospace">  const res = await request.post('/orders', { data: { items: [] } });</text>
+<text x="550" y="440" font-size="15" fill="#e2e8f0" xml:space="preserve" font-family="Consolas, 'Cascadia Mono', Menlo, monospace">  expect(res.status()).toBe(400);</text>
+<text x="550" y="470" font-size="15" fill="#e2e8f0" xml:space="preserve" font-family="Consolas, 'Cascadia Mono', Menlo, monospace">});</text>
+</svg>
