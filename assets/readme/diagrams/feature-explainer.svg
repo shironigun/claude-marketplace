@@ -1,0 +1,93 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="620" viewBox="0 0 1280 620" role="img" aria-label="How feature-explainer works" font-family="'Segoe UI', -apple-system, 'Helvetica Neue', Arial, sans-serif">
+<title>How feature-explainer works</title>
+<defs>
+  <linearGradient id="d-feature-explainer-bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0b1020"/><stop offset="1" stop-color="#151d3b"/></linearGradient>
+  <radialGradient id="d-feature-explainer-glow" cx="1" cy="0" r="0.9"><stop offset="0" stop-color="#a78bfa" stop-opacity=".28"/><stop offset="1" stop-color="#a78bfa" stop-opacity="0"/></radialGradient>
+  <pattern id="d-feature-explainer-dots" width="22" height="22" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1.1" fill="#ffffff" fill-opacity=".06"/></pattern>
+</defs>
+<rect width="1280" height="620" rx="26" fill="url(#d-feature-explainer-bg)"/>
+<rect width="1280" height="620" rx="26" fill="url(#d-feature-explainer-dots)"/>
+<rect width="1280" height="620" rx="26" fill="url(#d-feature-explainer-glow)"/>
+<rect x=".5" y=".5" width="1279" height="619" rx="26" fill="none" stroke="#ffffff" stroke-opacity=".08"/>
+<g transform="translate(64 46) scale(1.25)" fill="#a78bfa"><path d="m19 1-5 5v11l5-4.5zM1 6v14.65c0 .25.25.5.5.5.1 0 .15-.05.25-.05C3.1 20.45 5.05 20 6.5 20c1.95 0 4.05.4 5.5 1.5V6c-1.45-1.1-3.55-1.5-5.5-1.5S2.45 4.9 1 6m22 13.5V6c-.6-.45-1.25-.75-2-1v13.5c-1.1-.35-2.3-.5-3.5-.5-1.7 0-4.15.65-5.5 1.5v2c1.35-.85 3.8-1.5 5.5-1.5 1.65 0 3.35.3 4.75 1.05.1.05.15.05.25.05.25 0 .5-.25.5-.5z"/></g>
+<text x="106" y="70" font-size="26" font-weight="700" fill="#ffffff">How feature-explainer works</text>
+<text x="64" y="104" font-size="16" fill="#c7d0e6">Research once, read-only, then build the edition for the reader you name.</text>
+<text x="64" y="146" font-size="13" font-weight="700" letter-spacing="2" fill="#8b97b8">SOURCES</text>
+<rect x="64" y="160" width="200" height="88" rx="14" fill="#ffffff" fill-opacity="0.05" stroke="#a78bfa" stroke-opacity="0.4" />
+<text x="164" y="192.5" text-anchor="middle" font-size="15" font-weight="700" fill="#ffffff">Code and branches</text>
+<text x="164" y="214.5" text-anchor="middle" font-size="14" fill="#aab4cf">read with git show</text>
+<rect x="64" y="264" width="200" height="88" rx="14" fill="#ffffff" fill-opacity="0.05" stroke="#a78bfa" stroke-opacity="0.4" />
+<text x="164" y="296.5" text-anchor="middle" font-size="15" font-weight="700" fill="#ffffff">Tickets</text>
+<text x="164" y="318.5" text-anchor="middle" font-size="14" fill="#aab4cf">and their links</text>
+<rect x="64" y="368" width="200" height="88" rx="14" fill="#ffffff" fill-opacity="0.05" stroke="#a78bfa" stroke-opacity="0.4" />
+<text x="164" y="400.5" text-anchor="middle" font-size="15" font-weight="700" fill="#ffffff">Docs</text>
+<text x="164" y="422.5" text-anchor="middle" font-size="14" fill="#aab4cf">and existing pages</text>
+<rect x="64" y="472" width="200" height="88" rx="14" fill="#ffffff" fill-opacity="0.05" stroke="#a78bfa" stroke-opacity="0.4" />
+<text x="164" y="504.5" text-anchor="middle" font-size="15" font-weight="700" fill="#ffffff">Live calls</text>
+<text x="164" y="526.5" text-anchor="middle" font-size="14" fill="#aab4cf">only if you allow</text>
+<rect x="310" y="300" width="170" height="110" rx="14" fill="#a78bfa" fill-opacity="0.16" stroke="#a78bfa" stroke-opacity="0.8" />
+<text x="395" y="334" text-anchor="middle" font-size="17" font-weight="700" fill="#ffffff">Research</text>
+<text x="395" y="356" text-anchor="middle" font-size="14" fill="#aab4cf">Read-only, every</text>
+<text x="395" y="375" text-anchor="middle" font-size="14" fill="#aab4cf">fact dated</text>
+<path d="M282 204V516" stroke="#a78bfa" stroke-opacity=".6" stroke-width="2.2"/>
+<path d="M282 204H268" stroke="#a78bfa" stroke-opacity=".6" stroke-width="2"/>
+<path d="M282 308H268" stroke="#a78bfa" stroke-opacity=".6" stroke-width="2"/>
+<path d="M282 412H268" stroke="#a78bfa" stroke-opacity=".6" stroke-width="2"/>
+<path d="M282 516H268" stroke="#a78bfa" stroke-opacity=".6" stroke-width="2"/>
+<path d="M285.996590007081 359.8231597342L306.003909992919 358.93788008880887" stroke="#a78bfa" stroke-opacity="0.85" stroke-width="2.2" fill="none" />
+<path d="M306.003909992919 358.93788008880887l-10.72402030661346 6.480384900863692M306.003909992919 358.93788008880887l-11.254474732332175 -5.507885120379381" stroke="#a78bfa" stroke-opacity="0.85" stroke-width="2.2" stroke-linecap="round" fill="none"/>
+<text x="530" y="146" font-size="13" font-weight="700" letter-spacing="2" fill="#8b97b8">AN EDITION FOR THE READER YOU NAME</text>
+<rect x="530" y="160" width="280" height="60" rx="14" fill="#ffffff" fill-opacity="0.05" stroke="#a78bfa" stroke-opacity="0.4" />
+<text x="670" y="178.5" text-anchor="middle" font-size="15" font-weight="700" fill="#ffffff">Product</text>
+<text x="670" y="200.5" text-anchor="middle" font-size="14" fill="#aab4cf">journey and decisions</text>
+<rect x="530" y="230" width="280" height="60" rx="14" fill="#ffffff" fill-opacity="0.05" stroke="#a78bfa" stroke-opacity="0.4" />
+<text x="670" y="248.5" text-anchor="middle" font-size="15" font-weight="700" fill="#ffffff">QA</text>
+<text x="670" y="270.5" text-anchor="middle" font-size="14" fill="#aab4cf">rules and what to test</text>
+<rect x="530" y="300" width="280" height="60" rx="14" fill="#ffffff" fill-opacity="0.05" stroke="#a78bfa" stroke-opacity="0.4" />
+<text x="670" y="318.5" text-anchor="middle" font-size="15" font-weight="700" fill="#ffffff">Design</text>
+<text x="670" y="340.5" text-anchor="middle" font-size="14" fill="#aab4cf">screens and every state</text>
+<rect x="530" y="370" width="280" height="60" rx="14" fill="#ffffff" fill-opacity="0.05" stroke="#a78bfa" stroke-opacity="0.4" />
+<text x="670" y="388.5" text-anchor="middle" font-size="15" font-weight="700" fill="#ffffff">Development</text>
+<text x="670" y="410.5" text-anchor="middle" font-size="14" fill="#aab4cf">architecture and contract</text>
+<rect x="530" y="440" width="280" height="60" rx="14" fill="#ffffff" fill-opacity="0.05" stroke="#a78bfa" stroke-opacity="0.4" />
+<text x="670" y="458.5" text-anchor="middle" font-size="15" font-weight="700" fill="#ffffff">Sales</text>
+<text x="670" y="480.5" text-anchor="middle" font-size="14" fill="#aab4cf">problem and benefits</text>
+<rect x="530" y="510" width="280" height="60" rx="14" fill="#ffffff" fill-opacity="0.05" stroke="#a78bfa" stroke-opacity="0.4" />
+<text x="670" y="528.5" text-anchor="middle" font-size="15" font-weight="700" fill="#ffffff">Everyone</text>
+<text x="670" y="550.5" text-anchor="middle" font-size="14" fill="#aab4cf">how it works, detail folded</text>
+<path d="M505 190V540" stroke="#a78bfa" stroke-opacity=".6" stroke-width="2.2"/>
+<path d="M505 190H526" stroke="#a78bfa" stroke-opacity=".6" stroke-width="2"/>
+<path d="M526 190l-9 -5M526 190l-9 5" stroke="#a78bfa" stroke-opacity=".8" stroke-width="2" stroke-linecap="round"/>
+<path d="M505 260H526" stroke="#a78bfa" stroke-opacity=".6" stroke-width="2"/>
+<path d="M526 260l-9 -5M526 260l-9 5" stroke="#a78bfa" stroke-opacity=".8" stroke-width="2" stroke-linecap="round"/>
+<path d="M505 330H526" stroke="#a78bfa" stroke-opacity=".6" stroke-width="2"/>
+<path d="M526 330l-9 -5M526 330l-9 5" stroke="#a78bfa" stroke-opacity=".8" stroke-width="2" stroke-linecap="round"/>
+<path d="M505 400H526" stroke="#a78bfa" stroke-opacity=".6" stroke-width="2"/>
+<path d="M526 400l-9 -5M526 400l-9 5" stroke="#a78bfa" stroke-opacity=".8" stroke-width="2" stroke-linecap="round"/>
+<path d="M505 470H526" stroke="#a78bfa" stroke-opacity=".6" stroke-width="2"/>
+<path d="M526 470l-9 -5M526 470l-9 5" stroke="#a78bfa" stroke-opacity=".8" stroke-width="2" stroke-linecap="round"/>
+<path d="M505 540H526" stroke="#a78bfa" stroke-opacity=".6" stroke-width="2"/>
+<path d="M526 540l-9 -5M526 540l-9 5" stroke="#a78bfa" stroke-opacity=".8" stroke-width="2" stroke-linecap="round"/>
+<path d="M483.9835728258708 363.0894157114428L501.0159271741292 364.6378115612845" stroke="#a78bfa" stroke-opacity="0.85" stroke-width="2.2" fill="none" />
+<path d="M501.0159271741292 364.6378115612845l-11.49803974739985 4.9794660323385225M501.0159271741292 364.6378115612845l-10.411610794889633 -6.9712524452739215" stroke="#a78bfa" stroke-opacity="0.85" stroke-width="2.2" stroke-linecap="round" fill="none"/>
+<rect x="860" y="300" width="170" height="110" rx="14" fill="#ffffff" fill-opacity="0.05" stroke="#a78bfa" stroke-opacity="0.4" />
+<text x="945" y="324.5" text-anchor="middle" font-size="17" font-weight="700" fill="#ffffff">Checks</text>
+<text x="945" y="346.5" text-anchor="middle" font-size="14" fill="#aab4cf">Style for that</text>
+<text x="945" y="365.5" text-anchor="middle" font-size="14" fill="#aab4cf">reader, layout on</text>
+<text x="945" y="384.5" text-anchor="middle" font-size="14" fill="#aab4cf">phone</text>
+<path d="M836 190V540" stroke="#a78bfa" stroke-opacity=".6" stroke-width="2.2"/>
+<path d="M836 190H814" stroke="#a78bfa" stroke-opacity=".6" stroke-width="2"/>
+<path d="M836 260H814" stroke="#a78bfa" stroke-opacity=".6" stroke-width="2"/>
+<path d="M836 330H814" stroke="#a78bfa" stroke-opacity=".6" stroke-width="2"/>
+<path d="M836 400H814" stroke="#a78bfa" stroke-opacity=".6" stroke-width="2"/>
+<path d="M836 470H814" stroke="#a78bfa" stroke-opacity=".6" stroke-width="2"/>
+<path d="M836 540H814" stroke="#a78bfa" stroke-opacity=".6" stroke-width="2"/>
+<path d="M839.9837719240301 364.634516337245L856.0167280759699 363.16360292881006" stroke="#a78bfa" stroke-opacity="0.85" stroke-width="2.2" fill="none" />
+<path d="M856.0167280759699 363.16360292881006l-10.405841104289555 6.979861811832521M856.0167280759699 363.16360292881006l-11.502154477875829 -4.969953960257687" stroke="#a78bfa" stroke-opacity="0.85" stroke-width="2.2" stroke-linecap="round" fill="none"/>
+<rect x="1070" y="300" width="146" height="110" rx="14" fill="#a78bfa" fill-opacity="0.16" stroke="#a78bfa" stroke-opacity="0.8" />
+<text x="1143" y="334" text-anchor="middle" font-size="17" font-weight="700" fill="#ffffff">Publish</text>
+<text x="1143" y="356" text-anchor="middle" font-size="14" fill="#aab4cf">Private until</text>
+<text x="1143" y="375" text-anchor="middle" font-size="14" fill="#aab4cf">you share</text>
+<path d="M1034 355L1066 355" stroke="#a78bfa" stroke-opacity="0.85" stroke-width="2.2" fill="none" />
+<path d="M1066 355l-11 6M1066 355l-11 -6" stroke="#a78bfa" stroke-opacity="0.85" stroke-width="2.2" stroke-linecap="round" fill="none"/>
+</svg>

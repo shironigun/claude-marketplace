@@ -114,6 +114,13 @@ Select a card to open that plugin's folder and its README.
 **Templates** are tuned to one team's project and house style; retarget the conventions in each skill's
 `references/` folder for yours.
 
+## See it in action
+
+Every plugin has a picture of one real job: what you ask on the left, what you get back on the right.
+Here is the flagship. The rest are under [The plugins in detail](#the-plugins-in-detail), and at the top of each plugin's README.
+
+<p align="center"><a href="plugins/qa-engineering/"><img src="assets/readme/usecases/qa-engineering.svg" alt="qa-engineering in action: what you ask and what you get" width="100%"></a></p>
+
 ---
 
 ## Which plugin for which job
@@ -265,10 +272,26 @@ Start it by invoking the **`qa-orchestrator`** agent and saying what you want, o
 [`docs/`](plugins/qa-engineering/docs/) for the full map, and the
 [end-to-end rehearsal](plugins/qa-engineering/docs/enhancement/end-to-end-rehearsal.md) for a trace of the whole loop.
 
+<p align="center"><a href="plugins/qa-engineering/"><img src="assets/readme/usecases/qa-engineering.svg" alt="qa-engineering in action: what you ask and what you get" width="100%"></a></p>
+
+<details>
+<summary><b>How qa-engineering works</b></summary>
+<br>
+<p align="center"><img src="assets/readme/diagrams/qa-engineering.svg" alt="How qa-engineering works" width="100%"></p>
+</details>
+
 ### [qa-toolkit](plugins/qa-toolkit/)
 
 Product-neutral QA building blocks: generate API and UI test cases, convert test failures into bugs, and
 push them to your tracker. The lightweight, à-la-carte alternative to `qa-engineering`'s full orchestration.
+
+<p align="center"><a href="plugins/qa-toolkit/"><img src="assets/readme/usecases/qa-toolkit.svg" alt="qa-toolkit in action: what you ask and what you get" width="100%"></a></p>
+
+<details>
+<summary><b>How qa-toolkit works</b></summary>
+<br>
+<p align="center"><img src="assets/readme/diagrams/qa-toolkit.svg" alt="How qa-toolkit works" width="100%"></p>
+</details>
 
 ### [api-testing](plugins/api-testing/)
 
@@ -276,21 +299,53 @@ push them to your tracker. The lightweight, à-la-carte alternative to `qa-engin
 specs (forward from cases, or reverse from existing specs); `api-bugger` triages a failed API test and drafts
 a review-ready bug. (Tuned to a specific product's conventions.)
 
+<p align="center"><a href="plugins/api-testing/"><img src="assets/readme/usecases/api-testing.svg" alt="api-testing in action: what you ask and what you get" width="100%"></a></p>
+
+<details>
+<summary><b>How api-testing works</b></summary>
+<br>
+<p align="center"><img src="assets/readme/diagrams/api-testing.svg" alt="How api-testing works" width="100%"></p>
+</details>
+
 ### [ui-testing](plugins/ui-testing/)
 
 `buggy` writes ADO Test Case work items in a house style; `tester` authors UI cases and generates runnable
 Playwright + TypeScript UI specs (forward and reverse). (Tuned to a specific product.)
+
+<p align="center"><a href="plugins/ui-testing/"><img src="assets/readme/usecases/ui-testing.svg" alt="ui-testing in action: what you ask and what you get" width="100%"></a></p>
+
+<details>
+<summary><b>How ui-testing works</b></summary>
+<br>
+<p align="center"><img src="assets/readme/diagrams/ui-testing.svg" alt="How ui-testing works" width="100%"></p>
+</details>
 
 ### [bug-suite](plugins/bug-suite/)
 
 Files **Bugs** (against stories / regression) and **Defects** (production) and writes ticket comments on a
 specific "Example Project" Azure DevOps project, in a defined QA house style.
 
+<p align="center"><a href="plugins/bug-suite/"><img src="assets/readme/usecases/bug-suite.svg" alt="bug-suite in action: what you ask and what you get" width="100%"></a></p>
+
+<details>
+<summary><b>How bug-suite works</b></summary>
+<br>
+<p align="center"><img src="assets/readme/diagrams/bug-suite.svg" alt="How bug-suite works" width="100%"></p>
+</details>
+
 ### [release-notes-suite](plugins/release-notes-suite/)
 
 A two-stage release pipeline: **harvester** builds the complete engineering release inventory (every shipped
 story/defect across boards, plus non-ticketed PR/commit deployments); **releaser** turns that inventory (or a
 technical draft) into audience-facing release notes, with brand variants.
+
+<p align="center"><a href="plugins/release-notes-suite/"><img src="assets/readme/usecases/release-notes-suite.svg" alt="release-notes-suite in action: what you ask and what you get" width="100%"></a></p>
+
+<details>
+<summary><b>How release-notes-suite works</b></summary>
+<br>
+<p align="center"><img src="assets/readme/diagrams/release-notes-suite.svg" alt="How release-notes-suite works" width="100%"></p>
+</details>
 
 ### [feature-explainer](plugins/feature-explainer/)
 
@@ -302,6 +357,14 @@ architecture and contract, or a customer-facing overview) as pictures, with the 
 left out, and an audience-aware lint checks it before it is built. Bundles a drawing kit, a build script and
 layout checks.
 
+<p align="center"><a href="plugins/feature-explainer/"><img src="assets/readme/usecases/feature-explainer.svg" alt="feature-explainer in action: what you ask and what you get" width="100%"></a></p>
+
+<details>
+<summary><b>How feature-explainer works</b></summary>
+<br>
+<p align="center"><img src="assets/readme/diagrams/feature-explainer.svg" alt="How feature-explainer works" width="100%"></p>
+</details>
+
 <p align="center"><a href="plugins/feature-explainer/"><img src="assets/readme/previews/feature-explainer.png" alt="An example explainer page for a made-up feature: the journey from customer message to agent reply" width="85%"></a></p>
 
 ### [how-to-guides](plugins/how-to-guides/)
@@ -311,6 +374,14 @@ every task as checked steps, the questions readers ask and what to do when somet
 the feature from the code and the app (read-only), keeps lists of open questions, change requests and bugs
 for product, and builds a branded PDF from Markdown with checks against the standard. Your logo, colours,
 font and house rules live in your own `howto-brand.json`, never in the plugin.
+
+<p align="center"><a href="plugins/how-to-guides/"><img src="assets/readme/usecases/how-to-guides.svg" alt="how-to-guides in action: what you ask and what you get" width="100%"></a></p>
+
+<details>
+<summary><b>How how-to-guides works</b></summary>
+<br>
+<p align="center"><img src="assets/readme/diagrams/how-to-guides.svg" alt="How how-to-guides works" width="100%"></p>
+</details>
 
 <p align="center"><a href="plugins/how-to-guides/"><img src="assets/readme/previews/how-to-guides.png" alt="Three pages of an example guide for a made-up feature: the cover, the summary and contents, and numbered steps" width="85%"></a></p>
 

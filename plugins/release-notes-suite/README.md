@@ -19,6 +19,14 @@
 | **Setup** | An Azure DevOps connection to harvest |
 | **Product-neutral** | Template: retarget the skills |
 
+## See it in action
+
+<p align="center"><img src="../../assets/readme/usecases/release-notes-suite.svg" alt="release-notes-suite in action: what you ask and what you get" width="100%"></p>
+
+## How it works at a glance
+
+<p align="center"><img src="../../assets/readme/diagrams/release-notes-suite.svg" alt="How release-notes-suite works" width="100%"></p>
+
 
 A two-stage pipeline for turning what engineering shipped into client-facing release notes for **Acme APP / Acme Notify** (Acme).
 

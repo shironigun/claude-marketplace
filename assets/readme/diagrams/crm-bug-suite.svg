@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="620" viewBox="0 0 1280 620" role="img" aria-label="How bug-suite works" font-family="'Segoe UI', -apple-system, 'Helvetica Neue', Arial, sans-serif">
+<title>How bug-suite works</title>
+<defs>
+  <linearGradient id="d-bug-suite-bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0b1020"/><stop offset="1" stop-color="#151d3b"/></linearGradient>
+  <radialGradient id="d-bug-suite-glow" cx="1" cy="0" r="0.9"><stop offset="0" stop-color="#f87171" stop-opacity=".28"/><stop offset="1" stop-color="#f87171" stop-opacity="0"/></radialGradient>
+  <pattern id="d-bug-suite-dots" width="22" height="22" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1.1" fill="#ffffff" fill-opacity=".06"/></pattern>
+</defs>
+<rect width="1280" height="620" rx="26" fill="url(#d-bug-suite-bg)"/>
+<rect width="1280" height="620" rx="26" fill="url(#d-bug-suite-dots)"/>
+<rect width="1280" height="620" rx="26" fill="url(#d-bug-suite-glow)"/>
+<rect x=".5" y=".5" width="1279" height="619" rx="26" fill="none" stroke="#ffffff" stroke-opacity=".08"/>
+<g transform="translate(64 46) scale(1.25)" fill="#f87171"><path d="M20 8h-2.81c-.45-.78-1.07-1.45-1.82-1.96L17 4.41 15.59 3l-2.17 2.17C12.96 5.06 12.49 5 12 5s-.96.06-1.41.17L8.41 3 7 4.41l1.62 1.63C7.88 6.55 7.26 7.22 6.81 8H4v2h2.09c-.05.33-.09.66-.09 1v1H4v2h2v1c0 .34.04.67.09 1H4v2h2.81c1.04 1.79 2.97 3 5.19 3s4.15-1.21 5.19-3H20v-2h-2.09c.05-.33.09-.66.09-1v-1h2v-2h-2v-1c0-.34-.04-.67-.09-1H20zm-6 8h-4v-2h4zm0-4h-4v-2h4z"/></g>
+<text x="106" y="70" font-size="26" font-weight="700" fill="#ffffff">How bug-suite works</text>
+<text x="64" y="104" font-size="16" fill="#c7d0e6">Pick by where you found it. Every draft waits for your approval before it is created.</text>
+<rect x="64" y="300" width="240" height="110" rx="14" fill="#ffffff" fill-opacity="0.05" stroke="#f87171" stroke-opacity="0.4" />
+<text x="184" y="334" text-anchor="middle" font-size="17" font-weight="700" fill="#ffffff">What happened?</text>
+<text x="184" y="356" text-anchor="middle" font-size="14" fill="#aab4cf">Pick the skill by where you</text>
+<text x="184" y="375" text-anchor="middle" font-size="14" fill="#aab4cf">found it</text>
+<rect x="364" y="150" width="330" height="100" rx="14" fill="#ffffff" fill-opacity="0.05" stroke="#f87171" stroke-opacity="0.4" />
+<text x="529" y="206" text-anchor="middle" font-size="15" font-weight="700" fill="#ffffff">Found while testing a story, or in regression</text>
+<rect x="760" y="164" width="180" height="72" rx="14" fill="#f87171" fill-opacity="0.16" stroke="#f87171" stroke-opacity="0.8" />
+<text x="850" y="206" text-anchor="middle" font-size="17" font-weight="700" fill="#ffffff">bugger</text>
+<rect x="1006" y="150" width="210" height="100" rx="14" fill="#ffffff" fill-opacity="0.05" stroke="#f87171" stroke-opacity="0.4" />
+<text x="1111" y="188.5" text-anchor="middle" font-size="17" font-weight="700" fill="#ffffff">Bug</text>
+<text x="1111" y="210.5" text-anchor="middle" font-size="14" fill="#aab4cf">On the team board</text>
+<path d="M307.6486747844428 299.44769683597497L414.0610026349121 251.63925968576413" stroke="#f87171" stroke-opacity="0.85" stroke-width="2.2" fill="none" />
+<path d="M414.0610026349121 251.63925968576413l-7.5749661285713925 9.98097631251553M414.0610026349121 251.63925968576413l-12.49274518586381 -0.9650480408127615" stroke="#f87171" stroke-opacity="0.85" stroke-width="2.2" stroke-linecap="round" fill="none"/>
+<path d="M698 200L756 200" stroke="#f87171" stroke-opacity="0.85" stroke-width="2.2" fill="none" />
+<path d="M756 200l-11 6M756 200l-11 -6" stroke="#f87171" stroke-opacity="0.85" stroke-width="2.2" stroke-linecap="round" fill="none"/>
+<path d="M944 200L1002 200" stroke="#f87171" stroke-opacity="0.85" stroke-width="2.2" fill="none" />
+<path d="M1002 200l-11 6M1002 200l-11 -6" stroke="#f87171" stroke-opacity="0.85" stroke-width="2.2" stroke-linecap="round" fill="none"/>
+<circle cx="973" cy="200" r="14" fill="#fbbf24"/><g transform="translate(964 191) scale(0.75)" fill="#0b1020"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2m-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2m3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1s3.1 1.39 3.1 3.1z"/></g>
+<rect x="364" y="308" width="330" height="100" rx="14" fill="#ffffff" fill-opacity="0.05" stroke="#f87171" stroke-opacity="0.4" />
+<text x="529" y="364" text-anchor="middle" font-size="15" font-weight="700" fill="#ffffff">Found on production, by a live client</text>
+<rect x="760" y="322" width="180" height="72" rx="14" fill="#f87171" fill-opacity="0.16" stroke="#f87171" stroke-opacity="0.8" />
+<text x="850" y="364" text-anchor="middle" font-size="17" font-weight="700" fill="#ffffff">defector</text>
+<rect x="1006" y="308" width="210" height="100" rx="14" fill="#ffffff" fill-opacity="0.05" stroke="#f87171" stroke-opacity="0.4" />
+<text x="1111" y="346.5" text-anchor="middle" font-size="17" font-weight="700" fill="#ffffff">Defect</text>
+<text x="1111" y="368.5" text-anchor="middle" font-size="14" fill="#aab4cf">On Support Board</text>
+<path d="M307.9998487798423 356.0782595546073L360.0001512201577 356.5304360975666" stroke="#f87171" stroke-opacity="0.85" stroke-width="2.2" fill="none" />
+<path d="M360.0001512201577 356.5304360975666l-11.051756085172963 5.904124611984606M360.0001512201577 356.5304360975666l-10.947412203959681 -6.09542172754229" stroke="#f87171" stroke-opacity="0.85" stroke-width="2.2" stroke-linecap="round" fill="none"/>
+<path d="M698 358L756 358" stroke="#f87171" stroke-opacity="0.85" stroke-width="2.2" fill="none" />
+<path d="M756 358l-11 6M756 358l-11 -6" stroke="#f87171" stroke-opacity="0.85" stroke-width="2.2" stroke-linecap="round" fill="none"/>
+<path d="M944 358L1002 358" stroke="#f87171" stroke-opacity="0.85" stroke-width="2.2" fill="none" />
+<path d="M1002 358l-11 6M1002 358l-11 -6" stroke="#f87171" stroke-opacity="0.85" stroke-width="2.2" stroke-linecap="round" fill="none"/>
+<circle cx="973" cy="358" r="14" fill="#fbbf24"/><g transform="translate(964 349) scale(0.75)" fill="#0b1020"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2m-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2m3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1s3.1 1.39 3.1 3.1z"/></g>
+<rect x="364" y="466" width="330" height="100" rx="14" fill="#ffffff" fill-opacity="0.05" stroke="#f87171" stroke-opacity="0.4" />
+<text x="529" y="522" text-anchor="middle" font-size="15" font-weight="700" fill="#ffffff">An update for an existing ticket</text>
+<rect x="760" y="480" width="180" height="72" rx="14" fill="#f87171" fill-opacity="0.16" stroke="#f87171" stroke-opacity="0.8" />
+<text x="850" y="522" text-anchor="middle" font-size="17" font-weight="700" fill="#ffffff">commentor</text>
+<rect x="1006" y="466" width="210" height="100" rx="14" fill="#ffffff" fill-opacity="0.05" stroke="#f87171" stroke-opacity="0.4" />
+<text x="1111" y="504.5" text-anchor="middle" font-size="17" font-weight="700" fill="#ffffff">Comment</text>
+<text x="1111" y="526.5" text-anchor="middle" font-size="14" fill="#aab4cf">In the team's voice</text>
+<path d="M305.4818754171239 411.6915418613245L418.23241029716183 464.3084581386755" stroke="#f87171" stroke-opacity="0.85" stroke-width="2.2" fill="none" />
+<path d="M418.23241029716183 464.3084581386755l-12.505327331934662 0.7853587213292315M418.23241029716183 464.3084581386755l-7.430701747961177 -10.088838958613954" stroke="#f87171" stroke-opacity="0.85" stroke-width="2.2" stroke-linecap="round" fill="none"/>
+<path d="M698 516L756 516" stroke="#f87171" stroke-opacity="0.85" stroke-width="2.2" fill="none" />
+<path d="M756 516l-11 6M756 516l-11 -6" stroke="#f87171" stroke-opacity="0.85" stroke-width="2.2" stroke-linecap="round" fill="none"/>
+<path d="M944 516L1002 516" stroke="#f87171" stroke-opacity="0.85" stroke-width="2.2" fill="none" />
+<path d="M1002 516l-11 6M1002 516l-11 -6" stroke="#f87171" stroke-opacity="0.85" stroke-width="2.2" stroke-linecap="round" fill="none"/>
+<circle cx="973" cy="516" r="14" fill="#fbbf24"/><g transform="translate(964 507) scale(0.75)" fill="#0b1020"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2m-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2m3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1s3.1 1.39 3.1 3.1z"/></g>
+<circle cx="1048" cy="94" r="11" fill="#fbbf24"/><g transform="translate(1041 87) scale(0.5833333333333334)" fill="#0b1020"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2m-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2m3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1s3.1 1.39 3.1 3.1z"/></g><text x="1066" y="99" font-size="14" fill="#c7d0e6">waits for your OK</text>
+</svg>
