@@ -35,5 +35,5 @@
 <rect x="1045.6666666666667" y="290" width="170.33333333333334" height="44" rx="12" fill="#ffffff" fill-opacity=".05" stroke="#ffffff" stroke-opacity=".12"/>
 <circle cx="1065.6666666666667" cy="312" r="11" fill="#2dd4bf"/><text x="1065.6666666666667" y="317" text-anchor="middle" font-size="12" font-weight="700" fill="#0b1020">6</text>
 <text x="1083.6666666666667" y="317" font-size="15" font-weight="600" fill="#e6ebf7">File bug</text>
-<text x="1216" y="372" text-anchor="end" font-size="14" fill="#8b97b8">16 skills  ·  4 agents  ·  9 commands  ·  2 MCP servers  ·  shironigun/claude-marketplace</text>
+<text x="1216" y="372" text-anchor="end" font-size="14" fill="#8b97b8">16 skills  ·  4 agents  ·  9 commands  ·  2 MCP servers  ·  shironigun/marketplace</text>
 </svg>

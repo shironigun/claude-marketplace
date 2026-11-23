@@ -61,7 +61,7 @@ When nothing lands in **Announce**, "there isn't enough to announce this week" i
 ## Install
 
 ```bash
-claude plugin marketplace add shironigun/claude-marketplace
+claude plugin marketplace add shironigun/marketplace
 claude plugin install release-notes-suite@shironigun
 ```
 

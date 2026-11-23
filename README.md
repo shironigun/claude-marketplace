@@ -27,7 +27,7 @@ The flagship is **[qa-engineering](plugins/qa-engineering/)**: one AI orchestrat
 (analyze a story → author and approve test cases → publish them to a Test Plan/Suite → generate API + UI
 automation → turn a failing run into a filed bug) with **a human gate at every tracker write**.
 
-> **Marketplace name:** `shironigun` · **Source:** `shironigun/claude-marketplace` (this repo)
+> **Marketplace name:** `shironigun` · **Source:** `shironigun/marketplace` (this repo)
 > When you install a plugin you refer to it as **`<plugin>@shironigun`** (the `@` uses the marketplace's
 > registered name, not the GitHub path).
 
@@ -140,7 +140,7 @@ Select a card to open that plugin's folder and its README.
 
 ```bash
 # 1. Add this marketplace (clones the repo into Claude Code)
-claude plugin marketplace add shironigun/claude-marketplace
+claude plugin marketplace add shironigun/marketplace
 
 # 2. Install a plugin — e.g. the flagship
 claude plugin install qa-engineering@shironigun
@@ -159,8 +159,8 @@ start a new session.
 ### A. Claude Code CLI (terminal)
 
 ```bash
-# add the marketplace (pin a branch/tag with shironigun/claude-marketplace#<ref> if you want)
-claude plugin marketplace add shironigun/claude-marketplace
+# add the marketplace (pin a branch/tag with shironigun/marketplace#<ref> if you want)
+claude plugin marketplace add shironigun/marketplace
 
 # install one or more plugins (default scope: user — just you, on this machine)
 claude plugin install qa-engineering@shironigun
@@ -189,7 +189,7 @@ just you. Default is `--scope user`.
 **In a running session** the same operations are available as slash commands:
 
 ```
-/plugin marketplace add shironigun/claude-marketplace
+/plugin marketplace add shironigun/marketplace
 /plugin install qa-engineering@shironigun
 /reload-plugins
 /plugin                    # opens the panel: Discover · Installed · Marketplaces · Errors
@@ -221,8 +221,8 @@ from a terminal (step A above) — there is no documented GUI form for *adding* 
 <summary><b>C. From a local clone (offline / development)</b></summary>
 
 ```bash
-git clone https://github.com/shironigun/claude-marketplace.git
-claude plugin marketplace add ./claude-marketplace      # a folder containing .claude-plugin/marketplace.json
+git clone https://github.com/shironigun/marketplace.git
+claude plugin marketplace add ./marketplace            # a folder containing .claude-plugin/marketplace.json
 claude plugin install qa-engineering@shironigun
 ```
 

@@ -48,7 +48,7 @@ with Azure DevOps, Jira, Linear, Asana, GitHub Issues, Monday or ClickUp. Only *
 Add the marketplace first:
 
 ```bash
-claude plugin marketplace add shironigun/claude-marketplace
+claude plugin marketplace add shironigun/marketplace
 ```
 
 Then install this plugin:
