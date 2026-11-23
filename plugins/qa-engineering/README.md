@@ -19,6 +19,14 @@
 | **Setup** | Set `ADO_ORG`; interactive sign-in |
 | **Product-neutral** | Yes |
 
+## See it in action
+
+<p align="center"><img src="../../assets/readme/usecases/qa-engineering.svg" alt="qa-engineering in action: what you ask and what you get" width="100%"></p>
+
+## How it works at a glance
+
+<p align="center"><img src="../../assets/readme/diagrams/qa-engineering.svg" alt="How qa-engineering works" width="100%"></p>
+
 
 The **single AI QA engineering plugin** — one orchestrator for the whole QA loop. Bring it a story and it
 analyzes it, authors and approves test cases, publishes them to a Test Plan/Suite, builds and generates

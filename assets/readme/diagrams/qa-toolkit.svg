@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="620" viewBox="0 0 1280 620" role="img" aria-label="How qa-toolkit works" font-family="'Segoe UI', -apple-system, 'Helvetica Neue', Arial, sans-serif">
+<title>How qa-toolkit works</title>
+<defs>
+  <linearGradient id="d-qa-toolkit-bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0b1020"/><stop offset="1" stop-color="#151d3b"/></linearGradient>
+  <radialGradient id="d-qa-toolkit-glow" cx="1" cy="0" r="0.9"><stop offset="0" stop-color="#38bdf8" stop-opacity=".28"/><stop offset="1" stop-color="#38bdf8" stop-opacity="0"/></radialGradient>
+  <pattern id="d-qa-toolkit-dots" width="22" height="22" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1.1" fill="#ffffff" fill-opacity=".06"/></pattern>
+</defs>
+<rect width="1280" height="620" rx="26" fill="url(#d-qa-toolkit-bg)"/>
+<rect width="1280" height="620" rx="26" fill="url(#d-qa-toolkit-dots)"/>
+<rect width="1280" height="620" rx="26" fill="url(#d-qa-toolkit-glow)"/>
+<rect x=".5" y=".5" width="1279" height="619" rx="26" fill="none" stroke="#ffffff" stroke-opacity=".08"/>
+<g transform="translate(64 46) scale(1.25)" fill="#38bdf8"><path d="m21.67 18.17-5.3-5.3h-.99l-2.54 2.54v.99l5.3 5.3c.39.39 1.02.39 1.41 0l2.12-2.12c.39-.38.39-1.02 0-1.41"/><path d="m17.34 10.19 1.41-1.41 2.12 2.12c1.17-1.17 1.17-3.07 0-4.24l-3.54-3.54-1.41 1.41V1.71l-.7-.71-3.54 3.54.71.71h2.83l-1.41 1.41 1.06 1.06-2.89 2.89-4.13-4.13V5.06L4.83 2.04 2 4.87 5.03 7.9h1.41l4.13 4.13-.85.85H7.6l-5.3 5.3c-.39.39-.39 1.02 0 1.41l2.12 2.12c.39.39 1.02.39 1.41 0l5.3-5.3v-2.12l5.15-5.15z"/></g>
+<text x="106" y="70" font-size="26" font-weight="700" fill="#ffffff">How qa-toolkit works</text>
+<text x="64" y="104" font-size="16" fill="#c7d0e6">Four tools that work on their own. Only two need a tracker, and any tracker works.</text>
+<rect x="900" y="160" width="316" height="370" rx="14" fill="#38bdf8" fill-opacity="0.16" stroke="#38bdf8" stroke-opacity="0.8" />
+<text x="1058" y="351" text-anchor="middle" font-size="17" font-weight="700" fill="#ffffff"></text>
+<text x="1058" y="196" text-anchor="middle" font-size="18" font-weight="700" fill="#ffffff">Your tracker</text><text x="1058" y="218" text-anchor="middle" font-size="14" fill="#aab4cf">whatever you connect</text>
+<rect x="930" y="236" width="256" height="40" rx="14" fill="#ffffff" fill-opacity="0.05" stroke="#93c5fd" stroke-opacity="0.4" />
+<text x="1058" y="262" text-anchor="middle" font-size="15" font-weight="700" fill="#ffffff">Azure DevOps</text>
+<rect x="930" y="276" width="256" height="40" rx="14" fill="#ffffff" fill-opacity="0.05" stroke="#93c5fd" stroke-opacity="0.4" />
+<text x="1058" y="302" text-anchor="middle" font-size="15" font-weight="700" fill="#ffffff">Jira</text>
+<rect x="930" y="316" width="256" height="40" rx="14" fill="#ffffff" fill-opacity="0.05" stroke="#93c5fd" stroke-opacity="0.4" />
+<text x="1058" y="342" text-anchor="middle" font-size="15" font-weight="700" fill="#ffffff">Linear</text>
+<rect x="930" y="356" width="256" height="40" rx="14" fill="#ffffff" fill-opacity="0.05" stroke="#93c5fd" stroke-opacity="0.4" />
+<text x="1058" y="382" text-anchor="middle" font-size="15" font-weight="700" fill="#ffffff">Asana</text>
+<rect x="930" y="396" width="256" height="40" rx="14" fill="#ffffff" fill-opacity="0.05" stroke="#93c5fd" stroke-opacity="0.4" />
+<text x="1058" y="422" text-anchor="middle" font-size="15" font-weight="700" fill="#ffffff">GitHub Issues</text>
+<rect x="930" y="436" width="256" height="40" rx="14" fill="#ffffff" fill-opacity="0.05" stroke="#93c5fd" stroke-opacity="0.4" />
+<text x="1058" y="462" text-anchor="middle" font-size="15" font-weight="700" fill="#ffffff">Monday</text>
+<rect x="930" y="476" width="256" height="40" rx="14" fill="#ffffff" fill-opacity="0.05" stroke="#93c5fd" stroke-opacity="0.4" />
+<text x="1058" y="502" text-anchor="middle" font-size="15" font-weight="700" fill="#ffffff">ClickUp</text>
+<rect x="64" y="160" width="320" height="170" rx="14" fill="#ffffff" fill-opacity="0.05" stroke="#38bdf8" stroke-opacity="0.4" />
+<text x="224" y="233.5" text-anchor="middle" font-size="17" font-weight="700" fill="#ffffff">API test cases</text>
+<text x="224" y="255.5" text-anchor="middle" font-size="14" fill="#aab4cf">From an API spec or a sample response</text>
+<rect x="134" y="286" width="180" height="28" rx="14" fill="#64748b" fill-opacity=".18" stroke="#94a3b8" stroke-opacity=".6"/><text x="224" y="305" text-anchor="middle" font-size="13" font-weight="600" fill="#cbd5e1">no connector needed</text>
+<rect x="64" y="360" width="320" height="170" rx="14" fill="#ffffff" fill-opacity="0.05" stroke="#38bdf8" stroke-opacity="0.4" />
+<text x="224" y="433.5" text-anchor="middle" font-size="17" font-weight="700" fill="#ffffff">UI test cases</text>
+<text x="224" y="455.5" text-anchor="middle" font-size="14" fill="#aab4cf">From a screen or a user flow</text>
+<rect x="134" y="486" width="180" height="28" rx="14" fill="#64748b" fill-opacity=".18" stroke="#94a3b8" stroke-opacity=".6"/><text x="224" y="505" text-anchor="middle" font-size="13" font-weight="600" fill="#cbd5e1">no connector needed</text>
+<rect x="440" y="160" width="320" height="170" rx="14" fill="#ffffff" fill-opacity="0.05" stroke="#38bdf8" stroke-opacity="0.4" />
+<text x="600" y="233.5" text-anchor="middle" font-size="17" font-weight="700" fill="#ffffff">Failure to bug</text>
+<text x="600" y="255.5" text-anchor="middle" font-size="14" fill="#aab4cf">An API failure becomes a structured bug</text>
+<rect x="510" y="286" width="180" height="28" rx="14" fill="#38bdf8" fill-opacity=".18" stroke="#38bdf8" stroke-opacity=".6"/><text x="600" y="305" text-anchor="middle" font-size="13" font-weight="600" fill="#38bdf8">uses your tracker</text>
+<path d="M764 245L896 245" stroke="#38bdf8" stroke-opacity="0.85" stroke-width="2.2" fill="none" />
+<path d="M896 245l-11 6M896 245l-11 -6" stroke="#38bdf8" stroke-opacity="0.85" stroke-width="2.2" stroke-linecap="round" fill="none"/>
+<text x="830" y="235" text-anchor="middle" font-size="13" font-weight="600" fill="#c7d0e6">connector</text>
+<rect x="440" y="360" width="320" height="170" rx="14" fill="#ffffff" fill-opacity="0.05" stroke="#38bdf8" stroke-opacity="0.4" />
+<text x="600" y="433.5" text-anchor="middle" font-size="17" font-weight="700" fill="#ffffff">Cases to tracker</text>
+<text x="600" y="455.5" text-anchor="middle" font-size="14" fill="#aab4cf">Creates Test Case work items</text>
+<rect x="510" y="486" width="180" height="28" rx="14" fill="#38bdf8" fill-opacity=".18" stroke="#38bdf8" stroke-opacity=".6"/><text x="600" y="505" text-anchor="middle" font-size="13" font-weight="600" fill="#38bdf8">uses your tracker</text>
+<path d="M764 445L896 445" stroke="#38bdf8" stroke-opacity="0.85" stroke-width="2.2" fill="none" />
+<path d="M896 445l-11 6M896 445l-11 -6" stroke="#38bdf8" stroke-opacity="0.85" stroke-width="2.2" stroke-linecap="round" fill="none"/>
+<text x="830" y="435" text-anchor="middle" font-size="13" font-weight="600" fill="#c7d0e6">connector</text>
+<text x="64" y="578" font-size="15" fill="#c7d0e6">Each skill works on its own. Chain them when you want: write cases, push them, turn a red run into a bug.</text>
+</svg>

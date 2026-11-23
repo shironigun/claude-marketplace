@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="620" viewBox="0 0 1280 620" role="img" aria-label="How how-to-guides works" font-family="'Segoe UI', -apple-system, 'Helvetica Neue', Arial, sans-serif">
+<title>How how-to-guides works</title>
+<defs>
+  <linearGradient id="d-how-to-guides-bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0b1020"/><stop offset="1" stop-color="#151d3b"/></linearGradient>
+  <radialGradient id="d-how-to-guides-glow" cx="1" cy="0" r="0.9"><stop offset="0" stop-color="#fb923c" stop-opacity=".28"/><stop offset="1" stop-color="#fb923c" stop-opacity="0"/></radialGradient>
+  <pattern id="d-how-to-guides-dots" width="22" height="22" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1.1" fill="#ffffff" fill-opacity=".06"/></pattern>
+</defs>
+<rect width="1280" height="620" rx="26" fill="url(#d-how-to-guides-bg)"/>
+<rect width="1280" height="620" rx="26" fill="url(#d-how-to-guides-dots)"/>
+<rect width="1280" height="620" rx="26" fill="url(#d-how-to-guides-glow)"/>
+<rect x=".5" y=".5" width="1279" height="619" rx="26" fill="none" stroke="#ffffff" stroke-opacity=".08"/>
+<g transform="translate(64 46) scale(1.25)" fill="#fb923c"><path d="M21 5c-1.11-.35-2.33-.5-3.5-.5-1.95 0-4.05.4-5.5 1.5-1.45-1.1-3.55-1.5-5.5-1.5S2.45 4.9 1 6v14.65c0 .25.25.5.5.5.1 0 .15-.05.25-.05C3.1 20.45 5.05 20 6.5 20c1.95 0 4.05.4 5.5 1.5 1.35-.85 3.8-1.5 5.5-1.5 1.65 0 3.35.3 4.75 1.05.1.05.15.05.25.05.25 0 .5-.25.5-.5V6c-.6-.45-1.25-.75-2-1m0 13.5c-1.1-.35-2.3-.5-3.5-.5-1.7 0-4.15.65-5.5 1.5V8c1.35-.85 3.8-1.5 5.5-1.5 1.2 0 2.4.15 3.5.5z"/><path d="M17.5 10.5c.88 0 1.73.09 2.5.26V9.24c-.79-.15-1.64-.24-2.5-.24-1.7 0-3.24.29-4.5.83v1.66c1.13-.64 2.7-.99 4.5-.99M13 12.49v1.66c1.13-.64 2.7-.99 4.5-.99.88 0 1.73.09 2.5.26V11.9c-.79-.15-1.64-.24-2.5-.24-1.7 0-3.24.3-4.5.83m4.5 1.84c-1.7 0-3.24.29-4.5.83v1.66c1.13-.64 2.7-.99 4.5-.99.88 0 1.73.09 2.5.26v-1.52c-.79-.16-1.64-.24-2.5-.24"/></g>
+<text x="106" y="70" font-size="26" font-weight="700" fill="#ffffff">How how-to-guides works</text>
+<text x="64" y="104" font-size="16" fill="#c7d0e6">Facts from the source, written to a standard, built in your brand, with gaps sent back to product.</text>
+<text x="64" y="146" font-size="13" font-weight="700" letter-spacing="2" fill="#8b97b8">1  LEARN</text>
+<rect x="64" y="160" width="230" height="96" rx="14" fill="#ffffff" fill-opacity="0.05" stroke="#fb923c" stroke-opacity="0.4" />
+<text x="179" y="196.5" text-anchor="middle" font-size="17" font-weight="700" fill="#ffffff">Code</text>
+<text x="179" y="218.5" text-anchor="middle" font-size="14" fill="#aab4cf">read-only</text>
+<rect x="64" y="272" width="230" height="96" rx="14" fill="#ffffff" fill-opacity="0.05" stroke="#fb923c" stroke-opacity="0.4" />
+<text x="179" y="308.5" text-anchor="middle" font-size="17" font-weight="700" fill="#ffffff">The app</text>
+<text x="179" y="330.5" text-anchor="middle" font-size="14" fill="#aab4cf">with demo data</text>
+<rect x="64" y="384" width="230" height="96" rx="14" fill="#ffffff" fill-opacity="0.05" stroke="#fb923c" stroke-opacity="0.4" />
+<text x="179" y="420.5" text-anchor="middle" font-size="17" font-weight="700" fill="#ffffff">Help content</text>
+<text x="179" y="442.5" text-anchor="middle" font-size="14" fill="#aab4cf">words readers know</text>
+<text x="350" y="146" font-size="13" font-weight="700" letter-spacing="2" fill="#8b97b8">2  WRITE TO THE STANDARD</text>
+<rect x="350" y="160" width="400" height="70" rx="14" fill="#ffffff" fill-opacity="0.05" stroke="#fb923c" stroke-opacity="0.4" />
+<text x="550" y="183.5" text-anchor="middle" font-size="15" font-weight="700" fill="#ffffff">Before you begin</text>
+<text x="550" y="205.5" text-anchor="middle" font-size="14" fill="#aab4cf">the problem, setup, availability</text>
+<rect x="350" y="242" width="400" height="70" rx="14" fill="#ffffff" fill-opacity="0.05" stroke="#fb923c" stroke-opacity="0.4" />
+<text x="550" y="265.5" text-anchor="middle" font-size="15" font-weight="700" fill="#ffffff">How it works</text>
+<text x="550" y="287.5" text-anchor="middle" font-size="14" fill="#aab4cf">every label on screen, once</text>
+<rect x="350" y="324" width="400" height="70" rx="14" fill="#ffffff" fill-opacity="0.05" stroke="#fb923c" stroke-opacity="0.4" />
+<text x="550" y="347.5" text-anchor="middle" font-size="15" font-weight="700" fill="#ffffff">Tasks</text>
+<text x="550" y="369.5" text-anchor="middle" font-size="14" fill="#aab4cf">action, then You'll see, then why</text>
+<rect x="350" y="406" width="400" height="70" rx="14" fill="#ffffff" fill-opacity="0.05" stroke="#fb923c" stroke-opacity="0.4" />
+<text x="550" y="429.5" text-anchor="middle" font-size="15" font-weight="700" fill="#ffffff">Questions readers ask</text>
+<text x="550" y="451.5" text-anchor="middle" font-size="14" fill="#aab4cf">short, direct answers</text>
+<rect x="350" y="488" width="400" height="70" rx="14" fill="#ffffff" fill-opacity="0.05" stroke="#fb923c" stroke-opacity="0.4" />
+<text x="550" y="511.5" text-anchor="middle" font-size="15" font-weight="700" fill="#ffffff">If something goes wrong</text>
+<text x="550" y="533.5" text-anchor="middle" font-size="14" fill="#aab4cf">what you see, what to do</text>
+<path d="M298 208L346 208" stroke="#fb923c" stroke-opacity="0.45" stroke-width="2.2" fill="none" />
+<path d="M346 208l-11 6M346 208l-11 -6" stroke="#fb923c" stroke-opacity="0.45" stroke-width="2.2" stroke-linecap="round" fill="none"/>
+<path d="M298 320L346 320" stroke="#fb923c" stroke-opacity="0.45" stroke-width="2.2" fill="none" />
+<path d="M346 320l-11 6M346 320l-11 -6" stroke="#fb923c" stroke-opacity="0.45" stroke-width="2.2" stroke-linecap="round" fill="none"/>
+<path d="M298 432L346 432" stroke="#fb923c" stroke-opacity="0.45" stroke-width="2.2" fill="none" />
+<path d="M346 432l-11 6M346 432l-11 -6" stroke="#fb923c" stroke-opacity="0.45" stroke-width="2.2" stroke-linecap="round" fill="none"/>
+<text x="810" y="146" font-size="13" font-weight="700" letter-spacing="2" fill="#8b97b8">3  BUILD</text>
+<rect x="810" y="160" width="406" height="84" rx="14" fill="#ffffff" fill-opacity="0.05" stroke="#fb923c" stroke-opacity="0.4" stroke-dasharray="6 5"/>
+<text x="1013" y="190.5" text-anchor="middle" font-size="17" font-weight="700" fill="#ffffff">howto-brand.json</text>
+<text x="1013" y="212.5" text-anchor="middle" font-size="14" fill="#aab4cf">Your logo, colours, font and help line</text>
+<rect x="810" y="292" width="406" height="90" rx="14" fill="#fb923c" fill-opacity="0.16" stroke="#fb923c" stroke-opacity="0.8" />
+<text x="1013" y="325.5" text-anchor="middle" font-size="17" font-weight="700" fill="#ffffff">Branded PDF</text>
+<text x="1013" y="347.5" text-anchor="middle" font-size="14" fill="#aab4cf">Checked against the standard as it builds</text>
+<path d="M1013 248L1013 288" stroke="#fb923c" stroke-opacity="0.85" stroke-width="2.2" fill="none" />
+<path d="M1013 288l-6 -11M1013 288l6 -11" stroke="#fb923c" stroke-opacity="0.85" stroke-width="2.2" stroke-linecap="round" fill="none"/>
+<path d="M753.966830250789 303.4319866415709L806.033169749211 310.17924445994095" stroke="#fb923c" stroke-opacity="0.85" stroke-width="2.2" fill="none" />
+<path d="M806.033169749211 310.17924445994095l-11.679873303214228 4.536580168019023M806.033169749211 310.17924445994095l-10.13769307612561 -7.36391058434816" stroke="#fb923c" stroke-opacity="0.85" stroke-width="2.2" stroke-linecap="round" fill="none"/>
+<text x="810" y="432" font-size="13" font-weight="700" letter-spacing="2" fill="#8b97b8">4  REPORT BACK TO PRODUCT</text>
+<rect x="810" y="446" width="126" height="40" rx="14" fill="#ffffff" fill-opacity="0.05" stroke="#fbbf24" stroke-opacity="0.4" />
+<text x="873" y="472" text-anchor="middle" font-size="15" font-weight="700" fill="#ffffff">Questions</text>
+<rect x="950" y="446" width="126" height="40" rx="14" fill="#ffffff" fill-opacity="0.05" stroke="#fbbf24" stroke-opacity="0.4" />
+<text x="1013" y="472" text-anchor="middle" font-size="15" font-weight="700" fill="#ffffff">Change requests</text>
+<rect x="1090" y="446" width="126" height="40" rx="14" fill="#ffffff" fill-opacity="0.05" stroke="#fbbf24" stroke-opacity="0.4" />
+<text x="1153" y="472" text-anchor="middle" font-size="15" font-weight="700" fill="#ffffff">Bugs</text>
+<text x="810" y="516" font-size="14" fill="#aab4cf">Anything it can't confirm goes on a list,</text><text x="810" y="536" font-size="14" fill="#aab4cf">never into the guide as a guess.</text>
+</svg>
