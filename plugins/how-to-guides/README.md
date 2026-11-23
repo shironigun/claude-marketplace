@@ -1,5 +1,27 @@
 # how-to-guides
 
+<p align="center">
+  <img src="../../assets/readme/banners/how-to-guides.svg" alt="how-to-guides" width="100%">
+</p>
+
+<p align="center">
+  <a href="../../README.md#the-catalog">← All plugins</a> ·
+  <a href="#install">Install</a> ·
+  <a href="../../README.md#trust--safety">Trust &amp; safety</a>
+</p>
+
+| At a glance | |
+|---|---|
+| **Category** | Documentation |
+| **What it does** | A complete customer how-to guide for one feature, as a branded PDF |
+| **Includes** | 1 skill |
+| **Writes** | A PDF on your machine |
+| **Setup** | Node.js, Chrome |
+| **Product-neutral** | Yes |
+
+<p align="center"><img src="../../assets/readme/previews/how-to-guides.png" alt="Three pages of an example guide for a made-up feature" width="100%"></p>
+
+
 Customer how-to guides for B2B software, written to a standard and built as branded PDFs.
 
 Say "write a guide for the reminders feature for our dealers" and the `how-to-guide` skill writes the

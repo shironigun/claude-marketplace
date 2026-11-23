@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="340" viewBox="0 0 640 340" role="img" aria-label="release-notes-suite: From what shipped to what customers read" font-family="'Segoe UI', -apple-system, 'Helvetica Neue', Arial, sans-serif">
+<title>release-notes-suite: From what shipped to what customers read</title>
+<defs>
+  <linearGradient id="c-release-notes-suite-bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0b1020"/><stop offset="1" stop-color="#151d3b"/></linearGradient>
+  <radialGradient id="c-release-notes-suite-glow" cx="1" cy="0" r="0.9"><stop offset="0" stop-color="#fbbf24" stop-opacity=".28"/><stop offset="1" stop-color="#fbbf24" stop-opacity="0"/></radialGradient>
+  <pattern id="c-release-notes-suite-dots" width="22" height="22" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1.1" fill="#ffffff" fill-opacity=".06"/></pattern>
+</defs>
+<rect width="640" height="340" rx="24" fill="url(#c-release-notes-suite-bg)"/>
+<rect width="640" height="340" rx="24" fill="url(#c-release-notes-suite-dots)"/>
+<rect width="640" height="340" rx="24" fill="url(#c-release-notes-suite-glow)"/>
+<rect x=".5" y=".5" width="639" height="339" rx="24" fill="none" stroke="#ffffff" stroke-opacity=".08"/>
+<rect x="44" y="40" width="108" height="108" rx="26" fill="#fbbf24" fill-opacity=".14" stroke="#fbbf24" stroke-opacity=".5"/>
+<g transform="translate(68 64) scale(2.5)" fill="#fbbf24"><path d="m23 12-2.44-2.78.34-3.68-3.61-.82-1.89-3.18L12 3 8.6 1.54 6.71 4.72l-3.61.81.34 3.68L1 12l2.44 2.78-.34 3.69 3.61.82 1.89 3.18L12 21l3.4 1.46 1.89-3.18 3.61-.82-.34-3.68zm-10 5h-2v-2h2zm0-4h-2V7h2z"/></g>
+<rect x="176" y="44" width="159.72" height="27" rx="13.5" fill="#c7d0e6" fill-opacity="0.16" stroke="#c7d0e6" stroke-opacity=".55"/>
+<text x="255.86" y="60" text-anchor="middle" font-size="13" font-weight="600" fill="#c7d0e6">Release management</text><rect x="345.72" y="44" width="174.79999999999998" height="27" rx="13.5" fill="#cbd5e1" fill-opacity="0.16" stroke="#cbd5e1" stroke-opacity=".55"/>
+<text x="433.12" y="60" text-anchor="middle" font-size="13" font-weight="600" fill="#cbd5e1">House-style template</text>
+<text x="176" y="112" font-size="34" font-weight="700" fill="#ffffff">release-notes-suite</text>
+<text x="176" y="140" font-size="17" font-weight="500" fill="#fbbf24">From what shipped to what customers read</text>
+<text x="44" y="196" font-size="16" fill="#c7d0e6">Harvest every shipped ticket and untracked PR, then write short,</text>
+<text x="44" y="220" font-size="16" fill="#c7d0e6">benefit-led release notes.</text>
+<rect x="44" y="272" width="84.32" height="27" rx="13.5" fill="#e6ebf7" fill-opacity="0" stroke="#e6ebf7" stroke-opacity=".55"/>
+<text x="86.16" y="288" text-anchor="middle" font-size="13" font-weight="600" fill="#e6ebf7">2 skills</text><rect x="138.32" y="272" width="129.56" height="27" rx="13.5" fill="#e6ebf7" fill-opacity="0" stroke="#e6ebf7" stroke-opacity=".55"/>
+<text x="203.1" y="288" text-anchor="middle" font-size="13" font-weight="600" fill="#e6ebf7">Brand variants</text>
+<g transform="translate(570 276) scale(1)" fill="#ffffff"><path d="m12 4-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/></g>
+</svg>

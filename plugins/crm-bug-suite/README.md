@@ -1,5 +1,25 @@
 # Acme CRM Bug Suite
 
+<p align="center">
+  <img src="../../assets/readme/banners/crm-bug-suite.svg" alt="crm-bug-suite" width="100%">
+</p>
+
+<p align="center">
+  <a href="../../README.md#the-catalog">← All plugins</a> ·
+  <a href="#install">Install</a> ·
+  <a href="../../README.md#trust--safety">Trust &amp; safety</a>
+</p>
+
+| At a glance | |
+|---|---|
+| **Category** | Bug tracking |
+| **What it does** | Story and regression Bugs, production Defects and ticket comments |
+| **Includes** | 3 skills |
+| **Writes** | Bugs, Defects and comments in Azure DevOps, after your OK |
+| **Setup** | `az login` |
+| **Product-neutral** | Template: retarget `references/` |
+
+
 Three skills for the Acme CRM **Agile Project** Azure DevOps project, modeled on the team's actual authoring patterns.
 
 | Skill | Files what | Board / type | Trigger examples |
