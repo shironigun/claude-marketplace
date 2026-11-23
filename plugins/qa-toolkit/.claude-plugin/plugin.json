@@ -6,7 +6,7 @@
     "name": "shironigun",
     "url": "https://github.com/shironigun"
   },
-  "homepage": "https://github.com/shironigun/claude-marketplace/tree/main/plugins/qa-toolkit",
-  "repository": "https://github.com/shironigun/claude-marketplace",
+  "homepage": "https://github.com/shironigun/marketplace/tree/main/plugins/qa-toolkit",
+  "repository": "https://github.com/shironigun/marketplace",
   "keywords": ["testing", "qa", "automation", "test-cases", "bug-tracker"]
 }

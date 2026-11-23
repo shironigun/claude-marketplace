@@ -154,7 +154,7 @@ ${tag.svg}${badge.svg}
 <text x="232" y="194" font-size="24" font-weight="500" fill="${c.color}">${esc(p.tagline)}</text>
 <text x="64" y="268" font-size="15" font-weight="700" letter-spacing="2" fill="#8b97b8">${p.parallel ? 'WHAT IT DOES' : 'HOW IT WORKS'}</text>
 ${flow(64, 290, W - 128, p.steps, c.color, p.steps.length > 5 ? 15 : 16, p.parallel)}
-<text x="${W - 64}" y="372" text-anchor="end" font-size="14" fill="#8b97b8">${esc(p.stats.join('  ·  '))}  ·  shironigun/claude-marketplace</text>`);
+<text x="${W - 64}" y="372" text-anchor="end" font-size="14" fill="#8b97b8">${esc(p.stats.join('  ·  '))}  ·  shironigun/marketplace</text>`);
 }
 
 // ---- Marketplace hero ----
@@ -167,13 +167,13 @@ function hero() {
 ${icon(p.icon, x + 26, y + 20, 48, c.color)}<text x="${x + 50}" y="${y + 90}" text-anchor="middle" font-size="10.5" font-weight="600" fill="#c7d0e6">${esc(p.name.length > 15 ? p.name.replace('-suite', '') : p.name)}</text>`;
   }).join('\n');
   const cats = Object.values(CATEGORY).reduce((acc, c) => { const b = pill(acc.x, 300, c.label, NEUTRAL, { size: 14 }); acc.out += b.svg; acc.x += b.w + 10; return acc; }, { x: 72, out: '' }).out;
-  return svg(W, H, 'shironigun claude-marketplace: Claude Code plugins for QA, release and documentation work', `${frame('hero', W, H, '#7c9cff', 30)}
+  return svg(W, H, 'shironigun marketplace: Claude Code plugins for QA, release and documentation work', `${frame('hero', W, H, '#7c9cff', 30)}
 <text x="72" y="104" font-size="16" font-weight="700" letter-spacing="3" fill="#8b97b8">CLAUDE CODE PLUGIN MARKETPLACE</text>
 <text x="72" y="170" font-size="60" font-weight="700" fill="#ffffff">shironigun</text>
 <text x="72" y="222" font-size="30" font-weight="500" fill="#c7d0e6">Plugins for the work around shipping software:</text>
 <text x="72" y="260" font-size="30" font-weight="500" fill="#c7d0e6">testing it, releasing it, explaining it.</text>
 ${cats}
-<text x="72" y="384" font-size="16" fill="#8b97b8" font-family="Consolas, 'Cascadia Mono', Menlo, monospace">claude plugin marketplace add shironigun/claude-marketplace</text>
+<text x="72" y="384" font-size="16" fill="#8b97b8" font-family="Consolas, 'Cascadia Mono', Menlo, monospace">claude plugin marketplace add shironigun/marketplace</text>
 ${tiles}`);
 }
 

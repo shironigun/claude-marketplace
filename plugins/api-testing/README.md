@@ -44,7 +44,7 @@ running them is done in that framework (`npx playwright test`), not through this
 ## Install
 
 ```bash
-claude plugin marketplace add shironigun/claude-marketplace
+claude plugin marketplace add shironigun/marketplace
 claude plugin install api-testing@shironigun
 ```
 

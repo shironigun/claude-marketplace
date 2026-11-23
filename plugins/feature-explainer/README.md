@@ -73,7 +73,7 @@ first, a prose budget, dated issues, no secrets anywhere, and no code or interna
 ## Install
 
 ```text
-/plugin install feature-explainer --marketplace shironigun/claude-marketplace
+/plugin install feature-explainer --marketplace shironigun/marketplace
 ```
 
 ## Use
