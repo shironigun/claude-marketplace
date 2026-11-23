@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="340" viewBox="0 0 640 340" role="img" aria-label="api-testing: API cases and Playwright specs, both ways" font-family="'Segoe UI', -apple-system, 'Helvetica Neue', Arial, sans-serif">
+<title>api-testing: API cases and Playwright specs, both ways</title>
+<defs>
+  <linearGradient id="c-api-testing-bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0b1020"/><stop offset="1" stop-color="#151d3b"/></linearGradient>
+  <radialGradient id="c-api-testing-glow" cx="1" cy="0" r="0.9"><stop offset="0" stop-color="#a3e635" stop-opacity=".28"/><stop offset="1" stop-color="#a3e635" stop-opacity="0"/></radialGradient>
+  <pattern id="c-api-testing-dots" width="22" height="22" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1.1" fill="#ffffff" fill-opacity=".06"/></pattern>
+</defs>
+<rect width="640" height="340" rx="24" fill="url(#c-api-testing-bg)"/>
+<rect width="640" height="340" rx="24" fill="url(#c-api-testing-dots)"/>
+<rect width="640" height="340" rx="24" fill="url(#c-api-testing-glow)"/>
+<rect x=".5" y=".5" width="639" height="339" rx="24" fill="none" stroke="#ffffff" stroke-opacity=".08"/>
+<rect x="44" y="40" width="108" height="108" rx="26" fill="#a3e635" fill-opacity=".14" stroke="#a3e635" stroke-opacity=".5"/>
+<g transform="translate(68 64) scale(2.5)" fill="#a3e635"><path d="m14 12-2 2-2-2 2-2zm-2-6 2.12 2.12 2.5-2.5L12 1 7.38 5.62l2.5 2.5zm-6 6 2.12-2.12-2.5-2.5L1 12l4.62 4.62 2.5-2.5zm12 0-2.12 2.12 2.5 2.5L23 12l-4.62-4.62-2.5 2.5zm-6 6-2.12-2.12-2.5 2.5L12 23l4.62-4.62-2.5-2.5z"/></g>
+<rect x="176" y="44" width="76.78" height="27" rx="13.5" fill="#c7d0e6" fill-opacity="0.16" stroke="#c7d0e6" stroke-opacity=".55"/>
+<text x="214.39" y="60" text-anchor="middle" font-size="13" font-weight="600" fill="#c7d0e6">Testing</text><rect x="262.78" y="44" width="174.79999999999998" height="27" rx="13.5" fill="#cbd5e1" fill-opacity="0.16" stroke="#cbd5e1" stroke-opacity=".55"/>
+<text x="350.17999999999995" y="60" text-anchor="middle" font-size="13" font-weight="600" fill="#cbd5e1">House-style template</text>
+<text x="176" y="112" font-size="34" font-weight="700" fill="#ffffff">api-testing</text>
+<text x="176" y="140" font-size="17" font-weight="500" fill="#a3e635">API cases and Playwright specs, both ways</text>
+<text x="44" y="196" font-size="16" fill="#c7d0e6">Contract, endpoint and workflow cases, runnable Playwright +</text>
+<text x="44" y="220" font-size="16" fill="#c7d0e6">TypeScript + zod specs, and bug drafts.</text>
+<rect x="44" y="272" width="84.32" height="27" rx="13.5" fill="#e6ebf7" fill-opacity="0" stroke="#e6ebf7" stroke-opacity=".55"/>
+<text x="86.16" y="288" text-anchor="middle" font-size="13" font-weight="600" fill="#e6ebf7">2 skills</text><rect x="138.32" y="272" width="84.32" height="27" rx="13.5" fill="#e6ebf7" fill-opacity="0" stroke="#e6ebf7" stroke-opacity=".55"/>
+<text x="180.48" y="288" text-anchor="middle" font-size="13" font-weight="600" fill="#e6ebf7">No setup</text>
+<g transform="translate(570 276) scale(1)" fill="#ffffff"><path d="m12 4-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/></g>
+</svg>

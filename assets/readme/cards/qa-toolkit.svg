@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="340" viewBox="0 0 640 340" role="img" aria-label="qa-toolkit: Light QA building blocks" font-family="'Segoe UI', -apple-system, 'Helvetica Neue', Arial, sans-serif">
+<title>qa-toolkit: Light QA building blocks</title>
+<defs>
+  <linearGradient id="c-qa-toolkit-bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0b1020"/><stop offset="1" stop-color="#151d3b"/></linearGradient>
+  <radialGradient id="c-qa-toolkit-glow" cx="1" cy="0" r="0.9"><stop offset="0" stop-color="#38bdf8" stop-opacity=".28"/><stop offset="1" stop-color="#38bdf8" stop-opacity="0"/></radialGradient>
+  <pattern id="c-qa-toolkit-dots" width="22" height="22" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1.1" fill="#ffffff" fill-opacity=".06"/></pattern>
+</defs>
+<rect width="640" height="340" rx="24" fill="url(#c-qa-toolkit-bg)"/>
+<rect width="640" height="340" rx="24" fill="url(#c-qa-toolkit-dots)"/>
+<rect width="640" height="340" rx="24" fill="url(#c-qa-toolkit-glow)"/>
+<rect x=".5" y=".5" width="639" height="339" rx="24" fill="none" stroke="#ffffff" stroke-opacity=".08"/>
+<rect x="44" y="40" width="108" height="108" rx="26" fill="#38bdf8" fill-opacity=".14" stroke="#38bdf8" stroke-opacity=".5"/>
+<g transform="translate(68 64) scale(2.5)" fill="#38bdf8"><path d="m21.67 18.17-5.3-5.3h-.99l-2.54 2.54v.99l5.3 5.3c.39.39 1.02.39 1.41 0l2.12-2.12c.39-.38.39-1.02 0-1.41"/><path d="m17.34 10.19 1.41-1.41 2.12 2.12c1.17-1.17 1.17-3.07 0-4.24l-3.54-3.54-1.41 1.41V1.71l-.7-.71-3.54 3.54.71.71h2.83l-1.41 1.41 1.06 1.06-2.89 2.89-4.13-4.13V5.06L4.83 2.04 2 4.87 5.03 7.9h1.41l4.13 4.13-.85.85H7.6l-5.3 5.3c-.39.39-.39 1.02 0 1.41l2.12 2.12c.39.39 1.02.39 1.41 0l5.3-5.3v-2.12l5.15-5.15z"/></g>
+<rect x="176" y="44" width="76.78" height="27" rx="13.5" fill="#c7d0e6" fill-opacity="0.16" stroke="#c7d0e6" stroke-opacity=".55"/>
+<text x="214.39" y="60" text-anchor="middle" font-size="13" font-weight="600" fill="#c7d0e6">Testing</text><rect x="262.78" y="44" width="137.1" height="27" rx="13.5" fill="#93c5fd" fill-opacity="0.16" stroke="#93c5fd" stroke-opacity=".55"/>
+<text x="331.33" y="60" text-anchor="middle" font-size="13" font-weight="600" fill="#93c5fd">Product-neutral</text>
+<text x="176" y="112" font-size="34" font-weight="700" fill="#ffffff">qa-toolkit</text>
+<text x="176" y="140" font-size="17" font-weight="500" fill="#38bdf8">Light QA building blocks</text>
+<text x="44" y="196" font-size="16" fill="#c7d0e6">Pick one job: API cases, UI cases, a failure turned into a bug,</text>
+<text x="44" y="220" font-size="16" fill="#c7d0e6">or cases pushed to a tracker.</text>
+<rect x="44" y="272" width="84.32" height="27" rx="13.5" fill="#e6ebf7" fill-opacity="0" stroke="#e6ebf7" stroke-opacity=".55"/>
+<text x="86.16" y="288" text-anchor="middle" font-size="13" font-weight="600" fill="#e6ebf7">4 skills</text><rect x="138.32" y="272" width="84.32" height="27" rx="13.5" fill="#e6ebf7" fill-opacity="0" stroke="#e6ebf7" stroke-opacity=".55"/>
+<text x="180.48" y="288" text-anchor="middle" font-size="13" font-weight="600" fill="#e6ebf7">No setup</text>
+<g transform="translate(570 276) scale(1)" fill="#ffffff"><path d="m12 4-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/></g>
+</svg>

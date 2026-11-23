@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="400" viewBox="0 0 1280 400" role="img" aria-label="api-testing: API cases and Playwright specs, both ways" font-family="'Segoe UI', -apple-system, 'Helvetica Neue', Arial, sans-serif">
+<title>api-testing: API cases and Playwright specs, both ways</title>
+<defs>
+  <linearGradient id="b-api-testing-bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0b1020"/><stop offset="1" stop-color="#151d3b"/></linearGradient>
+  <radialGradient id="b-api-testing-glow" cx="1" cy="0" r="0.9"><stop offset="0" stop-color="#a3e635" stop-opacity=".28"/><stop offset="1" stop-color="#a3e635" stop-opacity="0"/></radialGradient>
+  <pattern id="b-api-testing-dots" width="22" height="22" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1.1" fill="#ffffff" fill-opacity=".06"/></pattern>
+</defs>
+<rect width="1280" height="400" rx="28" fill="url(#b-api-testing-bg)"/>
+<rect width="1280" height="400" rx="28" fill="url(#b-api-testing-dots)"/>
+<rect width="1280" height="400" rx="28" fill="url(#b-api-testing-glow)"/>
+<rect x=".5" y=".5" width="1279" height="399" rx="28" fill="none" stroke="#ffffff" stroke-opacity=".08"/>
+<rect x="64" y="64" width="140" height="140" rx="34" fill="#a3e635" fill-opacity=".14" stroke="#a3e635" stroke-opacity=".5"/>
+<g transform="translate(94 94) scale(3.3333333333333335)" fill="#a3e635"><path d="m14 12-2 2-2-2 2-2zm-2-6 2.12 2.12 2.5-2.5L12 1 7.38 5.62l2.5 2.5zm-6 6 2.12-2.12-2.5-2.5L1 12l4.62 4.62 2.5-2.5zm12 0-2.12 2.12 2.5 2.5L23 12l-4.62-4.62-2.5 2.5zm-6 6-2.12-2.12-2.5 2.5L12 23l4.62-4.62-2.5-2.5z"/></g>
+<rect x="232" y="70" width="84.9" height="29" rx="14.5" fill="#c7d0e6" fill-opacity="0.16" stroke="#c7d0e6" stroke-opacity=".55"/>
+<text x="274.45" y="88" text-anchor="middle" font-size="15" font-weight="600" fill="#c7d0e6">Testing</text><rect x="328.9" y="70" width="311.09999999999997" height="29" rx="14.5" fill="#cbd5e1" fill-opacity="0.16" stroke="#cbd5e1" stroke-opacity=".55"/>
+<text x="484.44999999999993" y="88" text-anchor="middle" font-size="15" font-weight="600" fill="#cbd5e1">House-style template you retarget</text>
+<text x="232" y="152" font-size="54" font-weight="700" fill="#ffffff">api-testing</text>
+<text x="232" y="194" font-size="24" font-weight="500" fill="#a3e635">API cases and Playwright specs, both ways</text>
+<text x="64" y="268" font-size="15" font-weight="700" letter-spacing="2" fill="#8b97b8">HOW IT WORKS</text>
+<rect x="64" y="290" width="209.6" height="44" rx="12" fill="#ffffff" fill-opacity=".05" stroke="#ffffff" stroke-opacity=".12"/>
+<circle cx="84" cy="312" r="11" fill="#a3e635"/><text x="84" y="317" text-anchor="middle" font-size="12" font-weight="700" fill="#0b1020">1</text>
+<text x="102" y="317" font-size="16" font-weight="600" fill="#e6ebf7">Contract</text><path d="M279.6 312h14m-6 -5 6 5-6 5" fill="none" stroke="#a3e635" stroke-opacity=".7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<rect x="299.6" y="290" width="209.6" height="44" rx="12" fill="#ffffff" fill-opacity=".05" stroke="#ffffff" stroke-opacity=".12"/>
+<circle cx="319.6" cy="312" r="11" fill="#a3e635"/><text x="319.6" y="317" text-anchor="middle" font-size="12" font-weight="700" fill="#0b1020">2</text>
+<text x="337.6" y="317" font-size="16" font-weight="600" fill="#e6ebf7">Endpoints</text><path d="M515.2 312h14m-6 -5 6 5-6 5" fill="none" stroke="#a3e635" stroke-opacity=".7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<rect x="535.2" y="290" width="209.6" height="44" rx="12" fill="#ffffff" fill-opacity=".05" stroke="#ffffff" stroke-opacity=".12"/>
+<circle cx="555.2" cy="312" r="11" fill="#a3e635"/><text x="555.2" y="317" text-anchor="middle" font-size="12" font-weight="700" fill="#0b1020">3</text>
+<text x="573.2" y="317" font-size="16" font-weight="600" fill="#e6ebf7">Workflows</text><path d="M750.8000000000001 312h14m-6 -5 6 5-6 5" fill="none" stroke="#a3e635" stroke-opacity=".7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<rect x="770.8" y="290" width="209.6" height="44" rx="12" fill="#ffffff" fill-opacity=".05" stroke="#ffffff" stroke-opacity=".12"/>
+<circle cx="790.8" cy="312" r="11" fill="#a3e635"/><text x="790.8" y="317" text-anchor="middle" font-size="12" font-weight="700" fill="#0b1020">4</text>
+<text x="808.8" y="317" font-size="16" font-weight="600" fill="#e6ebf7">Specs</text><path d="M986.4 312h14m-6 -5 6 5-6 5" fill="none" stroke="#a3e635" stroke-opacity=".7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<rect x="1006.4" y="290" width="209.6" height="44" rx="12" fill="#ffffff" fill-opacity=".05" stroke="#ffffff" stroke-opacity=".12"/>
+<circle cx="1026.4" cy="312" r="11" fill="#a3e635"/><text x="1026.4" y="317" text-anchor="middle" font-size="12" font-weight="700" fill="#0b1020">5</text>
+<text x="1044.4" y="317" font-size="16" font-weight="600" fill="#e6ebf7">Bug draft</text>
+<text x="1216" y="372" text-anchor="end" font-size="14" fill="#8b97b8">2 skills  ·  No setup  ·  shironigun/claude-marketplace</text>
+</svg>

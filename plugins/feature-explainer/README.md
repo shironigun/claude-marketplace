@@ -1,5 +1,27 @@
 # feature-explainer
 
+<p align="center">
+  <img src="../../assets/readme/banners/feature-explainer.svg" alt="feature-explainer" width="100%">
+</p>
+
+<p align="center">
+  <a href="../../README.md#the-catalog">← All plugins</a> ·
+  <a href="#install">Install</a> ·
+  <a href="../../README.md#trust--safety">Trust &amp; safety</a>
+</p>
+
+| At a glance | |
+|---|---|
+| **Category** | Documentation |
+| **What it does** | A researched, visual explainer page for the reader you name |
+| **Includes** | 1 skill |
+| **Writes** | A private artifact page you choose to share |
+| **Setup** | Node.js, Python 3 |
+| **Product-neutral** | Yes |
+
+<p align="center"><img src="../../assets/readme/previews/feature-explainer.png" alt="An example explainer page for a made-up feature" width="100%"></p>
+
+
 Name a feature; get a page that explains it.
 
 You give one line of direction ("explain the refund flow", "build a page for the AI reply suggestions").

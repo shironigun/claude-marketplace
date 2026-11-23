@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="400" viewBox="0 0 1280 400" role="img" aria-label="qa-toolkit: Light QA building blocks" font-family="'Segoe UI', -apple-system, 'Helvetica Neue', Arial, sans-serif">
+<title>qa-toolkit: Light QA building blocks</title>
+<defs>
+  <linearGradient id="b-qa-toolkit-bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0b1020"/><stop offset="1" stop-color="#151d3b"/></linearGradient>
+  <radialGradient id="b-qa-toolkit-glow" cx="1" cy="0" r="0.9"><stop offset="0" stop-color="#38bdf8" stop-opacity=".28"/><stop offset="1" stop-color="#38bdf8" stop-opacity="0"/></radialGradient>
+  <pattern id="b-qa-toolkit-dots" width="22" height="22" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1.1" fill="#ffffff" fill-opacity=".06"/></pattern>
+</defs>
+<rect width="1280" height="400" rx="28" fill="url(#b-qa-toolkit-bg)"/>
+<rect width="1280" height="400" rx="28" fill="url(#b-qa-toolkit-dots)"/>
+<rect width="1280" height="400" rx="28" fill="url(#b-qa-toolkit-glow)"/>
+<rect x=".5" y=".5" width="1279" height="399" rx="28" fill="none" stroke="#ffffff" stroke-opacity=".08"/>
+<rect x="64" y="64" width="140" height="140" rx="34" fill="#38bdf8" fill-opacity=".14" stroke="#38bdf8" stroke-opacity=".5"/>
+<g transform="translate(94 94) scale(3.3333333333333335)" fill="#38bdf8"><path d="m21.67 18.17-5.3-5.3h-.99l-2.54 2.54v.99l5.3 5.3c.39.39 1.02.39 1.41 0l2.12-2.12c.39-.38.39-1.02 0-1.41"/><path d="m17.34 10.19 1.41-1.41 2.12 2.12c1.17-1.17 1.17-3.07 0-4.24l-3.54-3.54-1.41 1.41V1.71l-.7-.71-3.54 3.54.71.71h2.83l-1.41 1.41 1.06 1.06-2.89 2.89-4.13-4.13V5.06L4.83 2.04 2 4.87 5.03 7.9h1.41l4.13 4.13-.85.85H7.6l-5.3 5.3c-.39.39-.39 1.02 0 1.41l2.12 2.12c.39.39 1.02.39 1.41 0l5.3-5.3v-2.12l5.15-5.15z"/></g>
+<rect x="232" y="70" width="84.9" height="29" rx="14.5" fill="#c7d0e6" fill-opacity="0.16" stroke="#c7d0e6" stroke-opacity=".55"/>
+<text x="274.45" y="88" text-anchor="middle" font-size="15" font-weight="600" fill="#c7d0e6">Testing</text><rect x="328.9" y="70" width="154.5" height="29" rx="14.5" fill="#93c5fd" fill-opacity="0.16" stroke="#93c5fd" stroke-opacity=".55"/>
+<text x="406.15" y="88" text-anchor="middle" font-size="15" font-weight="600" fill="#93c5fd">Product-neutral</text>
+<text x="232" y="152" font-size="54" font-weight="700" fill="#ffffff">qa-toolkit</text>
+<text x="232" y="194" font-size="24" font-weight="500" fill="#38bdf8">Light QA building blocks</text>
+<text x="64" y="268" font-size="15" font-weight="700" letter-spacing="2" fill="#8b97b8">WHAT IT DOES</text>
+<rect x="64" y="290" width="268.5" height="44" rx="12" fill="#ffffff" fill-opacity=".05" stroke="#ffffff" stroke-opacity=".12"/>
+<circle cx="84" cy="312" r="6" fill="#38bdf8"/>
+<text x="102" y="317" font-size="16" font-weight="600" fill="#e6ebf7">API cases</text>
+<rect x="358.5" y="290" width="268.5" height="44" rx="12" fill="#ffffff" fill-opacity=".05" stroke="#ffffff" stroke-opacity=".12"/>
+<circle cx="378.5" cy="312" r="6" fill="#38bdf8"/>
+<text x="396.5" y="317" font-size="16" font-weight="600" fill="#e6ebf7">UI cases</text>
+<rect x="653" y="290" width="268.5" height="44" rx="12" fill="#ffffff" fill-opacity=".05" stroke="#ffffff" stroke-opacity=".12"/>
+<circle cx="673" cy="312" r="6" fill="#38bdf8"/>
+<text x="691" y="317" font-size="16" font-weight="600" fill="#e6ebf7">Failure to bug</text>
+<rect x="947.5" y="290" width="268.5" height="44" rx="12" fill="#ffffff" fill-opacity=".05" stroke="#ffffff" stroke-opacity=".12"/>
+<circle cx="967.5" cy="312" r="6" fill="#38bdf8"/>
+<text x="985.5" y="317" font-size="16" font-weight="600" fill="#e6ebf7">To tracker</text>
+<text x="1216" y="372" text-anchor="end" font-size="14" fill="#8b97b8">4 skills  ·  No setup  ·  shironigun/claude-marketplace</text>
+</svg>

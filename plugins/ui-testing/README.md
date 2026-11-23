@@ -1,5 +1,25 @@
 # ui-testing
 
+<p align="center">
+  <img src="../../assets/readme/banners/ui-testing.svg" alt="ui-testing" width="100%">
+</p>
+
+<p align="center">
+  <a href="../../README.md#the-catalog">← All plugins</a> ·
+  <a href="#install">Install</a> ·
+  <a href="../../README.md#trust--safety">Trust &amp; safety</a>
+</p>
+
+| At a glance | |
+|---|---|
+| **Category** | Testing |
+| **What it does** | Click-by-click UI cases and runnable Playwright UI specs |
+| **Includes** | 2 skills |
+| **Writes** | Test Case work items (`buggy`, after your OK) |
+| **Setup** | `az login`, for `buggy` only |
+| **Product-neutral** | Template: retarget `references/` |
+
+
 UI test-case authoring and Playwright + TypeScript UI-script generation for **Acme APP**
 (Acme), in the team's QA house style.
 

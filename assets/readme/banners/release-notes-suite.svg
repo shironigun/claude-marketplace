@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="400" viewBox="0 0 1280 400" role="img" aria-label="release-notes-suite: From what shipped to what customers read" font-family="'Segoe UI', -apple-system, 'Helvetica Neue', Arial, sans-serif">
+<title>release-notes-suite: From what shipped to what customers read</title>
+<defs>
+  <linearGradient id="b-release-notes-suite-bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0b1020"/><stop offset="1" stop-color="#151d3b"/></linearGradient>
+  <radialGradient id="b-release-notes-suite-glow" cx="1" cy="0" r="0.9"><stop offset="0" stop-color="#fbbf24" stop-opacity=".28"/><stop offset="1" stop-color="#fbbf24" stop-opacity="0"/></radialGradient>
+  <pattern id="b-release-notes-suite-dots" width="22" height="22" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1.1" fill="#ffffff" fill-opacity=".06"/></pattern>
+</defs>
+<rect width="1280" height="400" rx="28" fill="url(#b-release-notes-suite-bg)"/>
+<rect width="1280" height="400" rx="28" fill="url(#b-release-notes-suite-dots)"/>
+<rect width="1280" height="400" rx="28" fill="url(#b-release-notes-suite-glow)"/>
+<rect x=".5" y=".5" width="1279" height="399" rx="28" fill="none" stroke="#ffffff" stroke-opacity=".08"/>
+<rect x="64" y="64" width="140" height="140" rx="34" fill="#fbbf24" fill-opacity=".14" stroke="#fbbf24" stroke-opacity=".5"/>
+<g transform="translate(94 94) scale(3.3333333333333335)" fill="#fbbf24"><path d="m23 12-2.44-2.78.34-3.68-3.61-.82-1.89-3.18L12 3 8.6 1.54 6.71 4.72l-3.61.81.34 3.68L1 12l2.44 2.78-.34 3.69 3.61.82 1.89 3.18L12 21l3.4 1.46 1.89-3.18 3.61-.82-.34-3.68zm-10 5h-2v-2h2zm0-4h-2V7h2z"/></g>
+<rect x="232" y="70" width="180.6" height="29" rx="14.5" fill="#c7d0e6" fill-opacity="0.16" stroke="#c7d0e6" stroke-opacity=".55"/>
+<text x="322.3" y="88" text-anchor="middle" font-size="15" font-weight="600" fill="#c7d0e6">Release management</text><rect x="424.6" y="70" width="311.09999999999997" height="29" rx="14.5" fill="#cbd5e1" fill-opacity="0.16" stroke="#cbd5e1" stroke-opacity=".55"/>
+<text x="580.15" y="88" text-anchor="middle" font-size="15" font-weight="600" fill="#cbd5e1">House-style template you retarget</text>
+<text x="232" y="152" font-size="54" font-weight="700" fill="#ffffff">release-notes-suite</text>
+<text x="232" y="194" font-size="24" font-weight="500" fill="#fbbf24">From what shipped to what customers read</text>
+<text x="64" y="268" font-size="15" font-weight="700" letter-spacing="2" fill="#8b97b8">HOW IT WORKS</text>
+<rect x="64" y="290" width="268.5" height="44" rx="12" fill="#ffffff" fill-opacity=".05" stroke="#ffffff" stroke-opacity=".12"/>
+<circle cx="84" cy="312" r="11" fill="#fbbf24"/><text x="84" y="317" text-anchor="middle" font-size="12" font-weight="700" fill="#0b1020">1</text>
+<text x="102" y="317" font-size="16" font-weight="600" fill="#e6ebf7">Harvest</text><path d="M338.5 312h14m-6 -5 6 5-6 5" fill="none" stroke="#fbbf24" stroke-opacity=".7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<rect x="358.5" y="290" width="268.5" height="44" rx="12" fill="#ffffff" fill-opacity=".05" stroke="#ffffff" stroke-opacity=".12"/>
+<circle cx="378.5" cy="312" r="11" fill="#fbbf24"/><text x="378.5" y="317" text-anchor="middle" font-size="12" font-weight="700" fill="#0b1020">2</text>
+<text x="396.5" y="317" font-size="16" font-weight="600" fill="#e6ebf7">Inventory</text><path d="M633 312h14m-6 -5 6 5-6 5" fill="none" stroke="#fbbf24" stroke-opacity=".7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<rect x="653" y="290" width="268.5" height="44" rx="12" fill="#ffffff" fill-opacity=".05" stroke="#ffffff" stroke-opacity=".12"/>
+<circle cx="673" cy="312" r="11" fill="#fbbf24"/><text x="673" y="317" text-anchor="middle" font-size="12" font-weight="700" fill="#0b1020">3</text>
+<text x="691" y="317" font-size="16" font-weight="600" fill="#e6ebf7">Suppress</text><path d="M927.5 312h14m-6 -5 6 5-6 5" fill="none" stroke="#fbbf24" stroke-opacity=".7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<rect x="947.5" y="290" width="268.5" height="44" rx="12" fill="#ffffff" fill-opacity=".05" stroke="#ffffff" stroke-opacity=".12"/>
+<circle cx="967.5" cy="312" r="11" fill="#fbbf24"/><text x="967.5" y="317" text-anchor="middle" font-size="12" font-weight="700" fill="#0b1020">4</text>
+<text x="985.5" y="317" font-size="16" font-weight="600" fill="#e6ebf7">Release note</text>
+<text x="1216" y="372" text-anchor="end" font-size="14" fill="#8b97b8">2 skills  ·  Brand variants  ·  shironigun/claude-marketplace</text>
+</svg>
