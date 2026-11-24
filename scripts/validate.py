@@ -14,8 +14,11 @@ import json, os, re, subprocess, sys
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 os.chdir(ROOT)
 
+# shironigun everywhere; named collaborators (see CLAUDE.md rule 3) by GitHub noreply email only.
 ALLOWED_AUTHOR_NAMES = {"shironigun"}
-ALLOWED_AUTHOR_EMAIL = re.compile(r"^\d+\+shironigun@users\.noreply\.github\.com$|^shironigun@users\.noreply\.github\.com$", re.I)
+COLLABORATORS = {"ayesha imtiaz": "252852590+aishaimt002@users.noreply.github.com",
+                 "aishaimt002": "252852590+aishaimt002@users.noreply.github.com"}
+ALLOWED_AUTHOR_EMAIL = re.compile(r"^(102178470\+)?shironigun@users\.noreply\.github\.com$|^252852590\+aishaimt002@users\.noreply\.github\.com$", re.I)
 
 SKIP_DIRS = {".git", "node_modules", "dist", "build", "test-results", "reports"}
 TEXT_EXT = {".md", ".json", ".yml", ".yaml", ".ts", ".tsx", ".js", ".mjs", ".cjs", ".py", ".css",
@@ -24,7 +27,7 @@ SKIP_FILES = {"package-lock.json", "THIRD_PARTY_NOTICES.txt", "cli.mjs"}
 
 # Generic leak patterns that are safe to publish (they name no one).
 GENERIC_LEAKS = [
-    (r"[A-Za-z0-9._%+-]+@(?![A-Za-z0-9.-]*example\.(com|org|net|test)\b)(?!users\.noreply\.github\.com\b)[A-Za-z0-9-]+(\.[A-Za-z0-9-]+)*\.(?!md\b|ts\b|js\b|json\b|test\b|invalid\b|localhost\b)[a-z]{2,}\b",
+    (r"(?<![A-Za-z0-9._%+-])(?!(shironigun|ayeshadis222)@gmail\.com\b)[A-Za-z0-9._%+-]+@(?![A-Za-z0-9.-]*example\.(com|org|net|test)\b)(?!users\.noreply\.github\.com\b)[A-Za-z0-9-]+(\.[A-Za-z0-9-]+)*\.(?!md\b|ts\b|js\b|json\b|test\b|invalid\b|localhost\b)[a-z]{2,}\b",
      "email address that is not a reserved example/test placeholder"),
     (r"dev\.azure\.com/(?!your-org\b|\$\{|<|\{)[A-Za-z0-9_-]+", "hardcoded Azure DevOps org URL"),
     (r"\b(?!0{8}-0{4}-0{4}-0{4}-0{12})[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\b",
@@ -133,8 +136,11 @@ def check_json(path):
         a = d.get("author", {})
         if not isinstance(a, dict) or a.get("name", "").lower() not in ALLOWED_AUTHOR_NAMES:
             err(path, "author.name must be shironigun")
-        if "email" in a: err(path, "author.email must not be published")
+        if a.get("email") not in (None, "shironigun@gmail.com", "ayeshadis222@gmail.com"):
+            err(path, "author.email may only be the maintainer's public contact")
     if path.endswith(".claude-plugin/marketplace.json"):
+        if d.get("owner", {}).get("email") not in (None, "shironigun@gmail.com"):
+            err(path, "owner.email may only be the maintainer's public contact")
         names = set()
         for p in d.get("plugins", []):
             if p["name"] in names: err(path, f"duplicate plugin {p['name']}")
@@ -145,7 +151,7 @@ def check_json(path):
         if extra: err(path, f"only 'mcpServers' allowed at top level, found {sorted(extra)}")
         for n, srv in d.get("mcpServers", {}).items():
             if srv.get("command") == "cmd": err(path, f"server '{n}' uses a Windows-only 'cmd' launcher; use npx")
-            args = " ".join(srv.get("args", []))
+            args = " ".join(a for a in srv.get("args", []) if not re.match(r"https?://", a))  # remote URLs are not packages
             for pkg in re.findall(r"(@?[a-z0-9][\w.-]*/?[\w.-]*@[\w.^~-]+|@?[a-z0-9][\w.-]*/[\w.-]+)(?=\s|$)", args):
                 if "@" not in pkg.lstrip("@"): warn(path, f"server '{n}' package '{pkg}' is not version-pinned")
             for k, v in (srv.get("env") or {}).items():
@@ -181,9 +187,10 @@ def check_identity(staged):
         if not line: continue
         h, an, ae, cn, ce, msg = line.split("|", 5)
         for who, mail in ((an, ae), (cn, ce)):
-            if who.lower() not in ALLOWED_AUTHOR_NAMES and who != "GitHub":
+            if who.lower() not in ALLOWED_AUTHOR_NAMES | set(COLLABORATORS) and who != "GitHub":
                 err(f"commit {h}", f"author/committer '{who} <{mail}>' is not shironigun")
-            elif who != "GitHub" and not ALLOWED_AUTHOR_EMAIL.match(mail):
+            elif who != "GitHub" and (not ALLOWED_AUTHOR_EMAIL.match(mail) or
+                                      (who.lower() in COLLABORATORS and mail.lower() != COLLABORATORS[who.lower()])):
                 err(f"commit {h}", f"email '{mail}' is not the shironigun noreply address")
         if re.search(r"(?im)^(co-authored-by|signed-off-by):", msg):
             err(f"commit {h}", "message has a Co-authored-by/Signed-off-by trailer")
