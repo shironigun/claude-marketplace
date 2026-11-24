@@ -1,0 +1,13 @@
+[
+  {
+    "uuid": "conv-2001",
+    "name": "Triage assistant spec",
+    "created_at": "2025-06-02T09:00:00.000Z",
+    "chat_messages": [
+      { "uuid": "m1", "sender": "human", "created_at": "2025-06-02T09:00:00.000Z", "text": "", "content": [{ "type": "text", "text": "Help me spec an AI triage assistant for the 4 most common ticket types." }] },
+      { "uuid": "m2", "sender": "assistant", "created_at": "2025-06-02T09:01:00.000Z", "text": "Start with the triage rules, then the reply templates.", "content": [] },
+      { "uuid": "m3", "sender": "assistant", "created_at": "2025-06-02T09:02:00.000Z", "text": "", "content": [{ "type": "tool_use", "name": "search" }] }
+    ]
+  },
+  { "something": "not a conversation" }
+]

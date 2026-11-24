@@ -1,0 +1,21 @@
+{
+  "name": "on-record",
+  "version": "0.1.0",
+  "description": "Revamps anyone's LinkedIn profile into a branded, enterprise, professional one, built only from facts they can back. It gathers evidence from the current profile (LinkedIn data export, Save to PDF or pasted sections), certificates and documents, and AI chats (ChatGPT and Claude data exports, plus a copy-paste extraction prompt for any chat), keeps a fact ledger where every claim has a source and a CONFIRMED, UNCONFIRMED or PLANNED status, interviews the user for what is missing, and drafts the headline, About, Experience, Featured, Projects, Certifications, Skills and a banner brief in a house style. A bundled check traces every number in the draft to a confirmed fact and enforces LinkedIn's limits, counting Unicode bold as LinkedIn does. Two approval gates: facts before drafting, each section before it is final. It never logs in to or automates LinkedIn; the user pastes. Offline scripts, no dependencies, no personal data shipped.",
+  "author": {
+    "name": "shironigun"
+  },
+  "license": "MIT",
+  "keywords": [
+    "linkedin",
+    "profile",
+    "personal-brand",
+    "career",
+    "resume",
+    "about-section",
+    "headline",
+    "chatgpt-export",
+    "claude-export",
+    "fact-checking"
+  ]
+}
