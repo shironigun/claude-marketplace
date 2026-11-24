@@ -27,8 +27,21 @@ test('kit camera: a shot frames its target with room, zooms a small one close, a
   const button = SP.shotFor({ x: 600, y: 400, w: 120, h: 40 }, FLOATING);
   assert.equal(button.z, 2.4);
   assert.deepEqual([button.cx, button.cy], [240 + 660, 90 + 420]);
+  // A box in the window's corner: the frame may show the safe margin and the card's padding past the window's edge.
   const corner = SP.shotFor({ x: 4, y: 4, w: 100, h: 30 }, FLOATING);
-  assert.deepEqual([corner.cx, corner.cy], [240 + 1920 / 2 / 2.4, 90 + 1080 / 2 / 2.4]);
+  assert.deepEqual([corner.cx, corner.cy].map((v) => Math.round(v * 1000) / 1000), [618.333, 293.333]);
+  // Whatever the box and the look, its shot keeps it and its lifted card's 12 px inside the safe area (film rule 8): a
+  // table nearly the window's width, a button in its corner, a header the full width of a full-bleed window.
+  const boxes = [{ x: 600, y: 400, w: 120, h: 40 }, { x: 4, y: 4, w: 100, h: 30 }, { x: 24, y: 120, w: 1232, h: 126 }, { x: 1300, y: 0, w: 140, h: 900 }, { x: 1330, y: 860, w: 106, h: 36 }, { x: 0, y: 0, w: 1440, h: 60 }, { x: 0, y: 150, w: 1440, h: 140 }];
+  for (const look of [FLOATING, { x: 0, y: 0, s: 4 / 3 }]) {
+    for (const b of boxes) {
+      const shot = SP.shotFor(b, look);
+      const a = SP.project(shot, look.x + b.x * look.s, look.y + b.y * look.s);
+      const k = look.s * shot.z;
+      const inSafe = a.x - 12 >= 39.5 && a.y - 12 >= 39.5 && a.x + b.w * k + 12 <= 1880.5 && a.y + b.h * k + 12 <= 1040.5;
+      assert.ok(inSafe, JSON.stringify({ look, b, shot: plain(shot), a: plain(a) }));
+    }
+  }
   // A narrow box on the right edge (a drawer) sits right of centre, leaving the left free for its caption.
   const drawer = SP.shotFor({ x: 1300, y: 200, w: 140, h: 300 }, FLOATING);
   assert.ok(drawer.cx < 240 + 1370, 'the frame moves left of the drawer');

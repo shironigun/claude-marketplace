@@ -82,4 +82,84 @@ function playedProblems(film, played) {
   return problems;
 }
 
-module.exports = { FRAME, framePlan, playedProblems };
+// The safe area (film rule 8): 40 px in from each edge of the 1920 by 1080 frame.
+const SAFE = { x: 40, y: 40, w: 1840, h: 1000 };
+const FULL = { x: 0, y: 0, w: 1920, h: 1080 };
+const inside = (b, a) => b.x >= a.x - 0.5 && b.y >= a.y - 0.5 && b.x + b.w <= a.x + a.w + 0.5 && b.y + b.h <= a.y + a.h + 0.5;
+const visible = (e) => e.shown && e.w > 0 && e.h > 0;
+
+// A colour's alpha as getComputedStyle gives it: 0 for transparent; the value after a slash in any colour function
+// (`oklch(0.7 0.1 200 / 0.4)`, `color(srgb 1 1 1 / 50%)`); the fourth value of `rgba()` or `hsla()` written with commas;
+// a mix with transparent (`color-mix()`) as half; and 1 otherwise. measureFrame runs it in the page.
+function alphaOf(color) {
+  const c = String(color).trim().toLowerCase();
+  if (c === 'transparent') return 0;
+  if (c.startsWith('color-mix(')) return c.includes('transparent') ? 0.5 : 1;
+  const value = (v) => (v.endsWith('%') ? Number(v.slice(0, -1)) / 100 : Number(v));
+  const slash = /\/\s*([\d.]+%?)\s*\)$/.exec(c);
+  if (slash) return value(slash[1]);
+  const legacy = /^(?:rgba|hsla)\(([^)]*)\)$/.exec(c);
+  const parts = legacy ? legacy[1].split(',').map((s) => s.trim()) : [];
+  return parts.length === 4 ? value(parts[3]) : 1;
+}
+
+// What the film's frames measure against the film rules (spec 5.13, 8): each sample is a moment of the plan with `m`,
+// what measureFrame gave there. `overlay` is the brand's brand.json. Each problem is said once, at its first moment.
+// - layout: a beat's target is shown when the beat acts, has a size, and lies in the app's window and the frame; a
+//   chip, caption, lifted card, step badge or a card's words stay in the safe area;
+// - stillness: the camera is where it was at both ends of a hold;
+// - exit before move: no callout shows while the camera moves, in the frame before it moves, or before a cut;
+// - bleed-through: something opaque covers each drawer, dialog or toast that shows;
+// - brand: each logo place shows the brand's own logo for it, at the brand's height.
+function measuredProblems(samples, overlay) {
+  const problems = [];
+  const said = new Set();
+  const say = (key, text) => {
+    if (!said.has(key)) problems.push(text);
+    said.add(key);
+  };
+  for (const s of samples) {
+    const { m } = s;
+    const at = `${s.scene} at ${s.t} s`;
+    // A frame that cannot be measured passes no check.
+    if (!m) {
+      say('frame', `${at}: the film's frame could not be measured, so none of its checks ran`);
+      continue;
+    }
+    if (s.kind === 'beat') {
+      const target = m.hooks.find((h) => h.hook === s.hook);
+      if (!target || !target.shown) say(`shown ${s.hook}`, `${s.hook} at ${s.t} s: its target is not shown when the beat acts`);
+      else if (target.w < 1 || target.h < 1) say(`size ${s.hook}`, `${s.hook} at ${s.t} s: its target measures ${target.w} by ${target.h} px`);
+      else if (!inside(target, m.window || FULL) || !inside(target, FULL)) say(`out ${s.hook}`, `${s.hook} at ${s.t} s: its target lies outside the app's window or the frame`);
+    }
+    if (['beat', 'caption', 'hold', 'card'].includes(s.kind)) {
+      for (const c of [...m.callouts, ...m.cards].filter((e) => visible(e) && !['leader', 'focus'].includes(e.kind) && !inside(e, SAFE))) {
+        say(`safe ${s.scene} ${c.kind}`, `${at}: a ${c.kind} reaches outside the safe area, 40 px in from each edge of the frame`);
+      }
+    }
+    if (['move', 'before-move', 'before-cut'].includes(s.kind)) {
+      const left = m.callouts.filter(visible);
+      if (left.length) say(`exit ${s.t}`, `${at}: a ${left[0].kind} still shows ${s.kind === 'before-cut' ? 'in the last frame before the cut' : 'while the camera moves'}`);
+    }
+    for (const l of m.layers.filter((x) => visible(x) && !x.opaque)) {
+      say(`bleed ${s.scene} ${l.kind}`, `${at}: the page shows through the ${l.kind}, which nothing opaque covers`);
+    }
+    for (const g of m.logos.filter(visible)) {
+      const place = overlay.places[g.place];
+      if (!place || g.src !== overlay.logos[place.logo]) {
+        say(`logo ${g.place}`, `${at}: the ${g.place} shows a logo that is not ${overlay.name}'s logo for it`);
+      } else if (Math.abs(g.h - place.height * m.scale) > 1) {
+        say(`height ${g.place}`, `${at}: the ${g.place} logo is ${ms(g.h / m.scale)} px high; ${overlay.name}'s is ${place.height} px`);
+      }
+    }
+  }
+  // Stillness: each beat's hold is measured at both ends.
+  const holds = new Map();
+  for (const s of samples.filter((x) => x.kind === 'hold' && x.m && x.m.camera)) holds.set(s.hook, [...(holds.get(s.hook) || []), s]);
+  for (const [hook, [a, b]] of holds) {
+    if (b && a.m.camera.some((v, i) => Math.abs(v - b.m.camera[i]) > 0.05)) problems.push(`${hook}: the camera moves between ${a.t} s and ${b.t} s, in a hold`);
+  }
+  return problems;
+}
+
+module.exports = { FRAME, SAFE, framePlan, playedProblems, alphaOf, measuredProblems };

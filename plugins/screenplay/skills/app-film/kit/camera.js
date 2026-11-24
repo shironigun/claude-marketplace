@@ -1,32 +1,54 @@
 // The camera (spec 7.2): holds are perfectly still, and it moves only between shots, gliding or cutting as the mods
 // say. A shot is a point of the stage at the frame's centre and a zoom: { cx, cy, z }.
 (function (SP) {
-  // The space a shot keeps round its target, in window pixels; the zooms a shot keeps to, never out past the whole
-  // window and a small target close up (film rule 7); the zoom under which a shot is the whole window; and the share of
-  // the frame a drawer's shot leaves free for its caption.
-  SP.CAM = { pad: 48, zMin: 1, zMax: 2.4, snap: 1.1, room: 0.22 };
+  // The space a shot keeps round its target, in window pixels; the zooms a close-up keeps to, a small target close up
+  // (film rule 7); the zoom under which a shot is the whole window; the share of the frame a drawer's shot leaves free
+  // for its caption; and the smallest the whole window gets, so a box at its edge on the full-bleed look sits in the
+  // safe area.
+  SP.CAM = { pad: 48, zMin: 1, zMax: 2.4, snap: 1.1, room: 0.22, floor: 0.75 };
 
   // The whole window, as the look sets it on the stage: where every scene starts unless it carries a shot over.
   SP.wide = () => ({ cx: SP.STAGE.w / 2, cy: SP.STAGE.h / 2, z: 1 });
 
   // The shot that frames a box of the window (spec 7.2): the box with room round it fills the safe area, zoomed between
-  // zMin and zMax, and the frame stays inside the window. A box on the window's right or left edge (a drawer, a
-  // panel) sits to that side, leaving the other side free for captions.
+  // zMin and zMax, and the frame stays inside the window but for the safe margin and a lifted card's padding, so a box at
+  // the window's edge still sits in the safe area. A box on the window's right or left edge (a drawer, a panel) sits to
+  // that side, leaving the other side free for captions. Where the window's edge keeps the frame from centring the box,
+  // the shot zooms out a step at a time until the box and its card's padding are in the safe area (film rule 8); under
+  // `snap` it is the whole window. A box the whole window cannot show in the safe area (on the full-bleed look, one at
+  // the window's edge) gets the window a step smaller, down to `floor`.
   SP.shotFor = function (box, look) {
     if (!box) return SP.wide();
     const s = look.s;
     const safe = { w: SP.STAGE.w - 2 * SP.SAFE, h: SP.STAGE.h - 2 * SP.SAFE };
     const fit = Math.min(safe.w / ((box.w + 2 * SP.CAM.pad) * s), safe.h / ((box.h + 2 * SP.CAM.pad) * s));
-    const z = SP.clamp(fit, SP.CAM.zMin, SP.CAM.zMax);
-    if (z < SP.CAM.snap) return SP.wide();
-    const half = { w: SP.STAGE.w / 2 / z, h: SP.STAGE.h / 2 / z };
     const win = { l: look.x, t: look.y, r: look.x + SP.WINDOW.w * s, b: look.y + SP.WINDOW.h * s };
-    let cx = look.x + (box.x + box.w / 2) * s;
-    const cy = look.y + (box.y + box.h / 2) * s;
-    if (box.x + box.w >= SP.WINDOW.w - 4 && box.x > 4) cx -= SP.STAGE.w * SP.CAM.room / z;
-    else if (box.x <= 4 && box.x + box.w < SP.WINDOW.w - 4) cx += SP.STAGE.w * SP.CAM.room / z;
+    const edge = SP.SAFE + SP.LIFT.pad;
     const keep = (c, lo, hi) => (lo > hi ? (lo + hi) / 2 : SP.clamp(c, lo, hi));
-    return { cx: keep(cx, win.l + half.w, win.r - half.w), cy: keep(cy, win.t + half.h, win.b - half.h), z };
+    const place = (z) => {
+      const half = { w: SP.STAGE.w / 2 / z, h: SP.STAGE.h / 2 / z };
+      let cx = look.x + (box.x + box.w / 2) * s;
+      const cy = look.y + (box.y + box.h / 2) * s;
+      if (box.x + box.w >= SP.WINDOW.w - 4 && box.x > 4) cx -= SP.STAGE.w * SP.CAM.room / z;
+      else if (box.x <= 4 && box.x + box.w < SP.WINDOW.w - 4) cx += SP.STAGE.w * SP.CAM.room / z;
+      return { cx: keep(cx, win.l + half.w - edge / z, win.r - half.w + edge / z), cy: keep(cy, win.t + half.h - edge / z, win.b - half.h + edge / z), z };
+    };
+    const fits = (shot) => {
+      const a = SP.project(shot, look.x + box.x * s, look.y + box.y * s);
+      const p = SP.LIFT.pad;
+      return a.x - p >= SP.SAFE - 0.5 && a.y - p >= SP.SAFE - 0.5
+        && a.x + box.w * s * shot.z + p <= SP.STAGE.w - SP.SAFE + 0.5 && a.y + box.h * s * shot.z + p <= SP.STAGE.h - SP.SAFE + 0.5;
+    };
+    for (let z = SP.clamp(fit, SP.CAM.zMin, SP.CAM.zMax); z >= SP.CAM.snap; z *= 0.97) {
+      const shot = place(z);
+      if (fits(shot)) return shot;
+    }
+    if (fits(SP.wide())) return SP.wide();
+    for (let z = 0.97; z >= SP.CAM.floor; z *= 0.97) {
+      const shot = place(z);
+      if (fits(shot)) return shot;
+    }
+    return SP.wide();
   };
 
   // The camera's moves through a scene: one for each beat that moves, from the shot before to the beat's shot, over

@@ -3,6 +3,7 @@ const path = require('path');
 const { pathToFileURL } = require('url');
 const { checkError } = require('./errors');
 const { PLAYER_FILES } = require('./tools');
+const { alphaOf } = require('./verify');
 
 // The Motion player's own offline entry (index.html#tools, window.__animation), opened in the user's Chromium with no
 // network (spec 12, 13): the page loads only the player's three files, and the film's documents reach it through
@@ -118,6 +119,63 @@ async function sheet(session, tiles, columns = 4, width = 480) {
   }, [srcs, columns, width]));
 }
 
+// What verify's checks read in the film's own frame (the player's srcdoc), at the time the player was sought to, in
+// stage pixels: the camera, the app's window, every hook's element, the callouts and a card's parts, each layer with
+// whether something opaque covers it, and each logo in a place. Runs in the page, given `alphaOf` (lib/verify.js), which
+// the page has not otherwise. `scale` is the window's own size on the stage, the look's scale times the camera's zoom.
+function measureFrame(alphaOf) {
+  const r1 = (n) => Math.round(n * 10) / 10;
+  const box = (e) => {
+    const r = e.getBoundingClientRect();
+    return { x: r1(r.x), y: r1(r.y), w: r1(r.width), h: r1(r.height) };
+  };
+  const shown = (e) => {
+    for (let n = e; n && n.nodeType === 1; n = n.parentElement) {
+      const cs = getComputedStyle(n);
+      if (cs.display === 'none' || cs.visibility === 'hidden' || Number(cs.opacity) === 0) return false;
+    }
+    return true;
+  };
+  const opaque = (e) => {
+    const cs = getComputedStyle(e);
+    return alphaOf(cs.backgroundColor) >= 1 || cs.backgroundImage !== 'none';
+  };
+  const all = (sel, kind) => [...document.querySelectorAll(sel)].map((e) => ({ kind, ...box(e), shown: shown(e) }));
+  const world = document.querySelector('.sp-world');
+  const win = document.querySelector('.sp-window');
+  const body = document.querySelector('.sp-window > .sp-body');
+  // The focus-pop's blur and dim on the window's body are a callout too: they leave with the caption.
+  const focus = body && getComputedStyle(body).filter !== 'none' ? [{ kind: 'focus', ...box(win), shown: true }] : [];
+  return {
+    camera: world ? ((d) => [d.a, d.b, d.c, d.d, d.e, d.f].map(r1))(new DOMMatrix(getComputedStyle(world).transform)) : null,
+    scale: win ? win.getBoundingClientRect().width / 1440 : 1,
+    window: win ? box(win) : null,
+    hooks: [...document.querySelectorAll('[data-sp]')].flatMap((e) => e.getAttribute('data-sp').split(/\s+/).filter(Boolean)
+      .map((hook) => ({ hook, ...box(e), shown: shown(e) }))),
+    callouts: [...all('.sp-chip', 'chip'), ...all('.sp-subtitle', 'caption'), ...all('.sp-lift', 'lifted card'), ...all('.sp-step', 'step badge'), ...all('.sp-leader', 'leader'), ...focus],
+    cards: all('.sp-card > *', 'card'),
+    layers: [...document.querySelectorAll('.sp-surface:not([data-kind="page"])')].map((s) => {
+      const root = [...s.children].find((c) => !c.classList.contains('sp-backdrop'));
+      if (!root) return null;
+      const b = box(root);
+      // Something opaque covers nearly all of the layer: its own background, or one of its parts'.
+      const covered = [root, ...root.querySelectorAll('*')].some((e) => opaque(e) && box(e).w * box(e).h >= 0.9 * b.w * b.h);
+      return { kind: s.getAttribute('data-kind'), ...b, shown: shown(root), opaque: covered };
+    }).filter(Boolean),
+    logos: [...document.querySelectorAll('[data-sp-logo] img.sp-logo')].map((e) => ({
+      place: e.closest('[data-sp-logo]').getAttribute('data-sp-logo'), src: e.getAttribute('src'), ...box(e), shown: shown(e),
+    })),
+  };
+}
+
+// The film at t, measured in its own frame: the player is sought to t first. Null when the frame is not there, which
+// the checks report.
+async function measure(session, t) {
+  await session.page.evaluate((time) => window.__animation.seek(time), t);
+  const frame = session.page.frames().find((f) => f.url() === 'about:srcdoc');
+  return frame ? frame.evaluate(`(${measureFrame})(${alphaOf})`) : null;
+}
+
 // A part of a still, at full scale: `box` is { x, y, w, h } on the 1920 by 1080 stage.
 async function crop(session, pngBytes, box) {
   return png(await session.page.evaluate(async function cropStill([src, b]) {
@@ -135,4 +193,4 @@ async function crop(session, pngBytes, box) {
   }, [`data:image/png;base64,${pngBytes.toString('base64')}`, box]));
 }
 
-module.exports = { ARGS, STAGE, playerFiles, openPlayer, loadFilm, still, played, sheet, crop };
+module.exports = { ARGS, STAGE, playerFiles, openPlayer, loadFilm, still, played, measureFrame, measure, sheet, crop };
