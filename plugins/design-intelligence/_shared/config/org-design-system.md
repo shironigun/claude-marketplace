@@ -35,6 +35,42 @@ Figma component library (file key + page name), the Figma `Icons` component (fil
 + node id), and the MUI theme file in the codebase. Skills read it to cite sources;
 they never guess a source that is not listed.
 
+## Discovery (first run, read-only)
+
+Find the org's design system without being told where it is. Read only; never edit a
+source. Record every source found in `sources.md`.
+
+**In the codebase (current project, and its repos if a tracker is connected)**
+- **Theme:** search for `createTheme(`, `ThemeProvider`, `extendTheme(`, `palette:`,
+  `typography:`, `shape:`, `spacing:` and theme/token files (`theme.ts`, `tokens.*`,
+  `*.tokens.json`, `tailwind.config.*`, CSS custom properties in global styles).
+  These give colors, type scale, spacing and radius → `generation/colors.md`,
+  `generation/typography.md`, `config/token-resolution.md`.
+- **Design docs:** search for `design.md`, `*-design.md`, `DESIGN*.md`, a `design-system/`
+  or `docs/design/` folder, Storybook stories (`*.stories.*`) and a component library
+  folder. These give rules, states, do's and don'ts → `config/required-states.md`,
+  `generation/component-guidelines.md`, `generation/alerts.md`.
+- **Icons:** collect the icon imports actually used (`@mui/icons-material/*`, an icon
+  map or registry file) → `knowledge/icons.md` / `icons.json`.
+- **Figma links:** collect `figma.com/design/` and `figma.com/file/` links from the
+  code, docs, READMEs and connected work items; they point to the component library
+  and the `Icons` component.
+
+**In Figma (when the Figma connector is available)**
+- From the links found (or the file the user's current request names), read the
+  component library and the `Icons` component: component names, variants/states and
+  the icon list with their names → `knowledge/icons.*`, `config/required-states.md`.
+- Read variables/styles for tokens when the file publishes them; codebase theme
+  values win over Figma when both exist and disagree, and the disagreement is
+  recorded as `[CONFLICT]` for the user to settle.
+
+**Only when a source is still missing**, ask for that one source (for example, "I found
+your theme and icons but no design rules doc: is there one?"). Never ask for what
+discovery already found.
+
+Re-run discovery for a single file when the user says the design system changed, or
+when a skill finds the overlay file it needs is missing.
+
 ## Resolution rule
 
 Wherever a skill, the agent, or another config file names one of the overridable
@@ -51,18 +87,16 @@ below), and every such use is logged as an `assumption`.
 
 1. Look for `.claude/design-intelligence/` in the project root (read-only).
 2. **Overlay present:** use the overlay copy of every file it contains. If a file the
-   current skill needs is missing from the overlay, name it to the user and ask for
-   its source (or permission to use the bundled example for that file only, per
-   step 4) before continuing.
-3. **Overlay missing (first run):** tell the user the bundled design system is an
-   illustrative example, and ask where their org's design system lives (`design.md`
-   files, a knowledge base, the Figma library and `Icons` component, the theme
-   file). Then offer to create the overlay: copy the bundled templates, fill them
-   from the sources the user named (read-only reading of those sources; unresolved
-   values stay `[TODO / source required]`, contradictions stay `[CONFLICT]`), show
-   the draft, and write it **only after the user approves**. In the same approval,
-   propose adding `.claude/design-intelligence/` to the project's `.gitignore` if it
-   is not already ignored.
+   current skill needs is missing from the overlay, run Discovery for that file only;
+   ask the user only if Discovery finds no source (or for permission to use the bundled
+   example for that file, per step 4).
+3. **Overlay missing (first run): build it automatically.** Do not ask the user where
+   things are before looking. Run **Discovery** (below, read-only), draft every overlay
+   file from what it finds, then show one summary: each value's source, plus the short
+   list of gaps it could not fill. Ask only about those gaps. Write the overlay **only
+   after the user approves**, and in the same approval add `.claude/design-intelligence/`
+   to the project's `.gitignore` if it is not already ignored. Unresolved values stay
+   `[TODO / source required]`; contradictions between sources stay `[CONFLICT]`.
 4. **Demo / trial run:** if the user explicitly chooses to run on the bundled example
    instead, proceed and record the assumption
    `"design system: bundled illustrative example, not the org's"` in the output.
@@ -71,7 +105,8 @@ below), and every such use is logged as an `assumption`.
 
 On a set-up project (overlay filled with the org's real files) this step is a single
 read, and every skill produces exactly what it would produce reading those files
-directly.
+directly. On a new project the overlay is built once by Discovery, confirmed once,
+and reused from then on.
 
 ## Rules
 

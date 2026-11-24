@@ -98,7 +98,8 @@ Do not proceed on a Figma URL alone with no `analysis` — report that
 
 Before anything else, run **Step 0** in `../../_shared/config/org-design-system.md`:
 load the org's local, git-ignored overlay (`.claude/design-intelligence/` in the
-project root), ask the user for their design-system sources if it is missing (the
+project root), and if it is missing build it automatically by Discovery (read-only
+scan of the codebase and Figma, one confirmation; the
 bundled values are an illustrative example, used only if the user opts in), and
 confirm the resolved sources in one line. Every org file this skill names means its
 **resolved copy** (overlay first). `_shared/...` paths are relative to the plugin

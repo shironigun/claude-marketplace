@@ -89,9 +89,13 @@ in a **local, git-ignored overlay** in the project you work in:
   runs/                       documentation run records
 ```
 
-Each skill that reads org values starts with **Step 0**: it loads the overlay; if
-the overlay is missing it asks where your design system lives, drafts the overlay
-from the bundled templates, and writes it only after you approve. Running on the
+Each skill that reads org values starts with **Step 0**: it loads the overlay. On
+the first run, when there is no overlay yet, it builds one itself: a read-only scan
+finds your MUI theme, design docs, Storybook, the icons you use and your Figma links,
+reads the component library and `Icons` component in Figma when that connector is on,
+and drafts every overlay file with its source. You confirm once (it asks only about
+what it could not find), it writes the overlay and adds it to `.gitignore`, and every
+later run just reads it. Running on the
 bundled example is possible for a trial, and is then logged as an assumption. Full
 rules: [`_shared/config/org-design-system.md`](_shared/config/org-design-system.md).
 
