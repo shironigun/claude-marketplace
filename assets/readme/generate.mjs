@@ -17,6 +17,7 @@ const CATEGORY = {
   'bug-tracking': { label: 'Bug tracking' },
   'release-management': { label: 'Release management' },
   documentation: { label: 'Documentation' },
+  design: { label: 'Design' },
 };
 
 export const PLUGINS = [
@@ -75,6 +76,13 @@ export const PLUGINS = [
     detail: 'One feature, learned from the source and written to a standard, built in your own brand.',
     steps: ['Learn', 'Write', 'Screenshots', 'Build PDF', 'Review'],
     stats: ['1 skill', '16 covers'],
+  },
+  {
+    name: 'design-intelligence', color: '#f472b6', short: 'Figma to compliant MUI', category: 'design', icon: 'Palette', neutral: true,
+    tagline: 'From a Figma screen to compliant MUI code',
+    detail: 'Analyses the screen, builds it in MUI to your design system, and reviews it until it passes.',
+    steps: ['Analyse', 'Generate', 'Review', 'Fix', 'Pass'],
+    stats: ['6 skills', '1 agent'],
   },
 ];
 
@@ -184,7 +192,7 @@ function map() {
     { title: 'Test it', cat: 'testing', note: 'Write cases, automate them, run them', items: ['qa-engineering', 'qa-toolkit', 'api-testing', 'ui-testing'] },
     { title: 'Track it', cat: 'bug-tracking', note: 'File what broke, in house style', items: ['bug-suite'] },
     { title: 'Ship it', cat: 'release-management', note: 'Tell customers what changed', items: ['release-notes-suite'] },
-    { title: 'Explain it', cat: 'documentation', note: 'Pages and guides people read', items: ['feature-explainer', 'how-to-guides'] },
+    { title: 'Design & explain', cat: 'documentation', note: 'Screens, pages and guides', items: ['design-intelligence', 'feature-explainer', 'how-to-guides'] },
   ];
   const lw = (W - 64 * 2 - 24 * 3) / 4;
   const body = lanes.map((l, i) => {
@@ -296,6 +304,13 @@ const USECASES = {
     rows: [['done', 'Learned the feature from the code and app, read-only'], ['done', 'Written to the standard: steps, AI callout, troubleshooting'], ['done', 'Built in your brand: How-to standard, no warnings'],
       ['wait', 'For product: 2 questions, 1 change request, 1 bug'], ['wait', 'Placeholder screenshots to replace: 1']],
     why: ['Facts from the source', 'Your brand, never ours', 'About 10 pages a reader opens'],
+  },
+  'design-intelligence': {
+    ask: 'Build the Orders list from this Figma frame.', command: '@design-intelligence-steward',
+    title: 'Orders list · mobile 430 x 932', kind: 'steps',
+    rows: [['done', 'Analysed the frame: 9 components, 2 states missing'], ['done', 'Mapped to MUI with your tokens, no raw values'], ['done', 'Generated the screen and every state'],
+      ['fail', 'Review: 2 contrast issues, 1 off-scale spacing'], ['done', 'Fixed and reviewed again: PASS']],
+    why: ['Your design system, never ours', 'Reviewed until it passes', 'Org values stay on your machine'],
   },
 };
 const STATUS = { done: ['#16a34a', 'CheckCircle'], wait: ['#d97706', 'Lock'], fail: ['#dc2626', 'BugReport'] };
@@ -522,6 +537,18 @@ function diagram(p) {
       ['Questions', 'Change requests', 'Bugs'].forEach((t, i) => pill(810 + i * 140, 446, 126, t, '#fbbf24'));
       out.push(`<text x="810" y="516" font-size="14" fill="#aab4cf">Anything it can't confirm goes on a list,</text><text x="810" y="536" font-size="14" fill="#aab4cf">never into the guide as a guess.</text>`);
     },
+    'design-intelligence': () => {
+      tag(64, 146, 'INPUTS');
+      const src = [['Figma screen', 'a frame or its link'], ['Your design system', 'local, never in the plugin'], ['Work item', 'optional context']].map(([t, s], i) => node(64, 160 + i * 120, 220, 100, t, s, { dashed: i === 1 }));
+      const analyse = node(330, 300, 180, 110, 'Analyse', 'components, states, tokens', { accent: true });
+      arrow(bracket(300, src, false), analyse);
+      const generate = node(560, 300, 180, 110, 'Generate', 'MUI to your tokens');
+      const review = node(790, 300, 180, 110, 'Review', 'against your rules', { accent: true });
+      const pass = node(1030, 300, 186, 110, 'PASS', 'compliant screen');
+      arrow(analyse, generate); arrow(generate, review); arrow(review, pass);
+      tag(560, 470, 'FIX AND REVIEW AGAIN UNTIL IT PASSES');
+      tag(330, 146, 'ONE STEWARD AGENT PICKS THE SKILLS AND ORDER');
+    },
   };
   draw[p.name]();
   const subs = {
@@ -533,6 +560,7 @@ function diagram(p) {
     'release-notes-suite': 'Gather everything that shipped, then keep only what customers can use.',
     'feature-explainer': 'Research once, read-only, then build the edition for the reader you name.',
     'how-to-guides': 'Facts from the source, written to a standard, built in your brand, with gaps sent back to product.',
+    'design-intelligence': 'Your design system in, compliant MUI out, reviewed until it passes.',
   };
   const W = 1280, H = 620;
   return svg(W, H, `How ${p.name} works`, `${frame(`d-${p.name}`, W, H, c, 26)}

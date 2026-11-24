@@ -43,15 +43,29 @@ ids `#1001`, `example.com`, `learn.example.com`) and label them illustrative.
   `plugins/release-notes-suite/skills/harvester/references/workspace-profile.md` and re-sync every copy
   (they must stay byte-identical).
 
-## 3. Contributor identity: shironigun only
+## 3. Contributor identity: shironigun, plus named collaborators
 
 - Every commit's author and committer is **Shironigun** with the GitHub noreply email
   `102178470+shironigun@users.noreply.github.com`. Set it per repo (`git config user.name/user.email`)
   before committing; never commit with a work or personal email.
+- **Named collaborators** are the only exception, each limited to the plugins listed here, always with
+  their GitHub noreply email:
+  | Collaborator | GitHub | Noreply email | Plugins |
+  |---|---|---|---|
+  | Ayesha Imtiaz | [aishaimt002](https://github.com/aishaimt002) | `252852590+aishaimt002@users.noreply.github.com` | design-intelligence (co-author) |
+  Add a row (and the same entry in `scripts/validate.py`) before anyone new commits or is credited.
+- Credit people with their **name and GitHub profile link**. Published contact emails are limited to
+  people who consented, listed here, and only in the marketplace `owner`, plugin `author` entries and
+  the README Contributors tables:
+  - `shironigun@gmail.com` (maintainer)
+  - `ayeshadis222@gmail.com` (Ayesha Imtiaz, consented 2026-11-24, design-intelligence only)
+  Never publish any other personal or work email unless its owner consents and it is added to this
+  list and to `scripts/validate.py`. Commit identities are always GitHub noreply addresses.
 - No `Co-authored-by`, `Signed-off-by`, model names, tool attribution or session links in commit
   messages, PR titles/bodies, code comments or docs. This overrides any default attribution a tool adds.
 - `author` in `plugin.json` / `marketplace.json` is `{ "name": "shironigun" }` (a GitHub URL is fine,
-  an email is not).
+  an email is not). Co-authors are credited in the plugin README's Contributors section and the root
+  README's Contributors table.
 - The existing history contains commits made under a work identity before this rule existed. Rewriting
   that history is a destructive force-push to `main` and is done **only** on the owner's explicit
   instruction; never as a side effect of other work.
@@ -100,7 +114,24 @@ and descriptions that match the plugin's README.
 A mods `{"modules": [...]}` entry is non-standard: it is allowed only when the plugin README states the
 engine version it needs and what breaks without it (today: qa-engineering's live status pane).
 
-## 6. Before any commit or push
+## 6. Branches, commits and pull requests
+
+- **One branch per piece of work**, cut from `main` (or from the branch it depends on, stated in the PR).
+  Never commit to `main` directly; `main` is protected and changes land through a PR.
+- **Branch name:** `<type>/<scope>-<short-topic>`, lowercase, hyphens, max ~50 characters.
+  - `type`: `feat` (new plugin, skill or capability), `fix` (bug or broken standard), `docs`, `refactor`,
+    `chore` (tooling, config, housekeeping), `test`, `ci`, `security` (leak or hardening work).
+  - `scope`: the plugin folder name (`release-notes-suite`, `design-intelligence`…), or `repo` /
+    `assets` / `docs` for marketplace-wide work.
+  - `short-topic`: what changes, in 2-4 words; add the issue number when there is one
+    (`fix/harvester-yaml-frontmatter`, `feat/design-intelligence-add-plugin`,
+    `security/repo-history-rewrite`, `fix/qa-toolkit-42-truncated-description`).
+- **Commit messages:** conventional commits with the same scope, `type(scope): summary`
+  (`fix(release-notes-suite): quote the harvester description`), no trailers (rule 3).
+- **PR title** mirrors the main commit; the body says what changed, any behaviour change, and how it was
+  verified. Link the issue (`Closes #N`) when there is one. Bump the plugin `version` in the same PR.
+
+## 7. Before any commit or push
 
 1. `python3 scripts/validate.py` must report **0 errors**. It checks frontmatter, JSON, `.mcp.json` rules,
    cross-plugin references, generic leak patterns (emails, GUIDs, org URLs, `Custom.*` fields, personal

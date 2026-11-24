@@ -1,0 +1,64 @@
+{
+  "id": "orders-list-mobile",
+  "screen": "ORDERS LIST",
+  "figma_node": "EXAMPLEfileKey000 / 1:2",
+  "platform": "mobile [CONFIRMED]",
+  "dimensions": "390x844 [CONFIRMED]",
+  "components": [
+    "TextField (search) → MUI TextField outlined [INFERRED]",
+    "Multi-select → MUI IconButton/Select [INFERRED]",
+    "Filter → MUI IconButton [INFERRED]",
+    "Status/Location → MUI Select outlined [INFERRED]",
+    "Switchable tab → MUI Tabs [CONFIRMED states present]",
+    "Sort → MUI Button + arrow (org sorting rule) [CONFIRMED rule]",
+    "Order card ×6 → MUI Card [CONFIRMED]"
+  ],
+  "tokens": [
+    "Typography Inter 16/24, 14/20, 12/16 → org mobile scale [CONFIRMED match]",
+    "Border used org #C8CCD2 (Figma #D9DCE1 not adopted) [CONFLICT preserved]",
+    "Radius used org 8px (Figma radius-4=4 not adopted) [CONFLICT preserved]"
+  ],
+  "typography": "Inter — Title 16/24 SemiBold, Subtitle 14/20, Body 12/16 [CONFIRMED, matches org mobile scale]",
+  "states": [
+    "Select:status: default, open, selected, focus (mui-auto), disabled (mui-auto)",
+    "Tabs:status: default, selected, focus (mui-auto)",
+    "Button:sort: default, active",
+    "TextField:search: default, focus (mui-auto), disabled (mui-auto)"
+  ],
+  "accessibility": [
+    "aria-label added to multi-select, filter, and each sort icon button [CONFIRMED, correction J1]",
+    "mobile touch target 40px applied [CONFIRMED]"
+  ],
+  "responsive": "mobile single screen; horizontal-scroll status board [INFERRED]",
+  "design_decisions": [
+    "typography = org mobile scale (CONFIRMED match to Figma variables)",
+    "org 8px radius + #C8CCD2 border used; screen's radius-4 & #D9DCE1 CONFLICTS preserved, not adopted",
+    "color=primary/error (org tokens); screen's #1D4E89 / #C62839 CONFLICTS preserved"
+  ],
+  "assumptions": [
+    "platform mobile (390x844) [ASSUMED from dimensions]",
+    "icon buttons aria-labeled",
+    "spacing/elevation UNKNOWN from metadata"
+  ],
+  "unresolved": [
+    "spacing values [UNKNOWN]",
+    "elevation levels [UNKNOWN]",
+    "card internal layout [UNKNOWN]"
+  ],
+  "conflicts": [
+    "primary: Figma #1D4E89 vs org #2F5DA8 [CONFLICT]",
+    "error: Figma #C62839 vs org #D64541 [CONFLICT]",
+    "border: Figma #D9DCE1 vs org #C8CCD2 [CONFLICT]",
+    "radius: Figma radius-4 (=4) vs org 8px [CONFLICT]",
+    "info-bg: Figma #E3F1FB vs org #E5F6FD [CONFLICT]"
+  ],
+  "review_findings": [
+    "J1 major accessibility: icon-only buttons need aria-label → fixed",
+    "J2 minor source-conflict: #1D4E89 vs #2F5DA8 (owner decision)",
+    "J3 minor source-conflict: #C62839 vs #D64541; #E3F1FB vs #E5F6FD (owner decision)"
+  ],
+  "corrections": [
+    "Round 1: added aria-labels to multi-select, filter, sort (J1)"
+  ],
+  "final_verdict": "PASS (only source CONFLICTS remain as owner-decision evidence) [CONFIRMED]"
+}

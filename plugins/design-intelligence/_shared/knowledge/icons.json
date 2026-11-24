@@ -1,0 +1,160 @@
+{
+  "_example": "Illustrative example only. The org's real mapping lives in the local overlay .claude/design-intelligence/knowledge/icons.json (see _shared/config/org-design-system.md).",
+  "source": {
+    "file": "EXAMPLE file (key recorded in the overlay's sources.md)",
+    "node": "EXAMPLE node id",
+    "name": "Foundations / Icons",
+    "pattern": "AppIconName (MUI name); D: prefix = developer-only name (kept distinct)"
+  },
+  "mui_icon_source": "https://fonts.google.com/icons",
+  "mui_docs": "https://mui.com/material-ui/material-icons/",
+  "count": 16,
+  "rows": [
+    {
+      "app_icon": "Add",
+      "mui_icons": [
+        "Add"
+      ],
+      "status": "CONFIRMED",
+      "dev_name_only": false,
+      "note": ""
+    },
+    {
+      "app_icon": "Archive",
+      "mui_icons": [
+        "Archive"
+      ],
+      "status": "CONFIRMED",
+      "dev_name_only": false,
+      "note": ""
+    },
+    {
+      "app_icon": "ArrowDown",
+      "mui_icons": [
+        "KeyboardArrowDown"
+      ],
+      "status": "CONFIRMED",
+      "dev_name_only": true,
+      "note": ""
+    },
+    {
+      "app_icon": "CalendarToday",
+      "mui_icons": [
+        "CalendarToday"
+      ],
+      "status": "CONFIRMED",
+      "dev_name_only": false,
+      "note": ""
+    },
+    {
+      "app_icon": "Close",
+      "mui_icons": [
+        "Close"
+      ],
+      "status": "CONFIRMED",
+      "dev_name_only": false,
+      "note": ""
+    },
+    {
+      "app_icon": "Delete",
+      "mui_icons": [
+        "Delete"
+      ],
+      "status": "CONFIRMED",
+      "dev_name_only": false,
+      "note": ""
+    },
+    {
+      "app_icon": "Delivered",
+      "mui_icons": [
+        "DoneAll",
+        "LocalShipping"
+      ],
+      "status": "CONFLICT",
+      "dev_name_only": false,
+      "note": "[CONFLICT] two distinct meanings in source"
+    },
+    {
+      "app_icon": "Download",
+      "mui_icons": [
+        "Download"
+      ],
+      "status": "CONFIRMED",
+      "dev_name_only": false,
+      "note": ""
+    },
+    {
+      "app_icon": "Edit",
+      "mui_icons": [
+        "Edit"
+      ],
+      "status": "CONFIRMED",
+      "dev_name_only": false,
+      "note": ""
+    },
+    {
+      "app_icon": "Filter",
+      "mui_icons": [
+        "FilterList"
+      ],
+      "status": "CONFIRMED",
+      "dev_name_only": false,
+      "note": ""
+    },
+    {
+      "app_icon": "More_vert",
+      "mui_icons": [
+        "MoreVert"
+      ],
+      "status": "CONFIRMED",
+      "dev_name_only": false,
+      "note": ""
+    },
+    {
+      "app_icon": "Notifications",
+      "mui_icons": [
+        "Notifications"
+      ],
+      "status": "CONFIRMED",
+      "dev_name_only": false,
+      "note": ""
+    },
+    {
+      "app_icon": "Preview",
+      "mui_icons": [
+        "Visibility",
+        "OpenInNew"
+      ],
+      "status": "CONFLICT",
+      "dev_name_only": false,
+      "note": "[CONFLICT] two distinct meanings in source"
+    },
+    {
+      "app_icon": "Search",
+      "mui_icons": [
+        "Search"
+      ],
+      "status": "CONFIRMED",
+      "dev_name_only": false,
+      "note": ""
+    },
+    {
+      "app_icon": "Settings",
+      "mui_icons": [
+        "Settings"
+      ],
+      "status": "CONFIRMED",
+      "dev_name_only": false,
+      "note": ""
+    },
+    {
+      "app_icon": "Sort",
+      "mui_icons": [
+        "SwapVert"
+      ],
+      "status": "CONFIRMED",
+      "dev_name_only": false,
+      "note": ""
+    }
+  ]
+}
