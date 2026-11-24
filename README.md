@@ -454,7 +454,7 @@ own git-ignored `.env`. See the [plugin security docs](https://code.claude.com/d
 | Contributor | GitHub | Contact | Plugins |
 |---|---|---|---|
 | Shironigun (maintainer) | [@shironigun](https://github.com/shironigun) | shironigun@gmail.com | All |
-| Ayesha Imtiaz | [@aishaimt002](https://github.com/aishaimt002) | via GitHub | design-intelligence (co-author) |
+| Ayesha Imtiaz | [@aishaimt002](https://github.com/aishaimt002) | ayeshadis222@gmail.com | design-intelligence (co-author) |
 
 ## Contributing a plugin
 

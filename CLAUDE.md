@@ -54,11 +54,13 @@ ids `#1001`, `example.com`, `learn.example.com`) and label them illustrative.
   |---|---|---|---|
   | Ayesha Imtiaz | [aishaimt002](https://github.com/aishaimt002) | `252852590+aishaimt002@users.noreply.github.com` | design-intelligence (co-author) |
   Add a row (and the same entry in `scripts/validate.py`) before anyone new commits or is credited.
-- Credit people with their **name and GitHub profile link**. The single published email is the
-  maintainer's public contact, `shironigun@gmail.com`, and only in the marketplace `owner`, plugin
-  `author` entries and the README Contributors tables. Never publish any other personal or work email
-  (collaborators included) unless its owner asks in writing; never use any email but a GitHub noreply
-  address as a commit identity.
+- Credit people with their **name and GitHub profile link**. Published contact emails are limited to
+  people who consented, listed here, and only in the marketplace `owner`, plugin `author` entries and
+  the README Contributors tables:
+  - `shironigun@gmail.com` (maintainer)
+  - `ayeshadis222@gmail.com` (Ayesha Imtiaz, consented 2026-11-24, design-intelligence only)
+  Never publish any other personal or work email unless its owner consents and it is added to this
+  list and to `scripts/validate.py`. Commit identities are always GitHub noreply addresses.
 - No `Co-authored-by`, `Signed-off-by`, model names, tool attribution or session links in commit
   messages, PR titles/bodies, code comments or docs. This overrides any default attribution a tool adds.
 - `author` in `plugin.json` / `marketplace.json` is `{ "name": "shironigun" }` (a GitHub URL is fine,

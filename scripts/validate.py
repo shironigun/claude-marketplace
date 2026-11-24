@@ -27,7 +27,7 @@ SKIP_FILES = {"package-lock.json", "THIRD_PARTY_NOTICES.txt", "cli.mjs"}
 
 # Generic leak patterns that are safe to publish (they name no one).
 GENERIC_LEAKS = [
-    (r"(?<![A-Za-z0-9._%+-])(?!shironigun@gmail\.com\b)[A-Za-z0-9._%+-]+@(?![A-Za-z0-9.-]*example\.(com|org|net|test)\b)(?!users\.noreply\.github\.com\b)[A-Za-z0-9-]+(\.[A-Za-z0-9-]+)*\.(?!md\b|ts\b|js\b|json\b|test\b|invalid\b|localhost\b)[a-z]{2,}\b",
+    (r"(?<![A-Za-z0-9._%+-])(?!(shironigun|ayeshadis222)@gmail\.com\b)[A-Za-z0-9._%+-]+@(?![A-Za-z0-9.-]*example\.(com|org|net|test)\b)(?!users\.noreply\.github\.com\b)[A-Za-z0-9-]+(\.[A-Za-z0-9-]+)*\.(?!md\b|ts\b|js\b|json\b|test\b|invalid\b|localhost\b)[a-z]{2,}\b",
      "email address that is not a reserved example/test placeholder"),
     (r"dev\.azure\.com/(?!your-org\b|\$\{|<|\{)[A-Za-z0-9_-]+", "hardcoded Azure DevOps org URL"),
     (r"\b(?!0{8}-0{4}-0{4}-0{4}-0{12})[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\b",
@@ -136,7 +136,7 @@ def check_json(path):
         a = d.get("author", {})
         if not isinstance(a, dict) or a.get("name", "").lower() not in ALLOWED_AUTHOR_NAMES:
             err(path, "author.name must be shironigun")
-        if a.get("email") not in (None, "shironigun@gmail.com"):
+        if a.get("email") not in (None, "shironigun@gmail.com", "ayeshadis222@gmail.com"):
             err(path, "author.email may only be the maintainer's public contact")
     if path.endswith(".claude-plugin/marketplace.json"):
         if d.get("owner", {}).get("email") not in (None, "shironigun@gmail.com"):
