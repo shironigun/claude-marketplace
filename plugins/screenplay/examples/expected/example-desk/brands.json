@@ -1,0 +1,80 @@
+{
+  "rule": {
+    "summary": "Partner workspaces and every path under /partner see Lumen; everyone else sees Harbor. The workspace comes from config.json through the session call.",
+    "evidence": [
+      { "path": "public/brand.js", "line": 9, "quote": "return (workspace && workspace.partner) ||" },
+      { "path": "public/app.js", "line": 34, "quote": "DeskBrand.brandFor(session.workspace, location.pathname)" },
+      { "path": "server.js", "line": 64, "quote": "workspace: config.workspace" }
+    ]
+  },
+  "brands": [
+    {
+      "id": "harbor",
+      "name": "Harbor",
+      "when": "A workspace that is not a partner, on any path outside /partner.",
+      "logos": {
+        "full": { "path": "brands/harbor/logo.svg", "format": "svg", "width": 128, "height": 32 },
+        "mark": { "path": "brands/harbor/mark.svg", "format": "svg", "width": 25, "height": 25 }
+      },
+      "chrome": { "rail": { "logo": "full", "height": 32, "inset": 0 } },
+      "palette": { "primary": "#1f5fbf", "error": "#c62828", "info": "#0277bd", "success": "#2e7d32", "background": "#f6f8fb", "text": "#1d2733" },
+      "type": { "family": "Harbor Sans", "weights": [400, 700], "source": "brands/harbor/theme.css", "titleWeight": 600 },
+      "names": { "product": "Example Desk", "modules": { "dashboard": "Dashboard", "reminders": "Reminders", "customers": "Customers" } },
+      "evidence": {
+        "when": { "path": "public/brand.js", "line": 9, "quote": "? 'lumen' : 'harbor';" },
+        "logos.full": { "path": "public/brand.js", "line": 4, "quote": "logo: '/brands/harbor/logo.svg'" },
+        "logos.mark": { "path": "public/brand.js", "line": 4, "quote": "mark: '/brands/harbor/mark.svg'" },
+        "chrome.rail": { "path": "public/brand.js", "line": 15, "quote": "{ src: b.logo, height: 32, inset: 0 }" },
+        "palette.primary": { "path": "brands/harbor/theme.css", "line": 2, "quote": "--brand-primary: #1f5fbf;" },
+        "palette.error": { "path": "brands/harbor/theme.css", "line": 4, "quote": "--brand-error: #c62828;" },
+        "palette.info": { "path": "brands/harbor/theme.css", "line": 3, "quote": "--brand-info: #0277bd;" },
+        "palette.success": { "path": "brands/harbor/theme.css", "line": 5, "quote": "--brand-success: #2e7d32;" },
+        "palette.background": { "path": "brands/harbor/theme.css", "line": 6, "quote": "--brand-background: #f6f8fb;" },
+        "palette.text": { "path": "brands/harbor/theme.css", "line": 7, "quote": "--brand-text: #1d2733;" },
+        "type.family": { "path": "brands/harbor/theme.css", "line": 8, "quote": "--brand-font: 'Harbor Sans'" },
+        "type.weights": { "path": "brands/harbor/theme.css", "line": 15, "quote": "font-weight: 400 700;" },
+        "type.source": { "path": "brands/harbor/theme.css", "line": 14, "quote": "src: local('Segoe UI'), local('Helvetica Neue'), local('Arial');" },
+        "type.titleWeight": { "path": "brands/harbor/theme.css", "line": 9, "quote": "--brand-title-weight: 600;" },
+        "names.product": { "path": "public/reminders.html", "line": 6, "quote": "Example Desk</title>" },
+        "names.modules.dashboard": { "path": "public/app.js", "line": 8, "quote": "['dashboard', '/', 'Dashboard']" },
+        "names.modules.reminders": { "path": "public/app.js", "line": 8, "quote": "['reminders', '/reminders', 'Reminders']" },
+        "names.modules.customers": { "path": "public/app.js", "line": 8, "quote": "['customers', '/customers', 'Customers']" }
+      }
+    },
+    {
+      "id": "lumen",
+      "name": "Lumen",
+      "when": "A partner workspace (config.json workspace.partner), or any path under /partner.",
+      "logos": {
+        "full": { "path": "brands/lumen/logo.svg", "format": "svg", "width": 124, "height": 32 },
+        "mark": { "path": "brands/lumen/mark.svg", "format": "svg", "width": 25, "height": 25 },
+        "collapsed": { "path": "brands/lumen/mark.svg", "format": "svg", "width": 25, "height": 25 }
+      },
+      "chrome": { "rail": { "logo": "collapsed", "height": 25, "inset": 10 } },
+      "palette": { "primary": "#00796b", "error": "#d32f2f", "info": "#0288d1", "success": "#388e3c", "background": "#f3f7f6", "text": "#1b2b28" },
+      "type": { "family": "Lumen Sans", "weights": [400, 700], "source": "brands/lumen/theme.css", "titleWeight": 700 },
+      "names": { "product": "Example Desk", "modules": { "dashboard": "Dashboard", "reminders": "Reminders", "customers": "Customers" } },
+      "evidence": {
+        "when": { "path": "public/brand.js", "line": 9, "quote": "return (workspace && workspace.partner) ||" },
+        "logos.full": { "path": "public/brand.js", "line": 5, "quote": "logo: '/brands/lumen/logo.svg'" },
+        "logos.mark": { "path": "public/brand.js", "line": 5, "quote": "mark: '/brands/lumen/mark.svg'" },
+        "logos.collapsed": { "path": "public/brand.js", "line": 15, "quote": "{ src: b.mark, height: 25, inset: 10 }" },
+        "chrome.rail": { "path": "public/brand.js", "line": 15, "quote": "{ src: b.mark, height: 25, inset: 10 }" },
+        "palette.primary": { "path": "brands/lumen/theme.css", "line": 2, "quote": "--brand-primary: #00796b;" },
+        "palette.error": { "path": "brands/lumen/theme.css", "line": 4, "quote": "--brand-error: #d32f2f;" },
+        "palette.info": { "path": "brands/lumen/theme.css", "line": 3, "quote": "--brand-info: #0288d1;" },
+        "palette.success": { "path": "brands/lumen/theme.css", "line": 5, "quote": "--brand-success: #388e3c;" },
+        "palette.background": { "path": "brands/lumen/theme.css", "line": 6, "quote": "--brand-background: #f3f7f6;" },
+        "palette.text": { "path": "brands/lumen/theme.css", "line": 7, "quote": "--brand-text: #1b2b28;" },
+        "type.family": { "path": "brands/lumen/theme.css", "line": 8, "quote": "--brand-font: 'Lumen Sans'" },
+        "type.weights": { "path": "brands/lumen/theme.css", "line": 15, "quote": "font-weight: 400 700;" },
+        "type.source": { "path": "brands/lumen/theme.css", "line": 14, "quote": "src: local('Trebuchet MS'), local('Verdana');" },
+        "type.titleWeight": { "path": "brands/lumen/theme.css", "line": 9, "quote": "--brand-title-weight: 700;" },
+        "names.product": { "path": "public/reminders.html", "line": 6, "quote": "Example Desk</title>" },
+        "names.modules.dashboard": { "path": "public/app.js", "line": 8, "quote": "['dashboard', '/', 'Dashboard']" },
+        "names.modules.reminders": { "path": "public/app.js", "line": 8, "quote": "['reminders', '/reminders', 'Reminders']" },
+        "names.modules.customers": { "path": "public/app.js", "line": 8, "quote": "['customers', '/customers', 'Customers']" }
+      }
+    }
+  ]
+}

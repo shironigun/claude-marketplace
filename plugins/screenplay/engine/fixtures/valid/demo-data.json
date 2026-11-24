@@ -1,0 +1,18 @@
+{
+  "calls": {
+    "API-01": [
+      {
+        "body": [
+          { "id": "O-1001", "customer": "Lake Harbor Supply", "total": 1280, "status": "pending" },
+          { "id": "O-1002", "customer": "Pine Street Cafe", "total": 342, "status": "approved" }
+        ]
+      }
+    ],
+    "API-02": [
+      {
+        "when": { "params": { "id": "O-1001" } },
+        "body": { "id": "O-1001", "customer": "Lake Harbor Supply", "total": 1280, "status": "pending" }
+      }
+    ]
+  }
+}

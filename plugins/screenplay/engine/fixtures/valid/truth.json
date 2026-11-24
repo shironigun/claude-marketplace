@@ -1,0 +1,6 @@
+{
+  "entries": [
+    { "id": "T-01", "kind": "manual-only", "statement": "An order is approved only when a user presses Approve; nothing approves it on a schedule.", "evidence": [{ "path": "src/routes/orders.js", "line": 18, "commit": "abc1234", "quote": "router.post('/orders/:id/approve', approveOrder);" }], "confidence": "confirmed" },
+    { "id": "T-02", "kind": "does", "statement": "Delivery happens in the mail service.", "evidence": [], "confidence": "open", "boundary": "the mail service repository" }
+  ]
+}

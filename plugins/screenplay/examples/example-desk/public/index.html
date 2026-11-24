@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Dashboard · Example Desk</title>
+  <link rel="stylesheet" href="/app.css">
+  <script src="/brand.js"></script>
+  <script src="/app.js" defer></script>
+</head>
+<body data-page="dashboard">
+  <div class="shell">
+    <nav class="rail" id="rail"></nav>
+    <main class="main">
+      <header class="topbar"><h1>Dashboard</h1><button class="bell" id="bell" type="button">Notifications <span class="badge" id="badge" hidden></span></button></header>
+      <section class="counters">
+        <article class="counter"><h2>Open reminders</h2><p id="c-open">0</p></article>
+        <article class="counter"><h2>Due today</h2><p id="c-due">0</p></article>
+        <article class="counter"><h2>Sent this week</h2><p id="c-sent">0</p></article>
+        <article class="counter"><h2>Avg. response</h2><p id="c-avg">—</p></article>
+      </section>
+    </main>
+    <aside class="panel" id="panel" hidden><h2>Notifications</h2><ul id="notes"></ul></aside>
+  </div>
+</body>
+</html>

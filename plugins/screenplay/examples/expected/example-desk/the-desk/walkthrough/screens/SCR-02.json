@@ -1,0 +1,250 @@
+{
+  "screen": "SCR-02",
+  "css": [
+    ".sp-scr-02, .sp-scr-02 * { box-sizing: border-box; }",
+    ".sp-scr-02 { margin: 0; font-family: var(--brand-font, system-ui, sans-serif); color: var(--brand-text, #222); background: var(--brand-background, #f5f5f5); }",
+    ".sp-scr-02 h1, .sp-scr-02 h2 { font-weight: var(--brand-title-weight, 600); }",
+    ".sp-scr-02 .shell { display: grid; grid-template-columns: 144px 1fr; min-height: 900px; }",
+    ".sp-scr-02 .rail { display: flex; flex-direction: column; gap: 4px; padding: 16px 8px; background: #fff; border-right: 1px solid #e3e7ee; }",
+    ".sp-scr-02 .rail-logo { display: block; margin: 0 0 16px; max-width: 100%; align-self: flex-start; }",
+    ".sp-scr-02 .rail-link { padding: 8px; border-radius: 8px; color: inherit; text-decoration: none; font-size: 12px; }",
+    ".sp-scr-02 .rail-link.active { background: var(--brand-primary); color: #fff; }",
+    ".sp-scr-02 .main { padding: 24px 32px; }",
+    ".sp-scr-02 .topbar { display: flex; align-items: center; justify-content: space-between; }",
+    ".sp-scr-02 .bell, .sp-scr-02 .tabs [role=tab], .sp-scr-02 .drawer button, .sp-scr-02 dialog button { font: inherit; border-radius: 8px; border: 1px solid #cfd6e0; background: #fff; padding: 6px 12px; cursor: pointer; }",
+    ".sp-scr-02 .badge { display: inline-block; min-width: 18px; padding: 0 5px; border-radius: 9px; background: var(--brand-error); color: #fff; font-size: 12px; }",
+    ".sp-scr-02 .tabs { display: flex; gap: 8px; margin: 16px 0; }",
+    ".sp-scr-02 .tabs [aria-selected=true] { background: var(--brand-primary); color: #fff; border-color: var(--brand-primary); }",
+    ".sp-scr-02 .grid { width: 100%; border-collapse: collapse; background: #fff; border-radius: 12px; overflow: hidden; }",
+    ".sp-scr-02 .grid th, .sp-scr-02 .grid td { text-align: left; padding: 10px 12px; border-bottom: 1px solid #eef1f5; }",
+    ".sp-scr-02 .grid tbody tr { cursor: pointer; }",
+    ".sp-scr-02 .drawer { position: fixed; top: 0; right: 0; bottom: 0; width: 380px; background: #fff; box-shadow: -8px 0 24px rgba(0, 0, 0, .12); padding: 20px; display: flex; flex-direction: column; gap: 12px; }",
+    ".sp-scr-02 .drawer footer { margin-top: auto; display: flex; gap: 8px; justify-content: flex-end; }",
+    ".sp-scr-02 .primary { background: var(--brand-primary) !important; color: #fff; border-color: var(--brand-primary) !important; }",
+    ".sp-scr-02 .danger-outline { color: var(--brand-error); border-color: var(--brand-error) !important; }",
+    ".sp-scr-02 .panel { position: fixed; top: 64px; right: 24px; width: 300px; background: #fff; border-radius: 12px; box-shadow: 0 8px 24px rgba(0, 0, 0, .14); padding: 12px 16px; }",
+    ".sp-scr-02 .note { list-style: none; padding: 8px 0; border-bottom: 1px solid #eef1f5; }",
+    ".sp-scr-02 .note time { display: block; font-size: 12px; opacity: .7; }",
+    ".sp-scr-02 dialog { border: none; border-radius: 12px; padding: 20px; width: 420px; }",
+    ".sp-scr-02 dialog textarea { width: 100%; font: inherit; }",
+    ".sp-scr-02 dialog menu { display: flex; gap: 8px; justify-content: flex-end; padding: 0; }",
+    ".sp-scr-02 .toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); background: var(--brand-text); color: #fff; padding: 10px 16px; border-radius: 8px; }",
+    ".sp-scr-02 [hidden] { display: none !important; }"
+  ],
+  "scenes": [
+    {
+      "scene": "S-05",
+      "surfaces": [
+        {
+          "kind": "page",
+          "html": [
+            "<div class='shell'>",
+            "  <nav class='rail'>",
+            "    <span class='rail-logo' data-sp-slot='logo' data-sp-logo='rail'></span>",
+            "    <a class='rail-link' href='#'>Dashboard</a>",
+            "    <a class='rail-link active' href='#'>Reminders</a>",
+            "    <a class='rail-link' href='#'>Customers</a>",
+            "  </nav>",
+            "  <main class='main'>",
+            "    <header class='topbar'><h1>Reminders</h1><button class='bell' type='button'>Notifications <span class='badge'>1</span></button></header>",
+            "    <div class='tabs' role='tablist' data-sp-state='Open'>",
+            "      <button role='tab' data-status='open' aria-selected='true'>Open</button>",
+            "      <button role='tab' data-status='snoozed' aria-selected='false' data-sp='S-05.2'>Snoozed</button>",
+            "      <button role='tab' data-status='sent' aria-selected='false'>Sent</button>",
+            "    </div>",
+            "    <div class='tabs' role='tablist' data-sp-state='Snoozed' hidden>",
+            "      <button role='tab' data-status='open' aria-selected='false'>Open</button>",
+            "      <button role='tab' data-status='snoozed' aria-selected='true'>Snoozed</button>",
+            "      <button role='tab' data-status='sent' aria-selected='false' data-sp='S-05.4'>Sent</button>",
+            "    </div>",
+            "    <div class='tabs' role='tablist' data-sp-state='Sent' hidden>",
+            "      <button role='tab' data-status='open' aria-selected='false' data-sp='S-05.6'>Open</button>",
+            "      <button role='tab' data-status='snoozed' aria-selected='false'>Snoozed</button>",
+            "      <button role='tab' data-status='sent' aria-selected='true'>Sent</button>",
+            "    </div>",
+            "    <table class='grid'>",
+            "      <thead><tr><th>Customer</th><th>Subject</th><th>Due</th><th>Owner</th><th>Channel</th></tr></thead>",
+            "      <tbody data-sp-state='Open' data-sp='S-05.1'>",
+            "        <tr data-id='R-201'><td>Elena Ruiz</td><td>Contract renewal</td><td>2026-11-12</td><td>Maya Okafor</td><td>email</td></tr>",
+            "        <tr data-id='R-202'><td>Tomas Berg</td><td>Delivery date</td><td>2026-11-13</td><td>Maya Okafor</td><td>sms</td></tr>",
+            "        <tr data-id='R-203'><td>Hana Sato</td><td>Quarterly review</td><td>2026-11-14</td><td>Jon Bell</td><td>email</td></tr>",
+            "      </tbody>",
+            "      <tbody data-sp-state='Snoozed' hidden data-sp='S-05.3'>",
+            "        <tr data-id='R-204'><td>Lina Park</td><td>Price list</td><td>2026-11-19</td><td>Jon Bell</td><td>sms</td></tr>",
+            "      </tbody>",
+            "      <tbody data-sp-state='Sent' hidden data-sp='S-05.5'>",
+            "        <tr data-id='R-205'><td>Omar Haddad</td><td>Invoice copy</td><td>2026-11-11</td><td>Maya Okafor</td><td>email</td></tr>",
+            "      </tbody>",
+            "    </table>",
+            "  </main>",
+            "</div>"
+          ]
+        }
+      ]
+    },
+    {
+      "scene": "S-06",
+      "surfaces": [
+        {
+          "kind": "page",
+          "html": [
+            "<div class='shell'>",
+            "  <nav class='rail'>",
+            "    <span class='rail-logo' data-sp-slot='logo' data-sp-logo='rail'></span>",
+            "    <a class='rail-link' href='#'>Dashboard</a>",
+            "    <a class='rail-link active' href='#'>Reminders</a>",
+            "    <a class='rail-link' href='#'>Customers</a>",
+            "  </nav>",
+            "  <main class='main'>",
+            "    <header class='topbar'><h1>Reminders</h1><button class='bell' type='button'>Notifications <span class='badge'>1</span></button></header>",
+            "    <div class='tabs' role='tablist'>",
+            "      <button role='tab' data-status='open' aria-selected='true'>Open</button>",
+            "      <button role='tab' data-status='snoozed' aria-selected='false'>Snoozed</button>",
+            "      <button role='tab' data-status='sent' aria-selected='false'>Sent</button>",
+            "    </div>",
+            "    <table class='grid'>",
+            "      <thead><tr><th>Customer</th><th>Subject</th><th>Due</th><th>Owner</th><th>Channel</th></tr></thead>",
+            "      <tbody>",
+            "        <tr data-id='R-201' data-sp='S-06.1'><td>Elena Ruiz</td><td>Contract renewal</td><td>2026-11-12</td><td>Maya Okafor</td><td>email</td></tr>",
+            "        <tr data-id='R-202'><td>Tomas Berg</td><td>Delivery date</td><td>2026-11-13</td><td>Maya Okafor</td><td>sms</td></tr>",
+            "        <tr data-id='R-203'><td>Hana Sato</td><td>Quarterly review</td><td>2026-11-14</td><td>Jon Bell</td><td>email</td></tr>",
+            "      </tbody>",
+            "    </table>",
+            "  </main>",
+            "</div>"
+          ]
+        },
+        {
+          "kind": "drawer",
+          "action": "Details",
+          "html": [
+            "<aside class='drawer' data-sp='S-06.2'>",
+            "  <header><h2>Elena Ruiz</h2><button type='button' aria-label='Close'>×</button></header>",
+            "  <div class='tabs' role='tablist'>",
+            "    <button role='tab' aria-selected='true'>Details</button>",
+            "    <button role='tab' aria-selected='false' hidden data-sp-hide='T-05'>History</button>",
+            "  </div>",
+            "  <dl><dt>Subject</dt><dd>Contract renewal</dd><dt>Due</dt><dd>2026-11-12</dd><dt>Owner</dt><dd>Maya Okafor</dd><dt>Channel</dt><dd>email</dd><dt>Status</dt><dd>open</dd></dl>",
+            "  <footer><button type='button'>Snooze</button><button type='button' class='primary' data-sp='S-06.3'>Send reminder</button></footer>",
+            "</aside>"
+          ]
+        },
+        {
+          "kind": "dialog",
+          "action": "Send reminder",
+          "html": [
+            "<dialog id='send-dialog' open>",
+            "  <form method='dialog'>",
+            "    <h2>Send reminder</h2>",
+            "    <label for='note'>Note to customer</label>",
+            "    <textarea id='note' maxlength='280' rows='4' data-sp='S-06.4'></textarea>",
+            "    <menu><button value='cancel' class='danger-outline'>Cancel</button><button value='send' class='primary' data-sp='S-06.5'>Send</button></menu>",
+            "  </form>",
+            "</dialog>"
+          ]
+        }
+      ]
+    },
+    {
+      "scene": "S-07",
+      "surfaces": [
+        {
+          "kind": "page",
+          "html": [
+            "<div class='shell'>",
+            "  <nav class='rail'>",
+            "    <span class='rail-logo' data-sp-slot='logo' data-sp-logo='rail'></span>",
+            "    <a class='rail-link' href='#'>Dashboard</a>",
+            "    <a class='rail-link active' href='#'>Reminders</a>",
+            "    <a class='rail-link' href='#' data-sp='S-07.4 S-07.5'>Customers</a>",
+            "  </nav>",
+            "  <main class='main'>",
+            "    <header class='topbar'><h1>Reminders</h1><button class='bell' type='button' data-sp='S-07.2'>Notifications <span class='badge'>2</span></button></header>",
+            "    <div class='tabs' role='tablist'>",
+            "      <button role='tab' data-status='open' aria-selected='true'>Open</button>",
+            "      <button role='tab' data-status='snoozed' aria-selected='false'>Snoozed</button>",
+            "      <button role='tab' data-status='sent' aria-selected='false'>Sent</button>",
+            "    </div>",
+            "    <table class='grid'>",
+            "      <thead><tr><th>Customer</th><th>Subject</th><th>Due</th><th>Owner</th><th>Channel</th></tr></thead>",
+            "      <tbody>",
+            "        <tr data-id='R-202'><td>Tomas Berg</td><td>Delivery date</td><td>2026-11-13</td><td>Maya Okafor</td><td>sms</td></tr>",
+            "        <tr data-id='R-203'><td>Hana Sato</td><td>Quarterly review</td><td>2026-11-14</td><td>Jon Bell</td><td>email</td></tr>",
+            "      </tbody>",
+            "    </table>",
+            "  </main>",
+            "</div>"
+          ]
+        },
+        {
+          "kind": "toast",
+          "action": "Reminder sent to <customer>",
+          "html": [
+            "<div class='toast' role='status' data-sp='S-07.1'>Reminder sent to Elena Ruiz</div>"
+          ]
+        },
+        {
+          "kind": "drawer",
+          "action": "Notifications",
+          "html": [
+            "<aside class='panel' data-sp='S-07.3'><h2>Notifications</h2><ul>",
+            "  <li class='note'>Reminder sent to Elena Ruiz<time>2026-11-12</time></li>",
+            "  <li class='note'>Reminder sent to Omar Haddad<time>2026-11-11</time></li>",
+            "</ul></aside>"
+          ]
+        }
+      ]
+    }
+  ],
+  "guesses": [
+    "The film window is 1440 by 900 px, so the shell's min-height of 100vh is 900px.",
+    "The send dialog is drawn open, as showModal() leaves it, with its note still empty."
+  ],
+  "evidence": [
+    {
+      "path": "public/app.css",
+      "line": 4,
+      "quote": ".shell { display: grid; grid-template-columns: 144px 1fr; min-height: 100vh; }"
+    },
+    {
+      "path": "public/app.js",
+      "line": 13,
+      "quote": "<img class=\"rail-logo\" src=\"${logo.src}\""
+    },
+    {
+      "path": "public/app.js",
+      "line": 25,
+      "quote": "<li class=\"note\">${esc(n.text)}<time>${esc(n.at)}</time></li>"
+    },
+    {
+      "path": "public/reminders.html",
+      "line": 17,
+      "quote": "<div class=\"tabs\" role=\"tablist\">"
+    },
+    {
+      "path": "public/reminders.js",
+      "line": 14,
+      "quote": "<tr data-id=\"${esc(r.id)}\"><td>${esc(r.customer)}</td>"
+    },
+    {
+      "path": "public/reminders.js",
+      "line": 21,
+      "quote": "$('d-details').innerHTML = [['Subject', current.subject]"
+    },
+    {
+      "path": "public/reminders.html",
+      "line": 32,
+      "quote": "<button role=\"tab\" aria-selected=\"false\" hidden>History</button>"
+    },
+    {
+      "path": "public/reminders.html",
+      "line": 39,
+      "quote": "<dialog id=\"send-dialog\">"
+    },
+    {
+      "path": "public/reminders.js",
+      "line": 45,
+      "quote": "Reminder sent to ${sent.customer}"
+    }
+  ]
+}

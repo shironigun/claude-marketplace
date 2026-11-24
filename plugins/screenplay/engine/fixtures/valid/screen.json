@@ -1,0 +1,47 @@
+{
+  "screen": "SCR-01",
+  "css": [
+    ".sp-scr-01 .orders { padding: 24px; color: var(--text); background: var(--background); font-family: system-ui, sans-serif; }",
+    ".sp-scr-01 .orders h1 { font-weight: var(--title-weight); }",
+    ".sp-scr-01 .orders table { width: 100%; border-collapse: collapse; }",
+    ".sp-scr-01 .orders td { padding: 8px 12px; border-bottom: 1px solid #eeeeee; }",
+    ".sp-scr-01 .drawer { position: absolute; top: 0; right: 0; bottom: 0; width: 360px; padding: 20px; background: #ffffff; }",
+    ".sp-scr-01 .drawer .approve { padding: 6px 12px; border: none; border-radius: 6px; background: var(--primary); color: #ffffff; }"
+  ],
+  "scenes": [
+    {
+      "scene": "S-02",
+      "surfaces": [
+        {
+          "kind": "page",
+          "html": [
+            "<section class='orders' data-sp='S-02.1'>",
+            "  <span class='logo' data-sp-slot='logo' data-sp-logo='header'></span>",
+            "  <h1>Orders</h1>",
+            "  <table>",
+            "    <tr data-sp='S-02.2 S-02.3'><td>O-1001</td><td>Lake Harbor Supply</td><td>1,280</td><td>pending</td></tr>",
+            "    <tr><td>O-1002</td><td>Pine Street Cafe</td><td>342</td><td>approved</td></tr>",
+            "  </table>",
+            "</section>"
+          ]
+        },
+        {
+          "kind": "drawer",
+          "action": "Open order",
+          "html": [
+            "<aside class='drawer' data-sp='S-02.4'>",
+            "  <h2>O-1001</h2>",
+            "  <p>Lake Harbor Supply, 1,280</p>",
+            "  <button class='approve' data-sp='S-02.5'>Approve</button>",
+            "</aside>"
+          ]
+        }
+      ]
+    }
+  ],
+  "guesses": ["The orders page renders nothing yet, so its list and drawer follow the Order type the API returns."],
+  "evidence": [
+    { "path": "src/pages/Orders.tsx", "line": 3, "quote": "// The orders list; a row opens the order in a drawer." },
+    { "path": "src/api/orders.ts", "line": 2, "quote": "fetch('/api/orders').then((r) => r.json());" }
+  ]
+}

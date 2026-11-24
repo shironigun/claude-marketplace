@@ -1,0 +1,22 @@
+{
+  "personas": [{ "id": "P-01", "name": "Dana Reyes", "role": "Sales lead" }],
+  "scenes": [
+    { "id": "S-01", "kind": "title", "text": "Orders", "line": "Every order, one click away", "ms": 3000 },
+    {
+      "id": "S-02",
+      "kind": "screen",
+      "screen": "SCR-01",
+      "state": "populated",
+      "persona": "P-01",
+      "pattern": "dialog-steps",
+      "beats": [
+        { "do": "hold", "target": "the orders list", "ms": 8000 },
+        { "do": "point", "target": "the first order", "ms": 1400 },
+        { "do": "click", "target": "the first order", "action": "Open order", "ms": 1200 },
+        { "do": "hold", "target": "the order drawer", "ms": 6000, "caption": { "label": "Approval", "value": "only when someone presses Approve", "truth": "T-01" } },
+        { "do": "hold", "target": "the Approve button", "ms": 8000 }
+      ]
+    },
+    { "id": "S-03", "kind": "end", "text": "Orders", "line": "Approve with confidence", "ms": 3000 }
+  ]
+}

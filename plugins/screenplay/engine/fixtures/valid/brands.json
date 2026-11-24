@@ -1,0 +1,37 @@
+{
+  "rule": {
+    "summary": "There is one brand: every account sees Sample.",
+    "evidence": [{ "path": "src/theme/index.ts", "line": 3, "quote": "export const brand = sample;" }]
+  },
+  "brands": [
+    {
+      "id": "sample",
+      "name": "Sample",
+      "when": "always",
+      "logos": {
+        "full": { "path": "src/theme/logo.svg", "format": "svg", "height": 28 },
+        "mark": { "path": "src/theme/mark.svg", "format": "svg", "width": 24, "height": 24 }
+      },
+      "chrome": { "header": { "logo": "full", "height": 28 } },
+      "palette": { "primary": "#4a3fb5", "secondary": "#d9822b", "background": "#fafafa", "text": "#202124" },
+      "type": { "family": "Sample Sans", "weights": [400, 600], "source": "src/theme/fonts.css", "titleWeight": 600 },
+      "names": { "product": "Sample", "modules": { "orders": "Orders" } },
+      "evidence": {
+        "when": { "path": "src/theme/index.ts", "line": 3, "quote": "export const brand = sample;" },
+        "logos.full": { "path": "src/theme/sample.ts", "line": 4, "quote": "logo: '/theme/logo.svg'," },
+        "logos.mark": { "path": "src/theme/sample.ts", "line": 5, "quote": "mark: '/theme/mark.svg'," },
+        "chrome.header": { "path": "src/theme/sample.ts", "line": 6, "quote": "logoHeight: 28," },
+        "palette.primary": { "path": "src/theme/sample.ts", "line": 8, "quote": "primary: '#4a3fb5'," },
+        "palette.secondary": { "path": "src/theme/sample.ts", "line": 9, "quote": "secondary: '#d9822b'," },
+        "palette.background": { "path": "src/theme/sample.ts", "line": 10, "quote": "background: '#fafafa'," },
+        "palette.text": { "path": "src/theme/sample.ts", "line": 11, "quote": "text: '#202124'," },
+        "type.family": { "path": "src/theme/fonts.css", "line": 2, "quote": "font-family: 'Sample Sans';" },
+        "type.weights": { "path": "src/theme/fonts.css", "line": 4, "quote": "font-weight: 400 600;" },
+        "type.source": { "path": "src/theme/fonts.css", "line": 3, "quote": "src: url('./sample-sans.woff2') format('woff2');" },
+        "type.titleWeight": { "path": "src/theme/sample.ts", "line": 13, "quote": "titleWeight: 600," },
+        "names.product": { "path": "src/theme/sample.ts", "line": 2, "quote": "name: 'Sample'," },
+        "names.modules.orders": { "path": "src/theme/names.ts", "line": 2, "quote": "orders: 'Orders'," }
+      }
+    }
+  ]
+}

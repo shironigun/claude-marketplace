@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "theme.json: each brand's theme, as the CSS variables the app's styles read, rebuilt from the code with evidence (spec 5.11, D25)",
+  "type": "object",
+  "required": ["brands"],
+  "additionalProperties": false,
+  "properties": {
+    "brands": { "type": "object", "additionalProperties": { "$ref": "#/$defs/brand" } }
+  },
+  "$defs": {
+    "brand": {
+      "type": "object",
+      "required": ["vars", "evidence"],
+      "additionalProperties": false,
+      "properties": {
+        "vars": {
+          "type": "object",
+          "additionalProperties": { "type": "string", "minLength": 1, "maxLength": 200, "pattern": "^[^\\r\\n;{}<>]*$" }
+        },
+        "evidence": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/citation" } }
+      }
+    },
+    "citation": {
+      "type": "object",
+      "required": ["path", "line", "quote"],
+      "additionalProperties": false,
+      "properties": {
+        "path": { "type": "string", "minLength": 1 },
+        "line": { "type": "integer", "minimum": 1 },
+        "commit": { "type": "string", "pattern": "^[0-9a-f]{7,40}$" },
+        "quote": { "type": "string", "minLength": 1 }
+      }
+    }
+  }
+}

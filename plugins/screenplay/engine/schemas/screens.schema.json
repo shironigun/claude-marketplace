@@ -1,0 +1,94 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "screens.json: a subject's screens, states, actions, navigation entries and neighbouring surfaces (spec 5.4)",
+  "type": "object",
+  "required": ["subject", "entryPoints", "navigation", "screens", "neighbours"],
+  "additionalProperties": false,
+  "properties": {
+    "subject": { "type": "string", "minLength": 1 },
+    "branch": { "type": "string", "minLength": 1 },
+    "entryPoints": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["path", "line", "foundBy"],
+        "additionalProperties": false,
+        "properties": {
+          "path": { "type": "string", "minLength": 1 },
+          "line": { "type": "integer", "minimum": 1 },
+          "foundBy": { "enum": ["name", "route", "navigation", "ui-string"] }
+        }
+      }
+    },
+    "navigation": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["label", "route"],
+        "additionalProperties": false,
+        "properties": {
+          "label": { "type": "string", "minLength": 1 },
+          "route": { "type": "string", "minLength": 1 },
+          "icon": { "type": "string", "minLength": 1 },
+          "position": { "type": "string", "minLength": 1 },
+          "permission": { "type": "string", "minLength": 1 }
+        }
+      }
+    },
+    "screens": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/screen" } },
+    "neighbours": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["where", "what", "evidence"],
+        "additionalProperties": false,
+        "properties": {
+          "where": { "type": "string", "minLength": 1 },
+          "what": { "type": "string", "minLength": 1 },
+          "evidence": { "$ref": "#/$defs/ref" }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "ref": {
+      "type": "object",
+      "required": ["path", "line"],
+      "additionalProperties": false,
+      "properties": {
+        "path": { "type": "string", "minLength": 1 },
+        "line": { "type": "integer", "minimum": 1 }
+      }
+    },
+    "callIds": { "type": "array", "items": { "type": "string", "pattern": "^API-\\d{2,}$" } },
+    "screen": {
+      "type": "object",
+      "required": ["id", "title", "route", "states", "actions", "calls", "evidence"],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "type": "string", "pattern": "^SCR-\\d{2,}$" },
+        "title": { "type": "string", "minLength": 1 },
+        "route": { "type": "string", "minLength": 1 },
+        "feature": { "type": "string", "minLength": 1 },
+        "states": { "type": "array", "minItems": 1, "items": { "enum": ["empty", "loading", "error", "populated"] } },
+        "actions": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["kind", "label"],
+            "additionalProperties": false,
+            "properties": {
+              "kind": { "enum": ["drawer", "dialog", "tab", "toast", "menu", "link", "form", "button"] },
+              "label": { "type": "string", "minLength": 1 },
+              "calls": { "$ref": "#/$defs/callIds" }
+            }
+          }
+        },
+        "calls": { "$ref": "#/$defs/callIds" },
+        "evidence": { "$ref": "#/$defs/ref" }
+      }
+    }
+  }
+}

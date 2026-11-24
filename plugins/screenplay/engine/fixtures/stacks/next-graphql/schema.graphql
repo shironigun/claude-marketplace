@@ -1,0 +1,2 @@
+type Query { invoices: [Invoice!]! }
+type Invoice { id: ID! }

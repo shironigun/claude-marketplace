@@ -1,0 +1,36 @@
+{
+  "subject": "Reminders",
+  "entryPoints": [
+    { "path": "public/reminders.js", "line": 2, "foundBy": "name" },
+    { "path": "server.js", "line": 17, "foundBy": "route" },
+    { "path": "public/app.js", "line": 8, "foundBy": "navigation" },
+    { "path": "public/reminders.html", "line": 16, "foundBy": "ui-string" }
+  ],
+  "navigation": [{ "label": "Reminders", "route": "/reminders", "position": "side rail, second" }],
+  "screens": [
+    {
+      "id": "SCR-01",
+      "title": "Reminders queue",
+      "route": "/reminders",
+      "states": ["empty", "populated"],
+      "actions": [
+        { "kind": "tab", "label": "Open", "calls": ["API-01"] },
+        { "kind": "tab", "label": "Snoozed", "calls": ["API-01"] },
+        { "kind": "tab", "label": "Sent", "calls": ["API-01"] },
+        { "kind": "drawer", "label": "Details", "calls": ["API-02"] },
+        { "kind": "button", "label": "Snooze", "calls": ["API-04", "API-01"] },
+        { "kind": "dialog", "label": "Send reminder", "calls": ["API-03", "API-01", "API-06"] },
+        { "kind": "toast", "label": "Reminder sent to <customer>" },
+        { "kind": "toast", "label": "Could not send: <status> <address>" },
+        { "kind": "drawer", "label": "Notifications" }
+      ],
+      "calls": ["API-01", "API-05", "API-06"],
+      "evidence": { "path": "public/reminders.html", "line": 12 }
+    }
+  ],
+  "neighbours": [
+    { "where": "Customers list", "what": "a Reminder tag on each customer with an open reminder", "evidence": { "path": "public/app.js", "line": 60 } },
+    { "where": "Dashboard", "what": "counters of open reminders, reminders due today and reminders sent this week", "evidence": { "path": "public/index.html", "line": 17 } },
+    { "where": "Notifications panel, on every page", "what": "a 'Reminder sent to <customer>' notification after each send", "evidence": { "path": "server.js", "line": 97 } }
+  ]
+}

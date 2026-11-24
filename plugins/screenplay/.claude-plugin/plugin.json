@@ -1,0 +1,10 @@
+{
+  "name": "screenplay",
+  "version": "0.0.5",
+  "description": "IN DEVELOPMENT, not yet registered in the marketplace. Turns any part of a web app (one feature, a whole module or a flow across modules) into polished films: promos, walkthroughs, trailers, teasers, release highlights, store previews and how-tos. It learns the app's branding from its code, maps the screens and traces them to the backend so a film never claims what the app cannot do, then rebuilds the screens from the code with demo data only, never running the app, and builds one Motion film per brand, checked against fixed film rules and improved from comments. This release holds the shared engine, the two analysis skills (brand-profile, which learns the brand profile, and app-map, which maps a feature, module or flow and records its truth ledger), and the film skill app-film up to an approved storyboard and the film's screens rebuilt from the code.",
+  "author": {
+    "name": "shironigun"
+  },
+  "license": "MIT",
+  "keywords": ["video", "promo", "walkthrough", "trailer", "film", "branding", "motion", "web-app"]
+}

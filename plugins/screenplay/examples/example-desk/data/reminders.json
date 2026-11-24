@@ -1,0 +1,8 @@
+[
+  { "id": "R-101", "customerId": "C-1", "customer": "Ava Brooks", "subject": "Renewal quote", "due": "2026-11-12", "owner": "Sam Ortiz", "status": "open", "channel": "email" },
+  { "id": "R-102", "customerId": "C-2", "customer": "Noah Patel", "subject": "Signed order form", "due": "2026-11-12", "owner": "Sam Ortiz", "status": "open", "channel": "sms" },
+  { "id": "R-103", "customerId": "C-3", "customer": "Mia Johnson", "subject": "Service follow-up", "due": "2026-11-13", "owner": "Riley Chen", "status": "open", "channel": "email" },
+  { "id": "R-104", "customerId": "C-4", "customer": "Leo Garcia", "subject": "Trade-in photos", "due": "2026-11-15", "owner": "Sam Ortiz", "status": "snoozed", "channel": "sms" },
+  { "id": "R-105", "customerId": "C-5", "customer": "Zoe Kim", "subject": "Payment reminder", "due": "2026-11-10", "owner": "Riley Chen", "status": "sent", "channel": "email", "sentAt": "2026-11-10", "note": "Sent the link again." },
+  { "id": "R-106", "customerId": "C-1", "customer": "Ava Brooks", "subject": "Warranty documents", "due": "2026-11-18", "owner": "Riley Chen", "status": "open", "channel": "email" }
+]

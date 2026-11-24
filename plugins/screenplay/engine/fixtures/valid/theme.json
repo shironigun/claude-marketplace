@@ -1,0 +1,20 @@
+{
+  "brands": {
+    "sample": {
+      "vars": {
+        "--primary": "#4a3fb5",
+        "--secondary": "#d9822b",
+        "--background": "#fafafa",
+        "--text": "#202124",
+        "--title-weight": "600"
+      },
+      "evidence": [
+        { "path": "src/theme/sample.ts", "line": 8, "quote": "primary: '#4a3fb5'," },
+        { "path": "src/theme/sample.ts", "line": 9, "quote": "secondary: '#d9822b'," },
+        { "path": "src/theme/sample.ts", "line": 10, "quote": "background: '#fafafa'," },
+        { "path": "src/theme/sample.ts", "line": 11, "quote": "text: '#202124'," },
+        { "path": "src/theme/sample.ts", "line": 13, "quote": "titleWeight: 600," }
+      ]
+    }
+  }
+}

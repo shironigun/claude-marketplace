@@ -1,0 +1,20 @@
+{
+  "repository": "example-desk",
+  "detectedAt": "2026-11-12T10:00:00.000Z",
+  "frontend": {
+    "frameworks": [{ "id": "static-html", "evidence": ["public/customers.html"] }],
+    "routing": [{ "id": "server-routes", "evidence": ["server.js: createServer("] }],
+    "apiStyles": [{ "id": "rest", "evidence": ["public/app.js: fetch('/api/session"] }],
+    "contracts": [{ "id": "openapi", "evidence": ["api/openapi.json"] }],
+    "auth": [{ "id": "cookie-session", "evidence": ["public/app.js: credentials: 'include'", "server.js: Set-Cookie"] }],
+    "theming": [{ "id": "css-variables", "evidence": ["brands/harbor/theme.css: --brand-primary:", "brands/lumen/theme.css: --brand-primary:"] }],
+    "devServers": [],
+    "i18n": [],
+    "fonts": [{ "id": "system", "evidence": ["brands/harbor/theme.css: @font-face", "brands/lumen/theme.css: @font-face"] }]
+  },
+  "backend": {
+    "languages": [{ "id": "node", "evidence": ["server.js: require('http')"] }],
+    "frameworks": [{ "id": "node-http", "evidence": ["server.js: require('http')"] }]
+  },
+  "layout": { "kind": "single", "packages": [] }
+}

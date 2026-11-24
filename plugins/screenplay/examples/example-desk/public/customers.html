@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Customers · Example Desk</title>
+  <link rel="stylesheet" href="/app.css">
+  <script src="/brand.js"></script>
+  <script src="/app.js" defer></script>
+</head>
+<body data-page="customers">
+  <div class="shell">
+    <nav class="rail" id="rail"></nav>
+    <main class="main">
+      <header class="topbar"><h1>Customers</h1><button class="bell" id="bell" type="button">Notifications <span class="badge" id="badge" hidden></span></button></header>
+      <table class="grid">
+        <thead><tr><th>Name</th><th>Company</th><th>City</th></tr></thead>
+        <tbody id="customer-rows"></tbody>
+      </table>
+    </main>
+    <aside class="panel" id="panel" hidden><h2>Notifications</h2><ul id="notes"></ul></aside>
+  </div>
+</body>
+</html>

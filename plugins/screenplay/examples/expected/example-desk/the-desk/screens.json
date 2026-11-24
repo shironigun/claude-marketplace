@@ -1,0 +1,58 @@
+{
+  "subject": "The Desk",
+  "entryPoints": [
+    { "path": "server.js", "line": 17, "foundBy": "route" },
+    { "path": "public/app.js", "line": 8, "foundBy": "navigation" },
+    { "path": "public/index.html", "line": 15, "foundBy": "ui-string" },
+    { "path": "public/reminders.html", "line": 16, "foundBy": "ui-string" },
+    { "path": "public/customers.html", "line": 15, "foundBy": "ui-string" }
+  ],
+  "navigation": [
+    { "label": "Dashboard", "route": "/", "position": "side rail, first" },
+    { "label": "Reminders", "route": "/reminders", "position": "side rail, second" },
+    { "label": "Customers", "route": "/customers", "position": "side rail, third" }
+  ],
+  "screens": [
+    {
+      "id": "SCR-01",
+      "title": "Dashboard",
+      "route": "/",
+      "feature": "Dashboard",
+      "states": ["populated"],
+      "actions": [{ "kind": "drawer", "label": "Notifications" }],
+      "calls": ["API-01", "API-02", "API-03"],
+      "evidence": { "path": "public/index.html", "line": 11 }
+    },
+    {
+      "id": "SCR-02",
+      "title": "Reminders queue",
+      "route": "/reminders",
+      "feature": "Reminders",
+      "states": ["empty", "populated"],
+      "actions": [
+        { "kind": "tab", "label": "Open", "calls": ["API-04"] },
+        { "kind": "tab", "label": "Snoozed", "calls": ["API-04"] },
+        { "kind": "tab", "label": "Sent", "calls": ["API-04"] },
+        { "kind": "drawer", "label": "Details", "calls": ["API-05"] },
+        { "kind": "button", "label": "Snooze", "calls": ["API-07", "API-04"] },
+        { "kind": "dialog", "label": "Send reminder", "calls": ["API-06", "API-04", "API-02"] },
+        { "kind": "toast", "label": "Reminder sent to <customer>" },
+        { "kind": "toast", "label": "Could not send: <status> <address>" },
+        { "kind": "drawer", "label": "Notifications" }
+      ],
+      "calls": ["API-01", "API-02", "API-04"],
+      "evidence": { "path": "public/reminders.html", "line": 12 }
+    },
+    {
+      "id": "SCR-03",
+      "title": "Customers",
+      "route": "/customers",
+      "feature": "Customers",
+      "states": ["populated"],
+      "actions": [{ "kind": "drawer", "label": "Notifications" }],
+      "calls": ["API-01", "API-02", "API-08"],
+      "evidence": { "path": "public/customers.html", "line": 11 }
+    }
+  ],
+  "neighbours": []
+}

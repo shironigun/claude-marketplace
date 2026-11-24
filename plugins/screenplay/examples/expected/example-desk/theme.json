@@ -1,0 +1,48 @@
+{
+  "brands": {
+    "harbor": {
+      "vars": {
+        "--brand-primary": "#1f5fbf",
+        "--brand-info": "#0277bd",
+        "--brand-error": "#c62828",
+        "--brand-success": "#2e7d32",
+        "--brand-background": "#f6f8fb",
+        "--brand-text": "#1d2733",
+        "--brand-font": "'Harbor Sans', 'Segoe UI', Arial, sans-serif",
+        "--brand-title-weight": "600"
+      },
+      "evidence": [
+        { "path": "brands/harbor/theme.css", "line": 2, "quote": "--brand-primary: #1f5fbf;" },
+        { "path": "brands/harbor/theme.css", "line": 3, "quote": "--brand-info: #0277bd;" },
+        { "path": "brands/harbor/theme.css", "line": 4, "quote": "--brand-error: #c62828;" },
+        { "path": "brands/harbor/theme.css", "line": 5, "quote": "--brand-success: #2e7d32;" },
+        { "path": "brands/harbor/theme.css", "line": 6, "quote": "--brand-background: #f6f8fb;" },
+        { "path": "brands/harbor/theme.css", "line": 7, "quote": "--brand-text: #1d2733;" },
+        { "path": "brands/harbor/theme.css", "line": 8, "quote": "--brand-font: 'Harbor Sans', 'Segoe UI', Arial, sans-serif;" },
+        { "path": "brands/harbor/theme.css", "line": 9, "quote": "--brand-title-weight: 600;" }
+      ]
+    },
+    "lumen": {
+      "vars": {
+        "--brand-primary": "#00796b",
+        "--brand-info": "#0288d1",
+        "--brand-error": "#d32f2f",
+        "--brand-success": "#388e3c",
+        "--brand-background": "#f3f7f6",
+        "--brand-text": "#1b2b28",
+        "--brand-font": "'Lumen Sans', 'Trebuchet MS', Verdana, sans-serif",
+        "--brand-title-weight": "700"
+      },
+      "evidence": [
+        { "path": "brands/lumen/theme.css", "line": 2, "quote": "--brand-primary: #00796b;" },
+        { "path": "brands/lumen/theme.css", "line": 3, "quote": "--brand-info: #0288d1;" },
+        { "path": "brands/lumen/theme.css", "line": 4, "quote": "--brand-error: #d32f2f;" },
+        { "path": "brands/lumen/theme.css", "line": 5, "quote": "--brand-success: #388e3c;" },
+        { "path": "brands/lumen/theme.css", "line": 6, "quote": "--brand-background: #f3f7f6;" },
+        { "path": "brands/lumen/theme.css", "line": 7, "quote": "--brand-text: #1b2b28;" },
+        { "path": "brands/lumen/theme.css", "line": 8, "quote": "--brand-font: 'Lumen Sans', 'Trebuchet MS', Verdana, sans-serif;" },
+        { "path": "brands/lumen/theme.css", "line": 9, "quote": "--brand-title-weight: 700;" }
+      ]
+    }
+  }
+}

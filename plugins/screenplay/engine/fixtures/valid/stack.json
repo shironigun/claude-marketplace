@@ -1,0 +1,17 @@
+{
+  "repository": "shop",
+  "detectedAt": "2026-11-12T10:00:00.000Z",
+  "frontend": {
+    "frameworks": [{ "id": "react", "evidence": ["package.json: dependencies.react"] }],
+    "routing": [{ "id": "react-router", "evidence": ["package.json: dependencies.react-router-dom"] }],
+    "apiStyles": [{ "id": "rest", "evidence": ["src/api/client.ts: fetch("] }],
+    "contracts": [{ "id": "typescript-types", "evidence": ["tsconfig.json"] }],
+    "auth": [{ "id": "bearer-token", "evidence": ["src/api/client.ts: Authorization"] }],
+    "theming": [{ "id": "css-variables", "evidence": ["src/index.css: --color-"] }],
+    "devServers": [{ "id": "vite", "evidence": ["vite.config.ts"] }],
+    "i18n": [],
+    "fonts": [{ "id": "google-fonts", "evidence": ["index.html: fonts.googleapis.com"] }]
+  },
+  "backend": { "languages": [], "frameworks": [] },
+  "layout": { "kind": "single", "packages": [] }
+}

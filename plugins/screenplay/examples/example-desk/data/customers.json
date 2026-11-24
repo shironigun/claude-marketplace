@@ -1,0 +1,7 @@
+[
+  { "id": "C-1", "name": "Ava Brooks", "company": "Brooks Studio", "city": "Portland" },
+  { "id": "C-2", "name": "Noah Patel", "company": "Patel Freight", "city": "Austin" },
+  { "id": "C-3", "name": "Mia Johnson", "company": "Johnson Dental", "city": "Denver" },
+  { "id": "C-4", "name": "Leo Garcia", "company": "Garcia Builders", "city": "Phoenix" },
+  { "id": "C-5", "name": "Zoe Kim", "company": "Kim Bakery", "city": "Seattle" }
+]

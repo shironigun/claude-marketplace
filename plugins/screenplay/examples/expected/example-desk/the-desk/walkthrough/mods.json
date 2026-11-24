@@ -1,0 +1,21 @@
+{
+  "format": "walkthrough",
+  "look": "floating-desk",
+  "ground": "light",
+  "callouts": "focus-pop",
+  "pointer": "cursor",
+  "transitions": "glide",
+  "pacing": "standard",
+  "intro": "boom",
+  "chip": "new",
+  "demoNote": "on",
+  "sound": "score",
+  "polish": "as-is",
+  "patterns": [
+    { "screen": "SCR-01", "pattern": "section-tour" },
+    { "screen": "SCR-02", "pattern": "tab-tour" },
+    { "screen": "SCR-02", "pattern": "dialog-steps" },
+    { "screen": "SCR-03", "pattern": "column-sweep" }
+  ],
+  "brands": ["harbor", "lumen"]
+}
