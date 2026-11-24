@@ -1,9 +1,9 @@
 <p align="center">
-  <img src="assets/readme/hero.svg" alt="shironigun: a Claude Code plugin marketplace for testing, releasing and explaining software" width="100%">
+  <img src="assets/readme/hero.svg" alt="shironigun: a Claude Code plugin marketplace for testing, releasing and explaining software, and showing your work" width="100%">
 </p>
 
 <p align="center">
-  <a href="#the-catalog"><img alt="9 plugins" src="https://img.shields.io/badge/plugins-9-7c9cff?style=for-the-badge"></a>
+  <a href="#the-catalog"><img alt="10 plugins" src="https://img.shields.io/badge/plugins-10-7c9cff?style=for-the-badge"></a>
   <a href="https://code.claude.com/docs/en/plugins/overview"><img alt="Claude Code plugin marketplace" src="https://img.shields.io/badge/Claude%20Code-plugin%20marketplace-0b1020?style=for-the-badge"></a>
   <a href="#trust--safety"><img alt="No secrets in the repo" src="https://img.shields.io/badge/secrets%20in%20repo-none-2dd4bf?style=for-the-badge"></a>
   <a href="#trust--safety"><img alt="Human-gated writes" src="https://img.shields.io/badge/tracker%20writes-human--gated-fbbf24?style=for-the-badge"></a>
@@ -21,8 +21,9 @@
 
 A [Claude Code](https://code.claude.com/docs/en/plugins/overview) **plugin marketplace**: a curated set of
 plugins (skills, agents, commands and MCP servers) for the work around shipping software. **Test it**, track
-what broke, **ship it** with release notes customers read, and **explain it** with pages and guides. Install
-them into Claude Code in the terminal, the Claude desktop app, or the VS Code extension.
+what broke, **ship it** with release notes customers read, and **explain it** with pages and guides. Then
+**show it**: a LinkedIn profile built from your own record. Install them into Claude Code in the terminal,
+the Claude desktop app, or the VS Code extension.
 
 The flagship is **[qa-engineering](plugins/qa-engineering/)**: one AI orchestrator for the whole QA loop
 (analyze a story → author and approve test cases → publish them to a Test Plan/Suite → generate API + UI
@@ -102,7 +103,11 @@ Select a card to open that plugin's folder and its README.
       <br><b><a href="plugins/design-intelligence/">design-intelligence</a></b>: analyse a Figma screen, build it in MUI to your design system, and review it until it passes.
       <br><code>claude plugin install design-intelligence@shironigun</code>
     </td>
-    <td width="50%" valign="top"></td>
+    <td width="50%" valign="top">
+      <a href="plugins/on-record/"><img src="assets/readme/cards/on-record.svg" alt="on-record: a LinkedIn revamp built from facts you can back" width="100%"></a>
+      <br><b><a href="plugins/on-record/">on-record</a></b>: your exports, certificates and AI chats into a sourced fact ledger, then a full profile revamp you paste in yourself.
+      <br><code>claude plugin install on-record@shironigun</code>
+    </td>
   </tr>
 </table>
 
@@ -119,6 +124,7 @@ Select a card to open that plugin's folder and its README.
 | [feature-explainer](plugins/feature-explainer/) | Documentation | 1 | A private artifact page you choose to share | Node.js, Python 3 | Yes |
 | [how-to-guides](plugins/how-to-guides/) | Documentation | 1 | A PDF guide on your machine | Node.js, Chrome | Yes |
 | [design-intelligence](plugins/design-intelligence/) | Design | 6 skills, 1 agent | MUI code in your project; a Figma screen only when you ask | Node.js, Python 3; optional `ADO_ORG` | Yes (local overlay) |
+| [on-record](plugins/on-record/) | Career | 1 | A fact ledger and a profile draft in a folder you choose; you paste into LinkedIn | Node.js | Yes |
 
 **Product-neutral** plugins ship no product data: your tracker, product and brand live in your own config.
 **Templates** are tuned to one team's project and house style; retarget the conventions in each skill's
@@ -145,6 +151,7 @@ Here is the flagship. The rest are under [The plugins in detail](#the-plugins-in
 - **Telling customers what shipped?** **[release-notes-suite](plugins/release-notes-suite/)**.
 - **Explaining a feature?** A page for your team: **[feature-explainer](plugins/feature-explainer/)**. A PDF for your customers: **[how-to-guides](plugins/how-to-guides/)**.
 - **Turning a Figma screen into code that follows your design system?** **[design-intelligence](plugins/design-intelligence/)**.
+- **Showing your own work?** A LinkedIn profile built from facts you can back: **[on-record](plugins/on-record/)**.
 
 ## How it works
 
@@ -409,6 +416,24 @@ the plugin ships only labelled examples. Co-authored by Ayesha Imtiaz and shiron
 <summary><b>How design-intelligence works</b></summary>
 <br>
 <p align="center"><img src="assets/readme/diagrams/design-intelligence.svg" alt="How design-intelligence works" width="100%"></p>
+</details>
+
+### [on-record](plugins/on-record/)
+
+Say "revamp my LinkedIn" and **on-record** builds the profile from the person's own record. It reads
+the LinkedIn data export (or Save to PDF), certificates and documents, and ChatGPT or Claude data exports,
+with a copy-paste extraction prompt for any other chat. Every claim goes into a fact ledger with its source
+and a status (CONFIRMED, UNCONFIRMED or PLANNED); an interview closes the gaps; then it drafts the headline,
+About, Experience, Featured, Projects, Certifications, Skills and a banner brief in one house style. A check
+traces every number to a confirmed fact and enforces LinkedIn's limits. Two gates: facts before drafting,
+each section before it is final. It never logs in to or automates LinkedIn; the user pastes.
+
+<p align="center"><a href="plugins/on-record/"><img src="assets/readme/usecases/on-record.svg" alt="on-record in action: what you ask and what you get" width="100%"></a></p>
+
+<details>
+<summary><b>How on-record works</b></summary>
+<br>
+<p align="center"><img src="assets/readme/diagrams/on-record.svg" alt="How on-record works" width="100%"></p>
 </details>
 
 ---

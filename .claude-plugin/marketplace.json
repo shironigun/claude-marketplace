@@ -61,6 +61,12 @@
       "description": "Turn a Figma screen into a compliant MUI implementation and review it against your design system until it passes; six skills and a steward agent. Your design system stays in a local, git-ignored overlay. Co-authored by Ayesha Imtiaz (aishaimt002) and shironigun",
       "source": "./plugins/design-intelligence",
       "category": "design"
+    },
+    {
+      "name": "on-record",
+      "description": "Revamp anyone's LinkedIn profile into a branded, enterprise one, built only from facts they can back: reads the LinkedIn export, certificates and ChatGPT or Claude exports, keeps a sourced fact ledger, interviews for gaps, then drafts every section and a banner brief. Checked against the ledger and LinkedIn's limits; the user pastes, nothing is automated",
+      "source": "./plugins/on-record",
+      "category": "career"
     }
   ]
 }

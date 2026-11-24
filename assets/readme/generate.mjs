@@ -18,6 +18,7 @@ const CATEGORY = {
   'release-management': { label: 'Release management' },
   documentation: { label: 'Documentation' },
   design: { label: 'Design' },
+  career: { label: 'Career' },
 };
 
 export const PLUGINS = [
@@ -83,6 +84,13 @@ export const PLUGINS = [
     detail: 'Analyses the screen, builds it in MUI to your design system, and reviews it until it passes.',
     steps: ['Analyse', 'Generate', 'Review', 'Fix', 'Pass'],
     stats: ['6 skills', '1 agent'],
+  },
+  {
+    name: 'on-record', color: '#60a5fa', short: 'A profile from your record', category: 'career', icon: 'VerifiedUser', neutral: true,
+    tagline: 'A LinkedIn revamp built from facts you can back',
+    detail: 'Reads your exports, certificates and AI chats, keeps a sourced fact ledger, then drafts every section.',
+    steps: ['Gather', 'Fact ledger', 'Interview', 'Draft', 'Check', 'You paste'],
+    stats: ['1 skill', '2 offline scripts', 'No login'],
   },
 ];
 
@@ -168,33 +176,41 @@ ${flow(64, 290, W - 128, p.steps, c.color, p.steps.length > 5 ? 15 : 16, p.paral
 // ---- Marketplace hero ----
 function hero() {
   const W = 1280, H = 440;
+  // Four tiles a row, the rows centred on the hero; a third row packs a little tighter to fit.
+  const rows = Math.ceil(PLUGINS.length / 4), step = rows > 2 ? 124 : 132, top = H / 2 - ((rows - 1) * step + 100) / 2;
   const tiles = PLUGINS.map((p, i) => {
     const c = { color: p.color }, col = i % 4, row = Math.floor(i / 4);
-    const x = 760 + col * 118, y = 92 + row * 132;
+    const x = 760 + col * 118, y = top + row * step;
     return `<rect x="${x}" y="${y}" width="100" height="100" rx="24" fill="${c.color}" fill-opacity=".13" stroke="${c.color}" stroke-opacity=".45"/>
 ${icon(p.icon, x + 26, y + 20, 48, c.color)}<text x="${x + 50}" y="${y + 90}" text-anchor="middle" font-size="10.5" font-weight="600" fill="#c7d0e6">${esc(p.name.length > 15 ? p.name.replace('-suite', '') : p.name)}</text>`;
   }).join('\n');
-  const cats = Object.values(CATEGORY).reduce((acc, c) => { const b = pill(acc.x, 300, c.label, NEUTRAL, { size: 14 }); acc.out += b.svg; acc.x += b.w + 10; return acc; }, { x: 72, out: '' }).out;
-  return svg(W, H, 'shironigun marketplace: Claude Code plugins for QA, release and documentation work', `${frame('hero', W, H, '#7c9cff', 30)}
+  // Category pills wrap to a second line before they reach the tile column at x = 760.
+  const cats = Object.values(CATEGORY).reduce((acc, c) => {
+    if (acc.x + pill(0, 0, c.label, NEUTRAL, { size: 14 }).w > 740) { acc.x = 72; acc.y += 36; }
+    const b = pill(acc.x, acc.y, c.label, NEUTRAL, { size: 14 }); acc.out += b.svg; acc.x += b.w + 10; return acc;
+  }, { x: 72, y: 300, out: '' }).out;
+  return svg(W, H, 'shironigun marketplace: Claude Code plugins for QA, release, design, documentation and career work', `${frame('hero', W, H, '#7c9cff', 30)}
 <text x="72" y="104" font-size="16" font-weight="700" letter-spacing="3" fill="#8b97b8">CLAUDE CODE PLUGIN MARKETPLACE</text>
 <text x="72" y="170" font-size="60" font-weight="700" fill="#ffffff">shironigun</text>
 <text x="72" y="222" font-size="30" font-weight="500" fill="#c7d0e6">Plugins for the work around shipping software:</text>
-<text x="72" y="260" font-size="30" font-weight="500" fill="#c7d0e6">testing it, releasing it, explaining it.</text>
+<text x="72" y="260" font-size="30" font-weight="500" fill="#c7d0e6">test it, ship it, explain it, show it.</text>
 ${cats}
-<text x="72" y="384" font-size="16" fill="#8b97b8" font-family="Consolas, 'Cascadia Mono', Menlo, monospace">claude plugin marketplace add shironigun/marketplace</text>
+<text x="72" y="400" font-size="16" fill="#8b97b8" font-family="Consolas, 'Cascadia Mono', Menlo, monospace">claude plugin marketplace add shironigun/marketplace</text>
 ${tiles}`);
 }
 
 // ---- Which plugin for which job ----
 function map() {
-  const W = 1280, H = 560;
+  const H = 560;
   const lanes = [
     { title: 'Test it', cat: 'testing', note: 'Write cases, automate them, run them', items: ['qa-engineering', 'qa-toolkit', 'api-testing', 'ui-testing'] },
     { title: 'Track it', cat: 'bug-tracking', note: 'File what broke, in house style', items: ['bug-suite'] },
     { title: 'Ship it', cat: 'release-management', note: 'Tell customers what changed', items: ['release-notes-suite'] },
     { title: 'Design & explain', cat: 'documentation', note: 'Screens, pages and guides', items: ['design-intelligence', 'feature-explainer', 'how-to-guides'] },
+    { title: 'Show it', cat: 'career', note: 'Your own work, on your profile', items: ['on-record'] },
   ];
-  const lw = (W - 64 * 2 - 24 * 3) / 4;
+  // Lanes keep a fixed width so the longest plugin name fits; the picture widens as lanes are added.
+  const lw = 270, W = 64 * 2 + lanes.length * lw + (lanes.length - 1) * 24;
   const body = lanes.map((l, i) => {
     const x = 64 + i * (lw + 24);
     const items = l.items.map((n, j) => {
@@ -207,7 +223,7 @@ ${icon(p.icon, x + 30, y + 17, 28, c.color)}
     return `<rect x="${x}" y="110" width="${lw}" height="${H - 150}" rx="20" fill="#ffffff" fill-opacity=".03" stroke="#ffffff" stroke-opacity=".14"/>
 <text x="${x + 20}" y="152" font-size="24" font-weight="700" fill="#ffffff">${esc(l.title)}</text>
 <text x="${x + 20}" y="180" font-size="14" fill="#c7d0e6">${esc(l.note)}</text>
-${items}${i < 3 ? `<path d="M${x + lw + 4} 150h16m-6 -6 6 6-6 6" fill="none" stroke="#8b97b8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>` : ''}`;
+${items}${i < lanes.length - 1 ? `<path d="M${x + lw + 4} 150h16m-6 -6 6 6-6 6" fill="none" stroke="#8b97b8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>` : ''}`;
   }).join('\n');
   return svg(W, H, 'Which plugin for which job', `${frame('map', W, H, '#7c9cff', 26)}
 <text x="64" y="72" font-size="30" font-weight="700" fill="#ffffff">Which plugin for which job</text>
@@ -311,6 +327,13 @@ const USECASES = {
     rows: [['done', 'Analysed the frame: 9 components, 2 states missing'], ['done', 'Mapped to MUI with your tokens, no raw values'], ['done', 'Generated the screen and every state'],
       ['fail', 'Review: 2 contrast issues, 1 off-scale spacing'], ['done', 'Fixed and reviewed again: PASS']],
     why: ['Your design system, never ours', 'Reviewed until it passes', 'Org values stay on your machine'],
+  },
+  'on-record': {
+    ask: 'Revamp my LinkedIn from my exports and certificates.', command: '/on-record:revamp',
+    title: 'draft.md · every section, ready to paste', kind: 'steps',
+    rows: [['done', 'Read your LinkedIn export, 3 certificates, 2 chat exports'], ['done', 'Fact ledger: 21 facts, each with its source'], ['done', 'Interview: 6 gaps closed in 2 rounds'],
+      ['wait', 'You approved the facts before any drafting'], ['done', 'Headline, About, 3 roles, Featured, Projects, Skills'], ['fail', 'Check: "35%" is unconfirmed, so it stays out']],
+    why: ['Every claim has a source', 'Numbers traced, never invented', 'You paste; it never logs in'],
   },
 };
 const STATUS = { done: ['#16a34a', 'CheckCircle'], wait: ['#d97706', 'Lock'], fail: ['#dc2626', 'BugReport'] };
@@ -549,6 +572,25 @@ function diagram(p) {
       tag(560, 470, 'FIX AND REVIEW AGAIN UNTIL IT PASSES');
       tag(330, 146, 'ONE STEWARD AGENT PICKS THE SKILLS AND ORDER');
     },
+    'on-record': () => {
+      tag(64, 146, 'SOURCES');
+      const src = [['LinkedIn export', 'or Save to PDF'], ['Certificates', 'and documents'], ['ChatGPT, Claude', 'official exports'], ['Any AI chat', 'an extraction prompt']].map(([t, s], i) => node(64, 160 + i * 104, 200, 88, t, s, { size: 15 }));
+      const ledger = node(330, 250, 210, 110, 'Fact ledger', 'Every claim: source and status', { accent: true });
+      arrow(bracket(296, src, false), ledger);
+      const interview = node(330, 440, 210, 92, 'Interview', 'Facts only, you answer');
+      arrow({ ...ledger, cx: ledger.cx - 40 }, { ...interview, cx: interview.cx - 40 }, { dashed: true });
+      arrow({ ...interview, cx: interview.cx + 40 }, { ...ledger, cx: ledger.cx + 40 }, { dashed: true });
+      const draft = node(610, 250, 200, 110, 'Draft', 'Every section, house style', { accent: true });
+      arrow(ledger, draft, { gate: true, label: 'facts' });
+      const check = node(870, 250, 170, 110, 'Check', 'Numbers traced, limits');
+      arrow(draft, check);
+      const paste = node(1090, 250, 126, 110, 'You paste', 'by hand', { dashed: true });
+      arrow(check, paste, { gate: true });
+      tag(610, 410, 'WHAT IT DRAFTS');
+      ['Headline', 'About', 'Experience', 'Featured', 'Projects', 'Certifications', 'Skills', 'Banner brief'].forEach((t, i) => pill(610 + (i % 4) * 152, 426 + Math.floor(i / 4) * 52, 140, t));
+      out.push(`<text x="610" y="560" font-size="14" fill="#aab4cf">Only CONFIRMED, public-safe facts reach the profile. It never logs in to LinkedIn.</text>`);
+      key();
+    },
   };
   draw[p.name]();
   const subs = {
@@ -561,6 +603,7 @@ function diagram(p) {
     'feature-explainer': 'Research once, read-only, then build the edition for the reader you name.',
     'how-to-guides': 'Facts from the source, written to a standard, built in your brand, with gaps sent back to product.',
     'design-intelligence': 'Your design system in, compliant MUI out, reviewed until it passes.',
+    'on-record': 'Facts first: every claim sourced and approved before drafting, every number traced before you paste.',
   };
   const W = 1280, H = 620;
   return svg(W, H, `How ${p.name} works`, `${frame(`d-${p.name}`, W, H, c, 26)}
