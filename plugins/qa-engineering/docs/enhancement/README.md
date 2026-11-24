@@ -122,7 +122,7 @@ phases 0–5) is one routed workflow. See [`end-to-end-rehearsal.md`](./end-to-e
 full-loop trace. Next (user-authorized, not done here): merge `dev` → `main` + refresh the marketplace
 listing.
 
-release-notes-suite stays a sibling the orchestrator can hand off to; `design-studio` is out of scope.
+release-notes-suite stays a sibling the orchestrator can hand off to; design-system work is out of scope.
 
 ## Phase 3 — Gap closure (SP12–SP13)
 
