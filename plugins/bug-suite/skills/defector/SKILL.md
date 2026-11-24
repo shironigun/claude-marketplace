@@ -26,7 +26,7 @@ If any are missing, run discovery for those keys only, confirm with the user, sa
 - **Tracker:** `tracker.org` / `tracker.project` (`tracker.projectId` when a GUID is needed).
 - **Board / area path:** the support board (`boards.support.areaPath`) — where production defects live.
 - **Author / QA identity:** `identity.displayName` / `identity.email` — asked during discovery, never guessed. Never substitute a shared, service or differently named account.
-- **Auth:** this plugin **bundles** the `azure-devops` MCP (Azure Identity / `az login`, no PAT or token); use its `mcp__azure-devops__*` tools only.
+- **Auth / tools:** this plugin **bundles** the official Azure DevOps MCP server (`ado`, `@azure-devops/mcp` 2.11.0): the org short name comes from the `ADO_ORG` environment variable and sign-in happens in the browser on first use (no PAT or token). Tools are named here by their bare name; they appear as `mcp__plugin_bug-suite_ado__<tool>`, or `mcp__ado__<tool>` if the user registered their own `ado` server. Use only that server's tools.
 - **Spec docs:** if the team keeps behaviour/flow docs (`specDocs.path`, rules in `specDocs.rulesFile`), read the relevant module doc + the rules file before analysing the issue. Verify any `[UNCLEAR]`/`[ASSUMED]` flags. If `specDocs` is empty, rely on what the user and the live behaviour show.
 
 ## Workflow
@@ -99,19 +99,24 @@ Fields that discovery shows are only filled **after** the fix (for example a roo
 
 ## Creating in ADO
 
+Use the Azure DevOps server's `wit_work_item_write` tool, action `create`. Every field goes in `fields` as
+`{ name, value, format }`; values are strings, and the HTML fields carry `format: "Html"` so they are
+stored exactly as drafted:
+
 ```
-mcp__azure-devops__create_work_item
+wit_work_item_write
+  action: "create"
+  project: "<tracker.project>"
   workItemType: "<workItemTypes.defect>"
-  title: "<title per house style>"
-  projectId: "<tracker.project>"
-  areaPath: "<boards.support.areaPath>"
-  priority: 2
-  additionalFields:
-    "Microsoft.VSTS.TCM.ReproSteps": "<repro HTML>"
-    "Microsoft.VSTS.Common.AcceptanceCriteria": "<acceptance HTML>"
-    "Microsoft.VSTS.TCM.SystemInfo": "<creds block, if any>"
-    "<each field from fields.defect, e.g. Custom.Example>": "<the value chosen for this defect>"
-    "System.Tags": "<tags per the observed Defect habit>"
+  fields:
+    - { name: "System.Title", value: "<title per house style>" }
+    - { name: "System.AreaPath", value: "<boards.support.areaPath>" }
+    - { name: "Microsoft.VSTS.Common.Priority", value: "2" }
+    - { name: "Microsoft.VSTS.TCM.ReproSteps", value: "<repro HTML>", format: "Html" }
+    - { name: "Microsoft.VSTS.Common.AcceptanceCriteria", value: "<acceptance HTML>", format: "Html" }
+    - { name: "Microsoft.VSTS.TCM.SystemInfo", value: "<creds block, if any>", format: "Html" }
+    - { name: "<each field from fields.defect, e.g. Custom.Example>", value: "<the value chosen for this defect>" }
+    - { name: "System.Tags", value: "<tags per the observed Defect habit>" }
 ```
 
 Use resolved profile values in the call, never the key names.

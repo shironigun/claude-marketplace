@@ -48,6 +48,6 @@
 <text x="978" y="202" font-size="15" fill="#c7d0e6">No secrets in the repo;</text>
 <text x="978" y="223" font-size="15" fill="#c7d0e6">every tracker write waits</text>
 <text x="978" y="244" font-size="15" fill="#c7d0e6">for your OK.</text>
-<text x="978" y="266" font-size="13" fill="#9db4ff" font-family="Consolas, 'Cascadia Mono', Menlo, monospace">az login · your .env</text>
+<text x="978" y="266" font-size="13" fill="#9db4ff" font-family="Consolas, 'Cascadia Mono', Menlo, monospace">browser sign-in · your .env</text>
 
 </svg>

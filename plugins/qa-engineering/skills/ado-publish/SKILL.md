@@ -49,12 +49,14 @@ never hard-code a project, plan, suite, org, link kind or field name.
 | Area / iteration the cases land on | `tracker.areaPath`, `tracker.iterationPath` | Degrade to the source story's area; say so |
 | **Default** test plan + suite (names, ids if known) | `testPlan.planName/planId`, `testPlan.suiteName/suiteId` | Offer nothing as default; QA must pick from the listed plans/suites |
 | Test-case field mapping (title convention, step/expected shape, tags) | `caseAuthoring.titleConvention`, `caseAuthoring.stepFormat`, `caseAuthoring.tags` | Use the neutral mapping in `references/test-case-field-mapping.md`; flag the assumption |
-| Link kind (case → story relation) | the profile's tracker link convention | Default = the case *tests* the story — `wit_work_items_link type: "tests"`, or `testplan_create_test_case testsWorkItemId` at create; say which was used |
+| Link kind (case → story relation) | the profile's tracker link convention | Default = the case *tests* the story — `wit_work_item_link_write` (action `link`, `type: "tests"`), or `testplan_test_case_write` (action `create`) `testsWorkItemId` at create; say which was used |
 | Author / assignee handles | `identity.author`, `identity.assignTo` | Leave unset; say the field was left to the tracker default |
 
 The tracker is "whatever the house-profile points at". The ops below are the ones the plugin's ADO MCP
-exposes; for a different tracker the orchestrator supplies the equivalent connector — the **flow**
-(load approved cases → confirm → list + pick plan/suite → dry-run → confirm → create → add-to-suite →
+(`@azure-devops/mcp` 2.11.0) exposes, named by their bare tool name: they appear as
+`mcp__plugin_qa-engineering_ado__<tool>` from the bundled server, or `mcp__ado__<tool>` when the QA
+registered their own `ado` server. For a different tracker the orchestrator supplies the equivalent
+connector — the **flow** (load approved cases → confirm → list + pick plan/suite → dry-run → confirm → create → add-to-suite →
 link → write context) is identical.
 
 ## The gated flow — in order, stop at each gate
@@ -99,13 +101,14 @@ it is not yet permission to write (that is gate 2, after the dry-run).
 ### 3. Pick the target plan + suite (READ the tracker)
 Read-only, list what exists so the QA chooses against real options — do not assume:
 
-- `testplan_list_test_plans` for the house-profile project → show the plans.
-- `testplan_list_test_suites` for the chosen plan → show the suites.
+- `testplan` (action `list_plans`) for the house-profile project → show the plans.
+- `testplan` (action `list_suites`, `planId`) for the chosen plan → show the suites.
 
 Present them. **Offer** the house-profile `testPlan` default (plan + suite) as the recommended pick
 *with the reason* — but it is an offer, never an assumption; the QA picks the plan **and** the suite.
 Creating a **new** suite is supported **only if the QA explicitly asks** — then (and only inside the
-confirmed write phase, after gate 2) `testplan_create_test_suite` is used; never create a suite
+confirmed write phase, after gate 2) `testplan_test_suite_write` (action `create`, `planId`,
+`parentSuiteId`, `name`) is used; never create a suite
 unasked.
 
 ### 4. Dry-run preview — show EXACTLY what will be written (NO writes yet)
@@ -120,7 +123,7 @@ Before any write, show the QA the full plan of record. For **each** case, list:
 
 Also surface, up front:
 - **A new suite, if one will be created** — if the QA asked for a new suite in step 3, name it
-  explicitly here as one of the writes to be performed (`testplan_create_test_suite`), so it appears in
+  explicitly here as one of the writes to be performed (`testplan_test_suite_write`, action `create`), so it appears in
   the preview and is covered by the single gate-2 confirm; never create a suite that wasn't in the
   dry-run.
 - **Idempotency check** — if any case already carries an **`adoCaseId`** (or matches a `published[]`
@@ -136,7 +139,7 @@ Present the dry-run and ask for an explicit yes:
 > suite? Nothing has been written yet."**
 
 **Only an explicit yes here unlocks the writes below.** Until this yes, no `create`, no
-`add_test_cases_to_suite`, no `link` has run or may run. One yes covers the previewed list only — a
+`add_test_cases`, no `link` has run or may run. One yes covers the previewed list only — a
 changed selection needs a fresh dry-run and a fresh confirm.
 
 ---
@@ -148,11 +151,11 @@ For each previewed case, create a Test Case work item with the mapped fields. Th
 **not interchangeable** — pick by whether you need the native Steps XML, tags and assignee:
 
 - **To carry `Microsoft.VSTS.TCM.Steps` XML, `System.Tags`, or `System.AssignedTo`, use
-  `wit_create_work_item`** with `workItemType: "Test Case"`, passing those as `fields` alongside
-  `System.Title`, `System.AreaPath`, `System.IterationPath`. Only `wit_create_work_item` accepts raw
-  TCM Steps XML and arbitrary fields — build the Steps XML per
+  `wit_work_item_write` (action `create`)** with `workItemType: "Test Case"`, passing those as `fields`
+  (`[{ name, value }]`, no `format` on the Steps XML) alongside `System.Title`, `System.AreaPath`,
+  `System.IterationPath`. Only `wit_work_item_write` accepts raw TCM Steps XML and arbitrary fields — build the Steps XML per
   `references/test-case-field-mapping.md`.
-- **`testplan_create_test_case` takes `steps` only as a pipe-delimited string** (`"1. action|expected"`,
+- **`testplan_test_case_write` (action `create`) takes `steps` only as a pipe-delimited string** (`"1. action|expected"`,
   one step per line) — **not** raw TCM XML — and exposes no Tags/AssignedTo param, but it can set the
   case→story link at create via `testsWorkItemId` (see step 8). Use it when pipe-delimited steps are
   enough and you want the link set in the same call; do **not** hand it the XML.
@@ -162,19 +165,21 @@ For each previewed case, create a Test Case work item with the mapped fields. Th
   id; a per-case failure is reported as a failure, never glossed.
 
 ### 7. Add the created cases to the suite (WRITE — the unlock)
-`testplan_add_test_cases_to_suite` with the chosen plan + suite and the ids from step 6. This is the
+`testplan_test_suite_write` (action `add_test_cases`) with the chosen `planId` + `suiteId` and the ids
+from step 6 as `testCaseIds`. This is the
 step the old `file-to-tracker` had to leave as a manual UI task; the shipped ADO MCP exposes it, so
 SP7 does it. Report the suite-add result per case from the API response — do not assume it succeeded.
 
 ### 8. Link each case to its story (WRITE — may already be done)
-If step 6 created the case with `testplan_create_test_case` and passed `testsWorkItemId`, the case→story
+If step 6 created the case with `testplan_test_case_write` (action `create`) and passed `testsWorkItemId`, the case→story
 (Tested By) link was already set at create — this step is then a **no-op**; just confirm it from the
-response. Otherwise (the `wit_create_work_item` path) link it now:
+response. Otherwise (the `wit_work_item_write` path) link it now:
 
-- `wit_work_items_link` from the created case to its `tracesStory`, with **`type: "tests"`** — the
+- `wit_work_item_link_write` (action `link`) from the created case to its `tracesStory`:
+  `updates: [{ id: <case id>, linkToId: <story id>, type: "tests" }]` — **`type: "tests"`** is the
   friendly relation enum this tool expects (the case *tests* the story). Do **not** pass
   `Microsoft.VSTS.Common.TestedBy-Reverse` here; that reference name is what
-  `testplan_create_test_case.testsWorkItemId` uses, not `wit_work_items_link`. If the house-profile
+  `testplan_test_case_write`'s `testsWorkItemId` sets, not `wit_work_item_link_write`. If the house-profile
   overrides the link kind, use its value.
 - If the relation is rejected, fall back to `type: "related"` and **tell the QA** which relation was
   actually used. Report only links the API confirmed.
@@ -206,7 +211,7 @@ partial or per-case failure called out plainly.
 
 ## Safety rules (load-bearing — state and obey)
 
-1. **Never auto-run.** No write op (`create`, `add_test_cases_to_suite`, `create_test_suite`, `link`)
+1. **Never auto-run.** No write op (`create`, `add_test_cases`, suite `create`, `link`)
    runs before gate 2's explicit confirm. There is no "I'll just create them", no silent publish, no
    skipping the dry-run. Steps 1–5 are reads and presentation only.
 2. **Idempotency / re-run.** Before creating, check for an existing id: if a case already carries an
@@ -237,13 +242,14 @@ partial or per-case failure called out plainly.
 - [ ] Approved cases were loaded from the `qa-context` **`cases`** slice (from the file); if absent or
       unapproved, the skill **stopped** and said to author/approve first — it authored nothing
 - [ ] Intent was confirmed (gate 1), the plan/suite was **picked from listed options**
-      (`testplan_list_test_plans` / `testplan_list_test_suites`), and the house-profile default was
+      (`testplan` actions `list_plans` / `list_suites`), and the house-profile default was
       **offered, not assumed**
 - [ ] A **dry-run preview** showed every case's title, target plan/suite, linked story, link kind and
       field mapping — with **no write performed** — before gate 2
 - [ ] **No write op ran before gate 2's explicit confirm**; only after it did create
-      (`testplan_create_test_case` / `wit_create_work_item`), add-to-suite
-      (`testplan_add_test_cases_to_suite`) and link (`wit_work_items_link`) run
+      (`testplan_test_case_write` / `wit_work_item_write`, action `create`), add-to-suite
+      (`testplan_test_suite_write`, action `add_test_cases`) and link (`wit_work_item_link_write`,
+      action `link`) run
 - [ ] Outcomes were reported **honestly** per case from the API responses; idempotency was handled
       (skip/relink, not double-create)
 - [ ] The `qa-context` **`ado`** slice (plan, suite, `published[]` of `{ caseTitle, adoCaseId }`) was

@@ -3,12 +3,21 @@
     "playwright": {
       "type": "stdio",
       "command": "npx",
-      "args": ["-y", "@playwright/mcp@0.0.83"]
+      "args": [
+        "-y",
+        "@playwright/mcp@0.0.86"
+      ]
     },
     "ado": {
       "type": "stdio",
       "command": "npx",
-      "args": ["-y", "@azure-devops/mcp@2.10.0", "${ADO_ORG}", "--authentication", "interactive"]
+      "args": [
+        "-y",
+        "@azure-devops/mcp@2.11.0",
+        "${ADO_ORG}",
+        "--authentication",
+        "interactive"
+      ]
     }
   }
 }

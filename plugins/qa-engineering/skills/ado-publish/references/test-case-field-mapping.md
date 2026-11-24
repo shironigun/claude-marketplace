@@ -20,7 +20,7 @@ the equivalent fields — the *shape* (title, steps, area/iteration, tags, assig
 | Area path | `System.AreaPath` | `tracker.areaPath`; else the source story's area |
 | Iteration path | `System.IterationPath` | `tracker.iterationPath`; else the source story's iteration |
 | Assignee | `System.AssignedTo` | `identity.assignTo`; else left to tracker default (say so) |
-| Story it traces (`tracesStory`) | a work-item link (below) | `tracker` link convention; default link = the case *tests* the story (`wit_work_items_link type: "tests"`, or `testplan_create_test_case testsWorkItemId`) |
+| Story it traces (`tracesStory`) | a work-item link (below) | `tracker` link convention; default link = the case *tests* the story (`wit_work_item_link_write` action `link`, `type: "tests"`, or `testplan_test_case_write` action `create` with `testsWorkItemId`) |
 
 ## The `Microsoft.VSTS.TCM.Steps` XML shape
 
@@ -78,21 +78,23 @@ The two create tools are **not interchangeable** — they take steps and links d
 
 1. **Create** — choose the tool by what you need to carry:
    - **Raw `Microsoft.VSTS.TCM.Steps` XML (the shape above), `System.Tags`, or `System.AssignedTo` →
-     `wit_create_work_item`** (`workItemType: "Test Case"`), with each of `System.Title`,
-     `System.AreaPath`, `System.IterationPath`, `System.Tags`, `System.AssignedTo`,
-     `Microsoft.VSTS.TCM.Steps` passed in `fields`. This is the only tool that accepts the raw Steps XML
+     `wit_work_item_write` with action `create`** (`workItemType: "Test Case"`), with each of
+     `System.Title`, `System.AreaPath`, `System.IterationPath`, `System.Tags`, `System.AssignedTo`,
+     `Microsoft.VSTS.TCM.Steps` passed in `fields` as `{ name, value }` entries (leave `format` off the
+     Steps XML so it is written verbatim). This is the only tool that accepts the raw Steps XML
      and arbitrary fields.
-   - **`testplan_create_test_case`** takes `steps` only as a **pipe-delimited string**
+   - **`testplan_test_case_write`** (action `create`) takes `steps` only as a **pipe-delimited string**
      (`"1. action|expected\n2. action|expected"`), has **no** param for raw Steps XML, Tags or
      AssignedTo, but can set the case→story link at create via `testsWorkItemId`. Use it only when
      pipe-delimited steps suffice — never to carry the XML above.
-2. **Add to suite** — `testplan_add_test_cases_to_suite` with the chosen plan + suite and the created
-   ids. (This is the step the old filing skill left as a manual UI task; the shipped ADO MCP exposes
+2. **Add to suite** — `testplan_test_suite_write` with action `add_test_cases`, the chosen `planId` +
+   `suiteId`, and the created ids as `testCaseIds`. (This is the step the old filing skill left as a manual UI task; the shipped ADO MCP exposes
    it.)
-3. **Link to story** — on `wit_work_items_link`, pass the friendly relation enum **`type: "tests"`**
+3. **Link to story** — on `wit_work_item_link_write` (action `link`, `updates: [{ id: <case id>,
+   linkToId: <story id>, type: "tests" }]`), pass the friendly relation enum **`type: "tests"`**
    (the case *tests* the story), not a reference name. The token
-   `Microsoft.VSTS.Common.TestedBy-Reverse` is what `testplan_create_test_case.testsWorkItemId` sets —
-   so if the case was created with `testplan_create_test_case` + `testsWorkItemId`, the link is already
+   `Microsoft.VSTS.Common.TestedBy-Reverse` is what `testplan_test_case_write`'s `testsWorkItemId` sets —
+   so if the case was created with `testplan_test_case_write` + `testsWorkItemId`, the link is already
    in place and this step is a no-op.
 
 ## Fallbacks (stay honest, never drop a case)
@@ -100,7 +102,7 @@ The two create tools are **not interchangeable** — they take steps and links d
 - **Steps XML rejected** → create the work item with title + tags + area first, then put the full
   Action/Expected table into `System.Description` as an HTML `<table>`, and tell the QA native step
   rendering needs the Steps field.
-- **The `tests` relation rejected** → fall back to `wit_work_items_link type: "related"` and tell the QA
+- **The `tests` relation rejected** → fall back to `wit_work_item_link_write` with `type: "related"` and tell the QA
   the link is "Related", not "Tested By".
 - **A field the profile did not fill** (area, assignee) → leave it to the tracker default and **say
   so** in the summary; do not invent a value.

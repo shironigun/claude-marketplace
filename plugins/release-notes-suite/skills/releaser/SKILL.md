@@ -34,7 +34,7 @@ What the profile gives you:
 - **Integration partners and plans:** `variants` (labelled `variants.label`: ERP, POS, PMS…) and `plans` (tiers/editions). Feature availability often differs by partner and by plan. Getting the availability line right matters more to clients than the feature copy.
 - **Product surface:** `product.modules`, the names clients see in the UI.
 - **Brands:** `brands[]`, one profile per client-facing brand of the same product (see **Brand variants**).
-- **Tools:** use the connected tracker MCP tools. If a tool returns "not found" or hangs after a reconnect, the connector hasn't re-registered: tell the user to toggle the connector off and on.
+- **Tools:** use the connected tracker MCP tools (for Azure DevOps, the official `@azure-devops/mcp` 2.11.0 server: `wit_query` action `wiql` for the query below, `wit_work_item` action `get_batch` for the batch fetch; read-only). If a tool returns "not found" or hangs after a reconnect, the connector hasn't re-registered: tell the user to toggle the connector off and on.
 
 ## Workflow
 

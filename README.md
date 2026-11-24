@@ -37,7 +37,7 @@ automation → turn a failing run into a filed bug) with **a human gate at every
 | | |
 |---|---|
 | **You stay in control** | Nothing is created, filed or published in your tracker until you confirm a preview. Research is read-only. |
-| **No secrets in the repo** | Sign-in is your `az login` session or an interactive browser sign-in. Your product details live in your own git-ignored files. |
+| **No secrets in the repo** | Sign-in is an interactive browser sign-in. Your product details live in your own git-ignored files. |
 | **Built from real work** | Every plugin came out of a real QA, release or documentation workflow and keeps the lessons from its reviews. |
 | **Install only what you need** | Each plugin stands alone. Pick one job, or take the whole QA loop. |
 
@@ -113,8 +113,8 @@ Select a card to open that plugin's folder and its README.
 | [qa-engineering](plugins/qa-engineering/) | Testing | 16 skills, 4 agents, 9 commands | Test Cases, suites and bugs in Azure DevOps, each after your OK; framework code in your repo | Claude Code 2.1.293+; set `ADO_ORG`; interactive sign-in | Yes |
 | [qa-toolkit](plugins/qa-toolkit/) | Testing | 4 | Cases and bug drafts in the session; Test Cases in your tracker (Azure DevOps, Jira, Linear and more) | A tracker connector, only to push cases | Yes |
 | [api-testing](plugins/api-testing/) | Testing | 2 | Cases, spec files and bug drafts in the session | None | Yes (local profile) |
-| [ui-testing](plugins/ui-testing/) | Testing | 2 | Test Case work items (`buggy`, after your OK); UI specs in the session | `AZURE_DEVOPS_ORG_URL` + `az login` for `buggy` | Yes (local profile) |
-| [bug-suite](plugins/bug-suite/) | Bug tracking | 3 | Bugs, Defects and comments in Azure DevOps | `AZURE_DEVOPS_ORG_URL` + `az login` | Yes (local profile) |
+| [ui-testing](plugins/ui-testing/) | Testing | 2 | Test Case work items (`buggy`, after your OK); UI specs in the session | Set `ADO_ORG`; browser sign-in, for `buggy` only | Yes (local profile) |
+| [bug-suite](plugins/bug-suite/) | Bug tracking | 3 | Bugs, Defects and comments in Azure DevOps | Set `ADO_ORG`; browser sign-in | Yes (local profile) |
 | [release-notes-suite](plugins/release-notes-suite/) | Release management | 2 | An inventory and release-note drafts in the session | An Azure DevOps connection to harvest tickets | Yes (local profile) |
 | [feature-explainer](plugins/feature-explainer/) | Documentation | 1 | A private artifact page you choose to share | Node.js, Python 3 | Yes |
 | [how-to-guides](plugins/how-to-guides/) | Documentation | 1 | A PDF guide on your machine | Node.js, Chrome | Yes |
@@ -419,20 +419,42 @@ Every plugin is self-contained. Most work the moment they install — they produ
 pages, guides or drafts **in the session** with no external dependency: `qa-toolkit`, `release-notes-suite`,
 `api-testing`, `feature-explainer` and `how-to-guides`.
 
-The three plugins that **write to Azure DevOps** each **bundle their own ADO MCP server** (in the plugin's
-`.mcp.json`) — **no PAT or token is committed or required**, and there's no manual MCP config:
+The plugins that talk to other tools **bundle their own MCP servers** (in the plugin's `.mcp.json`), so
+there's no manual MCP config. **No PAT or token is committed or required**: every server signs in with
+your own browser session, and no org is hardcoded.
 
-- **`bug-suite`** (files Bugs/Defects/comments) and **`ui-testing`** (its `buggy` skill creates
-  Test Cases) bundle the `azure-devops` MCP with **Azure Identity** auth → set **`AZURE_DEVOPS_ORG_URL`**
-  in the shell that launches Claude Code and run **`az login`** once.
-- **`qa-engineering`** ships the official Azure DevOps + Playwright MCP servers with **interactive** sign-in
-  → just set **`ADO_ORG`** in the shell that launches Claude Code.
-- **`design-intelligence`** bundles the Figma (remote), MUI and Azure DevOps MCP servers, all pinned; Figma
-  and Azure DevOps sign in interactively, and the ADO org comes from **`ADO_ORG`**.
+| Server | Pinned to | Bundled in | You set |
+|---|---|---|---|
+| Azure DevOps (Microsoft's official server) | `@azure-devops/mcp@2.11.0` | bug-suite, ui-testing, qa-engineering, design-intelligence | `ADO_ORG` (your org's short name) in the shell that launches Claude Code |
+| Playwright | `@playwright/mcp@0.0.86` | qa-engineering | nothing |
+| Figma (hosted, via the `mcp-remote` bridge) | `mcp-remote@0.16.7` → `https://mcp.figma.com/mcp` | design-intelligence | nothing; browser sign-in |
+| MUI docs | `@mui/mcp@0.1.10` | design-intelligence | nothing (`MUI_RECIPES_API_KEY` only for code generation) |
 
-No tokens live anywhere in this repo. Auth is your `az login` session or an interactive browser sign-in.
-No org is hardcoded: the bundled servers read your org from the environment and launch with `npx` (each
-README has the one-line `cmd /c` wrapper for native Windows).
+Every plugin defines a shared server **identically** (same name, command and version), so with several
+plugins installed Claude Code starts it **once**. Servers launch with `npx`; each README has the
+`cmd /c` wrapper for native Windows.
+
+**Prefer one server you manage yourself?** Register it once at user scope and it serves every plugin and
+project on your machine. Your org name then lives only in your own `~/.claude.json`. Keep these exact
+names so the skills and agents recognise the tools:
+
+```bash
+claude mcp add --scope user ado -- npx -y @azure-devops/mcp@2.11.0 <your-org> --authentication interactive
+```
+
+```bash
+claude mcp add --scope user playwright -- npx -y @playwright/mcp@0.0.86
+```
+
+```bash
+claude mcp add --scope user figma -- npx -y mcp-remote@0.16.7 https://mcp.figma.com/mcp
+```
+
+```bash
+claude mcp add --scope user mui-mcp -- npx -y @mui/mcp@0.1.10
+```
+
+What each connection shares with its provider is covered in [PRIVACY.md](PRIVACY.md).
 
 ### Your org's specifics stay on your machine
 
@@ -466,7 +488,7 @@ git-ignored. `qa-engineering` does the same with its own house-profile; `how-to-
 Plugins run with **your** privileges — hooks, MCP servers, and any `bin/` on the Bash PATH. Install only
 plugins you trust. Before installing, you can read a plugin's `.mcp.json`, `hooks/`, and `bin/` in this repo.
 The plugins here keep **no secrets in the repo**: Azure DevOps signs in interactively (set `ADO_ORG` in the
-shell that launches Claude Code) or through your `az login` session, and framework credentials live in your
+shell that launches Claude Code), and framework credentials live in your
 own git-ignored `.env`. See the [plugin security docs](https://code.claude.com/docs/en/plugins/security).
 
 | Guarantee | How |

@@ -43,8 +43,8 @@ profile sets one; use the profile's scale and say so):
 
 Any custom required fields (e.g. a QA owner, a "found with" picklist) are org-specific — ask the user for their required-field values rather than guessing; picklists reject arbitrary values.
 
-Link the bug to the source test case (when its `adoCaseId` is known) with `wit_work_items_link
-type: "related"` — a bug *relates to* the case it was found through, **not** `tests` (that relation is
+Link the bug to the source test case (when its `adoCaseId` is known) with `wit_work_item_link_write`
+(action `link`, `type: "related"`) — a bug *relates to* the case it was found through, **not** `tests` (that relation is
 case→story, owned by `ado-publish`). Link to the story too when `tracesStory` is known. Report the relation
 the API actually created.
 

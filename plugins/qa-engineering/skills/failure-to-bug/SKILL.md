@@ -185,11 +185,13 @@ fresh dry-run and confirm.
 
 ### 4. Create + link (WRITE)
 For each approved bug:
-- **`wit_create_work_item`** with `workItemType` = `defectFormat.type` (default `Bug`), setting the mapped
-  fields per `references/bug-format.md` (title, `Microsoft.VSTS.TCM.ReproSteps` HTML, severity, area, the
+- **`wit_work_item_write`** (action `create`) with `workItemType` = `defectFormat.type` (default `Bug`),
+  setting the mapped fields as `fields: [{ name, value, format }]` (`format: "Html"` on the HTML fields)
+  per `references/bug-format.md` (title, `Microsoft.VSTS.TCM.ReproSteps` HTML, severity, area, the
   optional acceptance + provenance). **Honest outcome:** a bug counts as filed only when the API returns its
   id; a per-bug failure is reported, never glossed.
-- **`wit_work_items_link`** from the new bug to its source **case** with `type: "related"` (a bug *relates
+- **`wit_work_item_link_write`** (action `link`, `updates: [{ id: <bug id>, linkToId: <case id>,
+  type: "related" }]`) from the new bug to its source **case** with `type: "related"` (a bug *relates
   to* the case it was found through — **not** `tests`), and to the **story** if `tracesStory` is set. If a
   relation is rejected, fall back to `related` and say which was used. Report only links the API confirmed.
 
@@ -206,7 +208,7 @@ Return the filed ids + a per-bug summary (filed ✓/✗, linked ✓/✗, relatio
 returned. For authoring or fixing the cases themselves, use `author-api-cases` / `author-ui-cases`.
 
 ## Safety rules (load-bearing — state and obey)
-1. **Never auto-file.** No `wit_create_work_item` or link runs before gate 2's explicit confirm. Drafting —
+1. **Never auto-file.** No `wit_work_item_write` create or link runs before gate 2's explicit confirm. Drafting —
    and even approving the draft at gate 1 — is not permission to write; the dry-run + gate-2 confirm is.
 2. **Only `real_bug` is filed.** A flake / environment / test_defect / uncertain verdict is reported, never
    filed as a bug.

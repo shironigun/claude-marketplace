@@ -56,15 +56,17 @@ ADO MCP exposes; for a different tracker the orchestrator supplies the equivalen
 ## (a) Retrieve the full work-item graph — READ-ONLY
 
 Pull everything that bears on the requirement, in this order. **Use only the tracker's read
-operations** (the plugin's ADO MCP read ops named below). Never a write.
+operations** (the plugin's ADO MCP read ops named below, by bare tool name: they appear as
+`mcp__plugin_qa-engineering_ado__<tool>` or, with a QA's own `ado` server, `mcp__ado__<tool>`). Never a
+write.
 
 | Step | What to pull | ADO MCP **read** op |
 |---|---|---|
-| 1 | The story itself with **relations/links expanded** — title, state, description, **acceptance criteria**, tags, area/iteration, and the full link set (parent, children, related, predecessor/successor, tested-by, affected-by) | `wit_get_work_item` with `$expand` = relations (or `all`) |
-| 2 | Every **linked item in one batch** — parent epic/feature, child tasks, related stories, linked **bugs/defects**, dependencies — so you read the neighbourhood, not just the node | `wit_get_work_items_batch_by_ids` (ids gathered from step 1's relations) |
-| 3 | The **discussion** — all comments/replies, decisions, clarifications, back-and-forth with Product/BA/Dev | `wit_list_work_item_comments` |
-| 4 | **History / state changes** where it matters (what was reworded, when AC changed, reopens) | `wit_list_work_item_revisions` *(read-only; where available)* |
-| 5 | **Siblings & neighbours you were not handed** — other stories under the same parent, related bugs by area/tag, prior work on the same module — to catch regression surface and duplicate intent | `wit_query_by_wiql` (a read WIQL query) and `search_workitem` (free-text) |
+| 1 | The story itself with **relations/links expanded** — title, state, description, **acceptance criteria**, tags, area/iteration, and the full link set (parent, children, related, predecessor/successor, tested-by, affected-by) | `wit_work_item` (action `get`, `expand: "Relations"` or `"All"`) |
+| 2 | Every **linked item in one batch** — parent epic/feature, child tasks, related stories, linked **bugs/defects**, dependencies — so you read the neighbourhood, not just the node | `wit_work_item` (action `get_batch`, `ids` gathered from step 1's relations) |
+| 3 | The **discussion** — all comments/replies, decisions, clarifications, back-and-forth with Product/BA/Dev | `wit_work_item` (action `list_comments`, `workItemId`) |
+| 4 | **History / state changes** where it matters (what was reworded, when AC changed, reopens) | `wit_work_item` (action `list_revisions`, `workItemId`) *(read-only; where available)* |
+| 5 | **Siblings & neighbours you were not handed** — other stories under the same parent, related bugs by area/tag, prior work on the same module — to catch regression surface and duplicate intent | `wit_query` (action `wiql`, a read WIQL query) and `search_workitem` (free-text) |
 
 Rules for the retrieval:
 

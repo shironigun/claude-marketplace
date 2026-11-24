@@ -195,7 +195,7 @@ objects and Playwright UI specs following **`${CLAUDE_PLUGIN_ROOT}/docs/script-g
 
 ### Phase 4 — ADO integration
 Publish the phase 2-3 **approved** cases to ADO through the **gated `ado-publish`** skill (approved cases →
-Test Plan/Suite: it creates each Test Case, adds it to the suite via `testplan_add_test_cases_to_suite`, and
+Test Plan/Suite: it creates each Test Case, adds it to the suite via `testplan_test_suite_write` (action `add_test_cases`), and
 links it to the story — **nothing is written before the QA confirms the dry-run**, and the suite-add is
 **not** manual). Each generated script already carries its `traces-case:` line, so link script ↔ case by the
 **`adoCaseId`** that `ado-publish` stamps onto the `cases` slice — **not** by the retired `file-to-tracker`

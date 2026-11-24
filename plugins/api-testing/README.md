@@ -45,7 +45,7 @@ into test cases", "the contract test failed, write it up".
 **None for the plugin itself** — both skills produce their output in the session (test cases, runnable
 spec files, or a bug draft). To actually **file** a drafted bug into Azure DevOps afterward, you can use
 an optional companion plugin from this marketplace (**bug-suite** or **qa-engineering**); those plugins
-**bundle** their own ADO MCP (Azure Identity / `az login`, no token), so filing works with no extra setup. The generated scripts target the Playwright + TypeScript + zod automation framework;
+**bundle** Microsoft's official Azure DevOps MCP server (set `ADO_ORG`, sign in in the browser, no token), so filing works with no extra setup. The generated scripts target the Playwright + TypeScript + zod automation framework;
 running them is done in that framework (`npx playwright test`), not through this plugin.
 
 ## Workspace profile (your org facts stay local)

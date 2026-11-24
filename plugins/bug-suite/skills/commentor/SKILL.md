@@ -21,13 +21,13 @@ Read `references/workspace-profile.md`, then load `.claude/workspace-profile.jso
 If any are missing, run discovery for those keys only, confirm with the user, save, then continue. Every org fact below comes from the profile; nothing is assumed.
 
 - **Tracker:** `tracker.org` / `tracker.project`.
-- **Author identity:** `identity.displayName` / `identity.email` — asked during discovery, never guessed. Their identity GUID comes from `mcp__azure-devops__get_me` at run time.
-- **Auth:** this plugin **bundles** the `azure-devops` MCP (Azure Identity / `az login`, no PAT or token); use its `mcp__azure-devops__*` tools.
-- A comment is posted by writing HTML to the **`System.History`** field via `update_work_item` (each write adds one discussion comment).
+- **Author identity:** `identity.displayName` / `identity.email` — asked during discovery, never guessed. Their identity GUID comes from the Azure DevOps server's `core_get_identity_ids` tool (`searchFilter`: `identity.email`) at run time.
+- **Auth / tools:** this plugin **bundles** the official Azure DevOps MCP server (`ado`, `@azure-devops/mcp` 2.11.0): the org short name comes from the `ADO_ORG` environment variable and sign-in happens in the browser on first use (no PAT or token). Tools are named here by their bare name; they appear as `mcp__plugin_bug-suite_ado__<tool>`, or `mcp__ado__<tool>` if the user registered their own `ado` server.
+- A comment is posted by writing HTML to the **`System.History`** field via the `wit_work_item_write` tool, action `update` (each write adds one discussion comment).
 
 ## Workflow
 
-1. **Pull the work item** (`mcp__azure-devops__get_work_item`, expand `all`) to ground the comment in the actual state, assignee, type, and existing discussion. Note the AssignedTo/CreatedBy **identity GUIDs** — you'll reuse them for @mentions.
+1. **Pull the work item** (`wit_work_item`, action `get`, `expand: "All"`) to ground the comment in the actual state, assignee, type, and existing discussion. Note the AssignedTo/CreatedBy **identity GUIDs** — you'll reuse them for @mentions.
 2. **Pick the comment shape** for the intent (status update / RCA / finding / hand-off / escalation — templates in `references/comment-templates.md`).
 3. **Draft the comment** in the house voice and **show it to the user for approval before posting.**
 4. **Post it** (see "Posting in ADO").
@@ -54,16 +54,17 @@ ADO mentions are an HTML anchor carrying the person's identity GUID:
 <a href="#" data-vss-mention="version:2.0,GUID">@Display Name</a>
 ```
 
-- Get GUIDs from the work item's `AssignedTo`/`CreatedBy` fields or its identity-type custom fields (step 1), or from `mcp__azure-devops__get_me` for the filer (`identity`).
+- Get GUIDs from the work item's `AssignedTo`/`CreatedBy` fields or its identity-type custom fields (step 1), or from `core_get_identity_ids` (`searchFilter`: `identity.email`) for the filer (`identity`).
 - If you don't have a person's GUID, **ask the user** or fall back to plain `@Name` text and tell the user that name won't hard-link without the GUID. Don't invent a GUID.
 
 ## Posting in ADO
 
 ```
-mcp__azure-devops__update_work_item
-  workItemId: <id>
-  additionalFields:
-    "System.History": "<comment HTML>"
+wit_work_item_write
+  action: "update"
+  id: <id>
+  updates:
+    - { op: "add", path: "/fields/System.History", value: "<comment HTML>" }
 ```
 
 Writing `System.History` appends a discussion comment (it does not overwrite prior comments). Keep the HTML to the patterns above: `<div>` blocks, `<b>` labels, `<ul>`/`<ol>` for steps, mention anchors in the `CC:` line.

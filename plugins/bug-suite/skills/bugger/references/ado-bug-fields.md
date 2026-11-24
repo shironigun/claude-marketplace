@@ -66,6 +66,7 @@ Paired SystemInfo: `tenantId = 10001 / username = <username> / password = <passw
 
 ## Resolve/close (when asked to verify)
 
-The filer often verifies and closes their own QA bugs. Use `update_work_item` with `state` + a reason the
+The filer often verifies and closes their own QA bugs. Use the `wit_work_item_write` tool (action `update`, JSON-patch
+`updates` on `/fields/System.State` and `/fields/System.Reason`) with a state + a reason the
 Bug type allows (commonly `Fixed and verified`, `Verified` or `Fixed`; check the observed values) only
 when the user asks to resolve/close.

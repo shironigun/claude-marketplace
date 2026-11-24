@@ -78,7 +78,7 @@ Read the `cases` slice from `qa-context.json`.
   absent `approved` as not-approved — **fail closed**, same discipline as `ado-publish`.
 
 **Alternate source — an ADO suite.** If the QA points at a published Test Plan + Suite instead of local
-cases, pull the cases with `testplan_list_test_cases` (read-only) for that plan/suite, and map each ADO
+cases, pull the cases with `testplan` (action `list_cases`, `planId` + `suiteId`; read-only) for that plan/suite, and map each ADO
 Test Case to the same item shape (`title`, `level` from its tag/folder convention or **asked if ambiguous —
 never guessed**, `adoCaseId` = its id, `tracesStory` from its tested-by link). Then continue as below. A
 populated suite already passed `ado-publish`'s approval + publish gate, and this pull is **read-only and

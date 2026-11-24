@@ -11,16 +11,16 @@ this is the contract a reviewer checks it against.
 |---|---|---|
 | 1 | Load approved cases from `qa-context.cases` | **read** (qa-context) |
 | 2 | **Gate 1** — present the N cases; "Publish these to ADO?" | **read / present** |
-| 3 | List plans + suites; QA picks plan + suite | **read** (`testplan_list_test_plans`, `testplan_list_test_suites`) |
+| 3 | List plans + suites; QA picks plan + suite | **read** (`testplan`, actions `list_plans`, `list_suites`) |
 | 4 | **Dry-run** — show every case's title, target plan/suite, linked story, link kind, field mapping | **read / present — NO write** |
 | 5 | **Gate 2** — explicit yes to "create + add-to-suite + link"; "nothing has been written yet" | **the unlock** |
-| 6 | Create Test Cases | **write** — only after gate 2 |
-| 7 | Add to suite (`testplan_add_test_cases_to_suite`) | **write** — only after gate 2 |
-| 8 | Link to story (`wit_work_items_link`) | **write** — only after gate 2 |
+| 6 | Create Test Cases (`wit_work_item_write` or `testplan_test_case_write`, action `create`) | **write** — only after gate 2 |
+| 7 | Add to suite (`testplan_test_suite_write`, action `add_test_cases`) | **write** — only after gate 2 |
+| 8 | Link to story (`wit_work_item_link_write`, action `link`) | **write** — only after gate 2 |
 | 9 | Write `qa-context.ado`; return ids + per-case summary | context write |
 
-**The line is between step 5 and step 6.** No `create`, `add_test_cases_to_suite`,
-`create_test_suite`, or `link` call exists anywhere above step 6. If the QA does not give the gate-2
+**The line is between step 5 and step 6.** No `create`, `add_test_cases`,
+suite `create`, or `link` call exists anywhere above step 6. If the QA does not give the gate-2
 yes, the flow stops at step 5 with nothing written. A reviewer reading the flow adversarially should
 find no write op reachable before the gate-2 confirm — that is the acceptance bar.
 

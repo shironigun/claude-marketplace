@@ -1,6 +1,6 @@
 # ADO Test Case Steps Field Format
 
-The `Microsoft.VSTS.TCM.Steps` field does **not** accept plain text or Markdown. It expects a specific XML structure where each step is a `<step>` element containing two `<parameterizedString>` elements — the action and the expected result. The whole thing is passed as a single string to `additionalFields`.
+The `Microsoft.VSTS.TCM.Steps` field does **not** accept plain text or Markdown. It expects a specific XML structure where each step is a `<step>` element containing two `<parameterizedString>` elements — the action and the expected result. The whole thing is passed as a single string: the `value` of the `Microsoft.VSTS.TCM.Steps` entry in `wit_work_item_write`'s `fields` (no `format`, so it is written verbatim).
 
 ## Structure
 
@@ -49,7 +49,7 @@ def build_steps(pairs):  # pairs = [(action, expected), ...]
 
 ## If the markup is rejected
 
-Some ADO MCP tool versions sanitize or reject the Steps XML. If `create_work_item` errors on the Steps field or the steps don't render:
+Some ADO MCP tool versions sanitize or reject the Steps XML. If `wit_work_item_write` (action `create`) errors on the Steps field or the steps don't render:
 
 1. Create the work item **without** the Steps field first (title + tags + area only).
 2. Put the full step table into the **`System.Description`** field as HTML instead (a normal `<table>` with #/Action/Expected columns). It won't render as native test steps but it's fully readable, and you tell the user the steps are in the Description.

@@ -1,13 +1,15 @@
 {
   "mcpServers": {
-    "azure-devops": {
+    "ado": {
       "type": "stdio",
       "command": "npx",
-      "args": ["-y", "@tiberriver256/mcp-server-azure-devops@0.1.48"],
-      "env": {
-        "AZURE_DEVOPS_ORG_URL": "${AZURE_DEVOPS_ORG_URL}",
-        "AZURE_DEVOPS_AUTH_METHOD": "azure-identity"
-      }
+      "args": [
+        "-y",
+        "@azure-devops/mcp@2.11.0",
+        "${ADO_ORG}",
+        "--authentication",
+        "interactive"
+      ]
     }
   }
 }

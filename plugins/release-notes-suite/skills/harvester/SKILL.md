@@ -30,7 +30,7 @@ If any are missing, run discovery for those keys only, confirm with the user, sa
 - **Boards:** the delivery board (`boards.delivery.areaPath`: sprint/feature work) and the support board (`boards.support.areaPath`: production/support). **harvester pulls BOTH.** The inventory is exhaustive; this is where it differs from `releaser`, which ignores the support board by default.
 - **Integration partners:** `variants.values`, labelled by `variants.label` (ERP, POS, PMS…). The inventory itself is brand-neutral; branding is applied downstream by `releaser`.
 - **Repos:** `repos`, or list them under the tracker project. Signature files/services per theme live in `codeTouchpoints`; when a harvest teaches you a new one, offer to add it to the profile.
-- **Tools:** use the connected tracker MCP tools (for Azure DevOps: the `wit_*`, `repo_*` and `search_*` tools). If a tool returns "not found", hangs after a reconnect, or a permission prompt is declined, that capability isn't available. See **Graceful degradation**.
+- **Tools:** use the connected tracker MCP tools. For Azure DevOps (the official `@azure-devops/mcp` 2.11.0 server, usually `mcp__ado__<tool>`): `wit_query`, `wit_work_item`, `search_workitem`, `repo_repository`, `repo_search_commits`, `repo_pull_request` and `search_code`, all read-only. If a tool returns "not found", hangs after a reconnect, or a permission prompt is declined, that capability isn't available. See **Graceful degradation**.
 - **Read-only:** harvester only *reads* the tracker and repos. It never creates or modifies work items.
 
 ## Scope the harvest first
@@ -42,7 +42,7 @@ Pin down three things before querying:
 
 ## Step 1 — Work items (BOTH boards)
 
-- Query by tag/title/area plus closed or changed in the window (Azure DevOps WIQL shown; translate for other trackers):
+- Query by tag/title/area plus closed or changed in the window (Azure DevOps WIQL shown, run with `wit_query` action `wiql`; set `top` above the expected count, since it defaults to 50; translate for other trackers):
 
 ```
 SELECT [System.Id],[System.Title],[System.WorkItemType],[System.State],[System.Tags],
@@ -54,18 +54,18 @@ WHERE [System.TeamProject] = '<tracker.project>'
 ORDER BY [System.ChangedDate] DESC
 ```
 
-- For an initiative, also run the tracker's full-text work-item search on the keywords, and **follow parent/child and related links** from the anchor stories so you catch bugs/defects that don't repeat the keyword in their title.
-- Batch-fetch the fields above. Substring matches are noisy (a short partner code can match unrelated words): read titles and drop false positives.
+- For an initiative, also run the tracker's full-text work-item search on the keywords (`search_workitem`), and **follow parent/child and related links** (`wit_work_item` action `get`, `expand: "Relations"`) from the anchor stories so you catch bugs/defects that don't repeat the keyword in their title.
+- Batch-fetch the fields above (`wit_work_item` action `get_batch` with `ids` and `fields`). Substring matches are noisy (a short partner code can match unrelated words): read titles and drop false positives.
 - Capture per item: **ID, type, state, title, closed/iteration date, board, tags.**
 
 ## Step 2 — Git layer (the differentiator: deployments with no ticket)
 
 This is why harvester exists: code ships that never gets a work item. Find it.
 
-- List the repos (`repos`, or list by project).
-- Search commits with the theme term, `fromDate`/`toDate`, and **work-item references included**: this separates commits that reference a work item from those that don't.
-- List PRs with status **Completed** in the window, then fetch each with **work-item refs and changed files included**. A completed PR touching theme code with **empty work-item refs = a deployment with no ticket**. Capture PR id, title, merge date, files/services.
-- Code-search a signature symbol to confirm the files/paths that mark a change as theme-relevant.
+- List the repos (`repos`, or list by project: `repo_repository` action `list`).
+- Search commits with the theme term and the window (`repo_search_commits`: `searchText`, `commitStartDate`/`commitEndDate`), then get their **work-item references**: this separates commits that reference a work item from those that don't. On Azure DevOps 2.11.0 the commit search returns no work-item refs, so map the commits to their PRs (`repo_pull_request` action `list_by_commits`) and read the refs from each PR.
+- List PRs with status **Completed** (`repo_pull_request` action `list`, `status: "Completed"`; filter to the window by close date), then fetch each with **work-item refs and changed files included** (action `get`, `includeWorkItemRefs: true`, `includeChangedFiles: true`). A completed PR touching theme code with **empty work-item refs = a deployment with no ticket**. Capture PR id, title, merge date, files/services.
+- Code-search a signature symbol (`search_code`) to confirm the files/paths that mark a change as theme-relevant.
 - **Dedupe:** map each PR/commit to its work item; PRs already tied to a captured work item fold under that item (list the PR numbers there). The leftover PRs/commits are the **non-ticketed** set: list them as their own entries.
 
 ## Step 3 — Graceful degradation (never fake completeness)

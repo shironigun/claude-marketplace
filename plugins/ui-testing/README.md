@@ -16,7 +16,7 @@
 | **What it does** | Click-by-click UI cases and runnable Playwright UI specs |
 | **Includes** | 2 skills |
 | **Writes** | Test Case work items (`buggy`, after your OK) |
-| **Setup** | `az login` + `AZURE_DEVOPS_ORG_URL`, for `buggy` only |
+| **Setup** | Set `ADO_ORG`; browser sign-in on first use, for `buggy` only |
 | **Product-neutral** | Yes: org facts come from a local workspace profile |
 
 ## See it in action
@@ -49,24 +49,39 @@ in each skill's `references/workspace-profile.md`.
 
 ## Setup — self-contained, no secrets (only `buggy` needs it)
 
-`buggy` **creates Test Case work items in Azure DevOps**, so the plugin **bundles** the `azure-devops` MCP
-server (in its `.mcp.json`) and authenticates with **Azure Identity** — **no PAT or token lives in the repo
-or is required**. (`tester` needs nothing — it only produces cases and script text.) Just once:
+`buggy` **creates Test Case work items in Azure DevOps**, so the plugin **bundles** Microsoft's official
+Azure DevOps MCP server (`ado`, `@azure-devops/mcp@2.11.0`, in its `.mcp.json`), which signs in
+**interactively in the browser** — **no PAT or token lives in the repo or is required**. (`tester` needs
+nothing — it only produces cases and script text.) Just once:
 
-1. **`az login`** (Azure CLI) with an account that can create work items on the project.
-2. Set **`AZURE_DEVOPS_ORG_URL`** in your environment to your org, e.g.
-   `export AZURE_DEVOPS_ORG_URL=https://dev.azure.com/<org-name>` (PowerShell:
-   `$env:AZURE_DEVOPS_ORG_URL = "https://dev.azure.com/<org-name>"`). The bundled `.mcp.json` reads it via
-   `${AZURE_DEVOPS_ORG_URL}`; no org is hardcoded.
-3. Install the plugin (below) and start or reload the session — the `azure-devops` server starts
-   automatically; confirm it in `/mcp`.
+1. Set **`ADO_ORG`** to your organization's **short name** (the `<org-name>` in
+   `https://dev.azure.com/<org-name>`) in **the shell that launches Claude Code**, e.g.
+   `export ADO_ORG=<org-name>` (PowerShell: `$env:ADO_ORG = "<org-name>"`), or in Claude Code's settings
+   `env`. The bundled `.mcp.json` reads it via `${ADO_ORG}`; no org is hardcoded. A `.env` file does not
+   work for this.
+2. Install the plugin (below) and start or reload the session — the `ado` server starts automatically;
+   confirm it in `/mcp`.
+3. On the first Azure DevOps call a browser window opens: sign in with an account that can create work
+   items on the project (and, if you want `buggy` to add cases to a suite for you, has Test Plans access).
 
 **Windows:** if the server fails to start because `npx` is not found as an executable, change the
 launcher in the plugin's `.mcp.json` from `"command": "npx", "args": ["-y", …]` to
 `"command": "cmd", "args": ["/c", "npx", "-y", …]`.
 
-> Nothing sensitive is committed — auth is your `az login` session (Azure Identity), never a PAT in a file.
+> Nothing sensitive is committed — auth is your own browser sign-in, never a PAT in a file.
 > `buggy` always asks for your approval before creating work items — ADO creation is a real write.
+
+### Use your own MCP server instead
+
+If you prefer one Azure DevOps server shared across all your plugins, register it once at user scope.
+Your org name then lives only in your own `~/.claude.json`, never in a repo:
+
+```bash
+claude mcp add --scope user ado -- npx -y @azure-devops/mcp@2.11.0 <your-org> --authentication interactive
+```
+
+Keep this exact server name (`ado`) so the skills recognise the tools (`mcp__ado__<tool>`). When both your
+server and the bundled one exist, Claude Code connects once.
 
 ## Install
 
@@ -75,7 +90,7 @@ claude plugin marketplace add shironigun/marketplace
 claude plugin install ui-testing@shironigun
 ```
 
-Then run `az login` and set `AZURE_DEVOPS_ORG_URL` if you plan to use `buggy` (the bundled MCP handles the rest — see Setup above).
+Then set `ADO_ORG` if you plan to use `buggy`, and sign in in the browser on first use (the bundled MCP handles the rest — see Setup above).
 
 ## Notes
 

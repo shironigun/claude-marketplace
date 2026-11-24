@@ -23,17 +23,19 @@ If any are missing, run discovery for those keys only, confirm with the user, sa
 - **Boards:** the support board (`boards.support.areaPath`: production defects) and the delivery board (`boards.delivery.areaPath`: sprint/feature work).
 - **Test Plan / Suite:** use `testPlan.planId` / `testPlan.suiteId` from the profile; if empty, ask the user once and offer to save them.
 - **Author identity:** the filer (`identity.displayName`, `identity.email`). Asked, never guessed.
+- **Auth / tools:** this plugin **bundles** the official Azure DevOps MCP server (`ado`, `@azure-devops/mcp` 2.11.0): the org short name comes from the `ADO_ORG` environment variable and sign-in happens in the browser on first use (no PAT or token). Tools are named here by their bare name; they appear as `mcp__plugin_ui-testing_ado__<tool>`, or `mcp__ado__<tool>` if the user registered their own `ado` server.
 - **Flow docs** (if the team keeps them, at `specDocs.path`): a folder of linked Markdown, such as `README.md` (index/mindmap), the rules file (`specDocs.rulesFile`, e.g. `RULES.md`, the business-rule registry), `modules/*.md`, `integrations/*.md`. These are the source of truth for behavior; read the relevant module file, its linked neighbors and the cited rule anchors before writing.
 
 ## The workflow
 
-1. **Read the ticket.** Pull the work item with `azure-devops:list_work_items` (WIQL by ID) or have the user paste it. Extract: the client/environment, the feature touched, expected vs actual behavior, and any acceptance criteria.
+1. **Read the ticket.** Pull the work item with the Azure DevOps server's `wit_work_item` tool (action `get`, `id`, `expand: "All"`) or have the user paste it. Extract: the client/environment, the feature touched, expected vs actual behavior, and any acceptance criteria.
 2. **Scope the behavior.** If flow docs exist, open the module the ticket touches, follow its `Touches:` links, and collect every cited rule from the rules file. If no docs, ask the user for the flow or work from the ticket + domain knowledge.
 3. **Draft the test cases** in the format below. Cover happy path, every business rule, every edge case ("Breaks"), and negative/permission cases. The rules and edge cases are where the real coverage lives.
 4. **Show the user the drafts for approval** before creating anything in ADO.
 5. **Create each as a Test Case work item** (see "Creating in ADO").
 6. **Link each to the source ticket.**
-7. **Tell the user the new Test Case IDs** and remind them to add them to the target suite in the ADO Test Plans UI (Add existing test cases by ID). That step is manual.
+7. **Tell the user the new Test Case IDs** and remind them to add them to the target suite in the ADO Test Plans UI (Add existing test cases by ID). By default that step stays manual.
+8. **Optional: add them to the suite for the user.** Only if the user asks or approves when offered, add the new IDs to the target suite (`testPlan.planId` / `testPlan.suiteId`) — see "Adding to a Test Suite (optional)". Skip it otherwise.
 
 ## Test case format
 
@@ -101,35 +103,56 @@ For any ticket, produce cases across these axes; skip an axis only if it genuine
 
 Create each test case as a work item:
 
+Use the Azure DevOps server's `wit_work_item_write` tool, action `create`. Every field goes in `fields` as
+`{ name, value }` (string values). Leave `format` off the Steps field so the XML is written verbatim:
+
 ```
-azure-devops:create_work_item
+wit_work_item_write
+  action: "create"
+  project: "<tracker.project>"
   workItemType: "Test Case"            # workItemTypes.testCase
-  title: "<title per format above>"
-  projectId: "<tracker.project>"
-  areaPath: <boards.support.areaPath or boards.delivery.areaPath, matching the source ticket>
-  assignedTo: "<identity.email>"       # unless told otherwise
-  additionalFields:
-    "Microsoft.VSTS.TCM.Steps": "<steps as HTML, see references/ado-steps-format.md>"
-    "System.Tags": "<carry over relevant tags from the source ticket, e.g. QA; <feature tag>; <environment>>"
+  fields:
+    - { name: "System.Title", value: "<title per format above>" }
+    - { name: "System.AreaPath", value: "<boards.support.areaPath or boards.delivery.areaPath, matching the source ticket>" }
+    - { name: "System.AssignedTo", value: "<identity.email>" }      # unless told otherwise
+    - { name: "Microsoft.VSTS.TCM.Steps", value: "<steps as HTML, see references/ado-steps-format.md>" }
+    - { name: "System.Tags", value: "<carry over relevant tags from the source ticket, e.g. QA; <feature tag>; <environment>>" }
 ```
+
+Don't use `testplan_test_case_write` for this: it builds its own Steps markup from a pipe-delimited string, which would not match the house format.
 
 The Steps field uses a specific ADO XML/HTML format, not plain text or a Markdown table. **Read `references/ado-steps-format.md` before writing the Steps field**; getting the markup right is what makes steps render as proper test steps in ADO.
 
 Then link to the source ticket:
 
 ```
-azure-devops:manage_work_item_link
-  operation: "add"
-  relationType: "Microsoft.VSTS.Common.TestedBy-Reverse"   # test case tests the ticket
-  sourceWorkItemId: <source ticket ID>
-  targetWorkItemId: <new test case ID>
+wit_work_item_link_write
+  action: "link"
+  project: "<tracker.project>"
+  updates:
+    - { id: <new test case ID>, linkToId: <source ticket ID>, type: "tests" }   # Microsoft.VSTS.Common.TestedBy-Reverse: test case tests the ticket
 ```
 
-If that relation type is rejected, fall back to `System.LinkTypes.Related` and tell the user the link is "Related" rather than "Tested By".
+If that relation type is rejected, fall back to `type: "related"` (`System.LinkTypes.Related`) and tell the user the link is "Related" rather than "Tested By".
+
+## Adding to a Test Suite (optional)
+
+Off by default: the standard result is the list of new IDs for the user to add in the Test Plans UI. Only when the user asks, or says yes when you offer, show the plan, suite and IDs you will add, and after their OK call:
+
+```
+testplan_test_suite_write
+  action: "add_test_cases"
+  project: "<tracker.project>"
+  planId: <testPlan.planId>
+  suiteId: <testPlan.suiteId>
+  testCaseIds: ["<new test case ID>", "..."]
+```
+
+If `testPlan` is empty, ask for the plan and suite once and offer to save them. Report the result per ID from the response; if the call fails, fall back to the manual UI step.
 
 ## Hard limits (be honest about these)
 
-- **Cannot add test cases to a Test Suite via API**: no suite tool is available. After creating the cases, the user adds them to the target suite manually in the Test Plans UI. Always state the new IDs so this is quick.
+- **Adding test cases to a Test Suite is manual by default**: after creating the cases, the user adds them to the target suite in the Test Plans UI. Always state the new IDs so this is quick. The server can do it (`testplan_test_suite_write`, action `add_test_cases`), but only as the optional, user-approved step above.
 - **Cannot execute test runs or record pass/fail outcomes**: authoring only.
 - **Always get approval before creating** work items in ADO; creation is a real write.
 
