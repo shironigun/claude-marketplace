@@ -1,12 +1,19 @@
 {
   "name": "qa-toolkit",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "QA workflow automation — generate API and UI test cases, convert failures to bugs, push to your tracker",
   "author": {
     "name": "shironigun",
     "url": "https://github.com/shironigun"
   },
+  "license": "MIT",
   "homepage": "https://github.com/shironigun/marketplace/tree/main/plugins/qa-toolkit",
   "repository": "https://github.com/shironigun/marketplace",
-  "keywords": ["testing", "qa", "automation", "test-cases", "bug-tracker"]
+  "keywords": [
+    "testing",
+    "qa",
+    "automation",
+    "test-cases",
+    "bug-tracker"
+  ]
 }

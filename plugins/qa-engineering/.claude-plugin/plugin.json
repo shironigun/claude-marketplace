@@ -6,6 +6,7 @@
   "author": {
     "name": "shironigun"
   },
+  "license": "MIT",
   "keywords": [
     "testing",
     "automation",
@@ -23,5 +24,14 @@
     "vscode",
     "codegen",
     "trace-viewer"
-  ]
+  ],
+  "network": {
+    "hosts": [
+      "registry.npmjs.org",
+      "dev.azure.com",
+      "login.microsoftonline.com",
+      "cdn.playwright.dev",
+      "playwright.azureedge.net"
+    ]
+  }
 }

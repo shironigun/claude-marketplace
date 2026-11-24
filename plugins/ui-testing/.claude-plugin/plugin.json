@@ -1,7 +1,24 @@
 {
   "name": "ui-testing",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "UI test case authoring and Playwright script generation for any web product. buggy writes Azure DevOps Test Case work items in a rigorous house style; tester authors cases and generates runnable Playwright + TypeScript UI specs (forward and reverse).",
-  "author": { "name": "shironigun" },
-  "keywords": ["testing", "qa", "ui", "playwright", "test-cases", "azure-devops"]
+  "author": {
+    "name": "shironigun"
+  },
+  "license": "MIT",
+  "keywords": [
+    "testing",
+    "qa",
+    "ui",
+    "playwright",
+    "test-cases",
+    "azure-devops"
+  ],
+  "network": {
+    "hosts": [
+      "registry.npmjs.org",
+      "dev.azure.com",
+      "login.microsoftonline.com"
+    ]
+  }
 }

@@ -505,3 +505,7 @@ own git-ignored `.env`. See the [plugin security docs](https://code.claude.com/d
   [marketplaces](https://code.claude.com/docs/en/plugins/create-marketplace)
 
 <p align="center"><sub>Made by <a href="https://github.com/shironigun">shironigun</a> · Plugins for testing, releasing and explaining software</sub></p>
+
+## License
+
+[MIT](LICENSE) © 2026 shironigun and contributors.

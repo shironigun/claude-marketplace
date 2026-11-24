@@ -106,6 +106,11 @@ explicit `tools` list scoped to what the agent needs.
 **Plugins** (`.claude-plugin/plugin.json`): kebab-case `name`, semver `version` (bump it on every change to
 the plugin), `description`, `author`, domain-neutral `keywords`. Paths relative to the plugin root.
 
+Every plugin must also pass Claude Code's own validator, `claude plugin validate plugins/<name>`, and
+the plugin-directory profile (`--profile directory`): a 512 to 2048 px square `.claude-plugin/icon.png`,
+`network.hosts` listing every host its MCP servers or skills reach, `privacyPolicyUrl` for any remote
+MCP server, and a license.
+
 **Marketplace** (`.claude-plugin/marketplace.json`): every plugin listed once with an existing `source`,
 and descriptions that match the plugin's README.
 

@@ -1,11 +1,12 @@
 {
   "name": "design-intelligence",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "Turns a Figma screen into a compliant MUI implementation (or a Figma screen) and reviews it against your organization's design system. Bundles six skills (Figma analysis, Figma-to-code adapter, design-system generation, Figma screen generation, design-system review, and skill maintenance), a steward agent, and shared design-system knowledge and configuration, with your org's values kept in a local, git-ignored overlay.",
   "author": {
     "name": "shironigun",
     "url": "https://github.com/shironigun"
   },
+  "license": "MIT",
   "keywords": [
     "design-system",
     "figma",
@@ -13,5 +14,15 @@
     "design-review",
     "accessibility",
     "design-to-code"
-  ]
+  ],
+  "network": {
+    "hosts": [
+      "registry.npmjs.org",
+      "dev.azure.com",
+      "login.microsoftonline.com",
+      "mcp.figma.com",
+      "mui.com",
+      "llms.mui.com"
+    ]
+  }
 }

@@ -1,7 +1,18 @@
 {
   "name": "api-testing",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "API test case authoring, Playwright + TypeScript script generation, and bug drafting for any HTTP API. api-tester authors contract/endpoint/workflow cases and generates runnable specs (forward and reverse); api-bugger triages failed API tests and drafts review-ready bugs.",
-  "author": { "name": "shironigun" },
-  "keywords": ["testing", "qa", "api", "playwright", "typescript", "zod", "test-cases"]
+  "author": {
+    "name": "shironigun"
+  },
+  "license": "MIT",
+  "keywords": [
+    "testing",
+    "qa",
+    "api",
+    "playwright",
+    "typescript",
+    "zod",
+    "test-cases"
+  ]
 }

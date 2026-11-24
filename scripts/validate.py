@@ -138,6 +138,19 @@ def check_json(path):
             err(path, "author.name must be shironigun")
         if a.get("email") not in (None, "shironigun@gmail.com", "ayeshadis222@gmail.com"):
             err(path, "author.email may only be the maintainer's public contact")
+        for dep in d.get("dependencies", []):
+            dn = dep if isinstance(dep, str) else dep.get("name", "")
+            dn = dn.split("@")[0]
+            if not os.path.isdir(os.path.join("plugins", dn)):
+                err(path, f"dependency '{dn}' is not a plugin in this marketplace")
+        pdir = os.path.dirname(os.path.dirname(path))
+        if not os.path.isfile(os.path.join(pdir, ".claude-plugin", "icon.png")) and not d.get("icon"):
+            err(path, "missing .claude-plugin/icon.png (512-2048 px square PNG)")
+        if os.path.isfile(os.path.join(pdir, ".mcp.json")) and not d.get("network", {}).get("hosts"):
+            err(path, "has an .mcp.json but no network.hosts")
+        if d.get("name", "").startswith("connector-"):
+            extra = [x for x in ("skills", "agents", "commands", "hooks") if os.path.isdir(os.path.join(os.path.dirname(os.path.dirname(path)), x))]
+            if extra: err(path, f"connector plugins hold only an .mcp.json, found {extra}")
     if path.endswith(".claude-plugin/marketplace.json"):
         if d.get("owner", {}).get("email") not in (None, "shironigun@gmail.com"):
             err(path, "owner.email may only be the maintainer's public contact")
