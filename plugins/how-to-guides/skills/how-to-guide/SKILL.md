@@ -20,6 +20,7 @@ This skill bundles:
 | `assets/images/placeholder.svg` | A stand-in screenshot until a real one exists. |
 | `scripts/build.mjs` + `scripts/theme/` | Markdown to branded PDF through local Chrome, with checks against the standard. |
 | `scripts/shots/` | A screenshot driver and a callout tool. |
+| `scripts/detect-brand.mjs` | Drafts a brand profile from the product's code, for the user to confirm. |
 
 `<skill>` below means this skill's folder.
 
@@ -30,7 +31,13 @@ This skill bundles:
 The build looks for `howto-brand.json` in the guide's folder or any folder above it (or takes `--brand=<file>`). It sets the product name, logo, colours, font, default cover and the closing help line, and can point to a `rules` file of house rules. Read `references/brand-profile.md` for the fields.
 
 - **There's a profile:** read it, and read its `rules` file in full. House rules win over this skill wherever they're more specific: product spelling, what the readers are called, plan and platform names, where the code lives and which branch is production, a team demo kit, the output folder.
-- **There isn't one:** ask the user once whether to set one up. If yes, copy `assets/howto-brand.example.json` next to the guide folder, fill it from what they give you (logo file, brand colour, help line), and offer to start a `rules` file. If no, the guide builds with a neutral look and no product name.
+- **There isn't one, and you have the product's code:** draft one from the code. Run `node "<skill>/scripts/detect-brand.mjs" "<repo>"`. It reads the code only and prints JSON: a `draft` profile, every `candidate` with the file it came from, and `brands` when the code holds more than one brand. Then:
+  1. Show the user the draft: the product name, the logo images themselves (open them, don't just list paths), each colour with the file it came from, and the font. If there are several brands, ask which one this guide is for; each brand gets its own profile.
+  2. Let them confirm or correct each field. A repo holds old logos, partner logos and app icons, and the theme's secondary colour isn't always the brand's accent, so never write a field they haven't seen.
+  3. Write `howto-brand.json` in the guides folder, never in the product's repo or in this plugin, and copy the chosen images into a `brand/` folder next to it.
+  4. If the font is only a web-font link, ask before downloading it, and check its licence allows embedding in a PDF. Without a file the guide uses the system font.
+  5. Ask for the `help` line (it isn't in the code) and offer to start a `rules` file.
+- **There isn't one and there's no code:** ask the user once whether to set one up. If yes, copy `assets/howto-brand.example.json` next to the guide folder, fill it from what they give you (logo file, brand colour, help line), and offer to start a `rules` file. If no, the guide builds with a neutral look and no product name.
 
 Never put a profile, logo or rules file inside this plugin: they belong to the user's organisation and stay with their files.
 

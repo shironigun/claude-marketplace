@@ -35,6 +35,19 @@ Paths in the profile are relative to the profile file. Every field is optional.
 
 Colours must be six-digit hex (`#1a2b3c`); anything else is ignored with a warning, because they go straight into the page's CSS.
 
+## Drafting a profile from the code
+
+`scripts/detect-brand.mjs <repo>` reads a product's code and prints a draft profile as JSON. It writes nothing.
+
+| It looks for | Where |
+| --- | --- |
+| Logos and marks | Image files named logo, brand, wordmark, mark or icon. Wide images are logo candidates, square ones mark candidates, and names with white, inverse or light are `logoOnDark` candidates. Build output, backups and `node_modules` are skipped. |
+| Colours | Theme, palette and token files: MUI palettes (`primary.main`, `primary.dark`, `secondary.main`, `text.primary`), CSS and Sass variables, and Tailwind colours. MUI colour names such as `colors.indigo[500]` are turned into hex through the project's own `@mui/material`. |
+| Font | The theme's `fontFamily`, `@font-face` rules, Google Fonts links, and font files in the repo. |
+| Product name | Page titles and web manifests, the app that holds the theme first. |
+
+When file names point to more than one brand (say `Logo_Product.svg` and `Logo_PartnerEdition.svg` for a product and an illustrative partner edition), the output lists each under `brands`, so you can build one profile per brand. Every value is a guess until a person confirms it.
+
 ## What goes in the house rules
 
 The standard is general. The `rules` file holds what only your organisation knows, so the skill gets it right without asking every time:

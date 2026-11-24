@@ -82,7 +82,10 @@ folder:
 
 Every guide below that folder builds in your colours, and the skill reads your house rules (what your
 readers are called, your plans and platforms, where the code lives, your demo kit) after the standard.
-Without a profile, guides build with a neutral look. See `skills/how-to-guide/references/brand-profile.md`.
+No profile yet? Point the skill at your product's code and it drafts one: logo, colours, font and
+product name, each shown with the file it came from, for you to confirm before anything is saved. It
+spots when the code holds more than one brand, so each can get its own profile. Without a profile,
+guides build with a neutral look. See `skills/how-to-guide/references/brand-profile.md`.
 
 ## Requirements
 
