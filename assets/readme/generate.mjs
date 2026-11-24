@@ -561,16 +561,22 @@ function diagram(p) {
       out.push(`<text x="810" y="516" font-size="14" fill="#aab4cf">Anything it can't confirm goes on a list,</text><text x="810" y="536" font-size="14" fill="#aab4cf">never into the guide as a guess.</text>`);
     },
     'design-intelligence': () => {
-      tag(64, 146, 'INPUTS');
-      const src = [['Figma screen', 'a frame or its link'], ['Your design system', 'local, never in the plugin'], ['Work item', 'optional context']].map(([t, s], i) => node(64, 160 + i * 120, 220, 100, t, s, { dashed: i === 1 }));
-      const analyse = node(330, 300, 180, 110, 'Analyse', 'components, states, tokens', { accent: true });
-      arrow(bracket(300, src, false), analyse);
-      const generate = node(560, 300, 180, 110, 'Generate', 'MUI to your tokens');
-      const review = node(790, 300, 180, 110, 'Review', 'against your rules', { accent: true });
-      const pass = node(1030, 300, 186, 110, 'PASS', 'compliant screen');
+      // Each step names the skill that does it; the steward on top orders them; the review loop is drawn, not just named.
+      node(330, 150, 886, 64, 'design-intelligence-steward', 'one agent picks the skills and their order', { accent: true, size: 16 });
+      tag(64, 246, 'INPUTS');
+      const src = [['Figma screen', 'a frame or its link'], ['Your design system', 'local, never in the plugin'], ['Work item', 'optional context']].map(([t, s], i) => node(64, 262 + i * 104, 220, 88, t, s, { dashed: i === 1, size: 15 }));
+      const analyse = node(330, 300, 190, 132, 'Analyse', 'figma-design-analysis', { accent: true });
+      arrow(bracket(302, src, false), analyse);
+      const generate = node(566, 300, 236, 132, 'Generate', 'figma-to-code, then design-system-generation, or figma-screen-generation for a Figma screen');
+      const review = node(848, 300, 190, 132, 'Review', 'design-system-review, against your rules', { accent: true });
+      const pass = node(1084, 300, 132, 132, 'PASS', 'compliant code or screen');
       arrow(analyse, generate); arrow(generate, review); arrow(review, pass);
-      tag(560, 470, 'FIX AND REVIEW AGAIN UNTIL IT PASSES');
-      tag(330, 146, 'ONE STEWARD AGENT PICKS THE SKILLS AND ORDER');
+      // Review sends fixes back to Generate until it passes.
+      const ry = 432, gx = generate.cx, rx = review.cx, ly = 486;
+      out.push(`<path d="M${rx} ${ry + 4}V${ly}H${gx}V${ry + 16}" fill="none" stroke="${c}" stroke-opacity=".85" stroke-width="2.2" stroke-dasharray="6 5"/>`);
+      out.push(`<path d="M${gx} ${ry + 6}l-6 11M${gx} ${ry + 6}l6 11" stroke="${c}" stroke-width="2.2" stroke-linecap="round" fill="none"/>`);
+      out.push(`<text x="${(gx + rx) / 2}" y="${ly + 24}" text-anchor="middle" font-size="13" font-weight="600" fill="#c7d0e6">fix and review again until it passes</text>`);
+      node(330, 538, 886, 52, 'skill-maintenance', 'keeps the six skills and the shared design knowledge current', { dashed: true, size: 15 });
     },
     'standout': () => {
       tag(64, 146, 'SOURCES');
