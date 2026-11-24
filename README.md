@@ -101,7 +101,7 @@ Select a card to open that plugin's folder and its README.
 
 | Plugin | Category | Skills | What it writes | Setup | Product-neutral |
 |---|---|---|---|---|---|
-| [qa-engineering](plugins/qa-engineering/) | Testing | 16 skills, 4 agents, 9 commands | Test Cases, suites and bugs in Azure DevOps, each after your OK; framework code in your repo | Set `ADO_ORG`; interactive sign-in | Yes |
+| [qa-engineering](plugins/qa-engineering/) | Testing | 16 skills, 4 agents, 9 commands | Test Cases, suites and bugs in Azure DevOps, each after your OK; framework code in your repo | Claude Code 2.1.293+; set `ADO_ORG`; interactive sign-in | Yes |
 | [qa-toolkit](plugins/qa-toolkit/) | Testing | 4 | Cases and bug drafts in the session; Test Cases in your tracker (Azure DevOps, Jira, Linear and more) | A tracker connector, only to push cases | Yes |
 | [api-testing](plugins/api-testing/) | Testing | 2 | Cases, spec files and bug drafts in the session | None | Yes (local profile) |
 | [ui-testing](plugins/ui-testing/) | Testing | 2 | Test Case work items (`buggy`, after your OK); UI specs in the session | `AZURE_DEVOPS_ORG_URL` + `az login` for `buggy` | Yes (local profile) |
