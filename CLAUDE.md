@@ -114,7 +114,24 @@ and descriptions that match the plugin's README.
 A mods `{"modules": [...]}` entry is non-standard: it is allowed only when the plugin README states the
 engine version it needs and what breaks without it (today: qa-engineering's live status pane).
 
-## 6. Before any commit or push
+## 6. Branches, commits and pull requests
+
+- **One branch per piece of work**, cut from `main` (or from the branch it depends on, stated in the PR).
+  Never commit to `main` directly; `main` is protected and changes land through a PR.
+- **Branch name:** `<type>/<scope>-<short-topic>`, lowercase, hyphens, max ~50 characters.
+  - `type`: `feat` (new plugin, skill or capability), `fix` (bug or broken standard), `docs`, `refactor`,
+    `chore` (tooling, config, housekeeping), `test`, `ci`, `security` (leak or hardening work).
+  - `scope`: the plugin folder name (`release-notes-suite`, `design-intelligence`…), or `repo` /
+    `assets` / `docs` for marketplace-wide work.
+  - `short-topic`: what changes, in 2-4 words; add the issue number when there is one
+    (`fix/harvester-yaml-frontmatter`, `feat/design-intelligence-add-plugin`,
+    `security/repo-history-rewrite`, `fix/qa-toolkit-42-truncated-description`).
+- **Commit messages:** conventional commits with the same scope, `type(scope): summary`
+  (`fix(release-notes-suite): quote the harvester description`), no trailers (rule 3).
+- **PR title** mirrors the main commit; the body says what changed, any behaviour change, and how it was
+  verified. Link the issue (`Closes #N`) when there is one. Bump the plugin `version` in the same PR.
+
+## 7. Before any commit or push
 
 1. `python3 scripts/validate.py` must report **0 errors**. It checks frontmatter, JSON, `.mcp.json` rules,
    cross-plugin references, generic leak patterns (emails, GUIDs, org URLs, `Custom.*` fields, personal
