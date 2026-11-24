@@ -7,7 +7,7 @@
   },
   "keywords": [],
   "author": "",
-  "license": "UNLICENSED",
+  "license": "MIT",
   "type": "commonjs",
   "dependencies": {
     "marked": "^14.1.4",

@@ -1,7 +1,16 @@
 {
   "name": "release-notes-suite",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Two-stage release pipeline for any product. harvester builds the complete engineering release inventory (every shipped story, bug and defect across the delivery and support boards plus non-ticketed PR/commit deployments); releaser turns an inventory or technical draft into short, benefit-led client release notes in a support-team house style, one variant per client-facing brand. Org specifics (boards, integration partners, plans, brands) are discovered once into a local, git-ignored workspace profile.",
-  "author": { "name": "shironigun" },
-  "keywords": ["release-notes", "changelog", "release-inventory", "azure-devops", "announcements"]
+  "author": {
+    "name": "shironigun"
+  },
+  "license": "MIT",
+  "keywords": [
+    "release-notes",
+    "changelog",
+    "release-inventory",
+    "azure-devops",
+    "announcements"
+  ]
 }
