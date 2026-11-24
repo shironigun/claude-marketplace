@@ -58,9 +58,9 @@
       "id": "pacing",
       "label": "Pacing",
       "options": [
-        { "id": "standard", "label": "Standard", "ms": 1400, "preview": "Each callout holds 1.4 s." },
-        { "id": "calm", "label": "Calm", "ms": 1600, "preview": "Each callout holds 1.6 s; the how-to default." },
-        { "id": "brisk", "label": "Brisk", "ms": 1200, "preview": "Each callout holds 1.2 s; the teaser and trailer default." }
+        { "id": "standard", "label": "Standard", "ms": 1400, "preview": "Each callout holds 1.4 s, and the camera glides 0.8 s between shots." },
+        { "id": "calm", "label": "Calm", "ms": 1600, "preview": "Each callout holds 1.6 s, and the camera glides 1 s between shots; the how-to default." },
+        { "id": "brisk", "label": "Brisk", "ms": 1200, "preview": "Each callout holds 1.2 s, and the camera glides 0.5 s between shots; the teaser and trailer default." }
       ]
     },
     {

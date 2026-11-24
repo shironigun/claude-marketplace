@@ -12,7 +12,8 @@ const { forbiddenNames } = require('./brief');
 const { renderStoryboard } = require('./storyboard');
 const { filmNext, pastGate2 } = require('./progress');
 const { beatsProblems, demoProblems } = require('./story');
-const { timingTable, timingProblems } = require('./timing');
+const { timingTable, timingProblems, lengthProblems } = require('./timing');
+const { formatOf } = require('./catalog');
 
 // The checks a film's result takes beyond its schema (spec 5.8, 5.9).
 const FILM_CHECKS = { mods: modsProblems, beats: beatsProblems, 'demo-data': demoProblems };
@@ -69,7 +70,10 @@ function planProblems(fc) {
     : [`${kind}: not saved yet; save it with sp save ${kind}`]));
   // A story that passes its own checks is timed as the build times it (spec 5.12), so what the Motion type or the kit
   // cannot play is refused before gate 2, not first at the build.
-  if (!problems.length) problems.push(...timingProblems(timingTable(fc)).map((p) => `beats: ${p}`));
+  if (!problems.length) {
+    const table = timingTable(fc);
+    problems.push(...[...timingProblems(table), ...lengthProblems(table, formatOf(fc.format))].map((p) => `beats: ${p}`));
+  }
   return problems;
 }
 

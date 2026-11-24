@@ -3,10 +3,9 @@
 // a pop as each caption comes in, a tick for each typed character. Every time comes from the film's one timing table,
 // the one the scenes read, so a retimed film keeps every sound on its frame.
 (function (SP) {
-  // Four bars that turn (I, V, vi, IV in C), their bass notes, and the tempo each pacing sets.
+  // Four bars that turn (I, V, vi, IV in C), and their bass notes.
   const CHORDS = [['C4', 'E4', 'G4'], ['B3', 'D4', 'G4'], ['A3', 'C4', 'E4'], ['A3', 'C4', 'F4']];
   const BASS = ['C2', 'G2', 'A2', 'F2'];
-  const BPM = { standard: 100, calm: 90, brisk: 108 };
 
   // The film's sound events, in seconds of the film: its clicks, caption pops and typed characters, the title's ring
   // and hit, the end card's chord, and the stretch the groove plays under (from the first screen to the end card).
@@ -43,7 +42,8 @@
     const film = (SP.film && SP.film.film) || kit.json('film.json');
     const c = SP.cues(film);
     // Velocities are on the player's own scale, as its sound reference writes them (a soft pad at 30), not 0 to 1.
-    S.tempo(BPM[film.mods.pacing] || BPM.standard, { t0: c.groove ? c.groove[0] : 0 });
+    // The tempo and its grid come from the timing table, which ends every scene on the same beat.
+    S.tempo(film.tempo.bpm, { t0: film.tempo.t0 });
     S.program('pad', 'pad', { gain: -12, rev: 0.5 });
     S.program('bass', 'bass', { gain: -10 });
     if (c.groove) {

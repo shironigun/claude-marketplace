@@ -3,7 +3,7 @@ const test = require('node:test');
 const assert = require('node:assert/strict');
 const path = require('path');
 const { EXAMPLES } = require('./helpers');
-const { PACE, beatPhases, timingTable, timingProblems } = require('../lib/timing');
+const { PACE, GLIDE, TEMPO, beatPhases, timingTable, timingProblems, lengthProblems } = require('../lib/timing');
 
 const expected = (...parts) => require(path.join(EXAMPLES, 'expected', 'example-desk', ...parts));
 // The example promo's film context: what the timing table reads.
@@ -14,12 +14,58 @@ const promo = () => ({
 });
 
 test('timing: every scene starts where the one before ends, in the Motion type\'s ids, and the film runs their sum', () => {
-  const table = timingTable(promo());
+  const silent = { ...promo(), mods: { ...promo().mods, sound: 'silent' } };
+  const table = timingTable(silent);
   assert.equal(table.fps, 60);
-  assert.equal(table.length, 32);
+  assert.equal(table.length, 33.8);
+  assert.equal(table.tempo, null);
   assert.deepEqual(table.scenes.map((s) => [s.id, s.motion, s.start, s.dur]), [
-    ['S-01', 's-01', 0, 3], ['S-02', 's-02', 3, 9.8], ['S-03', 's-03', 12.8, 4.8], ['S-04', 's-04', 17.6, 11.4], ['S-05', 's-05', 29, 3],
+    ['S-01', 's-01', 0, 3], ['S-02', 's-02', 3, 10.4], ['S-03', 's-03', 13.4, 5.2], ['S-04', 's-04', 18.6, 12.2], ['S-05', 's-05', 30.8, 3],
   ]);
+});
+
+test("timing: the camera glides at its pacing's speed, and a beat that glides lasts at least twice its glide", () => {
+  assert.deepEqual(GLIDE, { standard: 0.8, calm: 1, brisk: 0.5 });
+  // The mods form says what each pacing glides, so the user picks the speed knowingly.
+  const pacing = require('../catalog/mods.json').mods.find((m) => m.id === 'pacing');
+  for (const o of pacing.options) assert.ok(o.preview.includes('the camera glides ' + GLIDE[o.id] + ' s between shots'), o.id);
+  const at = (pacing, transitions = 'glide') => timingTable({ ...promo(), mods: { ...promo().mods, pacing, transitions, sound: 'silent' } });
+  const moves = (table) => table.scenes[1].beats.map((b) => [b.dur, b.move]);
+  // The story gives S-02 beats of 3, 1.4, 1.2, 3 and 1.2 s; the third acts on the second's target, so the camera stays.
+  assert.deepEqual(moves(at('brisk')), [[3, [0, 0.5]], [1.4, [0, 0.5]], [1.2, null], [3, [0, 0.5]], [1.2, [0, 0.5]]]);
+  assert.deepEqual(moves(at('standard')), [[3, [0, 0.8]], [1.6, [0, 0.8]], [1.2, null], [3, [0, 0.8]], [1.6, [0, 0.8]]]);
+  assert.deepEqual(moves(at('calm')), [[3, [0, 1]], [2, [0, 1]], [1.2, null], [3, [0, 1]], [2, [0, 1]]]);
+  assert.deepEqual([at('brisk').length, at('standard').length, at('calm').length], [32, 33.8, 35.8]);
+  // A cut lands at once, so it lengthens nothing.
+  assert.equal(at('standard', 'cut').length, 32);
+});
+
+test('timing: a film with a score cuts on its beat: every scene but the last lasts whole beats of the tempo its pacing sets', () => {
+  const table = timingTable(promo());
+  assert.deepEqual(table.tempo, { bpm: TEMPO.standard, t0: 0 });
+  // At 100 beats a minute a beat is 0.6 s: S-02's 10.4 s ends on the next beat, and the time goes to its last beat.
+  assert.deepEqual(table.scenes.map((s) => [s.id, s.start, s.dur]), [
+    ['S-01', 0, 3], ['S-02', 3, 10.8], ['S-03', 13.8, 5.4], ['S-04', 19.2, 12.6], ['S-05', 31.8, 3],
+  ]);
+  assert.equal(table.length, 34.8);
+  assert.equal(table.scenes[1].beats.at(-1).dur, 2);
+  const beat = 60 / TEMPO.standard;
+  assert.ok(table.scenes.every((s) => Math.abs(s.start / beat - Math.round(s.start / beat)) < 1e-6), JSON.stringify(table.scenes.map((s) => s.start)));
+  // A calm film's beats are longer; its starts stay on its own grid, to the millisecond.
+  const calm = timingTable({ ...promo(), mods: { ...promo().mods, pacing: 'calm' } });
+  assert.equal(calm.tempo.bpm, TEMPO.calm);
+  assert.ok(calm.scenes.every((s) => Math.abs(s.start * TEMPO.calm / 60 - Math.round(s.start * TEMPO.calm / 60)) < 0.002));
+  // Ending each scene on the beat can take a story inside its format past it: the film's length is checked again.
+  assert.deepEqual(lengthProblems({ length: 60.6 }, { label: 'Promo', seconds: { min: 30, max: 60 } }), [
+    'the film runs 60.6 s once each scene starts on its beat; a promo runs at most 60 s',
+  ]);
+  assert.deepEqual(lengthProblems({ length: 60 }, { label: 'Promo', seconds: { min: 30, max: 60 } }), []);
+  assert.deepEqual(lengthProblems({ length: 400 }, { label: 'Walkthrough', seconds: null }), []);
+  // The last scene keeps its own length, so an end card of 2 s holds 2 s, not the beat's 2.4.
+  const story = promo();
+  const short = { ...story, beats: { ...story.beats, scenes: story.beats.scenes.map((s, i, all) => (i === all.length - 1 ? { ...s, ms: 2000 } : s)) } };
+  const ended = timingTable(short);
+  assert.deepEqual([ended.scenes.at(-1).start, ended.scenes.at(-1).dur, ended.length], [31.8, 2, 33.8]);
 });
 
 test('timing: each screen scene opens on the whole window, and a new target moves the camera', () => {

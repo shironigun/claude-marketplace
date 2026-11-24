@@ -72,7 +72,7 @@ function filmBuild(fc, { screens, theme, profile, readRepo, readProfile }) {
   }
   const chip = fc.mods.chip === 'none' ? null : label('chip', fc.mods.chip);
   const film = {
-    v: 1, film: { title: fc.name, format: fc.format, length: table.length }, mods: fc.mods, chip, order: table.scenes.map((s) => s.id), scenes,
+    v: 1, film: { title: fc.name, format: fc.format, length: table.length }, mods: fc.mods, tempo: table.tempo, chip, order: table.scenes.map((s) => s.id), scenes,
   };
   const scenesJson = {
     v: 1, stage: 'final', look: `${label('look', fc.mods.look)}: a ${fc.format} of ${fc.name}, plain`, width: 1920, height: 1080, fps: 60,

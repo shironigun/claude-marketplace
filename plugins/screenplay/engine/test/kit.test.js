@@ -136,6 +136,7 @@ test('kit score: every sound sits on its frame of the timing table, and the groo
   const SP = kit();
   const film = {
     mods: { intro: 'boom' },
+    tempo: { bpm: 100, t0: 0 },
     order: ['S-01', 'S-02', 'S-03'],
     scenes: {
       'S-01': { kind: 'title', start: 0, dur: 3 },
@@ -173,7 +174,11 @@ test('kit score: every sound sits on its frame of the timing table, and the groo
       };
     },
   });
-  SP.score(S, {}, { json: () => film });
+  const tempo = [];
+  SP.score(new Proxy(S, { get: (t, name) => (name === 'tempo' ? (...args) => { tempo.push(args); return S; } : t[name]) }), {}, { json: () => film });
+  // The tempo and its grid come from the timing table, which cut the scenes on the same beat.
+  assert.deepEqual(plain(tempo), [[100, { t0: 0 }]]);
+  calls.push('tempo');
   assert.ok(['tempo', 'program', 'chord', 'note', 'drum', 'fx', 'ticks', 'master'].every((n) => calls.includes(n)), calls.join());
   // The groove stops with the screens: nothing of it sounds on under the end card's chord.
   const groove = sounds.filter((o) => o.t >= c.groove[0] && o.t < c.end);
