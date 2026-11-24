@@ -58,8 +58,8 @@ export interface Profile {
   envPrefix: string;
   /**
    * The variant this profile represents on the product's variant axis — an
-   * account/user/deployment type the product changes behaviour for (a client
-   * type, tenant type, product tier, user role, client app). Carries the
+   * account/user/deployment type the product changes behaviour for (a tenant
+   * type, integration partner, product tier, user role, client app). Carries the
    * product's own enum value. Undefined for a variant-agnostic / default profile.
    *
    * Branch on it ONLY where the product's own code branches — via

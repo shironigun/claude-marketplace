@@ -6,10 +6,10 @@ Every block in `assets/vzkit.js` returns an HTML string. `examples/example-conte
 
 Three lanes colour icons, pills and diagram boxes:
 - `ai`: indigo, the AI or an outside service
-- `app`: amber, your product's own code (the name is historical; it means "the app")
-- `dl`: neutral, a person or a screen
+- `app`: amber, your product's own code
+- `user`: neutral, a person or a screen
 
-Diagram box classes: `b-ai`, `b-app`, `b-dl`, `b-ok` (good outcome), `b-bad` (failure), `b-note`
+Diagram box classes: `b-ai`, `b-app`, `b-user`, `b-ok` (good outcome), `b-bad` (failure), `b-note`
 (dashed, a side note). Level colours: `var(--urg-low|medium|high|critical)`.
 
 ## Page furniture

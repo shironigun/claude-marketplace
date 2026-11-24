@@ -291,8 +291,8 @@ const USECASES = {
     why: ['Researched read-only', 'Pictures first, detail collapsed', 'Private until you share it'],
   },
   'how-to-guides': {
-    ask: 'Write a guide to Service Reminders for our clients.', command: '/how-to-guides:how-to-guide',
-    title: 'service-reminders.pdf · 7 pages', kind: 'steps',
+    ask: 'Write a guide to Payment Reminders for our admins.', command: '/how-to-guides:how-to-guide',
+    title: 'payment-reminders.pdf · 7 pages', kind: 'steps',
     rows: [['done', 'Learned the feature from the code and app, read-only'], ['done', 'Written to the standard: steps, AI callout, troubleshooting'], ['done', 'Built in your brand: How-to standard, no warnings'],
       ['wait', 'For product: 2 questions, 1 change request, 1 bug'], ['wait', 'Placeholder screenshots to replace: 1']],
     why: ['Facts from the source', 'Your brand, never ours', 'About 10 pages a reader opens'],
@@ -463,7 +463,7 @@ function diagram(p) {
     },
     'bug-suite': () => {
       const root = node(64, 300, 240, 110, 'What happened?', 'Pick the skill by where you found it');
-      const rows = [['Found while testing a story, or in regression', 'bugger', 'Bug', 'On the team board'], ['Found on production, by a live client', 'defector', 'Defect', 'On Support Board'], ['An update for an existing ticket', 'commentor', 'Comment', 'In the team\'s voice']];
+      const rows = [['Found while testing a story, or in regression', 'bugger', 'Bug', 'On the delivery board'], ['Found on production, by a live client', 'defector', 'Defect', 'On the support board'], ['An update for an existing ticket', 'commentor', 'Comment', 'In the team\'s voice']];
       rows.forEach(([cond, skill, res, where], i) => {
         const y = 150 + i * 158;
         const a = node(364, y, 330, 100, cond, '', { size: 15 });
@@ -477,7 +477,7 @@ function diagram(p) {
       out.push(`<path d="M300 140L1020 290V430L300 580Z" fill="${c}" fill-opacity=".05"/>`);
       tag(64, 146, 'EVERYTHING THAT SHIPPED');
       const src = ['User Stories', 'Bugs', 'Defects', 'Merged PRs', 'Commits', 'Deployments'].map((t, i) => pill(64, 160 + i * 62, 200, t));
-      out.push(`<text x="64" y="560" font-size="13" fill="#aab4cf">both boards, plus work</text><text x="64" y="578" font-size="13" fill="#aab4cf">that shipped with no ticket</text>`);
+      out.push(`<text x="64" y="560" font-size="13" fill="#aab4cf">every board, plus work</text><text x="64" y="578" font-size="13" fill="#aab4cf">that shipped with no ticket</text>`);
       const harvester = node(330, 300, 200, 110, 'harvester', 'Gathers it all, read-only', { accent: true });
       arrow(bracket(296, src, false), harvester);
       const inv = node(580, 300, 190, 110, 'Inventory', 'Complete, grouped by theme');

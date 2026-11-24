@@ -1,0 +1,6 @@
+#!/bin/sh
+# No co-author / sign-off trailers and no private session links in public history.
+if grep -qiE '^(co-authored-by|signed-off-by):|claude\.ai/code/session_' "$1"; then
+  echo "commit-msg: remove Co-authored-by / Signed-off-by trailers and session links (CLAUDE.md, rule 3)." >&2
+  exit 1
+fi

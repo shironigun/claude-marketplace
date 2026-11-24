@@ -15,19 +15,19 @@
     },
     {
       "name": "bug-suite",
-      "description": "File Bugs and Defects on the Example Project ADO project in the team's QA house style, plus ticket comments",
+      "description": "File story and regression Bugs, production Defects and ticket comments in Azure DevOps in a QA house style; your boards and fields are discovered into a local profile",
       "source": "./plugins/bug-suite",
       "category": "bug-tracking"
     },
     {
       "name": "release-notes-suite",
-      "description": "Two-stage release pipeline: harvester builds the complete engineering inventory; releaser writes client-facing notes for the product and its PARTNER-facing variant",
+      "description": "Two-stage release pipeline: harvester builds the complete engineering inventory; releaser writes short, benefit-led client release notes, one variant per brand",
       "source": "./plugins/release-notes-suite",
       "category": "release-management"
     },
     {
       "name": "ui-testing",
-      "description": "UI test case authoring and Playwright script generation for the product — buggy (ADO Test Cases) and tester (cases + runnable UI specs)",
+      "description": "UI test case authoring and Playwright script generation: buggy (Azure DevOps Test Cases) and tester (cases + runnable UI specs)",
       "source": "./plugins/ui-testing",
       "category": "testing"
     },
@@ -39,7 +39,7 @@
     },
     {
       "name": "qa-engineering",
-      "description": "AI QA engineering — one orchestrator for the whole QA loop: analyze an ADO story, author + approve test cases, publish them to a Test Plan/Suite, build + generate API + UI automation, and turn a failing run into a filed bug, human-gated at every tracker write. Also teaches and reviews a self-contained, product-neutral Playwright + TypeScript framework; the QA's specifics live in a git-ignored house-profile",
+      "description": "AI QA engineering — one orchestrator for the whole QA loop: analyze an ADO story, author + approve test cases, publish them to a Test Plan/Suite, build + generate API + UI automation, and turn a failing run into a filed bug, human-gated at every tracker write. Also teaches and reviews a self-contained, product-neutral Playwright + TypeScript framework; the QA's specifics live in a git-ignored house-profile. Requires Claude Code 2.1.293 or later",
       "source": "./plugins/qa-engineering",
       "category": "testing"
     },
@@ -51,7 +51,7 @@
     },
     {
       "name": "how-to-guides",
-      "description": "Customer how-to guides for B2B software (businesses and any B2B SaaS): one feature, researched read-only, written to a standard and built as a branded PDF. Your brand and house rules stay in your own howto-brand.json",
+      "description": "Customer how-to guides for any B2B software: one feature, researched read-only, written to a standard and built as a branded PDF. Your brand and house rules stay in your own howto-brand.json",
       "source": "./plugins/how-to-guides",
       "category": "documentation"
     }

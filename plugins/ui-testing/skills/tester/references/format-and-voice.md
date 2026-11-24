@@ -1,6 +1,6 @@
 # Format and Voice Reference
 
-The complete guide to the team's test case style. Read this before writing.
+The complete guide to the house test case style. Read this before writing. Module, feature and label names below are illustrative; use the product's real ones (`product.modules`).
 
 ## Title
 
@@ -8,8 +8,8 @@ The complete guide to the team's test case style. Read this before writing.
 [Module] - [Feature] - Verify that <behavior>.
 ```
 
-- Module = top-level area (Deals, Messenger, Customers, Settings, Leads, etc.)
-- Feature = specific sub-area or capability (Pipeline, Facebook, Merge, Roles, Import, etc.)
+- Module = top-level area (Contacts, Inbox, Campaigns, Invoices, Settings, etc.)
+- Feature = specific sub-area or capability (Queues, Chat, Merge, Roles, Import, etc.)
 - "Verify that" segment = one specific observable outcome. Describes exactly what should be true.
 - Period at the end. Always.
 - For client-specific cases: `[Module] - [Feature] - Client Name [ID] - Verify that ...`
@@ -18,8 +18,8 @@ The complete guide to the team's test case style. Read this before writing.
 
 State everything the tester needs to set up before step 1:
 - Client ID and Environment (QA / Staging / Production)
-- Role/user type (e.g., "User logged in as Salesperson role")
-- Required data state (e.g., "An FB conversation exists with last inbound > 24h ago")
+- Role/user type (e.g., "User logged in as Agent role")
+- Required data state (e.g., "A chat conversation exists with last inbound > 24h ago")
 - Any feature flags or configuration requirements
 
 Format: `Preconditions: Client ID: XXXXX | Environment: QA | <any other state>`
@@ -47,8 +47,8 @@ This is where most test case writers get it wrong. The reference standard:
 
 | Collapsed (wrong) | Correct (split) |
 |---|---|
-| Navigate to Settings and go to the Deals tab | Step 1: Navigate to Settings → Settings page opens. Step 2: Move to the Deals tab → Deals settings tab is displayed. |
-| Open the messenger and find the conversation | Step 1: Navigate to the Messenger module → Messenger opens and conversation list is displayed. Step 2: Locate the FB conversation with <condition> → The conversation is visible in the list. Step 3: Click the conversation to open it → The conversation thread opens. |
+| Navigate to Settings and go to the Inbox tab | Step 1: Navigate to Settings → Settings page opens. Step 2: Move to the Inbox tab → Inbox settings tab is displayed. |
+| Open the inbox and find the conversation | Step 1: Navigate to the Inbox module → Inbox opens and conversation list is displayed. Step 2: Locate the chat conversation with <condition> → The conversation is visible in the list. Step 3: Click the conversation to open it → The conversation thread opens. |
 | Fill in the form and save | Step 1: Enter the name in the Name field → Text appears in the Name field. Step 2: Enter the email in the Email field → Text appears in the Email field. Step 3: Click the SAVE button → Form submits and <result>. |
 
 The test is: can you point at any single step and ask "what specifically did the tester do?" If the answer could be two things, split it.
@@ -58,35 +58,35 @@ The test is: can you point at any single step and ask "what specifically did the
 ## Common mistakes
 
 **Bundling navigations**
-Wrong: `Navigate to Settings > Deals > Add Pipeline | Pipeline form opens`
+Wrong: `Navigate to Settings > Inbox > Add Queue | Queue form opens`
 Right:
 - `Navigate to Settings | Settings page opens`
-- `Move to the Deals tab | Deals settings tab is displayed`
-- `Click the Add Pipeline button | Add Pipeline form opens`
+- `Move to the Inbox tab | Inbox settings tab is displayed`
+- `Click the Add Queue button | Add Queue form opens`
 
 **Vague expected results**
 Wrong: `The system responds correctly`
 Wrong: `The page updates`
 Wrong: `An error is shown`
 Right: `The error message "Required field" appears below the Name field`
-Right: `The pipeline list refreshes and the newly created pipeline appears at the top`
+Right: `The queue list refreshes and the newly created queue appears at the top`
 Right: `The SAVE button becomes disabled`
 
 **Hedging**
 Wrong: `The user should be redirected to the dashboard`
 Wrong: `A success message may appear`
 Right: `The user is redirected to the dashboard`
-Right: `A success snackbar reading "Pipeline saved" appears at the bottom of the screen`
+Right: `A success snackbar reading "Queue saved" appears at the bottom of the screen`
 
 **Missing last verification step**
 Wrong: Ending on a system action like "The record is saved"
 Right: Last step is always "Verify that <behavior from title>" → definitive outcome
 
 **Generic titles**
-Wrong: `Deals - Pipeline - Verify that the feature works`
+Wrong: `Inbox - Queues - Verify that the feature works`
 Wrong: `Settings - Verify that the user can update settings`
-Right: `Deals - Pipeline - Verify that user is able to switch to the newly created pipeline.`
-Right: `Settings - Roles - Verify that a user without the Admin role is unable to access the Deals pipeline settings.`
+Right: `Inbox - Queues - Verify that user is able to switch to the newly created queue.`
+Right: `Settings - Roles - Verify that a user without the Admin role is unable to access the Inbox queue settings.`
 
 **Using "should" in expected results**
 Wrong: `The Send button should be disabled`
@@ -105,7 +105,7 @@ Use these consistent patterns (not alternatives — pick the one that matches th
 
 | Action type | Verb to use |
 |---|---|
-| Opening the application | Login to the product |
+| Opening the application | Login to the application (or the product's name, `product.name`) |
 | Navigating to a module | Navigate to the [Module] module |
 | Switching to a sub-tab | Move to the [Tab] tab |
 | Clicking a button | Click the [Label] button |

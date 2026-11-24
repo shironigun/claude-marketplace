@@ -26,7 +26,7 @@
 <text x="164" y="434" text-anchor="middle" font-size="15" font-weight="700" fill="#ffffff">Commits</text>
 <rect x="64" y="470" width="200" height="40" rx="14" fill="#ffffff" fill-opacity="0.05" stroke="#fbbf24" stroke-opacity="0.4" />
 <text x="164" y="496" text-anchor="middle" font-size="15" font-weight="700" fill="#ffffff">Deployments</text>
-<text x="64" y="560" font-size="13" fill="#aab4cf">both boards, plus work</text><text x="64" y="578" font-size="13" fill="#aab4cf">that shipped with no ticket</text>
+<text x="64" y="560" font-size="13" fill="#aab4cf">every board, plus work</text><text x="64" y="578" font-size="13" fill="#aab4cf">that shipped with no ticket</text>
 <rect x="330" y="300" width="200" height="110" rx="14" fill="#fbbf24" fill-opacity="0.16" stroke="#fbbf24" stroke-opacity="0.8" />
 <text x="430" y="334" text-anchor="middle" font-size="17" font-weight="700" fill="#ffffff">harvester</text>
 <text x="430" y="356" text-anchor="middle" font-size="14" fill="#aab4cf">Gathers it all,</text>

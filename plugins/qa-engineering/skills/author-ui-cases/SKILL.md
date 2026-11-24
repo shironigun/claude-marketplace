@@ -1,6 +1,6 @@
 ---
 name: author-ui-cases
-description: Native skill of the qa-engineering — review a user story, feature description, or acceptance criteria as a senior SQA analyst and write click-by-click UI test cases in a rigorous, behavior-driven house style, every step atomic, every step with an explicit expected result. Product-neutral and tracker-agnostic (ADO / Jira / any), grounded in the kit's framework standards. Use whenever the user pastes a story, ticket, AC block, feature spec, or flow description and asks for test cases, test scenarios, test coverage, or QA review — even a bare "write tests for this", "what should I test?", "break this story into test cases", or "give me QA coverage for this AC". Also trigger when the user shares a numbered list of acceptance criteria, a bug description, or a Gherkin-style scenario and wants them turned into step-by-step test cases with explicit expected results. Authors cases only; to file them as work items hand off to file-to-tracker.
+description: Native skill of the qa-engineering plugin — review a user story, feature description, or acceptance criteria as a senior SQA analyst and write click-by-click UI test cases in a rigorous, behavior-driven house style, every step atomic, every step with an explicit expected result. Product-neutral and tracker-agnostic (ADO / Jira / any), grounded in the kit's framework standards. Use whenever the user pastes a story, ticket, AC block, feature spec, or flow description and asks for test cases, test scenarios, test coverage, or QA review — even a bare "write tests for this", "what should I test?", "break this story into test cases", or "give me QA coverage for this AC". Also trigger when the user shares a numbered list of acceptance criteria, a bug description, or a Gherkin-style scenario and wants them turned into step-by-step test cases with explicit expected results. Authors cases only; to file them as work items hand off to file-to-tracker.
 ---
 
 # UI Test Cases — Senior SQA Analyst
@@ -30,7 +30,7 @@ This skill **authors** cases and records them in `qa-context`; it does not write
 > coverage discipline, title convention, `tracesStory`/`tracesModule`/`tracesRule`, and the approval seam are
 > identical in both modes.
 
-> The example module/feature names below (Deals, Settings, Messenger, Customers, Roles, etc.) are illustrative only. Use whatever modules and features exist in the product under test. The **house format below is the neutral default — the house-profile `caseAuthoring` slot may override the title convention, tags, step shape and voice**; the domain is always the user's.
+> The example module/feature names below (Deals, Settings, Inbox, Customers, Roles, etc.) are illustrative only. Use whatever modules and features exist in the product under test. The **house format below is the neutral default — the house-profile `caseAuthoring` slot may override the title convention, tags, step shape and voice**; the domain is always the user's.
 
 ## Phase 1: Read and analyze (UI-flavored)
 
@@ -67,7 +67,7 @@ What is UI-specific:
 - **UI titles** (neutral default convention `[Module] - [Feature] - Verify that <behavior>.`), e.g.:
   - `Deals - Pipeline - Verify that user is able to switch to the newly created pipeline.`
   - `Settings - Roles - Verify that a user without the Admin role cannot access pipeline settings.`
-  - `Messenger - Channel - Verify that user is unable to send a message after the messaging window closes.`
+  - `Inbox - Chat - Verify that user is unable to send a message after the conversation is closed.`
 - The UI granularity rule below (every click/navigation/field entry is its own row).
 
 ## Voice and style — UI specialization

@@ -1,6 +1,17 @@
 ---
 name: playwright-topic
-description: On-demand explainer for ANY single Playwright or test-automation topic — iframes, fixtures, downloads, popups, multiple tabs, dynamic elements, waits, flaky tests, auth, API-vs-UI, test data, network interception, cross-module reuse, and the rest. Explains one named topic at an adjustable depth using a fixed template (what it is · why apps use it · how Playwright handles it · the Playwright concepts · recommended approach · product-neutral code · common mistakes · best practices · when to use it and when NOT · official docs). Use whenever the QA asks to "teach me how X works in Playwright", "how do fixtures work", "how do I handle downloads / popups / iframes / tabs / dynamic elements", "how do I avoid flaky tests", "when should I use API vs UI", or "explain <Playwright topic>". It is product-neutral, cites only official docs that this plugin has verified, and DEFERS to the matching `knowledge/standards/*.md` where one exists (links it, never restates it). It explains a topic; it does not scaffold or run framework code (that is the builder, SP3) and it does not walk the whole curriculum (that is `teach-automation`).
+description: >-
+  On-demand explainer for any single Playwright or test-automation topic: iframes, fixtures,
+  downloads, popups, multiple tabs, dynamic elements, waits, flaky tests, auth, API vs UI, test
+  data, network interception, cross-module reuse, and more. Explains one named topic at an
+  adjustable depth with a fixed template (what it is, why apps use it, how Playwright handles it,
+  the concepts, recommended approach, product-neutral code, common mistakes, best practices, when
+  to use it and when not, official docs). Use whenever the QA asks "teach me how X works in
+  Playwright", "how do fixtures work", "how do I handle downloads / popups / iframes / tabs /
+  dynamic elements", "how do I avoid flaky tests", "when should I use API vs UI", or to "explain"
+  a named Playwright topic. Cites only official docs this plugin has verified and defers to the
+  matching knowledge/standards file where one exists (links it, never restates it). Does not
+  scaffold or run framework code (the builder) or walk the whole curriculum (teach-automation).
 ---
 
 # playwright-topic — explain one topic, on demand

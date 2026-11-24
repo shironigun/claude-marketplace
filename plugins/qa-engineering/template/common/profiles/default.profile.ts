@@ -16,7 +16,7 @@ import { buildProfile } from './build-profile';
  * lines of `.env`.
  *
  * VARIANT profiles — when the product changes behaviour by a kind of
- * account/user/deployment (a client type, tenant type, tier, role), register one
+ * account/user/deployment (a tenant type, integration partner, tier, role), register one
  * profile per variant, each carrying the product's enum value as `variant` and
  * reading its own `<VARIANT>_AUTH_*` creds (global `AUTH_*` is the fallback):
  *

@@ -1,11 +1,11 @@
 ---
 name: how-to-guide
-description: Write a complete customer-facing how-to guide for one feature of a B2B software product (business software, APP, scheduling, field service, any B2B SaaS) to a researched standard, and build it as a branded PDF. Use this skill whenever the user wants to write, draft, update, condense or review a feature guide, user guide, help guide, training PDF or "how-to" for the people who use their product, apply a reviewer's or support team's feedback to one, rebuild a guide PDF, set up a brand profile (logo, colours, font) for guides, or pick a cover, even if they only say "document this feature for our customers" or "make a PDF guide for clients". Not for release notes, API reference, user stories, or internal developer docs.
+description: Write a complete customer-facing how-to guide for one feature of a B2B software product (scheduling, invoicing, field service, healthcare, retail or any other B2B SaaS) to a researched standard, and build it as a branded PDF. Use this skill whenever the user wants to write, draft, update, condense or review a feature guide, user guide, help guide, training PDF or "how-to" for the people who use their product, apply a reviewer's or support team's feedback to one, rebuild a guide PDF, set up a brand profile (logo, colours, font) for guides, or pick a cover, even if they only say "document this feature for our customers" or "make a PDF guide for our customers' admins". Not for release notes, API reference, user stories, or internal developer docs.
 ---
 
 # How-to guide
 
-A how-to guide is everything a reader needs to understand one feature and use all of it, in one PDF they can keep. The reader works at a business that uses the product: a service manager at a business, a front desk, an office manager, an owner. So the guide is plain, warm and exact, and every sentence in it is something they will act on.
+A how-to guide is everything a reader needs to understand one feature and use all of it, in one PDF they can keep. The reader works at a business that uses the product: an account admin, a front desk, an office manager, an owner. So the guide is plain, warm and exact, and every sentence in it is something they will act on.
 
 This skill bundles:
 
@@ -72,7 +72,7 @@ Things that matter most:
 - **Real life:** customers get answers by phone, at the counter and in person, so cover those where a task depends on what happened.
 - **AI features:** an `[!AI]` callout in Before you begin that opens "*Feature* is an AI feature." and says it can be wrong, plus a one-line reminder wherever the AI rates, explains or drafts something. Say what it does on its own and what it doesn't.
 - **Sending:** any step that sends to a customer says who it goes out from.
-- **Questions heading:** name it after the readers, such as **Questions clients ask**.
+- **Questions heading:** name it after the readers, such as **Questions office managers ask**.
 
 ### 6. Screenshots
 

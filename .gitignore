@@ -27,5 +27,10 @@ Thumbs.db
 /index.html
 /*.xml
 
-# Local-only: live-test gaps log holds product specifics — never commit to the public repo
-plugins/qa-engineering/docs/enhancement/plugin-gaps-from-app-live-test.md
+# Local-only notes and profiles that hold org specifics — never commit to the public repo
+plugins/*/docs/enhancement/plugin-gaps-*.md
+.claude/workspace-profile.json
+**/.claude/workspace-profile.json
+
+# Private leak denylist (real employer/product/client/people terms) — local only
+.leak-denylist.local

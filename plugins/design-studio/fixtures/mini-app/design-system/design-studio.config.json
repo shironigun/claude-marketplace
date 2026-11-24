@@ -1,5 +1,5 @@
 {
-  "product": "Mini APP",
+  "product": "Mini App",
   "appRoot": ".",
   "adapter": "react-mui",
   "sources": ["src/**/*.{ts,tsx,js,jsx}", "src/**/*.{css,scss,less}"],

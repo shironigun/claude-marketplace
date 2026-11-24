@@ -17,7 +17,7 @@ If your house rules (the brand profile's `rules` file) describe a team demo kit,
    ```json
    [
      {"go": "/reminders"},
-     {"text": "Spring service", "wait": 2000},
+     {"text": "Spring renewal", "wait": 2000},
      {"shot": "rm-list", "clip": [57, 50, 1383, 420]},
      {"text": "New Reminder", "exact": true},
      {"shot": "rm-new", "clip": [700, 60, 740, 520]}

@@ -42,7 +42,7 @@ test('the planted components get the expected levels and layers', () => {
     ['src/common/components/unused-card.tsx#UnusedCard', 'atom', 'core'],
     ['src/components/leads/LeadRow.tsx#LeadRow', 'molecule', 'snowflake'],
     ['src/components/deals/DealsPanel.tsx#DealsPanel', 'organism', 'snowflake'],
-    ['src/components/messenger/Inbox.tsx#Inbox', 'molecule', 'snowflake'],
+    ['src/components/inbox/Inbox.tsx#Inbox', 'molecule', 'snowflake'],
     ['src/components/settings/StatusChip.tsx#StatusChip', 'atom', 'recipe'],
     ['src/components/deals/StatusChip.tsx#StatusChip', 'atom', 'snowflake'],
   ];
@@ -65,7 +65,7 @@ test('reach is resolved through barrels, default re-exports, baseUrl and lazy ro
 test('the planted duplicate families are found', () => {
   assert.equal(fam('same-name:StatusChip').size, 2);
   assert.equal(fam('same-name:Inbox').size, 2);
-  assert.deepEqual(reg.families.find((f) => f.kind === 'identical-files')?.members.map((m) => m.file), ['src/components/messenger-v2/Inbox.tsx', 'src/components/messenger/Inbox.tsx']);
+  assert.deepEqual(reg.families.find((f) => f.kind === 'identical-files')?.members.map((m) => m.file), ['src/components/inbox-v2/Inbox.tsx', 'src/components/inbox/Inbox.tsx']);
   assert.deepEqual(reg.families.find((f) => f.kind === 'repeated-style-block')?.members.map((m) => m.file), ['src/components/deals/DealsPanel.tsx', 'src/components/leads/LeadsPage.tsx', 'src/components/settings/SettingsPage.tsx']);
   assert.equal(fam('status-color-map:all').size, 3);
   assert.equal(fam('cross-feature-import:deals->settings').size, 1);
@@ -75,7 +75,7 @@ test('the planted duplicate families are found', () => {
 
 test('components carry their duplicate families and style quality', () => {
   assert.ok(comp('src/components/settings/StatusChip.tsx#StatusChip').families.includes('same-name:StatusChip'));
-  const inbox = comp('src/components/messenger/Inbox.tsx#Inbox').families;
+  const inbox = comp('src/components/inbox/Inbox.tsx#Inbox').families;
   assert.ok(inbox.includes('same-name:Inbox') && inbox.some((k) => k.startsWith('identical-files:')));
   assert.deepEqual(comp('src/common/components/unused-card.tsx#UnusedCard').families, ['dead-shared:all']);
   assert.deepEqual(comp('src/common/components/status-tag.tsx#StatusTag').quality, { rawValues: 2, themeValues: 1 });
@@ -106,7 +106,7 @@ test('style values are converted with their unit context', () => {
 });
 
 test('modules are scored', () => {
-  assert.deepEqual(reg.modules.map((m) => m.module), ['(other)', 'deals', 'leads', 'messenger', 'messenger-v2', 'settings', 'shared']);
+  assert.deepEqual(reg.modules.map((m) => m.module), ['(other)', 'deals', 'inbox', 'inbox-v2', 'leads', 'settings', 'shared']);
   const leads = reg.modules.find((m) => m.module === 'leads');
   assert.deepEqual([leads?.files, leads?.i18nCoverage, leads?.testRatio], [2, 0.5, 0.5]);
   assert.equal(reg.modules.find((m) => m.module === 'settings')?.i18nCoverage, 0);

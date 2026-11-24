@@ -10,9 +10,9 @@ version: 1.0
 
 ## What a how-to guide is for
 
-A how-to guide is everything a reader needs to understand one feature of your product and use all of it. The reader works at a business that uses your software: a service manager at a business, a parts counter, a front desk, an office manager, an owner with a business to run. They read the guide once to learn the feature, then come back to it when they need one task.
+A how-to guide is everything a reader needs to understand one feature of your product and use all of it. The reader works at a business that uses your software: an account admin, a front desk, an office manager, a team lead, an owner with a business to run. They read the guide once to learn the feature, then come back to it when they need one task.
 
-This standard says **reader** for that person, and **their customers** for the people the reader serves. Your house rules can name them, for example "clients" and "customers".
+This standard says **reader** for that person, and **their customers** for the people the reader serves. Your house rules can name them, for example "account admins" and "clients".
 
 So a guide:
 
@@ -36,7 +36,7 @@ Every guide uses these parts, in this order. The build adds the cover, summary, 
 | How it works | What the feature does, where it gets its information, and every term and label on screen, with screenshots. No steps here. | Yes |
 | Tasks | One `##` section per task, named with a verb: *Review a request*, *Assign a request*. Detailed steps, and a `[!DONE]` callout where the task ends. | Yes |
 | Tips to work faster | One to three habits that save time. | When useful |
-| Questions readers ask | Short answers to the real questions: does it contact customers, can it be wrong, who can see it. Name the heading after your readers, such as **Questions clients ask**. | Yes |
+| Questions readers ask | Short answers to the real questions: does it contact customers, can it be wrong, who can see it. Name the heading after your readers, such as **Questions office managers ask**. | Yes |
 | If something goes wrong | A table: what you see, what to do. | Yes |
 | Next steps | Related guides and knowledge base articles. | When useful |
 | Still stuck? | Added by the build from the brand profile: where to get help. | Automatic |
@@ -109,7 +109,7 @@ How a good guide sounds to a busy reader:
 - **Problem, then benefit, then steps.** Open with what gets easier for the business: fewer calls asking for status, no more phone tag, every request tracked.
 - **Plain, warm, second person.** Short sentences. Contractions are fine. Talk the way a helpful colleague would.
 - **Confident.** State what happens. One real limitation, said calmly, is fine. A list of edge cases is not.
-- **The reader's words.** Use the words of their trade (repair order, walk-in, appointment, account), not software or engineering terms. Your house rules list them.
+- **The reader's words.** Use the words of their trade (invoice, appointment, work order, account), not software or engineering terms. Your house rules list them.
 - **Name the exact screen.** "On the **Inventory** screen", not "in inventory".
 - **Benefit names, not internal names.** "Send reminders to a second contact", not the name your team uses for the work behind it.
 - **Reassure when something moved.** "Everything you used before is still here."
@@ -120,7 +120,7 @@ How a good guide sounds to a busy reader:
 
 ## Availability
 
-Some features depend on the reader's plan, add-ons, platform or integrations (for a business, often the client management system). A reader finding out afterwards that a feature isn't on their account is the top support complaint the guide can prevent.
+Some features depend on the reader's plan, add-ons, platform or integrations (often a connected accounting, payments or scheduling system). A reader finding out afterwards that a feature isn't on their account is the top support complaint the guide can prevent.
 
 - Put a `[!AVAILABILITY]` callout in **Before you begin** whenever a feature isn't on every plan or platform.
 - State exclusions plainly: "Not available on the Starter plan at this time."
@@ -194,4 +194,4 @@ Spell these the same way every time: **drop-down**, **checkbox**, **tooltip**, *
 - [Procedures (Google developer documentation style guide)](https://developers.google.com/style/procedures)
 - [How-to guides (Diátaxis)](https://diataxis.fr/how-to-guides/)
 - [Minimalism, J. Carroll: error recognition and recovery](https://www.instructionaldesign.org/theories/minimalism/)
-- Two rounds of review by a support team that writes a client knowledge base: the page target, where-it-is-on-screen help, the source named in the summary, setup as a barrier, the AI callout, and who a reply comes from.
+- Lessons from support-team reviews of customer guides: the page target, where-it-is-on-screen help, the source named in the summary, setup as a barrier, the AI callout, and who a reply comes from.

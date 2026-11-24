@@ -101,12 +101,12 @@ Select a card to open that plugin's folder and its README.
 
 | Plugin | Category | Skills | What it writes | Setup | Product-neutral |
 |---|---|---|---|---|---|
-| [qa-engineering](plugins/qa-engineering/) | Testing | 16 skills, 4 agents, 9 commands | Test Cases, suites and bugs in Azure DevOps, each after your OK; framework code in your repo | Set `ADO_ORG`; interactive sign-in | Yes |
+| [qa-engineering](plugins/qa-engineering/) | Testing | 16 skills, 4 agents, 9 commands | Test Cases, suites and bugs in Azure DevOps, each after your OK; framework code in your repo | Claude Code 2.1.293+; set `ADO_ORG`; interactive sign-in | Yes |
 | [qa-toolkit](plugins/qa-toolkit/) | Testing | 4 | Cases and bug drafts in the session; Test Cases in your tracker (Azure DevOps, Jira, Linear and more) | A tracker connector, only to push cases | Yes |
-| [api-testing](plugins/api-testing/) | Testing | 2 | Cases, spec files and bug drafts in the session | None | Template |
-| [ui-testing](plugins/ui-testing/) | Testing | 2 | Test Case work items (`buggy`, after your OK); UI specs in the session | `az login` for `buggy` | Template |
-| [bug-suite](plugins/bug-suite/) | Bug tracking | 3 | Bugs, Defects and comments in Azure DevOps | `az login` | Template |
-| [release-notes-suite](plugins/release-notes-suite/) | Release management | 2 | An inventory and release-note drafts in the session | An Azure DevOps connection to harvest tickets | Template |
+| [api-testing](plugins/api-testing/) | Testing | 2 | Cases, spec files and bug drafts in the session | None | Yes (local profile) |
+| [ui-testing](plugins/ui-testing/) | Testing | 2 | Test Case work items (`buggy`, after your OK); UI specs in the session | `AZURE_DEVOPS_ORG_URL` + `az login` for `buggy` | Yes (local profile) |
+| [bug-suite](plugins/bug-suite/) | Bug tracking | 3 | Bugs, Defects and comments in Azure DevOps | `AZURE_DEVOPS_ORG_URL` + `az login` | Yes (local profile) |
+| [release-notes-suite](plugins/release-notes-suite/) | Release management | 2 | An inventory and release-note drafts in the session | An Azure DevOps connection to harvest tickets | Yes (local profile) |
 | [feature-explainer](plugins/feature-explainer/) | Documentation | 1 | A private artifact page you choose to share | Node.js, Python 3 | Yes |
 | [how-to-guides](plugins/how-to-guides/) | Documentation | 1 | A PDF guide on your machine | Node.js, Chrome | Yes |
 
@@ -322,8 +322,8 @@ Playwright + TypeScript UI specs (forward and reverse). (Tuned to a specific pro
 
 ### [bug-suite](plugins/bug-suite/)
 
-Files **Bugs** (against stories / regression) and **Defects** (production) and writes ticket comments on a
-specific "Example Project" Azure DevOps project, in a defined QA house style.
+Files **Bugs** (against stories / regression) and **Defects** (production) and writes ticket comments on your
+Azure DevOps project, in a defined QA house style. Your boards and fields are discovered once into a local profile.
 
 <p align="center"><a href="plugins/bug-suite/"><img src="assets/readme/usecases/bug-suite.svg" alt="bug-suite in action: what you ask and what you get" width="100%"></a></p>
 
@@ -337,7 +337,7 @@ specific "Example Project" Azure DevOps project, in a defined QA house style.
 
 A two-stage release pipeline: **harvester** builds the complete engineering release inventory (every shipped
 story/defect across boards, plus non-ticketed PR/commit deployments); **releaser** turns that inventory (or a
-technical draft) into audience-facing release notes, with brand variants.
+technical draft) into audience-facing release notes, one variant per client-facing brand.
 
 <p align="center"><a href="plugins/release-notes-suite/"><img src="assets/readme/usecases/release-notes-suite.svg" alt="release-notes-suite in action: what you ask and what you get" width="100%"></a></p>
 
@@ -397,14 +397,23 @@ The three plugins that **write to Azure DevOps** each **bundle their own ADO MCP
 `.mcp.json`) — **no PAT or token is committed or required**, and there's no manual MCP config:
 
 - **`bug-suite`** (files Bugs/Defects/comments) and **`ui-testing`** (its `buggy` skill creates
-  Test Cases) bundle the `azure-devops` MCP with **Azure Identity** auth → just run **`az login`** once.
+  Test Cases) bundle the `azure-devops` MCP with **Azure Identity** auth → set **`AZURE_DEVOPS_ORG_URL`**
+  in the shell that launches Claude Code and run **`az login`** once.
 - **`qa-engineering`** ships the official Azure DevOps + Playwright MCP servers with **interactive** sign-in
   → just set **`ADO_ORG`** in the shell that launches Claude Code.
 
 No tokens live anywhere in this repo. Auth is your `az login` session or an interactive browser sign-in.
-(Each ADO plugin defaults to a placeholder org; change `AZURE_DEVOPS_ORG_URL` in its `.mcp.json`
-for yours. The bundled servers use a Windows `cmd /c npx` launcher — each README has the one-line
-macOS/Linux swap.)
+No org is hardcoded: the bundled servers read your org from the environment and launch with `npx` (each
+README has the one-line `cmd /c` wrapper for native Windows).
+
+### Your org's specifics stay on your machine
+
+The plugins that need org facts (`bug-suite`, `ui-testing`, `api-testing`, `release-notes-suite`) ship none.
+On first use they scan your tracker and codebase **read-only**, propose a workspace profile (project, boards,
+populated work-item fields, the integration partners your product connects to, plans, brands, identity),
+and save it to `.claude/workspace-profile.json` in **your** project only after you confirm. Keep that file
+git-ignored. `qa-engineering` does the same with its own house-profile; `how-to-guides` with
+`howto-brand.json`.
 
 ---
 

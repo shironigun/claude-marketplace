@@ -39,7 +39,7 @@ Colours must be six-digit hex (`#1a2b3c`); anything else is ignored with a warni
 
 The standard is general. The `rules` file holds what only your organisation knows, so the skill gets it right without asking every time:
 
-- What readers are called ("clients", "clinics", "account admins") and what their customers are called.
+- What readers are called ("account admins", "clinics", "office managers") and what their customers are called.
 - The product's name and how it's spelled, and other words to spell one way.
 - Plans, add-ons, platforms or integrations, and how to write them in an Availability callout.
 - Where the code lives, which branch is what readers have, and anything read-only.

@@ -2,7 +2,7 @@
 // plain-language building blocks (journey, who-does-what grid, helper cards, tiles, comparison cards,
 // verdict list, levels grid, issue cards, test routes). Every block returns an HTML string.
 // Styles live in shell.css. Lanes: 'ai' = the AI or outside service (indigo), 'app' = your product's
-// own code (amber), 'dl' = a person or a screen (neutral). See references/visual-catalog.md.
+// own code (amber), 'user' = a person or a screen (neutral). See references/visual-catalog.md.
 'use strict';
 
 // ---------- filled Material icons ----------
@@ -77,8 +77,8 @@ const cards = (cls, items) => '<div class="' + cls + '" style="' + cols(items.le
 const addIcons = (map) => { Object.assign(P, map); };
 
 // ---------- plain-language building blocks ----------
-// a role pill coloured by lane: pill('AI', 'ai'), pill('Your app', 'app'), pill('Manager', 'dl')
-const pill = (who, lane) => '<span class="' + (lane === 'ai' ? 'pill-ai' : lane === 'app' ? 'pill-app' : 'pill-dl') + '">' + who + '</span>';
+// a role pill coloured by lane: pill('AI', 'ai'), pill('Your app', 'app'), pill('Manager', 'user')
+const pill = (who, lane) => '<span class="' + (lane === 'ai' ? 'pill-ai' : lane === 'app' ? 'pill-app' : 'pill-user') + '">' + who + '</span>';
 const foot = (icn, html) => '<p class="vz-foot">' + ic(icn) + '<span>' + html + '</span></p>';
 
 // nodes: [lane, icon, title, sub, who]; loop: {icon, html, who, lane} or null

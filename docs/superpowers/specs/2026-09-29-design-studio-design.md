@@ -5,7 +5,7 @@
 | Date | 2026-09-29 |
 | Status | Draft for owner review |
 | Owner | the QA analyst |
-| Plugin home | `claude-marketplace/plugins/design-studio` (plugin #6 in this marketplace) |
+| Plugin home | `marketplace/plugins/design-studio` (plugin #6 in this marketplace) |
 | Pilot | The first real product the plugin runs on (React + MUI). Everything about that product — its brief, evidence and results — lives in the product's own repo, never in this plugin |
 | Scope of this spec | The whole plugin's architecture, with **sub-project 1** specified in full. Sub-projects 2–6 are outlined so their seams are fixed now |
 
@@ -162,7 +162,7 @@ searching the tree.
 
 ```
 <repo-root>/
-  .design-studio.json                 root marker: { "apps": ["web-app/src/target-app"] } — read by hooks
+  .design-studio.json                 root marker: { "apps": ["apps/web"] } — read by hooks
 <app-root>/
   design-system/
     design-studio.config.json         machine config (§5.6)
@@ -385,7 +385,7 @@ Plus `reach` (files/modules affected by fixing it at its fix location) and `chec
 
 A **family** groups findings with the same rule and the same fix. It has a **stable key** so
 re-audits can match it: `<ruleId>@<fixLocation>:<target>` (for example
-`DUP-01@shared-component:status-chip` or `SPC-SCALE-01@call-site:module/customer-groups`).
+`DUP-01@shared-component:status-chip` or `SPC-SCALE-01@call-site:module/contacts`).
 
 ### 5.9 Decisions
 
@@ -671,7 +671,7 @@ Outlined in §14.6.
 
 ## 10. Canon content plan
 
-- **Sources:** Atomic Design (Frost) and his later design-system writing; Don't Make Me Think and
+- **Sources:** Atomic Design and later design-system writing (Frost); Don't Make Me Think and
   Rocket Surgery Made Easy (Krug); The Design of Everyday Things (Norman); Laws of UX (Yablonski);
   Nielsen's 10 heuristics and NN/g articles; Refactoring UI (Wathan & Schoger); Material Design 3
   (reasoning only); W3C DTCG 2025.10; EightShapes component specification guidance (Curtis); Design
@@ -737,8 +737,7 @@ adapter, templates, fixture and evals; README and CONNECTORS; a marketplace entr
 
 Run in the product's repo on a dedicated pilot branch created from the team's integration branch
 (the integration branch itself is never changed). If the pilot branch is refreshed from the
-integration branch later and that touches routing, routing is re-verified as the product's own
-CLAUDE.md requires.
+integration branch later and that touches routing, routing is re-verified.
 
 1. `init` — config and profile (seeded from any product knowledge that already exists).
 2. `inventory` — full registry and report.
@@ -759,7 +758,7 @@ CLAUDE.md requires.
   `.storybook/`, the root marker, new library component folders with stories, dev-dependency /
   script changes in `package.json` and the lockfile, and — if approved — one pointer line in
   `CLAUDE.md`.
-- A non-dashboard route still loads on the pilot branch (product CLAUDE.md rule).
+- Existing routes outside the changed areas still load on the pilot branch.
 - Hooks do nothing in a repo without a config, and stay within their time budgets in the pilot.
 
 ---

@@ -1,21 +1,17 @@
 ---
 name: framework-reviewer
 description: >-
-  The independent review gate of the qa-engineering — inspects
-  generated/modified framework code against the SP1 standards and the shared
-  review rubric, runs the grep- and build-gates, and BLOCKS progression on any
-  hard-rule violation the builder's own self-check missed. Use when the user
-  says "review my framework", "check this before I continue", "is this generated
-  code correct", "review the module I just built", "did the build pass review",
-  "gate this phase", or "enforce the standards". It reads the changed/target
-  files, runs `npm run typecheck` / `lint` / `verify` and the rubric's greps,
-  judges each rubric dimension against `knowledge/standards/` via the
-  `framework-standards` skill. The reuse/duplication dimension is run by
-  `reuse-guardian` as a SIBLING pass that the orchestrator spawns alongside this one
-  (a subagent cannot spawn another subagent); when this reviewer is run STANDALONE
-  with no sibling pass, it covers reuse itself as a labeled generalist fallback. It is
-  REVIEW-ONLY: it reports findings and blocks; it never edits, scaffolds, or fixes —
-  the builder fixes on its next pass.
+  The independent review gate of the qa-engineering plugin: inspects generated or modified
+  framework code against the standards and the shared review rubric, runs the grep and build
+  gates, and blocks progression on any hard-rule violation the builder's own self-check missed.
+  Use when the user says "review my framework", "check this before I continue", "is this generated
+  code correct", "review the module I just built", "did the build pass review", "gate this phase",
+  or "enforce the standards". Reads the changed or target files, runs npm run typecheck / lint /
+  verify and the rubric's greps, and judges each rubric dimension against knowledge/standards/ via
+  framework-standards. The reuse/duplication dimension is run by reuse-guardian as a sibling pass
+  the orchestrator spawns alongside this one (a subagent cannot spawn another); run standalone,
+  this reviewer covers reuse itself as a labeled fallback. Review-only: it reports findings and
+  blocks, never edits or fixes; the builder fixes on its next pass.
 tools: Read, Grep, Glob, Bash, Skill
 ---
 

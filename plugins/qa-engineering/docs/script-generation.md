@@ -383,7 +383,7 @@ Copied from `modules/example/fixtures.ts`: a worker-scoped **read-only** `seed` 
 > tears it down; use it when the resource is safely creatable. (2) **Env-provided pre-existing id** — when
 > the resource can't be created per test (a de-facto singleton, or a read-only module), the seed reads an id
 > from `process.env.<MODULE>_TEST_<RESOURCE>_ID` (phase 0 discovers one with a read-only list→pick-first
-> probe and writes it to `.env`), e.g. `async ({}, use) => { const raw = process.env.CUSTOMER_TEST_CRM_ID;
+> probe and writes it to `.env`), e.g. `async ({}, use) => { const raw = process.env.CUSTOMERS_TEST_CUSTOMER_ID;
 > await use({ id: raw && /^\d+$/.test(raw) ? Number(raw) : null }); }`. Either way the id is **nullable** and
 > dependent tests `test.skip` when it is null.
 
@@ -725,19 +725,19 @@ test('Widgets - Lifecycle - Verify that a widget can be created, activated and r
 >
 > **De-facto singletons — a "create" that is really an ensure/upsert on a shared prerequisite.** Some
 > resources *look* creatable but are a singleton in disguise, and the generator must spot it:
-> - the create endpoint is an **ensure / upsert / get-or-create** (e.g. `EnsureQuote`, `PUT .../settings`):
+> - the create endpoint is an **ensure / upsert / get-or-create** (e.g. `EnsureProfile`, `PUT .../settings`):
 >   calling it twice returns the **same** instance, not a new one; or
 > - the resource is **1:1 with a single shared external prerequisite** the suite can't multiply — e.g. one
->   quote per the one configured opportunity (`.../opportunities/{the-one-id}/quote`), one cart per the one
+>   summary per the one configured parent project (`.../projects/{the-one-id}/summary`), one cart per the one
 >   test user.
 >
 > In both cases there is effectively **one instance**, so the create/`try…finally void` per-test pattern is
 > wrong: two tests (worse, two tests in **different files** under `fullyParallel`) race the same instance —
 > one's `void` in `finally` pulls the record out from under the other's read/update → a flake that passes at
-> `workers:1` (CI) and breaks in parallel (local). This is exactly the orders-quote trap. Handle it by
+> `workers:1` (CI) and breaks in parallel (local). This is the classic shared-singleton trap. Handle it by
 > **one of**, in order of preference:
-> 1. **Create the prerequisite per test.** If the parent *is* creatable (e.g. the suite can POST an
->    opportunity), make a fresh one per test so each test owns its own child end to end — full isolation,
+> 1. **Create the prerequisite per test.** If the parent *is* creatable (e.g. the suite can POST a
+>    project), make a fresh one per test so each test owns its own child end to end — full isolation,
 >    the best outcome. Reuse the owning module's service to make it (cross-module reuse), never a local copy.
 > 2. **Treat it as a singleton** (when the parent is a single shared external id): read-only where you can;
 >    else snapshot → mutate → restore; and **serialize every mutating test in ONE file** with

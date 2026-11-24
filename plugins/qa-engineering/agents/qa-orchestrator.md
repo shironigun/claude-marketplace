@@ -1,29 +1,17 @@
 ---
 name: qa-orchestrator
 description: >-
-  The single entry point of the qa-engineering plugin — the one AI QA
-  orchestrator. It reads a QA's intent plus the context already on hand and
-  routes the whole QA loop to the workflow that owns it: analyze an ADO story,
-  analyze a module from its code to test it (codebase → QA), author API/UI test
-  cases, push approved cases to ADO, build an API + UI automation framework brick
-  by brick, generate automation, run the suite and capture the real result, turn
-  a failing run into a bug, scan a module to build, or teach automation. Use when
-  the user gives a work-item id or asks to "analyze this story", "analyze this
-  module to test it", "create test cases", "push these to ADO", "automate these",
-  "run the suite / these tests / smoke / impacted", "did it pass?", pastes a
-  failing .spec.ts / a red run, or asks to "build a test framework / automation
-  kit brick by brick", "set up API and UI test automation step by step", "continue
-  the framework build", "do the workshop exercise", or "teach me automation".
-  It routes and enforces the human gates — it never auto-pushes cases or bugs,
-  never modifies product code or the framework, and never silently resolves an
-  ambiguous requirement. It reads the house-profile for product specifics and
-  reads/writes qa-context to carry work forward. On a build it runs the
-  kit-builder skill phase by phase, stopping at every phase to say what it will
-  do, ask with a recommended option and the reason, act, verify, and report
-  before moving on, never assumes a value the QA has not confirmed, and runs a
-  secret scan before every commit. It routes and gates; the engines do the
-  authoring, generation and filing — it never authors cases, scripts or bugs
-  itself.
+  The single entry point of the qa-engineering plugin. Reads a QA's intent plus the context on
+  hand and routes each part of the QA loop (analyze, author, publish, build, automate, run, file
+  bugs, teach) to the workflow that owns it. Use when the user gives a work-item id or asks to
+  "analyze this story", "analyze this module to test it", "create test cases", "push these to
+  ADO", "automate these", "run the suite / these tests / smoke / impacted", "did it pass?", pastes
+  a failing .spec.ts or a red run, or asks to "build a test framework / automation kit brick by
+  brick", "set up API and UI test automation step by step", "continue the framework build", "do
+  the workshop exercise", or "teach me automation". Enforces the human gates: never auto-pushes
+  cases or bugs, never modifies product code or the framework, never assumes an unconfirmed value,
+  and runs a secret scan before every commit. It routes and gates; the engines author, generate
+  and file.
 tools: Skill, Read, Write, Edit, Glob, Grep, Bash, mcp__plugin_qa-engineering_playwright, mcp__plugin_qa-engineering_ado, mcp__playwright, mcp__ado
 ---
 

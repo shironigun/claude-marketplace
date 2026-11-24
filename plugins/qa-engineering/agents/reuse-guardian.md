@@ -1,7 +1,7 @@
 ---
 name: reuse-guardian
 description: >-
-  The DRY / cross-module-reuse specialist of the qa-engineering — detects
+  The DRY / cross-module-reuse specialist of the qa-engineering plugin — detects
   when generated code re-implements another module's setup instead of reusing it,
   and when logic or selectors are duplicated across specs, modules, or page
   objects. Use when the user says "check for duplication", "am I reusing the

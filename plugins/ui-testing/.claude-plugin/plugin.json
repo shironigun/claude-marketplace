@@ -1,7 +1,7 @@
 {
   "name": "ui-testing",
-  "version": "1.1.0",
-  "description": "UI test case authoring and Playwright script generation for the product. buggy writes ADO Test Case work items in the team's house style; tester authors cases and generates runnable Playwright + TypeScript UI specs (forward and reverse).",
+  "version": "1.2.0",
+  "description": "UI test case authoring and Playwright script generation for any web product. buggy writes Azure DevOps Test Case work items in a rigorous house style; tester authors cases and generates runnable Playwright + TypeScript UI specs (forward and reverse).",
   "author": { "name": "shironigun" },
-  "keywords": ["testing", "qa", "ui", "playwright", "test-cases", "azure-devops", "app"]
+  "keywords": ["testing", "qa", "ui", "playwright", "test-cases", "azure-devops"]
 }

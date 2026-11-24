@@ -1,6 +1,6 @@
-# Comment templates (the team's voice)
+# Comment templates (the house voice)
 
-Post by writing the HTML to `System.History` via `update_work_item`. Always get approval first. Replace `GUID` with the person's identity GUID (from the work item's AssignedTo/CreatedBy or `get_me`); fall back to plain `@Name` text if unknown.
+Post by writing the HTML to `System.History` via `update_work_item`. Always get approval first. Replace `GUID` with the person's identity GUID (from the work item's AssignedTo/CreatedBy or `get_me`); fall back to plain `@Name` text if unknown. All filled-in examples are illustrative and use fictional placeholders.
 
 Mention anchor:
 ```html
@@ -46,11 +46,11 @@ Mention anchor:
 <div><a href="#" data-vss-mention="version:2.0,GUID">@Dev Owner</a> please check <specific area>. Repro on <client ID / env>; <error code> observed. Credentials are in the System Info section.</div>
 ```
 
-## 5. Cross-team escalation (PARTNER-E / PARTNER-A feeds, PARTNER-D/SSO)
+## 5. Cross-team escalation (integration partner feeds, SSO)
 
-Process-escalation tone — state ownership and the approved path:
+Process-escalation tone — state ownership and the approved path (partner names come from `variants.values`; illustrative):
 ```html
-<div><a href="#" data-vss-mention="version:2.0,GUID">@Owner</a> PARTNER-A can only help sync between PARTNER-A and PARTNER-E as far as PARTNER-D is concerned. If there is any issue with feeds, please involve the PARTNER-E team and have them contact us — that's the approved process. Unless it's the Customer Feed (the product → PARTNER-A) or the embedded browser in PARTNER-A, submit that issue to <a href="#" data-vss-mention="version:2.0,GUID">@Owner</a>.</div>
+<div><a href="#" data-vss-mention="version:2.0,GUID">@Owner</a> PARTNER-A can only help sync between PARTNER-A and PARTNER-B as far as PARTNER-C is concerned. If there is any issue with feeds, please involve the PARTNER-B team and have them contact us — that's the approved process. Unless it's the outbound contact feed (Product → PARTNER-A) or the embedded browser in PARTNER-A, submit that issue to <a href="#" data-vss-mention="version:2.0,GUID">@Owner</a>.</div>
 <div>@… @… @…</div>
 ```
 

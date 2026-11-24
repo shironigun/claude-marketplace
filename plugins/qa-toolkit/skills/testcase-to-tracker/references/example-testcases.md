@@ -1,6 +1,6 @@
 # Worked Example: Ticket -> Test Cases
 
-A concrete model to match — the reference standard for title format, step granularity, and per-step expected results. The domain (a APP Messenger module) is an example; copy the structure, not the product.
+A concrete model to match — the reference standard for title format, step granularity, and per-step expected results. The domain (a messaging Inbox module in a fictional product) is illustrative; copy the structure, not the product.
 
 ## Reference standard
 
@@ -18,7 +18,7 @@ Preconditions: Environment: QA
 | 2 | Navigate to Settings | Settings page opens |
 | 3 | Move to the Deals tab | Deals settings tab is displayed |
 | 4 | Click the Add Pipeline button | Add Pipeline form opens |
-| 5 | Add at least one department | Department is added to the pipeline |
+| 5 | Add at least one stage | Stage is added to the pipeline |
 | 6 | Click the SAVE button | Pipeline is saved and appears in the pipeline list |
 | 7 | Navigate to the Deals module | Deals module opens |
 | 8 | Click the "Select Pipeline" dropdown | Dropdown expands showing the list of pipelines |
@@ -33,11 +33,11 @@ Notice: 10 discrete actions = 10 steps. Navigating to Settings, moving to the De
 
 ## Example: defect ticket -> derived cases
 
-**Source ticket #123456 - Unable to send message in a conversation after the messaging window closes**
-Module: Messenger / Feature: Channel
-Rule: *Messages are only sendable within 24h of the last customer inbound; after that a special agent tag is required.*
+**Source ticket #1001 - Unable to send message in a conversation after the messaging window closes**
+Module: Inbox / Feature: Chat
+Rule: *Free-form replies are only sendable within 24h of the customer's last inbound message; after that only an approved template message can be sent.*
 
-### Messenger - Channel - Verify that user is able to send a message within the messaging window.
+### Inbox - Chat - Verify that user is able to send a message within the messaging window.
 
 ```
 Preconditions: Environment: QA | A conversation exists with a customer inbound message received < 24h ago
@@ -45,7 +45,7 @@ Preconditions: Environment: QA | A conversation exists with a customer inbound m
 | # | Action | Expected Result |
 |---|--------|-----------------|
 | 1 | Log in to the application | User is logged in and the dashboard loads |
-| 2 | Navigate to the Messenger module | Messenger opens and the conversation list is displayed |
+| 2 | Navigate to the Inbox module | Inbox opens and the conversation list is displayed |
 | 3 | Locate the conversation with an inbound message less than 24 hours old | The conversation is visible in the list |
 | 4 | Click the conversation to open it | The conversation thread opens and the message input field is enabled |
 | 5 | Type a message in the input field | The typed text appears in the input field |
@@ -54,7 +54,7 @@ Preconditions: Environment: QA | A conversation exists with a customer inbound m
 ```
 Actual Result:
 
-### Messenger - Channel - Verify that user is unable to send a standard message after the messaging window closes.
+### Inbox - Chat - Verify that user is unable to send a standard message after the messaging window closes.
 
 ```
 Preconditions: Environment: QA | A conversation whose last customer inbound message is > 24h old
@@ -62,16 +62,16 @@ Preconditions: Environment: QA | A conversation whose last customer inbound mess
 | # | Action | Expected Result |
 |---|--------|-----------------|
 | 1 | Log in to the application | User is logged in and the dashboard loads |
-| 2 | Navigate to the Messenger module | Messenger opens and the conversation list is displayed |
+| 2 | Navigate to the Inbox module | Inbox opens and the conversation list is displayed |
 | 3 | Locate the conversation with last inbound message older than 24 hours | The conversation is visible in the list |
 | 4 | Click the conversation to open it | The conversation thread opens |
 | 5 | Type a message in the input field | The typed text appears in the input field |
-| 6 | Click the Send button | The message is not sent; the system indicates the special agent tag is required to message outside the window |
+| 6 | Click the Send button | The message is not sent; the system indicates that only an approved template can be sent outside the window |
 | 7 | Verify that the standard message was blocked | No standard message is delivered and the window restriction is enforced |
 ```
 Actual Result:
 
-### Messenger - SMS - Verify that an SMS conversation is not affected by the messaging-window rule.
+### Inbox - SMS - Verify that an SMS conversation is not affected by the messaging-window rule.
 
 ```
 Preconditions: Environment: QA | An SMS (different-channel) conversation older than 24h
@@ -79,11 +79,11 @@ Preconditions: Environment: QA | An SMS (different-channel) conversation older t
 | # | Action | Expected Result |
 |---|--------|-----------------|
 | 1 | Log in to the application | User is logged in and the dashboard loads |
-| 2 | Navigate to the Messenger module | Messenger opens and the conversation list is displayed |
+| 2 | Navigate to the Inbox module | Inbox opens and the conversation list is displayed |
 | 3 | Locate and open an SMS conversation older than 24 hours | The conversation thread opens and the message input field is enabled |
 | 4 | Type a message in the input field | The typed text appears in the input field |
 | 5 | Click the Send button | The message is sent normally; the window restriction does not apply to SMS |
-| 6 | Verify that the SMS sent without restriction | The message shows as sent/delivered with no special-tag requirement |
+| 6 | Verify that the SMS sent without restriction | The message shows as sent/delivered with no template requirement |
 ```
 Actual Result:
 
@@ -96,4 +96,4 @@ Actual Result:
 - **Childlike granularity**: opening a conversation = locate it (one step) + click it (next step). Typing and sending are separate steps.
 - **Every step has a concrete expected result** — never blank, never bundled.
 - **Ends on a "Verify that..." step** restating the title's behavior.
-- **Cross-flow case** (SMS) came from following the impact link from the Channel rule to a different channel. Always check connected flows for impact cases.
+- **Cross-flow case** (SMS) came from following the impact link from the Chat rule to a different channel. Always check connected flows for impact cases.

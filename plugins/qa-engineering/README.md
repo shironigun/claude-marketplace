@@ -16,6 +16,7 @@
 | **What it does** | The whole QA loop: analyze, author, publish, automate, run, file bugs |
 | **Includes** | 16 skills · 4 agents · 9 commands · 2 MCP servers |
 | **Writes** | Test Cases, suites and bugs in Azure DevOps, each after your OK |
+| **Requires** | **Claude Code 2.1.293 or later** (the mods runtime). On older versions the whole plugin fails to load: see [Live status pane](#live-status-pane-optional--needs-the-mods-runtime) |
 | **Setup** | Set `ADO_ORG`; interactive sign-in |
 | **Product-neutral** | Yes |
 
@@ -159,6 +160,8 @@ Format and rules: `knowledge/standards/knowledge-base.md`.
 - Node 20 or later, git, and network access to the system under test.
 
 ## Install
+
+> **Minimum version: Claude Code 2.1.293.** Check yours with `claude --version` and update first if it is older.
 
 ```bash
 claude plugin marketplace add shironigun/marketplace

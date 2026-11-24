@@ -2,7 +2,7 @@
   "app": {
     "adapter": "react-mui",
     "appRoot": ".",
-    "product": "Mini APP"
+    "product": "Mini App"
   },
   "components": [
     {
@@ -336,6 +336,104 @@
       "confidence": "high",
       "evidence": "CONFIRMED",
       "exportNames": [
+        "Inbox"
+      ],
+      "families": [
+        "identical-files:1680f5d74738",
+        "same-name:Inbox"
+      ],
+      "file": "src/components/inbox-v2/Inbox.tsx",
+      "id": "src/components/inbox-v2/Inbox.tsx#Inbox",
+      "importers": {
+        "files": 0,
+        "modules": []
+      },
+      "layer": "snowflake",
+      "level": "molecule",
+      "levelReason": "2+ atoms combined for one job",
+      "line": 5,
+      "loc": 12,
+      "logic": "presentational",
+      "module": "inbox-v2",
+      "name": "Inbox",
+      "promotionCandidate": false,
+      "quality": {
+        "rawValues": 3,
+        "themeValues": 1
+      },
+      "shared": false,
+      "signals": {
+        "data": false,
+        "dataHooks": [],
+        "domainProps": false,
+        "pageArea": false,
+        "primaryActions": 0,
+        "region": false,
+        "slots": 0,
+        "styledTarget": null
+      },
+      "smells": [],
+      "uses": [],
+      "wraps": [
+        "mui:List",
+        "mui:ListItem",
+        "mui:ListItemText",
+        "mui:Typography"
+      ]
+    },
+    {
+      "confidence": "high",
+      "evidence": "CONFIRMED",
+      "exportNames": [
+        "Inbox"
+      ],
+      "families": [
+        "identical-files:1680f5d74738",
+        "same-name:Inbox"
+      ],
+      "file": "src/components/inbox/Inbox.tsx",
+      "id": "src/components/inbox/Inbox.tsx#Inbox",
+      "importers": {
+        "files": 0,
+        "modules": []
+      },
+      "layer": "snowflake",
+      "level": "molecule",
+      "levelReason": "2+ atoms combined for one job",
+      "line": 5,
+      "loc": 12,
+      "logic": "presentational",
+      "module": "inbox",
+      "name": "Inbox",
+      "promotionCandidate": false,
+      "quality": {
+        "rawValues": 3,
+        "themeValues": 1
+      },
+      "shared": false,
+      "signals": {
+        "data": false,
+        "dataHooks": [],
+        "domainProps": false,
+        "pageArea": false,
+        "primaryActions": 0,
+        "region": false,
+        "slots": 0,
+        "styledTarget": null
+      },
+      "smells": [],
+      "uses": [],
+      "wraps": [
+        "mui:List",
+        "mui:ListItem",
+        "mui:ListItemText",
+        "mui:Typography"
+      ]
+    },
+    {
+      "confidence": "high",
+      "evidence": "CONFIRMED",
+      "exportNames": [
         "LeadRow"
       ],
       "families": [
@@ -434,104 +532,6 @@
         "mui:Box",
         "mui:Dialog",
         "mui:TextField"
-      ]
-    },
-    {
-      "confidence": "high",
-      "evidence": "CONFIRMED",
-      "exportNames": [
-        "Inbox"
-      ],
-      "families": [
-        "identical-files:1680f5d74738",
-        "same-name:Inbox"
-      ],
-      "file": "src/components/messenger-v2/Inbox.tsx",
-      "id": "src/components/messenger-v2/Inbox.tsx#Inbox",
-      "importers": {
-        "files": 0,
-        "modules": []
-      },
-      "layer": "snowflake",
-      "level": "molecule",
-      "levelReason": "2+ atoms combined for one job",
-      "line": 5,
-      "loc": 12,
-      "logic": "presentational",
-      "module": "messenger-v2",
-      "name": "Inbox",
-      "promotionCandidate": false,
-      "quality": {
-        "rawValues": 3,
-        "themeValues": 1
-      },
-      "shared": false,
-      "signals": {
-        "data": false,
-        "dataHooks": [],
-        "domainProps": false,
-        "pageArea": false,
-        "primaryActions": 0,
-        "region": false,
-        "slots": 0,
-        "styledTarget": null
-      },
-      "smells": [],
-      "uses": [],
-      "wraps": [
-        "mui:List",
-        "mui:ListItem",
-        "mui:ListItemText",
-        "mui:Typography"
-      ]
-    },
-    {
-      "confidence": "high",
-      "evidence": "CONFIRMED",
-      "exportNames": [
-        "Inbox"
-      ],
-      "families": [
-        "identical-files:1680f5d74738",
-        "same-name:Inbox"
-      ],
-      "file": "src/components/messenger/Inbox.tsx",
-      "id": "src/components/messenger/Inbox.tsx#Inbox",
-      "importers": {
-        "files": 0,
-        "modules": []
-      },
-      "layer": "snowflake",
-      "level": "molecule",
-      "levelReason": "2+ atoms combined for one job",
-      "line": 5,
-      "loc": 12,
-      "logic": "presentational",
-      "module": "messenger",
-      "name": "Inbox",
-      "promotionCandidate": false,
-      "quality": {
-        "rawValues": 3,
-        "themeValues": 1
-      },
-      "shared": false,
-      "signals": {
-        "data": false,
-        "dataHooks": [],
-        "domainProps": false,
-        "pageArea": false,
-        "primaryActions": 0,
-        "region": false,
-        "slots": 0,
-        "styledTarget": null
-      },
-      "smells": [],
-      "uses": [],
-      "wraps": [
-        "mui:List",
-        "mui:ListItem",
-        "mui:ListItemText",
-        "mui:Typography"
       ]
     },
     {
@@ -725,12 +725,12 @@
       "kind": "identical-files",
       "members": [
         {
-          "file": "src/components/messenger-v2/Inbox.tsx",
+          "file": "src/components/inbox-v2/Inbox.tsx",
           "line": null,
           "name": null
         },
         {
-          "file": "src/components/messenger/Inbox.tsx",
+          "file": "src/components/inbox/Inbox.tsx",
           "line": null,
           "name": null
         }
@@ -766,12 +766,12 @@
       "kind": "same-name",
       "members": [
         {
-          "file": "src/components/messenger-v2/Inbox.tsx",
+          "file": "src/components/inbox-v2/Inbox.tsx",
           "line": 5,
           "name": "Inbox"
         },
         {
-          "file": "src/components/messenger/Inbox.tsx",
+          "file": "src/components/inbox/Inbox.tsx",
           "line": 5,
           "name": "Inbox"
         }
@@ -823,7 +823,7 @@
   ],
   "inputs": {
     "files": 18,
-    "hash": "51bd9819982d07816ebd6954bf291c6344571e69"
+    "hash": "0fbef7e0da68cc5edb3a80b74f1d0c1d3e920903"
   },
   "metrics": {
     "byLevel": {
@@ -873,6 +873,30 @@
       "tokenDiscipline": 0.333
     },
     {
+      "components": 1,
+      "files": 1,
+      "i18nCoverage": 0,
+      "lastCommit": null,
+      "loc": 16,
+      "module": "inbox",
+      "rawPerKloc": 187.5,
+      "samples": 4,
+      "testRatio": 0,
+      "tokenDiscipline": 0.25
+    },
+    {
+      "components": 1,
+      "files": 1,
+      "i18nCoverage": 0,
+      "lastCommit": null,
+      "loc": 16,
+      "module": "inbox-v2",
+      "rawPerKloc": 187.5,
+      "samples": 4,
+      "testRatio": 0,
+      "tokenDiscipline": 0.25
+    },
+    {
       "components": 2,
       "files": 2,
       "i18nCoverage": 0.5,
@@ -883,30 +907,6 @@
       "samples": 12,
       "testRatio": 0.5,
       "tokenDiscipline": 0.364
-    },
-    {
-      "components": 1,
-      "files": 1,
-      "i18nCoverage": 0,
-      "lastCommit": null,
-      "loc": 16,
-      "module": "messenger",
-      "rawPerKloc": 187.5,
-      "samples": 4,
-      "testRatio": 0,
-      "tokenDiscipline": 0.25
-    },
-    {
-      "components": 1,
-      "files": 1,
-      "i18nCoverage": 0,
-      "lastCommit": null,
-      "loc": 16,
-      "module": "messenger-v2",
-      "rawPerKloc": 187.5,
-      "samples": 4,
-      "testRatio": 0,
-      "tokenDiscipline": 0.25
     },
     {
       "components": 2,

@@ -81,17 +81,18 @@ no product dependency.
 
 ## Inspiration (not required)
 
-These product-specific sibling plugins inspired patterns in the kit but are **never** a hard
-dependency, and nothing in the kit requires them:
+These sibling plugins of this marketplace (and one scan-and-decide bootstrap that does not ship
+here) inspired patterns in the kit but are **never** a hard dependency, and nothing in the kit
+requires them:
 
 | Kit capability | Inspired by (not required) |
 |---|---|
-| `scan-and-confirm` (scan half, but it asks instead of assuming) | `setup/automation-setup` |
+| `scan-and-confirm` (scan half, but it asks instead of assuming) | a scan-and-decide bootstrap skill (not shipped) |
 | `docs/script-generation.md` (API cases ↔ scripts) | `api-testing/api-tester` |
 | `failure-to-bug` usage (failure → bug) | `api-testing/api-bugger` |
-| `docs/script-generation.md` (UI cases ↔ scripts) | `ui-testing/tester`, `setup/ui-tester` |
-| bug / defect filing | a product-specific bug/defect-filing plugin |
+| `docs/script-generation.md` (UI cases ↔ scripts) | `ui-testing/tester` |
+| bug / defect filing | `bug-suite` (optional) |
 
-A QA who already has those product-specific plugins installed may lean
+A QA who already has those plugins installed may lean
 on them, but the exercise and the committed kit run entirely on the kit's own native skills
 plus its own docs.

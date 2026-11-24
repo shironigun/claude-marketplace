@@ -1,6 +1,17 @@
 ---
 name: story-intelligence
-description: Native read-only engine of the qa-engineering — given a tracker story (a work-item id), retrieve its FULL context (fields, acceptance criteria, comments/discussion, history, parent/children/related/bugs/links, design & implementation notes) and produce a requirement understanding, a gaps/concerns list, and a QA review brief + test strategy — every claim labeled Confirmed / Inferred / Assumption / Gap-or-Question, and never inventing a requirement. Product-neutral and tracker-agnostic; the project, board and field names come from the house-profile, never hard-coded. Reads the tracker only — contains no write operation. Use whenever the user wants to "analyze this story", "understand this story", "get me ready to test", "what should I clarify", "review story", "raise gaps on this story", "review this story before I test it", or gives a bare "story <id>" / a work-item id with intent to test. It writes the story slice of qa-context and ends at the gaps gate — it does NOT author test cases (hand off to author-api-cases / author-ui-cases) and does NOT write anything to the tracker.
+description: >-
+  Read-only engine that takes a tracker story (a work-item id), retrieves its full context
+  (fields, acceptance criteria, comments, history, parent/children/related/bugs/links, design and
+  implementation notes) and produces a requirement understanding, a gaps/concerns list, and a QA
+  review brief + test strategy, every claim labeled Confirmed / Inferred / Assumption /
+  Gap-or-Question and no requirement invented. Tracker-agnostic; the project, board and field
+  names come from the house-profile, never hard-coded. Use whenever the user wants to "analyze
+  this story", "understand this story", "get me ready to test", "what should I clarify", "review
+  story", "raise gaps on this story", "review this story before I test it", or gives a bare "story
+  1234" or a work-item id with intent to test. Writes the story slice of qa-context and ends at
+  the gaps gate. Does not author test cases (author-api-cases / author-ui-cases) and writes
+  nothing to the tracker.
 ---
 
 # Story Intelligence — understand the requirement, surface the gaps, brief the QA
@@ -85,7 +96,7 @@ From the retrieved graph, state — concisely, each claim labeled:
 - **Expected behaviour** — what the system should do after the change, in observable terms.
 - **Affected modules / features** — which product areas this touches (in the team's domain nouns).
 - **Integrations / APIs / external systems** — any service, API, or external/partner system (e.g. a
-  PARTNER or other integration the house-profile names) that this change talks to or depends on.
+  partner or other integration the house-profile names) that this change talks to or depends on.
 - **Existing behaviour at risk** — what already works today that this change could break (the
   regression surface).
 
@@ -133,7 +144,7 @@ Produce the brief in the format of `references/review-brief-format.md`. Its sect
 - **Questions / Gaps** — the numbered list of Gap-or-Question items to resolve with Product/BA/Dev.
 - **Regression impact** — the existing flows/modules to re-check because they share surface.
 - **Test strategy** — **which test types apply and why**: functional, regression, API, UI,
-  integration, permissions, validation, negative, cross-browser, mobile, PARTNER/external-integration,
+  integration, permissions, validation, negative, cross-browser, mobile, partner/external-integration,
   performance. For each that applies, one line on *why it applies here*; name the ones that do **not**
   apply and why, so the QA sees a deliberate choice, not an omission.
 

@@ -9,7 +9,7 @@ Write UI test cases the way a rigorous senior SQA analyst writes them: behavior-
 
 This skill **authors** cases. It does not write to any tracker. When the user wants these created as Test Case work items, hand off to the `testcase-to-tracker` skill. For request/response coverage instead of click-by-click UI, use the `api-test-cases` skill.
 
-> The example module/feature names below (Deals, Settings, Messenger, Customers, Roles, etc.) are illustrative only. Use whatever modules and features exist in the product under test. The **format and voice are fixed**; the domain is the user's.
+> The example module/feature names below (Deals, Settings, Inbox, Customers, Roles, etc.) are illustrative only. Use whatever modules and features exist in the product under test. The **format and voice are fixed**; the domain is the user's.
 
 ## Phase 1: Read and Analyze
 
@@ -59,7 +59,7 @@ Examples of good titles:
 - `Deals - Pipeline - Verify that user is able to switch to the newly created pipeline.`
 - `Customers - Merge - Verify that a duplicate customer can be merged into an existing record.`
 - `Settings - Roles - Verify that a user without the Admin role cannot access pipeline settings.`
-- `Messenger - Channel - Verify that user is unable to send a message after the messaging window closes.`
+- `Inbox - Chat - Verify that user is unable to send a message after the messaging window closes.`
 
 **Entity-specific variant** (when the story targets a specific account/tenant/record):
 ```

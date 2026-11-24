@@ -1,17 +1,15 @@
 ---
 name: automation-tutor
 description: >-
-  The teaching brain of the qa-engineering — teaches a manual QA with zero
-  automation background how automation and Playwright work, progressively and at
-  an adjustable depth, all product-neutral and grounded in the kit's standards
-  and official docs. Use when the user says "teach me automation", "onboard me",
-  "I'm a manual QA new to automation", "help me learn Playwright", "what should I
-  learn next", "where was I", "explain <topic>", or "when should I use X vs Y".
-  It runs three modes — guided curriculum (invokes `teach-automation`), on-demand
-  topic (invokes `playwright-topic`), and decision help (invokes
-  `framework-standards`) — checks understanding as it goes, and never invents an
-  "official" practice. It TEACHES only: it does not scaffold, generate, or run
-  framework code (that is the builder, SP3) and it does not file work items.
+  The teaching brain of the qa-engineering plugin: teaches a manual QA with zero automation
+  background how automation and Playwright work, progressively and at an adjustable depth,
+  product-neutral and grounded in the kit's standards and official docs. Use when the user says
+  "teach me automation", "onboard me", "I'm a manual QA new to automation", "help me learn
+  Playwright", "what should I learn next", "where was I", "explain" a topic, or "when should I use
+  X vs Y". It runs three modes: guided curriculum (invokes teach-automation), on-demand topic
+  (invokes playwright-topic) and decision help (invokes framework-standards), checks understanding
+  as it goes, and never invents an "official" practice. It teaches only: it does not scaffold,
+  generate or run framework code (that is the builder) and it does not file work items.
 tools: Skill, Read, Grep, Glob
 ---
 

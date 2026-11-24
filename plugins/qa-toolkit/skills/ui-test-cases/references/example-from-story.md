@@ -1,12 +1,12 @@
 # Worked Example: User Story -> Test Cases
 
-A concrete model showing the full workflow: read the story, plan coverage, write cases. The product domain here (a APP's Leads module) is only an example — the format and voice are what to copy.
+A concrete model showing the full workflow: read the story, plan coverage, write cases. The product domain here (a fictional sales app's Leads module) is only an illustrative example — the format and voice are what to copy.
 
 ---
 
 ## Source Story
 
-**Title:** #123456 — Leads: Auto-assign lead to salesperson based on source
+**Title:** #1001 — Leads: Auto-assign lead to salesperson based on source
 
 **Description:**
 When a new lead is created in the Leads module, the system should automatically assign it to a salesperson based on the lead's source. Each lead source can be mapped to a specific salesperson in Settings. If no mapping exists for a source, the lead is left unassigned.
@@ -83,7 +83,7 @@ Actual Result:
 ### Leads - Auto-Assign - Verify that a lead remains unassigned when created with an unmapped source.
 
 ```
-Preconditions: Environment: QA | The lead source "Walk-In" has no salesperson mapping configured
+Preconditions: Environment: QA | The lead source "Trade Show" has no salesperson mapping configured
 
 | # | Action | Expected Result |
 |---|--------|-----------------|
@@ -92,7 +92,7 @@ Preconditions: Environment: QA | The lead source "Walk-In" has no salesperson ma
 | 3 | Click the Add Lead button | Add Lead form opens |
 | 4 | Enter the lead's name in the Name field | Text appears in the Name field |
 | 5 | Click the Source dropdown | Dropdown expands showing the list of lead sources |
-| 6 | Click the "Walk-In" option | "Walk-In" is selected as the lead source |
+| 6 | Click the "Trade Show" option | "Trade Show" is selected as the lead source |
 | 7 | Complete any other required fields | Required fields are filled |
 | 8 | Click the SAVE button | The lead is saved and appears in the lead list |
 | 9 | Click the newly created lead to open it | The lead detail view opens |

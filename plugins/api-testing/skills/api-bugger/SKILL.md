@@ -1,21 +1,35 @@
 ---
-name: "api-bugger"
-description: "When an API script fails in the automation project, act as a senior SQA analyst — triage the failure and draft a house-style ADO Bug (the team's voice) to review now and push to Azure DevOps later. Use whenever a Playwright API spec (contract / endpoint / workflow) fails and the user wants a bug drafted, when the user pastes a failed API test's output / assertion error / zod safeParse issues / non-2xx response and asks to log or write it up, or says \"draft a bug for this failure\", \"the contract test failed, write it up\", \"turn this red run into a bug\". Drafts live in the automation project's find-bugs module; the skill drafts and reviews only — it does not auto-push. Sibling of the `api-tester` skill (which authors the API cases/scripts) and the `bugger`/`defector` ADO-filing skills; hand off to those to actually create the work item."
+name: api-bugger
+description: >-
+  Acts as a senior SQA analyst when an API script fails in the automation project: triages the failure
+  and drafts a house-style Azure DevOps Bug to review now and push later. Use whenever a Playwright API
+  spec (contract / endpoint / workflow) fails and the user wants a bug drafted, when the user pastes a
+  failed API test's output, assertion error, zod safeParse issues or non-2xx response and asks to log or
+  write it up, or says "draft a bug for this failure", "the contract test failed, write it up", "turn
+  this red run into a bug". Drafts live in the automation project's find-bugs module; the skill drafts
+  and reviews only and never auto-files. Failure-side sibling of api-tester, which authors the API cases
+  and scripts.
 ---
 
 # API Bugger — Failed API Script → House-Style Bug Draft
 
 When an API script goes red, a senior SQA analyst does not paste the stack trace into ADO. They decide whether it is a real product bug, and if so write a bug a developer can reproduce and a reviewer can approve. This skill does exactly that for the `automation/` project: take a failed Playwright API spec (contract / endpoint / workflow) plus its failure output, **triage** it, and **draft** a bug in the exact house format — saved to the `find-bugs` module to view and push to ADO later. It is the failure-side sibling of `api-tester` (which authors the cases/scripts).
 
-**Scope:** this skill runs against the product **`automation/`** project. The bug format below was learned from the QA-automation tool's Bug Writer, but this skill does not touch that tool — it drafts into `automation/find-bugs/`.
+**Scope:** this skill runs against the **`automation/`** project and drafts into `automation/find-bugs/`.
 
-**Draft-and-review only.** The lifecycle is `Draft → Approved/Rejected → Pushed`; this skill produces the Draft and stops. Pushing to ADO is a separate, deliberate step (hand to `bugger`, or file via ADO tooling using the field map below). Never auto-file.
+**Draft-and-review only.** The lifecycle is `Draft → Approved/Rejected → Pushed`; this skill produces the Draft and stops. Pushing to ADO is a separate, deliberate step (hand the drafted fields to the user's tracker-filing tool, or file via ADO tooling using the field map below). Never auto-file.
+
+## Step 0 — Workspace profile
+
+Read `references/workspace-profile.md`, then load `.claude/workspace-profile.json` from the user's project. This skill needs:
+`tracker.*`, `boards.delivery`, `boards.support`, `workItemTypes.bug`, `fields.bug`, `identity`, `environments`, `variants`, `variantIdParam`, and `clientIdFormat`.
+If any are missing, run discovery for those keys only, confirm with the user, save, then continue. Every org fact below comes from the profile; nothing is assumed. Routes, partner names, ids and field values in the examples below are illustrative placeholders.
 
 ## Inputs to gather
 
 - **The failing spec** and its `traces-case:` header (from `api-tester`) — the case title and, if present, the `adoTestCaseId` and level (`@contract|@endpoint|@workflow`).
 - **The Playwright failure output** — the failing assertion (`expect(res.status()).toBe(201)` → received 500), the response status/body, and for contract failures the `zod` `safeParse` `error.issues`.
-- **Context** — the route (`routes.<unit>.ts`), the schema, the PARTNER profile + environment + client id the run used, and (optional) the relevant code snippet for a suggested fix.
+- **Context** — the route (`routes.<unit>.ts`), the schema, the variant profile (a `variants.values` item) + environment + client id the run used, and (optional) the relevant code snippet for a suggested fix.
 
 ## Phase 1: Triage (classify before drafting)
 
@@ -34,19 +48,19 @@ Draft fields (this is the frozen shape — camelCase): `title`, `severity`, `pre
 
 ### Title — declarative negative-state statement (NOT `[Module] - [Feature]`)
 
-State plainly what is broken, name the endpoint/module, and END with the environment. ALL-CAPS the domain keywords (states/entities like OPEN, CLOSED, EMAIL, PDF, CSV; PARTNER names PARTNER-B, PARTNER-C, PARTNER-E, PARTNER-A, APP; environments QA, STAGING, PRODUCTION). Bracket a client id when client-specific. No "should", no question phrasing, no speculation, no `[Module] - [Feature]` prefix. Pick the frame that fits:
+State plainly what is broken, name the endpoint/module, and END with the environment. ALL-CAPS the domain keywords (states/entities like OPEN, CLOSED, EMAIL, PDF, CSV; integration-partner names from `variants.values`, e.g. PARTNER-A, PARTNER-B; environments QA, STAGING, PRODUCTION), matching the house title habits recorded during discovery. Bracket a client id when client-specific (`clientIdFormat`, e.g. `Contoso Outdoor [10001]`). No "should", no question phrasing, no speculation, no `[Module] - [Feature]` prefix. Pick the frame that fits:
 
 - `<thing> not working` / `<thing> is/are not <verb>ing`
 - `Unable to <verb>`   ·   `<thing> is not <correct>`
 - `Error <doing X>`   ·   `Able to <do invalid thing>` (for things that should be blocked but aren't)
 
 API-molded examples (match this style):
-- `POST opportunities returns 500 on QA environment`
-- `Unable to CREATE opportunity via POST opportunities on PARTNER-B QA environment`
-- `opportunities response is missing the required id field on QA environment`
-- `Able to CREATE an opportunity without a required customer via POST opportunities on QA environment`
-- `GET opportunities returns 401 for a valid bearer token on QA environment`
-- `CLOSED invoices are syncing as OPEN from PARTNER-B to APP`
+- `POST orders returns 500 on QA environment`
+- `Unable to CREATE order via POST orders on PARTNER-B QA environment`
+- `orders response is missing the required id field on QA environment`
+- `Able to CREATE an order without a required contact via POST orders on QA environment`
+- `GET orders returns 401 for a valid bearer token on QA environment`
+- `CLOSED invoices are syncing as OPEN from PARTNER-B on STAGING environment`
 
 ### Severity (exactly one)
 
@@ -59,19 +73,19 @@ API-molded examples (match this style):
 
 `preconditions` is ALWAYS `""`; all setup goes into `reproSteps` as the first steps. Rules:
 
-- Imperative, third-person, atomic — ONE action per item. "Send a POST request to /api/orders/clients/{id}/opportunities with a valid payload." not "POST and check the response".
+- Imperative, third-person, atomic — ONE action per item. "Send a POST request to /api/orders/tenants/{id}/orders with a valid payload." not "POST and check the response".
 - Childlike granularity — each request and each setup action is its own step.
-- **Step 1 names the PARTNER + environment (and client id when known):** "Authenticate to the API as <role> on Client <id> on the QA environment." or "Go to PARTNER-B QA environment.", then one step per setup action (mint/seed the required record, capture ids), then the request that triggers the failure as the last step.
-- Reference exact routes, methods, params, headers, and field names verbatim (`POST /api/orders/.../opportunities`, `Authorization` header, `tenantId`, `stage`). Leave the broken result out of the steps — it belongs in `observations`.
+- **Step 1 names the variant + environment (and client id when known):** "Authenticate to the API as <role> on Client <id> on the QA environment." or "Go to PARTNER-B QA environment.", then one step per setup action (mint/seed the required record, capture ids), then the request that triggers the failure as the last step.
+- Reference exact routes, methods, params, headers, and field names verbatim (`POST /api/orders/.../orders`, `Authorization` header, `tenantId`, `status`). Leave the broken result out of the steps — it belongs in `observations`.
 
 ### Expected vs Observations
 
-- **expected** — the correct resolved state, pulled from the case/contract. Definitive ("POST opportunities returns 201 with the created opportunity."), never "should". This renders as the bug's acceptance line: *"I know this bug is resolved when: <expected>"*.
-- **observations** — the actual, as an ARRAY of DISTINCT facts, each ONE bullet, definitive. Put each technical signal in its own bullet: e.g. `["Response status is 500 Internal Server Error", "Response body is empty", "A subsequent GET opportunities does not include the new record"]`. For a contract failure, one bullet per `safeParse` issue (`"items[0].id is missing (zod: Required)"`). This renders under a bold **OBSERVATION:** header.
+- **expected** — the correct resolved state, pulled from the case/contract. Definitive ("POST orders returns 201 with the created order."), never "should". This renders as the bug's acceptance line: *"I know this bug is resolved when: <expected>"*.
+- **observations** — the actual, as an ARRAY of DISTINCT facts, each ONE bullet, definitive. Put each technical signal in its own bullet: e.g. `["Response status is 500 Internal Server Error", "Response body is empty", "A subsequent GET orders does not include the new record"]`. For a contract failure, one bullet per `safeParse` issue (`"items[0].id is missing (zod: Required)"`). This renders under a bold **OBSERVATION:** header.
 
 ### Suggested fix (optional)
 
-Concrete and code-aware if a code snippet was provided ("Return `id` from the create handler before serializing `OpportunityResponse`."). Leave `""` if no high-confidence suggestion.
+Concrete and code-aware if a code snippet was provided ("Return `id` from the create handler before serializing `OrderResponse`."). Leave `""` if no high-confidence suggestion.
 
 ### Voice
 
@@ -92,16 +106,16 @@ Draft JSON (mirrors the framework's BugDraft; `status` starts `Draft`, `adoBugId
 
 ```json
 {
-  "title": "POST opportunities returns 500 on QA environment",
+  "title": "POST orders returns 500 on QA environment",
   "severity": "High",
   "preconditions": "",
-  "reproSteps": ["Authenticate to the API as an ADMIN on Client 99204001 on the QA environment.", "Send a POST request to /api/orders/clients/99204001/opportunities with a valid payload.", "Read the response status."],
-  "expected": "POST opportunities returns 201 with the created opportunity.",
-  "observations": ["Response status is 500 Internal Server Error", "Response body is empty", "No opportunity is created"],
+  "reproSteps": ["Authenticate to the API as an ADMIN on Client 10001 on the QA environment.", "Send a POST request to /api/orders/tenants/10001/orders with a valid payload.", "Read the response status."],
+  "expected": "POST orders returns 201 with the created order.",
+  "observations": ["Response status is 500 Internal Server Error", "Response body is empty", "No order is created"],
   "suggestedFix": "",
   "status": "Draft",
   "adoBugId": null,
-  "source": { "spec": "modules/orders/api/tests/endpoints/opportunities-create.spec.ts", "tracesCase": "CPQ+ - Opportunities - Verify that POST opportunities creates an opportunity successfully.", "adoTestCaseId": null, "level": "endpoint" },
+  "source": { "spec": "modules/orders/api/tests/endpoints/orders-create.spec.ts", "tracesCase": "Sales - Orders - Verify that POST orders creates an order successfully.", "adoTestCaseId": null, "level": "endpoint" },
   "triage": { "classification": "real_bug", "confidence": "high", "reason": "A valid create payload returns 500 and persists nothing; the endpoint is at fault." }
 }
 ```
@@ -113,11 +127,11 @@ When pushed, the draft maps to an ADO **Bug** ($Bug) with this frozen field orde
 1. `System.Title` = title
 2. `Microsoft.VSTS.TCM.ReproSteps` = repro HTML — env-first steps as `<ul><li>…</li></ul>`, then `<div><b>OBSERVATION:</b></div><ul><li>…</li></ul>` (one `<li>` per observation), then `<div><i>[Attach screenshot/GIF here]</i></div>`. (`preconditions` is empty, so no preconditions line.)
 3. `Microsoft.VSTS.Common.Severity` = `1 - Critical` | `2 - High` | `3 - Medium` | `4 - Low`
-4. `System.AreaPath` = the configured bug area path
+4. `System.AreaPath` = the delivery board (`boards.delivery.areaPath`) for QA/Staging failures, or the support board (`boards.support.areaPath`) when the failure is on PRODUCTION / live clients
 5. `Microsoft.VSTS.Common.Priority` = `2`
 6. `Microsoft.VSTS.Common.ValueArea` = `Business`
-7. `Custom.ExampleOwner` = the configured QA owner
-8. `Custom.ExampleFoundWith` = `Manual Test` (leave this — the picklist rejects arbitrary values like "Automated Test"; the automation provenance goes in System Info)
+7. Every other field the org populates on Bugs (`fields.bug`), each set to its typical value from the profile; an owner/QA field takes `identity`
+8. For a picklist field that records how the bug was found (if `fields.bug` has one), use its typical manual value from the observed `values` (picklists reject arbitrary values like "Automated Test"; the automation provenance goes in System Info)
 9. *(optional)* `Microsoft.VSTS.Common.AcceptanceCriteria` = `I know this bug is resolved when:` + `<ul><li>expected</li></ul>`
 10. *(optional)* `Microsoft.VSTS.TCM.SystemInfo` = `Suggested fix:` (if any) + a **"How this bug was found"** block: filed from a failed Playwright API test, the spec/test name, the `traces-case`/ADO Test Case #, the triage verdict + confidence + reason, and the exact failing assertion message.
 
@@ -127,9 +141,8 @@ Severity string mapping is exact: `Critical→"1 - Critical"`, `High→"2 - High
 
 Present the draft(s) for review; let the user edit and Approve/Reject. When they choose to file, hand off:
 
-- **`bugger`** — files a Bug on the Example Project project in house style (QA/Staging regressions). Give it the drafted fields.
-- **`defector`** — use instead when the failure is on PRODUCTION / live clients.
-- Or file directly via ADO tooling using the field map above (create `$Bug`, then link **Related** to the source `adoTestCaseId` if known). On success, set the draft `status` to `Pushed` and record `adoBugId`.
+- Give the drafted fields to the user's tracker-filing tool, targeting the delivery board for QA/Staging regressions and the support board when the failure is on PRODUCTION / live clients.
+- Or file directly via ADO tooling using the field map above (create `$Bug` in `tracker.project`, then link **Related** to the source `adoTestCaseId` if known). On success, set the draft `status` to `Pushed` and record `adoBugId`.
 
 ## After drafting
 

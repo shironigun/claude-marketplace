@@ -1,6 +1,17 @@
 ---
 name: scan-and-confirm
-description: Phase 0 of building a test-automation framework — scan the target repo or live API, PROPOSE how the chosen module's flows work, and ASK the QA to confirm or correct each one (one question at a time, each with a recommended answer and the reason) before any test is written. First confirms the PRODUCT KIND (web | api | desktop | mixed), which derives whether automation applies (web/api automatable, desktop manual, mixed = API automatable + desktop UI manual). Discovers modules SURFACE-FIRST — for a web product from the route table/nav (resolving each screen's API calls into backend handlers); for a desktop/thick-client product (VB.NET/Delphi/WinForms/WPF) from the app's forms/windows/menus (resolving each screen into its code-behind + business logic); backend-prefix for an API-only product. Collects API base URL(s)/auth/credentials into the git-ignored `.env` ONLY for an automatable surface (skipped for a pure desktop product). Writes a system map (with productKind + automation) + a confirmed flow map (`flow-map.json`) for the kit-builder, and on first run scaffolds a Knowledge Base (`knowledge-base/` with a stub per discovered module) that later grounds story/module analysis. Use whenever the user asks to "scan the repo/API before building tests", "confirm the flow before writing tests", "scan and confirm", "propose the flows and let me correct them", "pick the module to automate", "create the knowledgebase", or is starting phase 0 of the qa-engineering / a brick-by-brick framework build — also when kit-builder reaches phase 0. It asks instead of assuming — the inverse of automation-setup, which scans but never asks.
+description: >-
+  Phase 0 of a test-automation framework build: scans the repo or live API, proposes how the
+  chosen module's flows work, and asks the QA to confirm or correct each (one question at a time,
+  each with a recommended answer) before any test is written. First confirms the product kind
+  (web, api, desktop, mixed), which decides if automation applies. Discovers modules surface-first
+  (routes/nav for web, forms/menus for a desktop app such as VB.NET or WinForms, backend prefixes
+  for API-only). Collects URLs and credentials into the git-ignored .env when automatable, writes
+  a system map and a confirmed flow-map.json for kit-builder, and on first run scaffolds a
+  Knowledge Base. Use when the user asks to "scan the repo/API before building tests", "confirm
+  the flow before writing tests", "scan and confirm", "propose the flows and let me correct them",
+  "pick the module to automate", "create the knowledgebase", or starts phase 0 of a brick-by-brick
+  build (also when kit-builder reaches phase 0).
 ---
 
 # Scan and Confirm — phase 0
@@ -26,15 +37,15 @@ This is phase 0 of the `qa-engineering`. It produces, for `kit-builder` (phases 
 > grouping. A **`mixed`** product discovers its desktop UI screen-first *and* maps the backend API. See
 > `knowledge/standards/knowledge-base.md`.
 
-> **System before module — do not jump to a module.** Analyse the *system* first (section 0): its hosts, its auth, and — crucially — whether the product changes behaviour by a **kind of account / user / deployment** (a client type, tenant type, subscription tier, role, client app). That **variant axis** is a first-class architectural input: it decides the profile set and which modules need variant-specific coverage, so it is discovered and confirmed *before* the first module is chosen, not bolted on later. See `knowledge/standards/variants-and-user-types.md`.
+> **System before module — do not jump to a module.** Analyse the *system* first (section 0): its hosts, its auth, and — crucially — whether the product changes behaviour by a **kind of account / user / deployment** (a tenant type, integration partner, subscription tier, role, client app). That **variant axis** is a first-class architectural input: it decides the profile set and which modules need variant-specific coverage, so it is discovered and confirmed *before* the first module is chosen, not bolted on later. See `knowledge/standards/variants-and-user-types.md`.
 
 > The examples below (orders, widgets) are illustrative. Use the real modules, paths, hosts and field names of the system under test. Nothing product-specific belongs in this skill, in the flow map's key names, or in anything committed.
 
-## This skill ASKS (unlike `automation-setup`, which assumes)
+## This skill ASKS (unlike a scan-and-decide bootstrap, which assumes)
 
-`automation-setup` scans a backend and then decides everything itself — its opening instruction is "Do not ask the user anything.", and an unknown value is recorded and reported at the end. **This skill keeps the scan and inverts that rule: that skill does not ask; this one must.**
+A scan-and-decide bootstrap scans a backend and then decides everything itself — its rule is "Do not ask the user anything.", and an unknown value is recorded and reported at the end. **This skill keeps the scan and inverts that rule: that skill does not ask; this one must.**
 
-| | `automation-setup` | `scan-and-confirm` |
+| | scan-and-decide bootstrap | `scan-and-confirm` |
 |---|---|---|
 | Uncertain about a value | decides from evidence, labels it inferred | **asks now**, with a recommended answer |
 | What the code evidence is | the decision | the *proposal* — the QA's answer is the decision |
@@ -119,7 +130,7 @@ What kind of product is this — and therefore **what can the plugin automate**?
 ### 0b. The variant axis
 The one product-level thing most easily missed — and
 most costly to retrofit — is a **variant axis**: a kind of account / user / deployment the product
-changes behaviour for (a client type, tenant type, subscription tier/edition, user role, client app).
+changes behaviour for (a tenant type, integration partner, subscription tier/edition, user role, client app).
 It decides the profile set and which modules need per-variant coverage, so it is architecture, not a
 module detail. Read `knowledge/standards/variants-and-user-types.md` for the full standard; the short
 version:
@@ -251,7 +262,7 @@ framework still needs. (All read-only; never echo a secret you read.)
    |---|---|
    | `API_BASE_URL` (primary) / `<HOST>_API_BASE_URL` | `*_API_BASE_URL`, `VITE_*_API`, `BASE_URL` |
    | `AUTH_BASE_URL` | the auth/token host (`*_WEB_API`, `AUTH_URL`, `IDENTITY_URL`) |
-   | `AUTH_TENANT_ID` (+ `AUTH_TENANT_FIELD`) | `*_CLIENT_ID`, `ACCOUNT_ID`, `ORG_ID`, `COMPANY_ID` — the tenant has many product names; set `AUTH_TENANT_FIELD` to the **login body field** name (e.g. `clientId`) and `AUTH_TENANT_ID` to its value |
+   | `AUTH_TENANT_ID` (+ `AUTH_TENANT_FIELD`) | `*_ACCOUNT_ID`, `*_LOCATION_ID`, `ORG_ID`, `COMPANY_ID` — the tenant has many product names; set `AUTH_TENANT_FIELD` to the **login body field** name (e.g. `accountId`) and `AUTH_TENANT_ID` to its value |
    | `AUTH_USERNAME` / `AUTH_PASSWORD` | `*_USERNAME` / `*_PASSWORD`, `USER` / `PASS` |
    | `<VARIANT>_AUTH_*` (per variant) | the existing per-variant blocks (`<PARTNER>_AUTH_*`, `<TIER>_AUTH_*`) |
    | `WEB_APP_URL` / `WEB_APP_LOGIN_URL` (+ `<VARIANT>_WEB_APP_LOGIN_URL`) | `*_WEB_APP_URL`, `APP_URL`, a per-variant login URL |
@@ -259,9 +270,9 @@ framework still needs. (All read-only; never echo a secret you read.)
 3. **Append, don't overwrite** — write the template-schema keys the framework needs, deriving each value
    from the mapped existing key; leave the existing keys in place (dotenv keeps the first occurrence, so a
    duplicate is harmless). When a template key's value is just a rename of an existing one
-   (`AUTH_TENANT_ID` ← `*_CLIENT_ID`), copy the value across; don't make the QA re-enter it.
-4. **State the mapping in the confirmation log** — "mapped `CPQ_API_BASE_URL`→`API_BASE_URL`,
-   `*_AUTH_CLIENT_ID`→`*_AUTH_TENANT_ID`, …" — so the QA sees what was adopted vs. what they still must
+   (`AUTH_TENANT_ID` ← `*_ACCOUNT_ID`), copy the value across; don't make the QA re-enter it.
+4. **State the mapping in the confirmation log** — "mapped `ORDERS_API_BASE_URL`→`API_BASE_URL`,
+   `*_AUTH_ACCOUNT_ID`→`*_AUTH_TENANT_ID`, …" — so the QA sees what was adopted vs. what they still must
    fill. Never print a secret value in that log.
 
 ## 5. Emit the system map, then the flow map

@@ -18,13 +18,13 @@ G += '<path class="ar" d="M380 138 H410 M410 58 V218"/>';
 
 const how = [
   head('How it works', 'A first draft of every reply, written for the agent'),
-  roles([['dl', 'Product', 'The journey and the promises', '#how-journey'], ['ai', 'QA', 'What to test and issues found', '#how-qa'], ['app', 'Developers', 'Technical detail at the bottom', '#how-dev']]),
+  roles([['user', 'Product', 'The journey and the promises', '#how-journey'], ['ai', 'QA', 'What to test and issues found', '#how-qa'], ['app', 'Developers', 'Technical detail at the bottom', '#how-dev']]),
   sub('The journey', 'how-journey'),
   journey('From a customer email to a sent reply', [
-    ['dl', 'sms', 'Customer writes', 'An email or a chat message', 'Customer'],
+    ['user', 'sms', 'Customer writes', 'An email or a chat message', 'Customer'],
     ['app', 'store', 'Helpdesk opens a ticket', 'And sends the thread to the AI', 'Helpdesk'],
     ['ai', 'ai', 'The AI drafts', 'A reply in the team&#8217;s tone', 'AI'],
-    ['dl', 'review', 'Agent edits', 'Changes anything, or starts over', 'Agent'],
+    ['user', 'review', 'Agent edits', 'Changes anything, or starts over', 'Agent'],
     ['app', 'send', 'Agent sends', 'From the agent&#8217;s own mailbox', 'Helpdesk']
   ], { icon: 'sync', who: 'Helpdesk', lane: 'app', html: '<b>When the customer replies,</b> a fresh draft is written for the new message.' }, 'The AI never sends anything. Every reply takes an agent&#8217;s click.'),
   sub('Two kinds of draft'),
@@ -33,7 +33,7 @@ const how = [
     ['forum', 'A holding reply', 'Holding', msg('c', 'Can I get a refund for the broken lamp?', 'Customer &middot; 10/14', 'Asked') + msg('r', 'Sorry about the lamp. I&#8217;m checking with our returns team and will reply by 5pm.', 'Draft'), 'Promises a time, never an outcome']
   ]),
   sub('Who does what'),
-  matrix([['ai', 'ai', 'The AI'], ['app', 'store', 'Helpdesk'], ['dl', 'person', 'The agent']], [
+  matrix([['ai', 'ai', 'The AI'], ['app', 'store', 'Helpdesk'], ['user', 'person', 'The agent']], [
     ['sms', 'Write the draft', ['y', 'Every new message'], ['n', '&mdash;'], ['p', 'Edits it']],
     ['shield', 'Check the draft', ['n', '&mdash;'], ['y', 'Length, links, tone'], ['p', 'Reads it']],
     ['send', 'Send the reply', ['n', 'Never'], ['p', 'Sends on the click'], ['y', 'Clicks Send']]
@@ -44,7 +44,7 @@ const how = [
   levels(L, [['clock', 'Waiting', ['under 4 hours', '4 hours or more', '1 day or more', '3 days or more']], ['mood', 'Mood', ['calm', 'concerned', 'frustrated', 'angry']]],
     '<span>Example:</span><span class="vz-sig">waiting 5 hours ' + upill('Medium', L[1][1]) + '</span><b>+</b><span class="vz-sig">frustrated ' + upill('High', L[2][1]) + '</span><b>=</b>' + upill('High', L[2][1]) + '<span class="vz-urgnote">The highest signal wins.</span>'),
   sub('What the agent can do'),
-  actions([['send', 'Send', 'The draft is right, or right after an edit'], ['pen', 'Rewrite', 'Ask for a new draft in a different tone'], ['block', 'Discard', 'Write the reply from scratch', 'dl']]),
+  actions([['send', 'Send', 'The draft is right, or right after an edit'], ['pen', 'Rewrite', 'Ask for a new draft in a different tone'], ['block', 'Discard', 'Write the reply from scratch', 'user']]),
   sub('When the AI gets it wrong'),
   big(svg('0 0 860 250', 'Every draft is checked: shown to the agent, trimmed, or not shown', G, 'The agent always reads the draft before anything is sent.', true)),
   sub('What to test', 'how-qa'),

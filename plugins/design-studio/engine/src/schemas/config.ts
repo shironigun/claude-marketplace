@@ -2,7 +2,7 @@ const strArr = { type: 'array', items: { type: 'string' } } as const;
 
 export const configSchema = {
   $schema: 'https://json-schema.org/draft/2020-12/schema',
-  $id: 'https://github.com/shironigun/ai-marketplace/plugins/design-studio/schemas/config.schema.json',
+  $id: 'https://github.com/shironigun/marketplace/plugins/design-studio/schemas/config.schema.json',
   title: 'design-studio product config',
   type: 'object',
   additionalProperties: false,

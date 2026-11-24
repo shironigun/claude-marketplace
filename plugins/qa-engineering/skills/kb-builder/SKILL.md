@@ -1,6 +1,17 @@
 ---
 name: kb-builder
-description: Native engine of the qa-engineering — deep-generate one module's Knowledge Base entry (a behavior brief + testable RULES + a thin code atlas) from the product code, surface-first, so the analysis and authoring engines are grounded in documented behavior instead of re-deriving it. Given a module (a route/screen/area/slug), it reads the product repo READ-ONLY, runs the investigation protocol (map the surface — web screens under a route OR a desktop app's forms/windows/menus — trace its calls, resolve them into backend handlers or code-behind/business-logic, cross-check contracts, extract rules, build disambiguation keyword packs, mark variant behavior), confirms the discovered surface with the QA, then WRITES only the knowledge-base/ files in the QA's own repo (modules/<slug>.md + atlas/<slug>.md + a RULES.md patch) and runs a coverage self-audit. Product-neutral; the module/routes/messages come from the code, never hard-coded. Use whenever the user wants to "deepen the KB for <module>", "build the knowledge base for this module", "document this module's features/rules", "generate the module brief", or when scan-and-confirm/story-/code-intelligence finds a module whose KB is still a stub and the QA opts to deepen it. It generates product KNOWLEDGE into the QA's repo; it does NOT author test cases (author-api-cases / author-ui-cases), scan-to-build (scan-and-confirm → kit-builder), analyze-only (code-intelligence), or write to the tracker.
+description: >-
+  Deep-generates one module's Knowledge Base entry (behavior brief, testable RULES, thin code
+  atlas) from the product code, surface-first, so analysis and authoring are grounded in
+  documented behavior. Given a module (route, screen, area or slug), reads the product repo
+  read-only, maps the surface (web screens under a route, or a desktop app's forms/windows/menus),
+  traces calls into backend handlers or code-behind, extracts rules and variant behavior, confirms
+  the surface with the QA, then writes only knowledge-base/ files in the QA's own repo (brief,
+  atlas, RULES.md patch) and self-audits coverage. Use whenever the user wants to "deepen the KB
+  for this module", "build the knowledge base for this module", "document this module's
+  features/rules", "generate the module brief", or when scan-and-confirm, story-intelligence or
+  code-intelligence finds a stub KB module and the QA opts to deepen it. Does not author test
+  cases, scan-to-build, analyze-only (code-intelligence) or write to the tracker.
 ---
 
 # KB Builder — one module, deep, from the frontend in

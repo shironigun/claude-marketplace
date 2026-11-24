@@ -12,7 +12,7 @@
 
 ## Global Constraints
 
-- Work on the claude-marketplace branch **`dev`**. Never push. Never touch `main`.
+- Work on the marketplace repo branch **`dev`**. Never push. Never touch `main`.
 - All commands run from `plugins/design-studio/engine/` unless a step says "from the repo root". Commit commands run from the repo root.
 - Commits are authored as shironigun only, with no Co-Authored-By or Signed-off-by trailers (see CLAUDE.md).
 - Engine source is TypeScript with **erasable syntax only**: no `enum`, no `namespace`, no constructor parameter properties. Relative imports include the `.ts` extension. Type-only imports use `import type` or inline `type`.
@@ -20,7 +20,7 @@
 - Outputs use **app-relative POSIX paths**. JSON is written with `stableStringify` (sorted keys, 2-space indent, trailing newline). **No timestamps in JSON.** Same inputs → byte-identical outputs.
 - Source files are read with `readText` (strips BOM, CRLF/CR → LF) so results don't depend on git line-ending settings.
 - The engine is **read-only on product repos**: `inventory` writes only to `--out` or to `<config dir>/inventory/`.
-- Everything under `plugins/design-studio/` is **product-neutral**: no pilot-product names, paths or values. The fixture is a generic "Mini APP".
+- Everything under `plugins/design-studio/` is **product-neutral**: no pilot-product names, paths or values. The fixture is a generic "Mini App".
 - Evidence vocabulary: a classification with `confidence: high` is `CONFIRMED`; anything else is `INFERRED`.
 
 ---
@@ -586,7 +586,7 @@ const strArr = { type: 'array', items: { type: 'string' } } as const;
 
 export const configSchema = {
   $schema: 'https://json-schema.org/draft/2020-12/schema',
-  $id: 'https://github.com/shironigun/claude-marketplace/plugins/design-studio/schemas/config.schema.json',
+  $id: 'https://github.com/shironigun/marketplace/plugins/design-studio/schemas/config.schema.json',
   title: 'design-studio product config',
   type: 'object',
   additionalProperties: false,
@@ -3859,7 +3859,7 @@ const FAMILY_KINDS = ['same-name', 'identical-files', 'near-duplicate-files', 'r
 
 export const registrySchema = {
   $schema: 'https://json-schema.org/draft/2020-12/schema',
-  $id: 'https://github.com/shironigun/claude-marketplace/plugins/design-studio/schemas/registry.schema.json',
+  $id: 'https://github.com/shironigun/marketplace/plugins/design-studio/schemas/registry.schema.json',
   title: 'design-studio inventory registry',
   type: 'object',
   additionalProperties: false,
@@ -4248,7 +4248,7 @@ git commit -m "feat(design-studio): assemble the inventory registry, report and 
 
 ---
 
-### Task 16: Mini APP fixture, planted-problem tests and the golden registry
+### Task 16: Mini app fixture, planted-problem tests and the golden registry
 
 **Files:**
 - Create: `plugins/design-studio/fixtures/mini-app/**` (listed below)
@@ -4263,14 +4263,14 @@ git commit -m "feat(design-studio): assemble the inventory registry, report and 
 
 `fixtures/mini-app/README.md`:
 ```markdown
-# Mini APP fixture
+# Mini app fixture
 
 A tiny, product-neutral React + MUI app used to test design-studio. It is never built or run; the
 engine reads it statically. Planted problems (tests depend on them, so change them only with the
 tests):
 
 - StatusChip is defined twice (`settings/`, `deals/`); `deals/StatusChip.tsx` says it was copied.
-- `messenger/Inbox.tsx` and `messenger-v2/Inbox.tsx` are identical.
+- `inbox/Inbox.tsx` and `inbox-v2/Inbox.tsx` are identical.
 - `TABLE_HEAD_SX` is the same style block in three files.
 - Three separate status-to-colour maps (`LeadRow`, `settings/StatusChip`, `deals/StatusChip`).
 - `deals/DealsPanel.tsx` imports from inside the `settings` module.
@@ -4305,7 +4305,7 @@ tests):
 `fixtures/mini-app/design-system/design-studio.config.json`:
 ```json
 {
-  "product": "Mini APP",
+  "product": "Mini App",
   "appRoot": ".",
   "adapter": "react-mui",
   "sources": ["src/**/*.{ts,tsx,js,jsx}", "src/**/*.{css,scss,less}"],
@@ -4548,7 +4548,7 @@ export function DealsPanel({ open }: { open: boolean }) {
 }
 ```
 
-`fixtures/mini-app/src/components/messenger/Inbox.tsx` **and** `fixtures/mini-app/src/components/messenger-v2/Inbox.tsx` (identical content):
+`fixtures/mini-app/src/components/inbox/Inbox.tsx` **and** `fixtures/mini-app/src/components/inbox-v2/Inbox.tsx` (identical content):
 ```tsx
 import { List, ListItem, ListItemText, Typography } from '@mui/material';
 
@@ -4641,7 +4641,7 @@ test('the planted components get the expected levels and layers', () => {
     ['src/common/components/unused-card.tsx#UnusedCard', 'atom', 'core'],
     ['src/components/leads/LeadRow.tsx#LeadRow', 'molecule', 'snowflake'],
     ['src/components/deals/DealsPanel.tsx#DealsPanel', 'organism', 'snowflake'],
-    ['src/components/messenger/Inbox.tsx#Inbox', 'molecule', 'snowflake'],
+    ['src/components/inbox/Inbox.tsx#Inbox', 'molecule', 'snowflake'],
     ['src/components/settings/StatusChip.tsx#StatusChip', 'atom', 'recipe'],
     ['src/components/deals/StatusChip.tsx#StatusChip', 'atom', 'snowflake'],
   ];
@@ -4664,7 +4664,7 @@ test('reach is resolved through barrels, default re-exports, baseUrl and lazy ro
 test('the planted duplicate families are found', () => {
   assert.equal(fam('same-name:StatusChip').size, 2);
   assert.equal(fam('same-name:Inbox').size, 2);
-  assert.deepEqual(reg.families.find((f) => f.kind === 'identical-files')?.members.map((m) => m.file), ['src/components/messenger-v2/Inbox.tsx', 'src/components/messenger/Inbox.tsx']);
+  assert.deepEqual(reg.families.find((f) => f.kind === 'identical-files')?.members.map((m) => m.file), ['src/components/inbox-v2/Inbox.tsx', 'src/components/inbox/Inbox.tsx']);
   assert.deepEqual(reg.families.find((f) => f.kind === 'repeated-style-block')?.members.map((m) => m.file), ['src/components/deals/DealsPanel.tsx', 'src/components/leads/LeadsPage.tsx', 'src/components/settings/SettingsPage.tsx']);
   assert.equal(fam('status-color-map:all').size, 3);
   assert.equal(fam('cross-feature-import:deals->settings').size, 1);
@@ -4674,7 +4674,7 @@ test('the planted duplicate families are found', () => {
 
 test('components carry their duplicate families and style quality', () => {
   assert.ok(comp('src/components/settings/StatusChip.tsx#StatusChip').families.includes('same-name:StatusChip'));
-  const inbox = comp('src/components/messenger/Inbox.tsx#Inbox').families;
+  const inbox = comp('src/components/inbox/Inbox.tsx#Inbox').families;
   assert.ok(inbox.includes('same-name:Inbox') && inbox.some((k) => k.startsWith('identical-files:')));
   assert.deepEqual(comp('src/common/components/unused-card.tsx#UnusedCard').families, ['dead-shared:all']);
   assert.deepEqual(comp('src/common/components/status-tag.tsx#StatusTag').quality, { rawValues: 2, themeValues: 1 });
@@ -4692,7 +4692,7 @@ test('style values are converted with their unit context', () => {
 });
 
 test('modules are scored', () => {
-  assert.deepEqual(reg.modules.map((m) => m.module), ['(other)', 'deals', 'leads', 'messenger', 'messenger-v2', 'settings', 'shared']);
+  assert.deepEqual(reg.modules.map((m) => m.module), ['(other)', 'deals', 'inbox', 'inbox-v2', 'leads', 'settings', 'shared']);
   const leads = reg.modules.find((m) => m.module === 'leads');
   assert.deepEqual([leads?.files, leads?.i18nCoverage, leads?.testRatio], [2, 0.5, 0.5]);
   assert.equal(reg.modules.find((m) => m.module === 'settings')?.i18nCoverage, 0);
@@ -4727,7 +4727,7 @@ Run: `npm test` → Expected: all PASS. Run: `npm run typecheck` → Expected: e
 
 ```bash
 git add plugins/design-studio
-git commit -m "test(design-studio): add Mini APP fixture with planted problems and golden registry"
+git commit -m "test(design-studio): add mini app fixture with planted problems and golden registry"
 ```
 
 ---

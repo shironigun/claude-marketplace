@@ -1,6 +1,17 @@
 ---
 name: teach-automation
-description: The curriculum and pedagogy for teaching test automation to a QA — especially a manual QA with zero automation background — progressively and at an adjustable depth, grounded in the kit's SP1 standards and official docs. Use whenever someone wants to LEARN automation rather than have code built — "teach me automation", "start from the beginning", "onboard me", "I'm a manual QA new to automation", "what's next", "where was I", "continue the course", "jump to <topic>", or "explain <framework concept>" (locators, fixtures, POM, test levels, isolation, cross-module reuse, CI, …). It walks `knowledge/curriculum/learning-path.md` in order (respecting prerequisites), teaches each topic by pulling that topic's mapped standard via the `framework-standards` skill plus the official docs and explaining at the chosen depth from `knowledge/curriculum/depth-levels.md`, checks understanding before advancing, and ties each topic to what the SP3 builder can scaffold. It teaches FROM the standards and never restates their body; it does not scaffold framework code (that is the builder) and does not re-implement decision guidance (that is `framework-standards`).
+description: >-
+  Curriculum and pedagogy for teaching test automation to a QA, especially a manual QA with zero
+  automation background, progressively at an adjustable depth, grounded in the kit's standards and
+  official docs. Use whenever someone wants to learn automation rather than have code built:
+  "teach me automation", "start from the beginning", "onboard me", "I'm a manual QA new to
+  automation", "what's next", "where was I", "continue the course", "jump to" a topic, or
+  "explain" a framework concept (locators, fixtures, POM, test levels, isolation, cross-module
+  reuse, CI). Walks knowledge/curriculum/learning-path.md in prerequisite order, teaches each
+  topic from its mapped standard (via framework-standards) and official docs at a depth from
+  knowledge/curriculum/depth-levels.md, checks understanding before advancing and ties topics to
+  what the builder scaffolds. Teaches from the standards and never restates them; does not
+  scaffold framework code (the builder) or re-implement decision guidance (framework-standards).
 ---
 
 # Teach Automation — walk the path, teach from the standards

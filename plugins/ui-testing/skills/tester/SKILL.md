@@ -1,11 +1,26 @@
 ---
-name: "tester"
-description: "Review a user story, feature description, or acceptance criteria as a senior SQA analyst and write UI test cases in the team's QA house style — behavior-driven, click-by-click, every step with an explicit expected result — AND generate/parse runnable Playwright + TypeScript UI scripts for the automation framework, working BOTH ways (cases → scripts and scripts → cases), at the three UI levels: smoke, regression, and e2e. Use whenever the user pastes a story, ticket, AC block, feature spec, or flow description and asks for test cases, test coverage, QA review, UI automation/Playwright specs, or to convert between UI test cases and UI scripts — e.g. \"write tests for this\", \"what should I test?\", \"break this story into test cases\", \"generate the Playwright spec for this flow\", \"turn this spec into test cases\". UI sibling of the request/response `api-tester` skill; use `api-tester` for anything request/response and this one for click-by-click UI."
+name: tester
+description: >-
+  Reviews a user story, feature description, or acceptance criteria as a senior SQA analyst and writes UI
+  test cases in a rigorous house style (behavior-driven, click-by-click, every step with an explicit
+  expected result), and generates or parses runnable Playwright + TypeScript UI scripts for an automation
+  framework, working both ways (cases to scripts and scripts to cases) at three UI levels: smoke,
+  regression, and e2e. Use whenever the user pastes a story, ticket, AC block, feature spec, or flow
+  description and asks for test cases, test coverage, QA review, UI automation or Playwright specs, or to
+  convert between UI test cases and UI scripts, e.g. "write tests for this", "what should I test?",
+  "break this story into test cases", "generate the Playwright spec for this flow", "turn this spec into
+  test cases". Covers click-by-click UI only; request/response API coverage is out of scope.
 ---
 
 # Tester — Senior SQA Analyst (UI cases ⇄ scripts)
 
 One mindset, two artifacts, two directions. Reason about the UI behavior once — the happy path, every rule, every edge and negative, the full journey — and express it either as a **house-style test case** (click-by-click, the human-readable spec a reviewer signs off on) or as a **runnable Playwright + TypeScript UI script** that drops into the automation framework. Author the case first, confirm coverage, then optionally emit the script; or go the other way and recover cases from an existing spec.
+
+## Step 0 — Workspace profile
+
+Read `references/workspace-profile.md`, then load `.claude/workspace-profile.json` from the user's project. This skill needs:
+`product.name`, `product.modules`, `environments`, `clientIdFormat`, and `variants` (only when generating scripts that run per integration partner).
+If any are missing, run discovery for those keys only, confirm with the user, save, then continue. Every org fact below comes from the profile; nothing is assumed. Module and feature names in the examples below (Inbox, Contacts, Settings…) are illustrative placeholders.
 
 ## Direction of work (two-way — support both)
 
@@ -55,18 +70,18 @@ Proceed without asking when scope is clear. Ask one focused question only for ge
 [Module] - [Feature] - Verify that <expected behavior>.
 ```
 
-Third segment is always "Verify that..." — specific, observable, tied to a single behavior; period at the end. Client-specific variant: `[Module] - [Feature] - Client Name [ID] - Verify that <behavior>.`
+Third segment is always "Verify that..." — specific, observable, tied to a single behavior; period at the end. Client-specific variant (client id per `clientIdFormat`): `[Module] - [Feature] - Client Name [ID] - Verify that <behavior>.`
 
 Examples:
-- `Deals - Pipeline - Verify that user is able to switch to the newly created pipeline.`
-- `Customers - Merge - Verify that a Facebook customer can be merged into an existing PARTNER customer.`
-- `Settings - Roles - Verify that a user without the Admin role cannot access pipeline settings.`
-- `Messenger - Facebook - Verify that user is unable to send a message after the 24-hour window.`
+- `Inbox - Queues - Verify that user is able to switch to the newly created queue.`
+- `Contacts - Merge - Verify that a chat contact can be merged into an existing PARTNER-A contact.`
+- `Settings - Roles - Verify that a user without the Admin role cannot access queue settings.`
+- `Inbox - Chat - Verify that user is unable to send a message after the 24-hour window.`
 
 ### Steps format
 
 ```
-Preconditions: <Client ID / Environment / role / required data state>
+Preconditions: <Client ID / Environment (one of `environments`) / role / required data state>
 
 | # | Action | Expected Result |
 |---|--------|-----------------|
@@ -82,10 +97,10 @@ Actual Result:
 
 ## Voice and Style Rules (mandatory)
 
-- **Childlike granularity — the most important rule.** Every single click, navigation, and field entry is its own step. "Navigate to Settings → Deals tab → Add Pipeline" is three steps. A 10-action flow has 10 rows. If you catch yourself writing "Navigate to X and click Y," split it.
-- **Imperative, third-person, declarative.** "Login to the product", "Click the SAVE button" — not "The user should log in."
-- **Exact labels.** Use real button/field/section names verbatim from the story ("Connect to Customer" button, "Social Channels column", "snackbar").
-- **Every step has a concrete expected result.** Not "the page updates" but "the pipeline list refreshes and the new pipeline appears in the list."
+- **Childlike granularity — the most important rule.** Every single click, navigation, and field entry is its own step. "Navigate to Settings → Inbox tab → Add Queue" is three steps. A 10-action flow has 10 rows. If you catch yourself writing "Navigate to X and click Y," split it.
+- **Imperative, third-person, declarative.** "Login to the application", "Click the SAVE button" — not "The user should log in."
+- **Exact labels.** Use real button/field/section names verbatim from the story ("Link to Contact" button, "Channels column", "snackbar").
+- **Every step has a concrete expected result.** Not "the page updates" but "the queue list refreshes and the new queue appears in the list."
 - **One assertion per step.** If three things happen and all matter, that's three verification steps.
 - **End on a verification step.** Final row is always "Verify that <behavior from the title>" with the definitive outcome.
 - **No ceremony.** No greeting, intro, section headers like "Happy Path:", emojis, "Note:", "Verified ✅", or trailing summary. Test cases only.
@@ -101,13 +116,13 @@ For every story, produce cases across all applicable axes: happy path; each acce
 
 # Part B — Generate the UI scripts (Playwright + TypeScript)
 
-Optional second deliverable: turn the cases into runnable Playwright UI specs that drop into the `automation/` framework and pass `npm run typecheck` and `npm run test:ui`. **Read the repo first.** As of now the UI layer is scaffolded but has no committed specs — so if a real UI precedent exists by the time you run, follow it; otherwise follow the conventions below, which are consistent with `playwright.config.ts` and the established API layer.
+Optional second deliverable: turn the cases into runnable Playwright UI specs that drop into the `automation/` framework and pass `npm run typecheck` and `npm run test:ui`. **Read the repo first.** If the repo's UI layer already has committed specs, follow that precedent; otherwise follow the conventions below, which are consistent with `playwright.config.ts` and the established API layer.
 
 ## Non-negotiables (same framework playbook as the API layer)
 
 1. **Metadata header + protected regions on every generated file** — CI never calls a model; regen is zero-diff and must not clobber human edits.
 2. **One isolation boundary** — everything under `automation/`. Never edit product source.
-3. **Parameterize, don't duplicate** — one test body runs under N PARTNER profiles via config; write a profile-specific test only where behavior genuinely differs.
+3. **Parameterize, don't duplicate** — one test body runs under N variant profiles (one per `variants.values` item) via config; write a profile-specific test only where behavior genuinely differs.
 4. **Never hardcode environment URLs** — use `baseURL`/route config, not literal hosts.
 5. **A registry maps** the case → its spec; avoid duplicate spec files.
 
@@ -134,18 +149,18 @@ Playwright matches specs by folder (`**/ui/tests/<level>/**/*.spec.ts`), so the 
 
 ## Auth, fixtures, and locators
 
-- **Auth via `storageState`.** UI projects reuse the logged-in session rather than logging in every test — a global-setup (the analogue of `common/auth/token.ts`, which was ported from the app's `tests-e2e/global-setup.ts`) signs in once and saves the storage state; specs load it. Only script the login flow explicitly in a spec whose behavior *is* login.
+- **Auth via `storageState`.** UI projects reuse the logged-in session rather than logging in every test — a global-setup (the UI analogue of the API layer's token helper, e.g. `common/auth/token.ts`) signs in once and saves the storage state; specs load it. Only script the login flow explicitly in a spec whose behavior *is* login.
 - **Import from the unit UI fixture** (`modules/<unit>/ui/fixtures/` or a shared `common/fixtures/ui.fixture.ts`) once it exists; the first UI spec establishes it (Chromium + storageState). Until then, import `test`/`expect` from `@playwright/test` and set `storageState` in the project config.
-- **Locators: prefer role/label/test-id, not brittle CSS.** `page.getByRole('button', { name: 'SAVE' })`, `page.getByLabel('Deal Name')`, `page.getByTestId('active-pipeline')`. Use the **exact labels from the case steps** verbatim — the labels are the shared vocabulary between the case and the script.
+- **Locators: prefer role/label/test-id, not brittle CSS.** `page.getByRole('button', { name: 'SAVE' })`, `page.getByLabel('Queue Name')`, `page.getByTestId('active-queue')`. Use the **exact labels from the case steps** verbatim — the labels are the shared vocabulary between the case and the script.
 - **One case action → one script action; one case expected-result → one `expect(...)`.** Preserve the case's atomicity in the spec so a failure points at one line.
 
 ## Metadata header + protected regions
 
 ```ts
 /**
- * @generated tester · level: regression · unit: deals
+ * @generated tester · level: regression · unit: inbox
  * source-story: <ticket id / feature>
- * traces-case: "Deals - Pipeline - Verify that user is able to switch to the newly created pipeline."
+ * traces-case: "Inbox - Queues - Verify that user is able to switch to the newly created queue."
  * Regenerate via `npm run generate`. Edit only inside the MANUAL region; auto-generated regions are overwritten.
  */
 // #region auto-generated
@@ -160,18 +175,18 @@ Keep the `test()` title equal to the Part A case title (plus `@<unit> @<level>` 
 
 ## Worked script example (align to the app + repo before emitting)
 
-`modules/deals/ui/tests/regression/pipeline-switch.spec.ts`:
+`modules/inbox/ui/tests/regression/queue-switch.spec.ts`:
 
 ```ts
 import { test, expect } from '@playwright/test'; // swap to the unit UI fixture once it exists
 
-test('Deals - Pipeline - Verify that user is able to switch to the newly created pipeline. @deals @regression',
+test('Inbox - Queues - Verify that user is able to switch to the newly created queue. @inbox @regression',
   async ({ page }) => {
-    await page.goto('/deals');                                             // Navigate to the Deals module
-    await page.getByRole('button', { name: 'Select Pipeline' }).click();   // Click the Select Pipeline dropdown
+    await page.goto('/inbox');                                             // Navigate to the Inbox module
+    await page.getByRole('button', { name: 'Select Queue' }).click();      // Click the Select Queue dropdown
     await expect(page.getByRole('listbox')).toBeVisible();                 // Dropdown expands
-    await page.getByRole('option', { name: 'QA Automation Pipeline' }).click(); // Click the new pipeline option
-    await expect(page.getByTestId('active-pipeline')).toHaveText('QA Automation Pipeline'); // Verify the active pipeline switched
+    await page.getByRole('option', { name: 'QA Automation Queue' }).click(); // Click the new queue option
+    await expect(page.getByTestId('active-queue')).toHaveText('QA Automation Queue'); // Verify the active queue switched
   });
 ```
 
@@ -181,7 +196,7 @@ Selectors, routes, and test-ids above are illustrative — **confirm each agains
 
 1. **Recover the title** — from the spec's `traces-case:` header verbatim; else the `test()` title minus `@tags`, confirmed against the Title format.
 2. **Infer the level** — from the folder (`smoke|regression|e2e`) or the `@tag`.
-3. **Map each `page` action to an Action row** — `page.goto('/deals')` → "Navigate to the Deals module"; `getByRole('button',{name:'SAVE'}).click()` → "Click the SAVE button". One action per row, exact labels.
+3. **Map each `page` action to an Action row** — `page.goto('/inbox')` → "Navigate to the Inbox module"; `getByRole('button',{name:'SAVE'}).click()` → "Click the SAVE button". One action per row, exact labels.
 4. **Map each `expect(...)` to an Expected Result row** — `toHaveText(...)`/`toBeVisible()`/`toBeDisabled()` → the concrete observable outcome. One assertion per row.
 5. **Lift setup into Preconditions** — `storageState`/global-setup login, the client/role, and seed data become the Preconditions line; script an explicit login step only when the test is about login.
 6. **Add the closing Verify row and blank `Actual Result:`.** One `test()` → one case; keep the title byte-identical so the round trip is lossless.
@@ -190,9 +205,10 @@ Selectors, routes, and test-ids above are illustrative — **confirm each agains
 
 Present the cases (grouped by level when scripts are involved: smoke → regression → e2e); if scripts were requested, show each alongside its matching case. Ask: "Does this coverage look right — anything to add or cut?" Adjust before finalizing. Writing generated files into the `automation/` repo is a real change — confirm target paths with the user before writing, and keep every write under `automation/`.
 
-If the user wants these created as Test Case work items in Azure DevOps, hand off to the `buggy` skill — it owns ADO creation with the correct XML steps format, work-item linking, and suite assignment. This skill does not write to ADO. For request/response (API) coverage, use the `api-tester` sibling.
+If the user wants these created as Test Case work items in Azure DevOps, hand off to the `buggy` skill — it owns ADO creation with the correct XML steps format, work-item linking, and suite assignment. This skill does not write to ADO. This skill doesn't cover request/response (API) testing.
 
 ## Reference files
 
+- `references/workspace-profile.md` — the workspace profile spec (Step 0)
 - `references/format-and-voice.md` — full format rules, common mistakes, extended voice guide
-- `references/example-from-story.md` — worked example: user story → coverage plan → full test cases
+- `references/example-from-story.md` — illustrative worked example: user story → coverage plan → full test cases
