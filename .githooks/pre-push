@@ -1,3 +1,5 @@
 #!/bin/sh
 # Full-repo scan + every outgoing commit's author/committer/trailers before anything leaves the machine.
-exec python3 scripts/validate.py
+# python3 can be the Windows Store stub, which exists but fails; fall back to python.
+PY=python3; python3 -c "" >/dev/null 2>&1 || PY=python
+exec "$PY" scripts/validate.py
