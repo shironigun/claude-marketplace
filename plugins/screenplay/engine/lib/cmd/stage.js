@@ -1,5 +1,4 @@
 'use strict';
-const fs = require('fs');
 const path = require('path');
 const { usageError, checkError } = require('../errors');
 const { readJson, writeJson } = require('../files');
@@ -7,7 +6,7 @@ const { repoInfo, checkHome, repoPaths, workspaceKey } = require('../paths');
 const { loadFilm, approvedFilm } = require('../film');
 const { neededScreens } = require('../screens');
 const { buildInputs } = require('../built');
-const { hash, brandDocs, stagePlan, writeStage } = require('../stage');
+const { builtDocs, stagePlan, writeStage } = require('../stage');
 const { moduleProblems } = require('../modules');
 
 module.exports = {
@@ -30,19 +29,9 @@ module.exports = {
     if (!built || built.inputs !== buildInputs(f.fp, rp, neededScreens(fc).map((s) => s.id), f.subj)) {
       throw checkError(`the film has changed since its build; run sp build ${fc.subject} --film ${fc.film}`);
     }
-    // Only the modules the build wrote, as it wrote them: a stray file or a build that stopped half-way never reaches
-    // the film.
-    const modules = Object.keys(built.modules).sort().map((name) => {
-      const file = path.join(f.fp.modules, name);
-      const text = fs.existsSync(file) ? fs.readFileSync(file, 'utf8') : null;
-      if (text === null || hash(text) !== built.modules[name]) {
-        throw checkError(`film/modules/${name} is not as the build wrote it; run sp build ${fc.subject} --film ${fc.film}`);
-      }
-      return { name, text };
-    });
+    const docs = builtDocs(f.fp, built, id, `sp build ${fc.subject} --film ${fc.film}`);
     const brand = readJson(path.join(f.fp.brands, `${id}.json`));
     const known = readJson(f.fp.films, {})[id] || null;
-    const docs = brandDocs(modules, brand);
     // The brand's modules as its film will hold them, with its own scenes.json, base.css and brand.json, are within
     // the Motion type's limits before anything is staged.
     const problems = moduleProblems(Object.entries(docs).filter(([k]) => k.startsWith('modules/')).map(([k, doc]) => ({ name: k.slice(8), ...doc })));

@@ -145,6 +145,8 @@ function filmPaths(home, key, subject, film) {
     modules: path.join(root, 'film', 'modules'),
     brands: path.join(root, 'film', 'brands'),
     films: path.join(root, 'film', 'films.json'),
+    // Verify (spec 4.2, 5.13): for each brand, its frames, sheets and crops, and the report.
+    verify: path.join(root, 'verify'),
   };
 }
 

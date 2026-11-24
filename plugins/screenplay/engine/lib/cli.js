@@ -14,12 +14,20 @@ function usage(commands) {
 }
 
 // Runs one command and returns the exit code: 0 success, 1 a check failed, 2 the command was used wrongly,
-// 3 an internal error.
+// 3 an internal error. A command that drives the browser runs asynchronously: then main returns a promise of the code.
 function main(argv, io) {
   const [name, ...rest] = argv;
   // After `--` every word is an argument, so a `--json` there does not ask for the JSON error envelope.
   const end = rest.indexOf('--');
   const json = (end === -1 ? rest : rest.slice(0, end)).includes('--json');
+  const fail = (e) => {
+    const known = e instanceof SpError;
+    const code = known ? e.code : 3;
+    const message = known ? e.message : `internal error: ${e && e.message !== undefined ? e.message : e}`;
+    io.stderr.write(`sp${name ? ` ${name}` : ''}: ${message}\n`);
+    if (json) io.stdout.write(`${JSON.stringify({ error: { code, message } }, null, 2)}\n`);
+    return code;
+  };
   try {
     const commands = loadCommands();
     if (!name || name === 'help' || name === '--help') {
@@ -42,17 +50,16 @@ function main(argv, io) {
       pluginRoot: PLUGIN_ROOT,
       env,
     };
-    const result = cmd.run(ctx, args) || {};
-    if (args.flags.json) io.stdout.write(`${JSON.stringify(result.json ?? null, null, 2)}\n`);
-    else if (result.text) io.stdout.write(`${result.text}\n`);
-    return result.exitCode || 0;
+    const finish = (result) => {
+      if (args.flags.json) io.stdout.write(`${JSON.stringify(result.json ?? null, null, 2)}\n`);
+      else if (result.text) io.stdout.write(`${result.text}\n`);
+      return result.exitCode || 0;
+    };
+    const result = cmd.run(ctx, args);
+    if (result && typeof result.then === 'function') return result.then((r) => finish(r || {}), fail);
+    return finish(result || {});
   } catch (e) {
-    const known = e instanceof SpError;
-    const code = known ? e.code : 3;
-    const message = known ? e.message : `internal error: ${e && e.message !== undefined ? e.message : e}`;
-    io.stderr.write(`sp${name ? ` ${name}` : ''}: ${message}\n`);
-    if (json) io.stdout.write(`${JSON.stringify({ error: { code, message } }, null, 2)}\n`);
-    return code;
+    return fail(e);
   }
 }
 

@@ -3,7 +3,8 @@ const crypto = require('crypto');
 const fs = require('fs');
 const path = require('path');
 const { kindOf } = require('./build');
-const { writeJson } = require('./files');
+const { checkError } = require('./errors');
+const { readJson, writeJson } = require('./files');
 
 // What one ArtifactData batch may hold (the Artifact tools): 50 writes and 1 MiB, kept to 900 KiB for the batch's own
 // wrapping.
@@ -36,6 +37,19 @@ function brandDocs(modules, brand) {
   docs['film/meta'] = { v: 1, title: brand.title };
   docs['film/script'] = { code: SCRIPT };
   return docs;
+}
+
+// A brand's film as its last build composes it (spec 5.12): only the modules the build wrote, each as it wrote it, so
+// a stray file or a build that stopped half-way never reaches a film, with the brand's overlay, as brandDocs gives
+// them. `fp` are the film's paths, `built` its build.json, and `rebuild` the command that makes a new build.
+function builtDocs(fp, built, id, rebuild) {
+  const modules = Object.keys(built.modules).sort().map((name) => {
+    const file = path.join(fp.modules, name);
+    const text = fs.existsSync(file) ? fs.readFileSync(file, 'utf8') : null;
+    if (text === null || hash(text) !== built.modules[name]) throw checkError(`film/modules/${name} is not as the build wrote it; run ${rebuild}`);
+    return { name, text };
+  });
+  return brandDocs(modules, readJson(path.join(fp.brands, `${id}.json`)));
 }
 
 // The writes that bring a brand's film from what films.json says it holds to the build (spec 5.12): each document
@@ -111,4 +125,4 @@ function recordVersions(entry, stage, versions) {
   return { ...rest, docs, ...(done ? { built: stage.inputs } : {}) };
 }
 
-module.exports = { BATCH, SCRIPT, hash, brandDocs, stagePlan, writeStage, recordVersions };
+module.exports = { BATCH, SCRIPT, hash, brandDocs, builtDocs, stagePlan, writeStage, recordVersions };
