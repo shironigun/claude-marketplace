@@ -49,16 +49,16 @@ module.exports = {
     if (problems.length) throw checkError(`the film cannot be staged for ${id}:\n  ${problems.join('\n  ')}`);
     const plan = stagePlan(docs, known, ctx.now);
     const dir = path.join(rp.inbox, 'stage', `${fc.subject}.${fc.film}.${id}`);
-    const batches = writeStage(dir, docs, plan, built.inputs);
+    const { id: stageId, batches } = writeStage(dir, docs, plan, built.inputs);
     const url = (known && known.url) || null;
     const writes = batches.reduce((n, b) => n + b.length, 0);
     // A film with nothing left to write holds the build.
     if (!writes && url && known.built !== built.inputs) writeJson(f.fp.films, { ...readJson(f.fp.films, {}), [id]: { ...known, built: built.inputs } });
     return {
-      json: { subject: fc.subject, film: fc.film, brand: id, url, create: url ? null : { title: brand.title }, batches, stage: dir },
+      json: { subject: fc.subject, film: fc.film, brand: id, url, create: url ? null : { title: brand.title }, id: stageId, batches, stage: dir },
       text: [
         url ? `${brand.title}: ${url}` : `${brand.title}: no film yet; create it from the Motion type with this title, then sp record --url`,
-        writes ? `${writes} writes in ${batches.length} batches, staged in ${dir}` : 'nothing to write: the film holds the build',
+        writes ? `${writes} writes in ${batches.length} batches, staged in ${dir} as stage ${stageId}` : 'nothing to write: the film holds the build',
       ].join('\n'),
     };
   },

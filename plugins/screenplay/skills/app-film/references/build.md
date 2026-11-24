@@ -32,7 +32,8 @@ and stop.
 
 For each brand in `brands`, in order:
 
-1. Run `sp stage <slug> --film <film> --brand <brand> --json`. It gives `url`, `create` and `batches`. When it
+1. Run `sp stage <slug> --film <film> --brand <brand> --json`. It gives `url`, `create`, the stage's `id` and
+   `batches`. When it
    exits 1 because a module or the film would be too big with the brand's own colours and overlay, tell the user
    which, and stop.
 2. When `create` is set, the brand has no film yet:
@@ -44,7 +45,8 @@ For each brand in `brands`, in order:
      wrote.
    - Record its url: `sp record <slug> --film <film> --brand <brand> --url <url>`.
    - A new film may hold documents of its own. List its `film` and `modules` collections (ArtifactData `list`). For
-     each document, write `"<collection>/<doc_id>": { "version": <its version> }` into a JSON file in the inbox, and
+     each document, write `"<collection>/<doc_id>": { "version": <its version> }` into a JSON file in the inbox, with
+     `"stage": "<the stage's id>"`, and
      record them all with `sp record <slug> --film <film> --brand <brand> --versions <file>`. Then run `sp stage`
      again: its writes to those documents are pinned to their versions, and no stage deletes a document no build
      wrote.
@@ -52,7 +54,8 @@ For each brand in `brands`, in order:
    exactly as the stage gives them. Each write sends a file the stage wrote (`file_path`), so no document passes
    through the conversation; never retype one inline.
 4. After each batch, write the version its result gives for each document it wrote into a JSON file in the inbox,
-   keyed as `"<collection>/<doc_id>"` (`"modules/scene-s-02.js": 3`), with `null` for a delete, and run
+   keyed as `"<collection>/<doc_id>"` (`"modules/scene-s-02.js": 3`), with `null` for a delete and
+   `"stage": "<the stage's id>"`, and run
    `sp record <slug> --film <film> --brand <brand> --versions <file>`. Record only what the result says was written:
    a batch the store applies one write at a time can stop part-way.
 

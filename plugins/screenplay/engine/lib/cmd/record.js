@@ -35,10 +35,14 @@ module.exports = {
     } else {
       const stage = readJson(path.join(rp.inbox, 'stage', `${f.subjectState.subject}.${f.filmState.film}.${id}`, 'stage.json'), null);
       if (!stage) throw usageError(`no stage for ${id}; run sp stage first`);
-      const given = readJsonFile(ctx.cwd, versions);
-      if (!given || typeof given !== 'object' || Array.isArray(given)) {
+      const file = readJsonFile(ctx.cwd, versions);
+      if (!file || typeof file !== 'object' || Array.isArray(file)) {
         throw usageError(`${versions}: the versions are an object of "<collection>/<doc id>" to a version`);
       }
+      const { stage: from, ...given } = file;
+      // The versions come from a batch of one stage: recorded against a later one, they would name its content.
+      if (typeof from !== 'string') throw usageError(`${versions}: the versions name no stage; give the "stage" id sp stage printed with the batches`);
+      if (from !== stage.id) throw usageError(`the versions are for another stage than ${id}'s last one; record only the batches of the last stage`);
       // A version is only for a set the stage planned, and null only for a delete it planned (spec 5.12: only what
       // the batch's result says was written).
       const removed = new Set(stage.removed);

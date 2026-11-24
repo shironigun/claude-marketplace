@@ -77,7 +77,8 @@ test('sp stage and sp record: a film to create, its writes as files, then nothin
   assert.match(fs.readFileSync(path.join(s.stage, 'stage.json'), 'utf8'), /\n}\n$/);
   const url = 'https:' + '//example.invalid/film-1';
   sp('record', 'reminders', '--film', 'promo', '--brand', 'harbor', '--url', url);
-  const versions = Object.fromEntries(writes.map((w) => [`${w.collection}/${w.doc_id}`, 1]));
+  assert.match(s.id, /^[0-9a-f]{16}$/);
+  const versions = { stage: s.id, ...Object.fromEntries(writes.map((w) => [`${w.collection}/${w.doc_id}`, 1])) };
   sp('record', 'reminders', '--film', 'promo', '--brand', 'harbor', '--versions', inputFile(versions, repo));
   const again = sp('stage', 'reminders', '--film', 'promo', '--brand', 'harbor', '--json').json;
   assert.deepEqual([again.url, again.create, again.batches], [url, null, []]);
@@ -86,10 +87,15 @@ test('sp stage and sp record: a film to create, its writes as files, then nothin
   // A version for a document the stage did not write, versions that are not an object, and a brand the film is not
   // made for are refused.
   const record = (...more) => runSp(repo, ['record', 'reminders', '--film', 'promo', ...more], env);
-  assert.match(record('--brand', 'harbor', '--versions', inputFile({ 'modules/x.js': 1 }, repo)).stderr, /modules\/x\.js was not staged for harbor/);
+  const last = (more) => inputFile({ stage: again.id, ...more }, repo);
+  assert.match(record('--brand', 'harbor', '--versions', last({ 'modules/x.js': 1 })).stderr, /modules\/x\.js was not staged for harbor/);
   // The last stage found nothing left to write, so a version for one of its documents, or null for one, is refused too.
-  assert.match(record('--brand', 'harbor', '--versions', inputFile({ 'modules/shared.js': 2 }, repo)).stderr, /modules\/shared\.js was not staged for harbor/);
-  assert.match(record('--brand', 'harbor', '--versions', inputFile({ 'film/script': null }, repo)).stderr, /film\/script was not staged for harbor/);
+  assert.match(record('--brand', 'harbor', '--versions', last({ 'modules/shared.js': 2 })).stderr, /modules\/shared\.js was not staged for harbor/);
+  assert.match(record('--brand', 'harbor', '--versions', last({ 'film/script': null })).stderr, /film\/script was not staged for harbor/);
+  // The versions name the stage their batch came from: none, or an older one, is refused.
+  assert.match(record('--brand', 'harbor', '--versions', inputFile({ 'modules/shared.js': 2 }, repo)).stderr, /the versions name no stage/);
+  assert.match(record('--brand', 'harbor', '--versions', inputFile({ stage: s.id === again.id ? 'other' : s.id, 'modules/shared.js': 2 }, repo)).stderr,
+    /the versions are for another stage than harbor's last one; record only the batches of the last stage/);
   assert.match(record('--brand', 'harbor', '--versions', inputFile(null, repo)).stderr, /the versions are an object of "<collection>\/<doc id>" to a version/);
   assert.match(record('--brand', 'acme', '--url', url).stderr, /the film is not made for "acme"; its brands are harbor, lumen/);
   assert.equal(runSp(repo, ['stage', 'reminders', '--film', 'promo', '--brand', 'acme'], env).code, 2);
@@ -125,7 +131,7 @@ test('status: a film whose every brand\'s film holds its build goes on to verify
   for (const brand of ['harbor', 'lumen']) {
     const s = sp('stage', 'reminders', '--film', 'promo', '--brand', brand, '--json').json;
     sp('record', 'reminders', '--film', 'promo', '--brand', brand, '--url', `${'https:'}//example.invalid/${brand}`);
-    const versions = Object.fromEntries(s.batches.flat().map((w) => [`${w.collection}/${w.doc_id}`, 1]));
+    const versions = { stage: s.id, ...Object.fromEntries(s.batches.flat().map((w) => [`${w.collection}/${w.doc_id}`, 1])) };
     if (brand === 'harbor') assert.equal(next(), 'build');
     sp('record', 'reminders', '--film', 'promo', '--brand', brand, '--versions', inputFile(versions, repo));
   }
@@ -140,9 +146,14 @@ test('status: a film whose every brand\'s film holds its build goes on to verify
 test('status: a stage recorded part-way leaves the film to build, and a stage with nothing to write holds the build', () => {
   const { sp, repo } = readyFilm('reminders', 'promo');
   const next = () => sp('status', 'reminders', '--film', 'promo', '--json').json.next;
-  const stage = (brand) => sp('stage', 'reminders', '--film', 'promo', '--brand', brand, '--json').json.batches;
+  const ids = {};
+  const stage = (brand) => {
+    const s = sp('stage', 'reminders', '--film', 'promo', '--brand', brand, '--json').json;
+    ids[brand] = s.id;
+    return s.batches;
+  };
   const record = (brand, writes) => sp('record', 'reminders', '--film', 'promo', '--brand', brand, '--versions',
-    inputFile(Object.fromEntries(writes.map((w) => [`${w.collection}/${w.doc_id}`, 1])), repo));
+    inputFile({ stage: ids[brand], ...Object.fromEntries(writes.map((w) => [`${w.collection}/${w.doc_id}`, 1])) }, repo));
   const theme = JSON.parse(fs.readFileSync(path.join(EXAMPLES, 'expected', 'example-desk', 'theme.json'), 'utf8'));
   sp('build', 'reminders', '--film', 'promo');
   for (const brand of ['harbor', 'lumen']) {
@@ -185,7 +196,7 @@ test('sp record: a document the store holds as it is gets pinned writes, and one
   sp('build', 'reminders', '--film', 'promo');
   const s = sp('stage', 'reminders', '--film', 'promo', '--brand', 'harbor', '--json').json;
   sp('record', 'reminders', '--film', 'promo', '--brand', 'harbor', '--url', `${'https:'}//example.invalid/h`);
-  const versions = Object.fromEntries(s.batches.flat().map((w) => [`${w.collection}/${w.doc_id}`, 1]));
+  const versions = { stage: s.id, ...Object.fromEntries(s.batches.flat().map((w) => [`${w.collection}/${w.doc_id}`, 1])) };
   // The store refused shared.js, which had changed, and the user said to write the build over it; the film also held a
   // document of its own when it was created.
   versions['modules/shared.js'] = { version: 7 };

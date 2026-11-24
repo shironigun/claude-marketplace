@@ -86,8 +86,10 @@ function writeStage(dir, docs, plan, inputs) {
     if (w.if_version) out.if_version = w.if_version;
     return out;
   }));
-  writeJson(path.join(dir, 'stage.json'), { inputs, hashes: plan.hashes, removed: plan.removed, writes: plan.writes });
-  return batches;
+  // The stage's id names what it planned: a rebuild that changes a write is another stage.
+  const id = hash({ inputs, hashes: plan.hashes, removed: plan.removed, writes: plan.writes });
+  writeJson(path.join(dir, 'stage.json'), { id, inputs, hashes: plan.hashes, removed: plan.removed, writes: plan.writes });
+  return { id, batches };
 }
 
 // films.json after a brand's writes: the versions the store gave back, each with the hash of what the stage wrote,
