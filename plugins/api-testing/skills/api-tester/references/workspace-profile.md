@@ -15,8 +15,11 @@ nothing about any company.
 ## Step 0 (run at the start of every skill)
 
 1. Read `.claude/workspace-profile.json` from the project root.
-2. If it exists and has every key this skill needs, use it silently. Do not re-scan.
-3. If it is missing, or a key this skill needs is empty, run **Discovery** below for the missing keys only.
+2. If it exists and has every key this skill needs, use it silently. Do not re-scan. A key listed in
+   `noneFound` counts as present even though it is empty: discovery already looked and the user confirmed
+   there is nothing to record.
+3. If it is missing, or a key this skill needs is empty and not in `noneFound`, run **Discovery** below
+   for the missing keys only.
 4. Show the user a short summary of what was discovered and ask them to confirm or correct it.
    Nothing is written until they confirm.
 5. Write (or merge into) the file. Check that `.claude/workspace-profile.json` is listed in the
@@ -81,7 +84,8 @@ always use the **resolved value** (for example the real board path), never the k
     "postFixFields": []         // fields only filled after a fix (root cause, fixed-in…); leave empty on filing
   },
   "clientIdFormat": "",         // how a client/tenant is identified in titles, e.g. "Client Name [12345]"
-  "variantIdParam": ""          // the route/query param that carries the tenant/partner id in APIs, if any
+  "variantIdParam": "",         // the route/query param that carries the tenant/partner id in APIs, if any
+  "noneFound": []               // keys discovery searched and the user confirmed are empty, e.g. ["variants", "plans"]
 }
 ```
 
@@ -94,6 +98,9 @@ anything in the tracker or the repo.
 
 **Tracker**
 - List projects; if more than one, ask which one. Record `tracker.*`.
+- One project can hold several products (area paths or repos named for different products). If it does,
+  ask which product this profile is for, record `product.name`, and pick `boards.*` and `repos` under
+  that product only, so a harvest or a field sample never mixes products.
 - Sample the most recent ~100 work items (any state). Rank area paths by volume and by work-item type:
   the path dominated by stories and bugs is `boards.delivery`; the path dominated by production
   defects/support items is `boards.support`. Confirm both with the user.
@@ -118,7 +125,9 @@ anything in the tracker or the repo.
 - Spec docs: look for a behaviour/rules doc set (`docs/`, `knowledge-base/`, `specs/`, `RULES.md`).
 
 **Ask, don't guess**, for: the filer's identity, brand support pointers and links, and anything the scan
-found ambiguous. Unknown stays empty and is surfaced as an open question when a skill needs it.
+found ambiguous. Unknown stays empty and is surfaced as an open question when a skill needs it. When a
+search finds nothing (no partners, no plans), say so in the summary; once the user
+confirms, add the key to `noneFound` so later runs do not search again.
 
 ## Placeholders used in this plugin's examples
 
