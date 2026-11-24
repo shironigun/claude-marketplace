@@ -1,6 +1,7 @@
 'use strict';
 const fs = require('fs');
 const path = require('path');
+const vm = require('vm');
 
 // The kit (spec 7.8), written fresh for the plugin: its scripts in the order they build on one another, and its CSS.
 const KIT_DIR = path.join(__dirname, '..', '..', 'skills', 'app-film', 'kit');
@@ -16,4 +17,12 @@ function kitBundle() {
 // The kit's CSS, which goes into each brand's base.css after the film's four colours.
 const kitCss = () => fs.readFileSync(path.join(KIT_DIR, 'kit.css'), 'utf8');
 
-module.exports = { KIT_DIR, KIT_FILES, kitBundle, kitCss };
+// The kit as the player runs it, without a page: its pure parts, such as the score's cues, for the engine and the
+// tests. Its values come from the sandbox's own realm.
+function kitSandbox() {
+  const ctx = { window: {} };
+  vm.runInNewContext(kitBundle(), ctx);
+  return ctx.window.W.sp;
+}
+
+module.exports = { KIT_DIR, KIT_FILES, kitBundle, kitCss, kitSandbox };

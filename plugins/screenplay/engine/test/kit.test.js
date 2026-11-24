@@ -1,15 +1,7 @@
 'use strict';
 const test = require('node:test');
 const assert = require('node:assert/strict');
-const vm = require('vm');
-const { kitBundle, kitCss } = require('../lib/kit');
-
-// The kit as the player runs it, without a page: its pure parts are what these tests read.
-function kit() {
-  const ctx = { window: {} };
-  vm.runInNewContext(kitBundle(), ctx);
-  return ctx.window.W.sp;
-}
+const { kitBundle, kitCss, kitSandbox: kit } = require('../lib/kit');
 const FLOATING = { x: 240, y: 90, s: 1 };
 // A value the kit made, as plain JSON: its objects come from the sandbox's own Object.
 const plain = (v) => JSON.parse(JSON.stringify(v));
