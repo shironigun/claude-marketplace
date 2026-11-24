@@ -1,7 +1,7 @@
-# on-record
+# standout
 
 <p align="center">
-  <img src="../../assets/readme/banners/on-record.svg" alt="on-record" width="100%">
+  <img src="../../assets/readme/banners/standout.svg" alt="standout" width="100%">
 </p>
 
 <p align="center">
@@ -21,11 +21,11 @@
 
 ## See it in action
 
-<p align="center"><img src="../../assets/readme/usecases/on-record.svg" alt="on-record in action: what you ask and what you get" width="100%"></p>
+<p align="center"><img src="../../assets/readme/usecases/standout.svg" alt="standout in action: what you ask and what you get" width="100%"></p>
 
 ## How it works at a glance
 
-<p align="center"><img src="../../assets/readme/diagrams/on-record.svg" alt="How on-record works" width="100%"></p>
+<p align="center"><img src="../../assets/readme/diagrams/standout.svg" alt="How standout works" width="100%"></p>
 
 Revamp anyone's LinkedIn profile into a branded, enterprise one, built only from facts they can back: it
 reads the LinkedIn export, certificates and ChatGPT or Claude exports, keeps a sourced fact ledger,
@@ -38,10 +38,10 @@ from a template. Nothing goes on the profile that you cannot back.
 ## Install
 
 ```
-/plugin install on-record@shironigun
+/plugin install standout@shironigun
 ```
 
-Then ask for a revamp, or run `/on-record:revamp`.
+Then ask for a revamp, or run `/standout:revamp`.
 
 ## What you get
 

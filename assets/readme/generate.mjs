@@ -86,7 +86,7 @@ export const PLUGINS = [
     stats: ['6 skills', '1 agent'],
   },
   {
-    name: 'on-record', color: '#60a5fa', short: 'A profile from your record', category: 'career', icon: 'VerifiedUser', neutral: true,
+    name: 'standout', color: '#60a5fa', short: 'A profile from your record', category: 'career', icon: 'VerifiedUser', neutral: true,
     tagline: 'A LinkedIn revamp built from facts you can back',
     detail: 'Reads your exports, certificates and AI chats, keeps a sourced fact ledger, then drafts every section.',
     steps: ['Gather', 'Fact ledger', 'Interview', 'Draft', 'Check', 'You paste'],
@@ -207,7 +207,7 @@ function map() {
     { title: 'Track it', cat: 'bug-tracking', note: 'File what broke, in house style', items: ['bug-suite'] },
     { title: 'Ship it', cat: 'release-management', note: 'Tell customers what changed', items: ['release-notes-suite'] },
     { title: 'Design & explain', cat: 'documentation', note: 'Screens, pages and guides', items: ['design-intelligence', 'feature-explainer', 'how-to-guides'] },
-    { title: 'Show it', cat: 'career', note: 'Your own work, on your profile', items: ['on-record'] },
+    { title: 'Show it', cat: 'career', note: 'Your own work, on your profile', items: ['standout'] },
   ];
   // Lanes keep a fixed width so the longest plugin name fits; the picture widens as lanes are added.
   const lw = 270, W = 64 * 2 + lanes.length * lw + (lanes.length - 1) * 24;
@@ -328,8 +328,8 @@ const USECASES = {
       ['fail', 'Review: 2 contrast issues, 1 off-scale spacing'], ['done', 'Fixed and reviewed again: PASS']],
     why: ['Your design system, never ours', 'Reviewed until it passes', 'Org values stay on your machine'],
   },
-  'on-record': {
-    ask: 'Revamp my LinkedIn from my exports and certificates.', command: '/on-record:revamp',
+  'standout': {
+    ask: 'Revamp my LinkedIn from my exports and certificates.', command: '/standout:revamp',
     title: 'draft.md · every section, ready to paste', kind: 'steps',
     rows: [['done', 'Read your LinkedIn export, 3 certificates, 2 chat exports'], ['done', 'Fact ledger: 21 facts, each with its source'], ['done', 'Interview: 6 gaps closed in 2 rounds'],
       ['wait', 'You approved the facts before any drafting'], ['done', 'Headline, About, 3 roles, Featured, Projects, Skills'], ['fail', 'Check: "35%" is unconfirmed, so it stays out']],
@@ -572,7 +572,7 @@ function diagram(p) {
       tag(560, 470, 'FIX AND REVIEW AGAIN UNTIL IT PASSES');
       tag(330, 146, 'ONE STEWARD AGENT PICKS THE SKILLS AND ORDER');
     },
-    'on-record': () => {
+    'standout': () => {
       tag(64, 146, 'SOURCES');
       const src = [['LinkedIn export', 'or Save to PDF'], ['Certificates', 'and documents'], ['ChatGPT, Claude', 'official exports'], ['Any AI chat', 'an extraction prompt']].map(([t, s], i) => node(64, 160 + i * 104, 200, 88, t, s, { size: 15 }));
       const ledger = node(330, 250, 210, 110, 'Fact ledger', 'Every claim: source and status', { accent: true });
@@ -603,7 +603,7 @@ function diagram(p) {
     'feature-explainer': 'Research once, read-only, then build the edition for the reader you name.',
     'how-to-guides': 'Facts from the source, written to a standard, built in your brand, with gaps sent back to product.',
     'design-intelligence': 'Your design system in, compliant MUI out, reviewed until it passes.',
-    'on-record': 'Facts first: every claim sourced and approved before drafting, every number traced before you paste.',
+    'standout': 'Facts first: every claim sourced and approved before drafting, every number traced before you paste.',
   };
   const W = 1280, H = 620;
   return svg(W, H, `How ${p.name} works`, `${frame(`d-${p.name}`, W, H, c, 26)}
