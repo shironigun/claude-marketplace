@@ -15,6 +15,7 @@
   <a href="#quick-start"><b>Quick start</b></a> ·
   <a href="#install"><b>Install</b></a> ·
   <a href="#trust--safety"><b>Trust &amp; safety</b></a> ·
+  <a href="#contributors"><b>Contributors</b></a> ·
   <a href="#contributing-a-plugin"><b>Contributing</b></a>
 </p>
 
@@ -447,6 +448,13 @@ own git-ignored `.env`. See the [plugin security docs](https://code.claude.com/d
 | Research doesn't change anything | The documentation plugins read code, branches and tickets read-only: no commits, pushes or branch switches. |
 | Your data stays yours | Product, tracker, brand and credentials live in your own git-ignored files, never in this repo. |
 | Screenshots use demo data | `how-to-guides` takes shots from a local or test build and refuses any other host unless you allow it. |
+
+## Contributors
+
+| Contributor | GitHub | Contact | Plugins |
+|---|---|---|---|
+| Shironigun (maintainer) | [@shironigun](https://github.com/shironigun) | shironigun@gmail.com | All |
+| Ayesha Imtiaz | [@aishaimt002](https://github.com/aishaimt002) | via GitHub | design-intelligence (co-author) |
 
 ## Contributing a plugin
 

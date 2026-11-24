@@ -4,6 +4,7 @@
   "description": "AI tools marketplace by shironigun — skills, plugins, and MCP servers for AI-assisted workflows",
   "owner": {
     "name": "shironigun",
+    "email": "shironigun@gmail.com",
     "url": "https://github.com/shironigun"
   },
   "plugins": [
