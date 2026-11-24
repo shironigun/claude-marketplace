@@ -1,3 +1,5 @@
 #!/bin/sh
 # Blocks commits that leak private data, break plugin standards, or carry a non-shironigun identity.
-exec python3 scripts/validate.py --staged
+# python3 can be the Windows Store stub, which exists but fails; fall back to python.
+PY=python3; python3 -c "" >/dev/null 2>&1 || PY=python
+exec "$PY" scripts/validate.py --staged
