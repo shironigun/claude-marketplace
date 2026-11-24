@@ -60,7 +60,8 @@ def files(staged):
     out = []
     for d, dirs, fs in os.walk("."):
         dirs[:] = [x for x in dirs if x not in SKIP_DIRS]
-        for f in fs:
+        # In a git worktree or submodule, .git is a file holding an absolute path, not a folder.
+        for f in (x for x in fs if x != ".git"):
             out.append(os.path.relpath(os.path.join(d, f)))
     return out
 
