@@ -14,8 +14,11 @@ import json, os, re, subprocess, sys
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 os.chdir(ROOT)
 
+# shironigun everywhere; named collaborators (see CLAUDE.md rule 3) by GitHub noreply email only.
 ALLOWED_AUTHOR_NAMES = {"shironigun"}
-ALLOWED_AUTHOR_EMAIL = re.compile(r"^\d+\+shironigun@users\.noreply\.github\.com$|^shironigun@users\.noreply\.github\.com$", re.I)
+COLLABORATORS = {"ayesha imtiaz": "252852590+aishaimt002@users.noreply.github.com",
+                 "aishaimt002": "252852590+aishaimt002@users.noreply.github.com"}
+ALLOWED_AUTHOR_EMAIL = re.compile(r"^(102178470\+)?shironigun@users\.noreply\.github\.com$|^252852590\+aishaimt002@users\.noreply\.github\.com$", re.I)
 
 SKIP_DIRS = {".git", "node_modules", "dist", "build", "test-results", "reports"}
 TEXT_EXT = {".md", ".json", ".yml", ".yaml", ".ts", ".tsx", ".js", ".mjs", ".cjs", ".py", ".css",
@@ -181,9 +184,10 @@ def check_identity(staged):
         if not line: continue
         h, an, ae, cn, ce, msg = line.split("|", 5)
         for who, mail in ((an, ae), (cn, ce)):
-            if who.lower() not in ALLOWED_AUTHOR_NAMES and who != "GitHub":
+            if who.lower() not in ALLOWED_AUTHOR_NAMES | set(COLLABORATORS) and who != "GitHub":
                 err(f"commit {h}", f"author/committer '{who} <{mail}>' is not shironigun")
-            elif who != "GitHub" and not ALLOWED_AUTHOR_EMAIL.match(mail):
+            elif who != "GitHub" and (not ALLOWED_AUTHOR_EMAIL.match(mail) or
+                                      (who.lower() in COLLABORATORS and mail.lower() != COLLABORATORS[who.lower()])):
                 err(f"commit {h}", f"email '{mail}' is not the shironigun noreply address")
         if re.search(r"(?im)^(co-authored-by|signed-off-by):", msg):
             err(f"commit {h}", "message has a Co-authored-by/Signed-off-by trailer")
