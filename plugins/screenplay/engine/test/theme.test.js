@@ -29,6 +29,12 @@ test('theme: one entry per brand of the profile, each with the same custom prope
   ]);
   const two = { a: { vars: { '--x': '1', '--y': '2' }, evidence }, b: { vars: { '--x': '3' }, evidence } };
   assert.deepEqual(themeProblems({ brands: two }, ['a', 'b']), ['/brands/b/vars: missing --y, which another brand defines']);
+  // A custom property's name may hold `_` and letters past ASCII, as CSS reads it; a space or a colon is no part of it.
+  assert.deepEqual(themeProblems({ brands: { sample: { vars: { '--brand_main': '#123', '--café': '#456' }, evidence } } }, ['sample']), []);
+  assert.deepEqual(themeProblems({ brands: { sample: { vars: { '--a b': '1', '--c:d': '2' }, evidence } } }, ['sample']), [
+    '/brands/sample/vars/--a b: a theme variable is a custom property, as --name',
+    '/brands/sample/vars/--c:d: a theme variable is a custom property, as --name',
+  ]);
   assert.deepEqual(check('theme', { brands: { sample: { vars: { '--x': 'red; color: blue' }, evidence } } }), [
     '/brands/sample/vars/--x: must match ^[^\\r\\n;{}<>]*$',
   ]);

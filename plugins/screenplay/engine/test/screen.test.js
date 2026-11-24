@@ -197,6 +197,13 @@ test('screen: hooks and variables are read from the markup and the CSS; sizes st
   assert.deepEqual(attrTokens("<i data-sp=S-02.4 data-sp-hide='T-04 T-05'>c</i>", 'data-sp-hide'), ['T-04', 'T-05']);
   const vars = cssVariables('.sp-scr-01 { --gap: 4px; color: var(--brand-text, #222); margin: var( --gap) }');
   assert.deepEqual([[...vars.used], [...vars.set]], [['--brand-text', '--gap'], ['--gap']]);
+  const named = cssVariables('.sp-scr-01 { --brand_gap: 4px; color: var(--marca-café); margin: var(--brand_gap) }');
+  assert.deepEqual([[...named.used], [...named.set]], [['--marca-café', '--brand_gap'], ['--brand_gap']]);
+  // 150 KiB of url( is read in one pass: the first runs to the end of the text, and is refused.
+  const flood = 'url('.repeat(37 * 1024);
+  assert.deepEqual(htmlProblems(`<p style="background: ${flood}">a</p>`, AT), [
+    `${AT}: url(${flood.slice(4)}">a</p>) loads from outside; a screen loads nothing`,
+  ]);
   const screen = validJson('screen');
   const big = { ...screen, css: `.sp-scr-01 .a { content: "${'x'.repeat(151 * 1024)}" }` };
   assert.deepEqual(filmReadyProblems(big), ["/css: 152 KiB is more than the 150 KiB a screen's CSS may take"]);

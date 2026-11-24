@@ -1,6 +1,6 @@
 'use strict';
 const { namesShown } = require('./brief');
-const { decodeCssEscapes, readCss } = require('./css');
+const { CUSTOM_PROPERTY, decodeCssEscapes, readCss } = require('./css');
 const { MUST_NOT_SHOW } = require('./dossier');
 const { filmCss } = require('./filmcss');
 const { MODULE_LIMITS } = require('./modules');
@@ -33,10 +33,12 @@ const kib = (n) => `${Math.ceil(n / 1024)} KiB`;
 // spaces a browser strips from an address (a no-break space is not one).
 const inline = (value) => /^[\t\n\f\r ]*(#|data:image\/)/i.test(value);
 // The address each url() of a text names: a quoted one runs to its own closing quote, whatever it holds, and a bare one
-// to the first space or `)`. Only the spaces CSS skips may come between `url(` and the address.
+// to the first space or `)`. Only the spaces CSS skips may come between `url(` and the address. The next url( is
+// looked for after the address, so the text is read once, however many url( it holds.
 function urls(text) {
   const found = [];
-  for (const m of text.matchAll(/url\([ \t\n\r\f]*/gi)) {
+  const start = /url\([ \t\n\r\f]*/gi;
+  for (let m = start.exec(text); m; m = start.exec(text)) {
     let i = m.index + m[0].length;
     const quote = text[i] === '"' || text[i] === "'" ? text[i] : null;
     let value = '';
@@ -49,6 +51,7 @@ function urls(text) {
       for (; i < text.length && !/[\s)]/.test(text[i]); i += 1) value += text[i];
     }
     found.push(value);
+    start.lastIndex = Math.max(i, start.lastIndex);
   }
   return found;
 }
@@ -133,8 +136,8 @@ const attrTokens = (html, name) => attrValues(html, name).flatMap((v) => v.split
 // The custom properties a screen's CSS reads, and those it sets itself.
 function cssVariables(css) {
   return {
-    used: new Set([...css.matchAll(/var\(\s*(--[A-Za-z0-9-]+)/g)].map((m) => m[1])),
-    set: new Set([...css.matchAll(/(?:^|[;{\s])(--[A-Za-z0-9-]+)\s*:/g)].map((m) => m[1])),
+    used: new Set([...css.matchAll(new RegExp(`var\\(\\s*(${CUSTOM_PROPERTY})`, 'g'))].map((m) => m[1])),
+    set: new Set([...css.matchAll(new RegExp(`(?:^|[;{\\s])(${CUSTOM_PROPERTY})\\s*:`, 'g'))].map((m) => m[1])),
   };
 }
 

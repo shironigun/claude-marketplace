@@ -1,8 +1,8 @@
 'use strict';
-const { decodeCssEscapes } = require('./css');
+const { CUSTOM_PROPERTY, decodeCssEscapes } = require('./css');
 
 // A theme variable: a CSS custom property (spec 5.11).
-const VAR_RE = /^--[A-Za-z0-9-]+$/;
+const VAR_RE = new RegExp(`^${CUSTOM_PROPERTY}$`);
 
 // What is wrong with a theme beyond its schema (spec 5.11, D25): a brand of the profile it leaves out, or one the
 // profile lacks; a name that is not a custom property; a value that loads an image, through url() or image-set()

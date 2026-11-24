@@ -188,4 +188,8 @@ function readCss(css) {
   return tokens;
 }
 
-module.exports = { decodeCssEscapes, readCss };
+// A custom property's name as CSS reads an ident (CSS Syntax 4.3.11): `--`, then letters, digits, `_`, `-` and any
+// character past ASCII. A space, a colon or a brace is no part of it.
+const CUSTOM_PROPERTY = /--(?:[A-Za-z0-9_-]|[^\x00-\x7f])+/.source;
+
+module.exports = { CUSTOM_PROPERTY, decodeCssEscapes, readCss };
