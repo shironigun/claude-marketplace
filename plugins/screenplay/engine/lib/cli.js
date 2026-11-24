@@ -40,6 +40,7 @@ function main(argv, io) {
       home: path.resolve(io.cwd, args.flags.home || env.SCREENPLAY_HOME || path.join(os.homedir(), '.screenplay')),
       now: new Date(time).toISOString(),
       pluginRoot: PLUGIN_ROOT,
+      env,
     };
     const result = cmd.run(ctx, args) || {};
     if (args.flags.json) io.stdout.write(`${JSON.stringify(result.json ?? null, null, 2)}\n`);
