@@ -104,9 +104,9 @@ Select a card to open that plugin's folder and its README.
       <br><code>claude plugin install design-intelligence@shironigun</code>
     </td>
     <td width="50%" valign="top">
-      <a href="plugins/on-record/"><img src="assets/readme/cards/on-record.svg" alt="on-record: a LinkedIn revamp built from facts you can back" width="100%"></a>
-      <br><b><a href="plugins/on-record/">on-record</a></b>: your exports, certificates and AI chats into a sourced fact ledger, then a full profile revamp you paste in yourself.
-      <br><code>claude plugin install on-record@shironigun</code>
+      <a href="plugins/standout/"><img src="assets/readme/cards/standout.svg" alt="standout: a LinkedIn revamp built from facts you can back" width="100%"></a>
+      <br><b><a href="plugins/standout/">standout</a></b>: your exports, certificates and AI chats into a sourced fact ledger, then a full profile revamp you paste in yourself.
+      <br><code>claude plugin install standout@shironigun</code>
     </td>
   </tr>
 </table>
@@ -124,7 +124,7 @@ Select a card to open that plugin's folder and its README.
 | [feature-explainer](plugins/feature-explainer/) | Documentation | 1 | A private artifact page you choose to share | Node.js, Python 3 | Yes |
 | [how-to-guides](plugins/how-to-guides/) | Documentation | 1 | A PDF guide on your machine | Node.js, Chrome | Yes |
 | [design-intelligence](plugins/design-intelligence/) | Design | 6 skills, 1 agent | MUI code in your project; a Figma screen only when you ask | Node.js, Python 3; optional `ADO_ORG` | Yes (local overlay) |
-| [on-record](plugins/on-record/) | Career | 1 | A fact ledger and a profile draft in a folder you choose; you paste into LinkedIn | Node.js | Yes |
+| [standout](plugins/standout/) | Career | 1 | A fact ledger and a profile draft in a folder you choose; you paste into LinkedIn | Node.js | Yes |
 
 **Product-neutral** plugins ship no product data: your tracker, product and brand live in your own config.
 **Templates** are tuned to one team's project and house style; retarget the conventions in each skill's
@@ -151,7 +151,7 @@ Here is the flagship. The rest are under [The plugins in detail](#the-plugins-in
 - **Telling customers what shipped?** **[release-notes-suite](plugins/release-notes-suite/)**.
 - **Explaining a feature?** A page for your team: **[feature-explainer](plugins/feature-explainer/)**. A PDF for your customers: **[how-to-guides](plugins/how-to-guides/)**.
 - **Turning a Figma screen into code that follows your design system?** **[design-intelligence](plugins/design-intelligence/)**.
-- **Showing your own work?** A LinkedIn profile built from facts you can back: **[on-record](plugins/on-record/)**.
+- **Showing your own work?** A LinkedIn profile built from facts you can back: **[standout](plugins/standout/)**.
 
 ## How it works
 
@@ -418,9 +418,9 @@ the plugin ships only labelled examples. Co-authored by Ayesha Imtiaz and shiron
 <p align="center"><img src="assets/readme/diagrams/design-intelligence.svg" alt="How design-intelligence works" width="100%"></p>
 </details>
 
-### [on-record](plugins/on-record/)
+### [standout](plugins/standout/)
 
-Say "revamp my LinkedIn" and **on-record** builds the profile from the person's own record. It reads
+Say "revamp my LinkedIn" and **standout** builds the profile from the person's own record. It reads
 the LinkedIn data export (or Save to PDF), certificates and documents, and ChatGPT or Claude data exports,
 with a copy-paste extraction prompt for any other chat. Every claim goes into a fact ledger with its source
 and a status (CONFIRMED, UNCONFIRMED or PLANNED); an interview closes the gaps; then it drafts the headline,
@@ -428,12 +428,12 @@ About, Experience, Featured, Projects, Certifications, Skills and a banner brief
 traces every number to a confirmed fact and enforces LinkedIn's limits. Two gates: facts before drafting,
 each section before it is final. It never logs in to or automates LinkedIn; the user pastes.
 
-<p align="center"><a href="plugins/on-record/"><img src="assets/readme/usecases/on-record.svg" alt="on-record in action: what you ask and what you get" width="100%"></a></p>
+<p align="center"><a href="plugins/standout/"><img src="assets/readme/usecases/standout.svg" alt="standout in action: what you ask and what you get" width="100%"></a></p>
 
 <details>
-<summary><b>How on-record works</b></summary>
+<summary><b>How standout works</b></summary>
 <br>
-<p align="center"><img src="assets/readme/diagrams/on-record.svg" alt="How on-record works" width="100%"></p>
+<p align="center"><img src="assets/readme/diagrams/standout.svg" alt="How standout works" width="100%"></p>
 </details>
 
 ---

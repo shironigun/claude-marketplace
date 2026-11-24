@@ -63,9 +63,9 @@
       "category": "design"
     },
     {
-      "name": "on-record",
+      "name": "standout",
       "description": "Revamp anyone's LinkedIn profile into a branded, enterprise one, built only from facts they can back: reads the LinkedIn export, certificates and ChatGPT or Claude exports, keeps a sourced fact ledger, interviews for gaps, then drafts every section and a banner brief. Checked against the ledger and LinkedIn's limits; the user pastes, nothing is automated",
-      "source": "./plugins/on-record",
+      "source": "./plugins/standout",
       "category": "career"
     }
   ]

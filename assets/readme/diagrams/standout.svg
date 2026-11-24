@@ -1,16 +1,16 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="620" viewBox="0 0 1280 620" role="img" aria-label="How on-record works" font-family="'Segoe UI', -apple-system, 'Helvetica Neue', Arial, sans-serif">
-<title>How on-record works</title>
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="620" viewBox="0 0 1280 620" role="img" aria-label="How standout works" font-family="'Segoe UI', -apple-system, 'Helvetica Neue', Arial, sans-serif">
+<title>How standout works</title>
 <defs>
-  <linearGradient id="d-on-record-bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0b1020"/><stop offset="1" stop-color="#151d3b"/></linearGradient>
-  <radialGradient id="d-on-record-glow" cx="1" cy="0" r="0.9"><stop offset="0" stop-color="#60a5fa" stop-opacity=".28"/><stop offset="1" stop-color="#60a5fa" stop-opacity="0"/></radialGradient>
-  <pattern id="d-on-record-dots" width="22" height="22" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1.1" fill="#ffffff" fill-opacity=".06"/></pattern>
+  <linearGradient id="d-standout-bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0b1020"/><stop offset="1" stop-color="#151d3b"/></linearGradient>
+  <radialGradient id="d-standout-glow" cx="1" cy="0" r="0.9"><stop offset="0" stop-color="#60a5fa" stop-opacity=".28"/><stop offset="1" stop-color="#60a5fa" stop-opacity="0"/></radialGradient>
+  <pattern id="d-standout-dots" width="22" height="22" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1.1" fill="#ffffff" fill-opacity=".06"/></pattern>
 </defs>
-<rect width="1280" height="620" rx="26" fill="url(#d-on-record-bg)"/>
-<rect width="1280" height="620" rx="26" fill="url(#d-on-record-dots)"/>
-<rect width="1280" height="620" rx="26" fill="url(#d-on-record-glow)"/>
+<rect width="1280" height="620" rx="26" fill="url(#d-standout-bg)"/>
+<rect width="1280" height="620" rx="26" fill="url(#d-standout-dots)"/>
+<rect width="1280" height="620" rx="26" fill="url(#d-standout-glow)"/>
 <rect x=".5" y=".5" width="1279" height="619" rx="26" fill="none" stroke="#ffffff" stroke-opacity=".08"/>
 <g transform="translate(64 46) scale(1.25)" fill="#60a5fa"><path d="M12 1 3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5zm-2 16-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9z"/></g>
-<text x="106" y="70" font-size="26" font-weight="700" fill="#ffffff">How on-record works</text>
+<text x="106" y="70" font-size="26" font-weight="700" fill="#ffffff">How standout works</text>
 <text x="64" y="104" font-size="16" fill="#c7d0e6">Facts first: every claim sourced and approved before drafting, every number traced before you paste.</text>
 <text x="64" y="146" font-size="13" font-weight="700" letter-spacing="2" fill="#8b97b8">SOURCES</text>
 <rect x="64" y="160" width="200" height="88" rx="14" fill="#ffffff" fill-opacity="0.05" stroke="#60a5fa" stroke-opacity="0.4" />
