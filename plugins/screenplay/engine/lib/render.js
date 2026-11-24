@@ -138,7 +138,10 @@ function measureFrame(alphaOf) {
   };
   const opaque = (e) => {
     const cs = getComputedStyle(e);
-    return alphaOf(cs.backgroundColor) >= 1 || cs.backgroundImage !== 'none';
+    const image = cs.backgroundImage;
+    // An image counts only when every colour it names is fully opaque; a url() names none and is taken as opaque.
+    const solidImage = image !== 'none' && !/transparent/.test(image) && (image.match(/(?:rgba?|hsla?|color)([^)]*)/g) || []).every((c) => alphaOf(c) >= 1);
+    return alphaOf(cs.backgroundColor) >= 1 || solidImage;
   };
   const all = (sel, kind) => [...document.querySelectorAll(sel)].map((e) => ({ kind, ...box(e), shown: shown(e) }));
   const world = document.querySelector('.sp-world');

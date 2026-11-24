@@ -136,6 +136,7 @@ test('verify: what the frames measure against the film rules: layout, stillness,
   // The focus-pop's blur leaves before a move too; a frame that cannot be measured passes nothing.
   const blurred = [{ t: 6.2, kind: 'move', scene: 'S-02', hook: 'S-02.2', m: frame({ callouts: [{ kind: 'focus', ...el([240, 90, 1440, 900]) }] }) }];
   assert.deepEqual(measuredProblems(blurred, overlay), ['S-02 at 6.2 s: a focus still shows while the camera moves']);
+  assert.deepEqual(measuredProblems([{ t: 5, kind: 'hold', scene: 'S-02', hook: 'S-02.1', m: frame({ camera: null }) }], overlay), ['S-02.1: the camera could not be measured at 5 s, so its hold is not checked']);
   assert.deepEqual(measuredProblems([{ t: 3, kind: 'cut', scene: 'S-02', m: null }, { t: 4, kind: 'beat', scene: 'S-02', hook: 'S-02.1', m: null }], overlay), [
     "S-02 at 3 s: the film's frame could not be measured, so none of its checks ran",
   ]);

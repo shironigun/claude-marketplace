@@ -154,6 +154,7 @@ function measuredProblems(samples, overlay) {
     }
   }
   // Stillness: each beat's hold is measured at both ends.
+  for (const s of samples.filter((x) => x.kind === 'hold' && x.m && !x.m.camera)) say(`camera ${s.hook}`, `${s.hook}: the camera could not be measured at ${s.t} s, so its hold is not checked`);
   const holds = new Map();
   for (const s of samples.filter((x) => x.kind === 'hold' && x.m && x.m.camera)) holds.set(s.hook, [...(holds.get(s.hook) || []), s]);
   for (const [hook, [a, b]] of holds) {
