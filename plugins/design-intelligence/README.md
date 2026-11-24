@@ -184,6 +184,11 @@ the launcher in your local copy of `.mcp.json`: `"command": "cmd"` with
 `"args": ["/c", "npx", "-y", ...]` followed by the same pinned package and
 arguments. macOS, Linux and WSL use the file as shipped.
 
+## Roadmap
+
+Next up: creating a component library from an existing codebase (measure the real UI, propose a standard,
+publish Storybook and Figma libraries, audit over time). See [`ROADMAP.md`](ROADMAP.md).
+
 ## Safety
 
 - Figma analysis and work-item lookups are read-only. Figma writes happen only in

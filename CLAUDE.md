@@ -138,6 +138,6 @@ engine version it needs and what breaks without it (today: qa-engineering's live
    paths, secrets), your private denylist, and the identity and trailers of every unpushed commit.
 2. The hooks in `.githooks/` run it automatically. Enable them once per clone:
    `git config core.hooksPath .githooks`.
-3. Run each touched plugin's own checks (for example `npm test` in `plugins/design-studio/engine`).
+3. Run each touched plugin's own checks (for example `python3 -m py_compile` on design-intelligence's capabilities, or a how-to-guides PDF build).
 4. Show the owner an **audit** (what changed, what was generalised, any output change, anything left
    unresolved) and push **only after they say go**. Work on a branch; never push to `main` directly.
