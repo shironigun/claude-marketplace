@@ -1,9 +1,9 @@
 {
   "name": "bug-suite",
-  "version": "0.2.0",
-  "description": "Files Bugs (against stories/regression) and Defects (production) and writes ticket comments on the 'Example Project' Azure DevOps project, in the team's QA house style.",
+  "version": "0.3.0",
+  "description": "Files Bugs (against stories/regression) and production Defects, and writes ticket comments in Azure DevOps in a QA house style. Org facts (project, boards, fields, identity) are discovered once into a local workspace profile.",
   "author": {
     "name": "shironigun"
   },
-  "keywords": ["azure-devops", "ado", "qa", "bug", "defect", "app", "your-org"]
+  "keywords": ["azure-devops", "ado", "qa", "bug", "defect", "bug-tracking"]
 }

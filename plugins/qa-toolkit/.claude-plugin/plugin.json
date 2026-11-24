@@ -1,6 +1,6 @@
 {
   "name": "qa-toolkit",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "QA workflow automation — generate API and UI test cases, convert failures to bugs, push to your tracker",
   "author": {
     "name": "shironigun",

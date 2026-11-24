@@ -22,7 +22,7 @@ title, description, **acceptance criteria**, **comments/discussions**, history, 
 **related**, dependencies, **bugs**, other linked items, and design/implementation context. Never write.
 
 **(b) Requirement understanding.** What is changing & why · expected behavior · affected
-modules/features · integrations/APIs/PARTNER systems that may be affected · existing behavior that could break.
+modules/features · integrations/APIs/partner systems that may be affected · existing behavior that could break.
 
 **(c) QA concerns.** Ambiguities · missing requirements/AC/validation rules/error handling ·
 permissions/security · integration · regression · mobile/responsive (where applicable) · edge cases ·
@@ -33,7 +33,7 @@ data/state issues · backward-compatibility · risks introduced by the change.
 
 **(e) QA review brief + test strategy.** A concise, QA-oriented summary: **Understanding · Scope · Risks ·
 Questions/Gaps · Regression impact · Test strategy** (which of functional / regression / API / UI /
-integration / permissions / validation / negative / cross-browser / mobile / PARTNER / performance apply, and
+integration / permissions / validation / negative / cross-browser / mobile / partner integration / performance apply, and
 why). This helps QA *think*, not just produce artifacts.
 
 **(f) Write to `qa-context`** (the `story` slice: id, the analysis, the labeled gaps, the review) so

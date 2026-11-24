@@ -36,7 +36,7 @@ silent, the item is an Assumption or a Gap-or-Question, not a Confirmed fact.
 
 ## 4. Integration
 
-- Every API / service / external system (including any PARTNER or partner integration the house-profile
+- Every API / service / external system (including any partner integration the house-profile
   names) the change calls or is called by.
 - The contract at each boundary: request/response shape, status codes, required fields, versioning.
 - Failure behaviour of a dependency: slow, down, partial, error, rate-limited — what the feature does.

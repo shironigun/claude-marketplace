@@ -1,6 +1,15 @@
 ---
 name: testcase-to-tracker
-description: Author test cases from a ticket in a rigorous senior-SQA house style and file them as Test Case work items in the user's issue tracker (Azure DevOps, Jira, or any other), then link each back to the source ticket. Use whenever the user wants to write, draft, generate, or create test cases for a ticket, story, defect, or bug AND get them into their tracker — or mentions a work item ID together with testing, a Test Plan/Suite, test steps, expected/actual results, or QA verification. Trigger even on a bare "write tests for #123456 and add them", "I need test cases for this story in the tracker", or when they paste a ticket description and ask to turn it into filed test cases. For authoring cases without filing, use ui-test-cases (UI) or api-test-cases (API); this skill is the filing counterpart.
+description: >-
+  Author test cases from a ticket in a rigorous senior-SQA house style and file them as Test Case work
+  items in the user's issue tracker (Azure DevOps, Jira, or any other), then link each back to the
+  source ticket. Use whenever the user wants to write, draft, generate, or create test cases for a
+  ticket, story, defect, or bug AND get them into their tracker — or mentions a work item ID together
+  with testing, a Test Plan/Suite, test steps, expected/actual results, or QA verification. Trigger
+  even on a bare "write tests for #1001 and add them", "I need test cases for this story in the
+  tracker", or when they paste a ticket description and ask to turn it into filed test cases. For
+  authoring cases without filing, use ui-test-cases (UI) or api-test-cases (API); this skill is the
+  filing counterpart.
 ---
 
 # Test Case -> Tracker
@@ -32,7 +41,7 @@ The third segment is phrased as "Verify that..." describing the specific behavio
 
 Examples:
 - `Deals - Pipeline - Verify that user is able to switch to the newly created pipeline.`
-- `Messenger - Channel - Verify that user is unable to send a message after the messaging window closes.`
+- `Inbox - Chat - Verify that user is unable to send a message after the messaging window closes.`
 - `Customers - Merge - Verify that a duplicate customer can be merged into an existing record.`
 
 **Steps — childlike granularity is mandatory.** Every single click, navigation, and field entry is its own step. Never collapse "Navigate to Settings -> Deals tab -> Add Pipeline" into one step — that is three steps. Assume the tester knows nothing and must be guided action-by-action. A 10-action flow has 10 steps. The final step is always the verification step.
@@ -50,7 +59,7 @@ Preconditions: Environment: <QA/Staging/Production> | Role: <role> | <any setup 
 | 2 | Navigate to Settings | Settings page opens |
 | 3 | Move to the Deals tab | Deals settings tab is displayed |
 | 4 | Click the Add Pipeline button | Add Pipeline form/drawer opens |
-| 5 | Add at least one department | Department is added to the pipeline |
+| 5 | Add at least one stage | Stage is added to the pipeline |
 | 6 | Click the SAVE button | Pipeline is saved and appears in the pipeline list |
 | 7 | Navigate to the Deals module | Deals module opens |
 | 8 | Click the "Select Pipeline" dropdown | Dropdown expands showing the list of pipelines |

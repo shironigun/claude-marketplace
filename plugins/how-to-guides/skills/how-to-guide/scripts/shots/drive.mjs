@@ -7,7 +7,7 @@
 //   {"text": "New Reminder", "exact": true}    select visible text ("nth" picks a later match)
 //   {"role": ["button", "Create"]}             select by role and accessible name
 //   {"sel": "[role=combobox]", "nth": 4}       select by CSS
-//   {"fill": ["input[name=title]", "Spring service reminder"]}
+//   {"fill": ["input[name=title]", "Spring renewal reminder"]}
 //   {"type": "Hi @CustomerName, ..."}          type into the focused field
 //   {"key": "Escape"}
 //   {"hide": {"sel": "[role=tab]", "text": "Beta"}}   remove matching elements now and before every shot

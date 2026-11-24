@@ -1,6 +1,17 @@
 ---
 name: automation-engine
-description: Native skill of the qa-engineering — take QA-approved test cases (from qa-context, or from an ADO Test Plan/Suite) and generate framework-aware Playwright + TypeScript spec files for them, reusing the kit's existing Standards, services, schemas, page-objects, builders and fixtures rather than duplicating them. Each generated spec lands at the framework's own level (folder + tag) and carries a traces-case line back to its case so the story-case-script thread holds. Product-neutral and tracker-agnostic (Azure DevOps is the implemented case source). Use whenever the user wants to "automate these cases", "turn these test cases into scripts", "generate automation for this suite", "write specs for the approved cases", or points at an approved set / a Test Plan+Suite and asks for automation. It reads the qa-context cases + framework slices and writes the qa-context automation slice. It does NOT author cases (author-api-cases / author-ui-cases), publish them (ado-publish), run them, or triage failures (failure-to-bug). For a brick-by-brick framework build from a module scan, that is kit-builder; this engine generates from cases.
+description: >-
+  Takes QA-approved test cases (from qa-context or an ADO Test Plan/Suite) and generates
+  framework-aware Playwright + TypeScript spec files for them, reusing the kit's existing
+  standards, services, schemas, page objects, builders and fixtures instead of duplicating them.
+  Each spec lands at the framework's own level (folder + tag) and carries a traces-case line back
+  to its case so the story-case-script thread holds. Tracker-agnostic (Azure DevOps is the
+  implemented case source). Use whenever the user wants to "automate these cases", "turn these
+  test cases into scripts", "generate automation for this suite", "write specs for the approved
+  cases", or points at an approved set or a Test Plan+Suite and asks for automation. Reads the
+  qa-context cases + framework slices and writes the automation slice. Does not author cases
+  (author-api-cases / author-ui-cases), publish them (ado-publish), run them or triage failures
+  (failure-to-bug); a brick-by-brick framework build from a module scan is kit-builder.
 ---
 
 # Automation engine — approved cases → framework-aware specs

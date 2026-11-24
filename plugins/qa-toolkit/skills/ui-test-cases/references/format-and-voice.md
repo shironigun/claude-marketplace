@@ -8,7 +8,7 @@ The complete guide to the house test-case style. Read this before writing.
 [Module] - [Feature] - Verify that <behavior>.
 ```
 
-- Module = top-level area of the product (e.g., Deals, Messenger, Customers, Settings, Leads).
+- Module = top-level area of the product (e.g., Deals, Inbox, Customers, Settings, Leads).
 - Feature = specific sub-area or capability (e.g., Pipeline, Channel, Merge, Roles, Import).
 - "Verify that" segment = one specific observable outcome. Describes exactly what should be true.
 - Period at the end. Always.
@@ -49,7 +49,7 @@ This is where most test-case writers get it wrong. The reference standard:
 | Collapsed (wrong) | Correct (split) |
 |---|---|
 | Navigate to Settings and go to the Deals tab | Step 1: Navigate to Settings -> Settings page opens. Step 2: Move to the Deals tab -> Deals settings tab is displayed. |
-| Open the messenger and find the conversation | Step 1: Navigate to the Messenger module -> Messenger opens and conversation list is displayed. Step 2: Locate the conversation with <condition> -> The conversation is visible in the list. Step 3: Click the conversation to open it -> The conversation thread opens. |
+| Open the inbox and find the conversation | Step 1: Navigate to the Inbox module -> Inbox opens and conversation list is displayed. Step 2: Locate the conversation with <condition> -> The conversation is visible in the list. Step 3: Click the conversation to open it -> The conversation thread opens. |
 | Fill in the form and save | Step 1: Enter the name in the Name field -> Text appears in the Name field. Step 2: Enter the email in the Email field -> Text appears in the Email field. Step 3: Click the SAVE button -> Form submits and <result>. |
 
 The test is: can you point at any single step and ask "what specifically did the tester do?" If the answer could be two things, split it.

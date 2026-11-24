@@ -12,7 +12,7 @@ A QA who runs `/qa` or `/build` to set up a UI framework hits a **blank toolchai
 dependency but the **browsers are not installed** (`npx playwright install` was never run), the **VS Code
 extension** is only *recommended* by `template/.vscode/extensions.json` (passive — VS Code may or may not offer
 it), and the only way to learn the extension's real power (codegen/Record, Pick-locator, Trace Viewer, in-editor
-debug) is to read the standard. The live-test log (`plugin-gaps-from-app-live-test.md`, §H/§P) corroborates: the
+debug) is to read the standard. A live-test log (kept locally, not shipped) corroborates: the
 UI tier works on Playwright's bundled Chromium, but browser install is not a guided step, and the extension
 know-how is reference-and-teach only, never an active setup + practice loop.
 

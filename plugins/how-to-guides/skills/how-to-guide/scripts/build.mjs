@@ -180,7 +180,7 @@ function checkHowTo() {
   if (!meta.subtitle) warnings.push('No summary: add a subtitle saying what the reader can do when they finish.');
   if (!h2.includes('before you begin')) warnings.push('No "Before you begin" section.');
   if (!h2.includes('how it works')) warnings.push('No "How it works" section explaining the feature and its terms.');
-  if (!h2.some((h) => /^questions .+ ask$/.test(h))) warnings.push('No "Questions <readers> ask" section, such as "Questions clients ask".');
+  if (!h2.some((h) => /^questions .+ ask$/.test(h))) warnings.push('No "Questions <readers> ask" section, such as "Questions office managers ask".');
   if (!h2.includes('if something goes wrong')) warnings.push('No "If something goes wrong" section.');
   if (!/^>\s*\[!DONE\]/im.test(md.replace(/^ +/gm, ''))) warnings.push('No "> [!DONE]" callout saying what the reader sees when the task worked.');
   // Reviewers missed an AI disclaimer folded into a general note, so an AI feature gets its own labelled callout.

@@ -76,7 +76,7 @@ A fixture wires all of this in BEFORE the test body, so the test names what it n
 - `defaults-and-deviation.md` — the opinionated default stack these blocks assume, and when to deviate.
 - `fixtures.md` — how the blocks are wired into a test before its body runs.
 - `cross-module-reuse.md` — how a test that spans two modules composes their blocks instead of copying.
-- `variants-and-user-types.md` — the product's variant axis (PARTNER type / role / tier) modeled as a first-class
+- `variants-and-user-types.md` — the product's variant axis (tenant type / integration partner / role / tier) modeled as a first-class
   dimension, so shared behavior is tested once and variant-specific behavior is guarded and cited.
 - `knowledge-base.md` — the frontend-first per-module Knowledge Base (behavior briefs + testable RULES + a thin
   code atlas) that records what the product does and grounds the analysis + authoring engines. Not a code

@@ -7,7 +7,7 @@ ids, account names, or product data. The runbook for reproducing it is the kit i
 
 | Run | Target | Module | Auth | Phases driven |
 |---|---|---|---|---|
-| 1 | A real QA backend, via a QA-supplied git-ignored `.env` | Customer | password | 0–5 |
+| 1 | A QA backend (anonymised), via a QA-supplied git-ignored `.env` | Customer | password | 0–5 |
 | 2 | A public sample API (no org affiliation) | posts | none | 0–2 |
 
 Both workspaces were scaffolded from `template/` only, installed with `npm ci`, and configured
@@ -15,7 +15,7 @@ with their own `.env` + `flow-map.json`. The kit itself was never modified to ma
 
 ---
 
-## Run 1 — real QA backend, Customer module (phases 0–5)
+## Run 1 — QA backend (anonymised), Customer module (phases 0–5)
 
 | Phase | What ran | Result |
 |---|---|---|
@@ -29,14 +29,14 @@ with their own `.env` + `flow-map.json`. The kit itself was never modified to ma
 ### Findings (Run 1)
 
 - **Real defect surfaced by the kit** — `GET customers/{id}` with an unknown id returns **500**
-  (an unhandled "value cannot be null" server error) where **404** is correct. Reproducible against
-  QA. The endpoint spec asserts the correct 404 and carries a `knownBug` marker on the line directly
+  (an unhandled server error) where **404** is correct. Reproducible against
+  QA. (Details anonymised.) The endpoint spec asserts the correct 404 and carries a `knownBug` marker on the line directly
   above that assertion, so the suite stays green while the defect is open and turns red the day it is
   fixed. A matching bug draft was written on the degrade path (`failure-to-bug` JSON shape).
 - **Softer observation (not filed)** — `GET customers/{id}/summary` with an unknown id returns 200
   with an all-null body rather than a 404. Noted for triage; not drafted as a defect.
 - **Data hygiene** — the Customer API has no DELETE endpoint, so create tests leave `AUTOMATION_`-named
-  records (teardown is a no-op; the name keeps them greppable for the SQL cleanup). Expected, not a
+  records (teardown is a no-op; the name keeps them greppable for a manual cleanup). Expected, not a
   kit defect.
 
 ---

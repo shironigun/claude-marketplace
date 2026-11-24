@@ -16,8 +16,8 @@
 | **What it does** | A complete release inventory, then short benefit-led release notes |
 | **Includes** | 2 skills |
 | **Writes** | Nothing outside the session: an inventory and drafts |
-| **Setup** | An Azure DevOps connection to harvest |
-| **Product-neutral** | Template: retarget the skills |
+| **Setup** | A tracker connection (Azure DevOps today) to harvest; none to transform a pasted draft |
+| **Product-neutral** | Yes: your org's boards, integrations, plans and brands are discovered once into a local, git-ignored profile |
 
 ## See it in action
 
@@ -28,17 +28,27 @@
 <p align="center"><img src="../../assets/readme/diagrams/release-notes-suite.svg" alt="How release-notes-suite works" width="100%"></p>
 
 
-A two-stage pipeline for turning what engineering shipped into client-facing release notes for **the product and its PARTNER-facing variant**.
+A two-stage pipeline for turning what engineering shipped into client-facing release notes, one per client-facing brand of your product.
 
 ```
-harvester  ->  releaser  ->  general-brand note + PARTNER-facing note
-(gather all)   (suppress + write)     (brand variants)
+harvester  ->  releaser  ->  one note per brand
+(gather all)   (suppress + write)   (brand variants)
 ```
+
+## First run: the workspace profile
+
+Nothing about your organisation ships in this plugin. The first time a skill needs an org fact, it scans your
+tracker and codebase read-only and proposes a profile: tracker project, delivery and support boards, the
+integration partners your product connects to (whatever your code calls them: ERP, POS, PMS…), plans or
+tiers, and client-facing brands with their knowledge-base link, webinar and support pointer. You confirm or
+correct it, and it is saved to `.claude/workspace-profile.json` in **your** project (add it to `.gitignore`;
+the skill offers to). Later runs reuse it silently. The schema is in
+`skills/harvester/references/workspace-profile.md`.
 
 ## Skills
 
-- **harvester** — builds the *complete* engineering release inventory for a date window or an initiative (e.g. "PARTNER-A Two-Way Sync"). Pulls User Stories, Bugs and Defects across **both** the Delivery Team and Support Board boards, plus the git layer (merged PRs / commits / deployments), and deliberately catches work that shipped with **no linked ticket**. Output is the internal, exhaustive, grouped inventory — the raw material for notes. This is the opposite discipline to `releaser`: completeness, not curation.
-- **releaser** — turns an inventory or a technical draft into the short, benefit-led client note in the support lead / support-team house style, deciding what to announce vs. suppress. Emits **general-brand** and **PARTNER-facing** (PARTNER-A) variants from one run; branding is a profile, not a separate skill.
+- **harvester**: builds the *complete* engineering release inventory for a date window or an initiative (e.g. "PARTNER-A Two-Way Sync"). Pulls User Stories, Bugs and Defects across **both** your delivery and support boards, plus the git layer (merged PRs / commits / deployments), and deliberately catches work that shipped with **no linked ticket**. Output is the internal, exhaustive, grouped inventory: the raw material for notes. This is the opposite discipline to `releaser`: completeness, not curation.
+- **releaser**: turns an inventory or a technical draft into the short, benefit-led client note in a support-team house style, deciding what to announce vs. suppress. Emits one variant per client-facing brand from one run; branding is a profile, not a separate skill.
 
 ## How releaser decides what customers read
 
@@ -74,8 +84,8 @@ claude plugin install release-notes-suite@shironigun
 ```
 
 To pull from the tracker, connect an Azure DevOps MCP server in your session. Transforming a pasted draft
-needs no setup.
+needs no tracker; the skill asks for your integration partners, plans and brands once instead.
 
 ## Install note
 
-If you already have the standalone `releaser` skill installed, remove it after installing this suite so you don't run two copies. The suite's `releaser` is the maintained version (adds brand variants).
+If you already have a standalone `releaser` skill installed, remove it after installing this suite so you don't run two copies.

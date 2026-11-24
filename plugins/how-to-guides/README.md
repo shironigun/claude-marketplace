@@ -32,10 +32,10 @@
 
 Customer how-to guides for B2B software, written to a standard and built as branded PDFs.
 
-Say "write a guide for the reminders feature for our clients" and the `how-to-guide` skill writes the
+Say "write a guide for the reminders feature for our account admins" and the `how-to-guide` skill writes the
 complete guide for one feature: the reader's problem, how the feature works, every task as checked steps,
 the questions readers ask, and what to do when something goes wrong. It's made for the people who use
-B2B software at work, such as a service desk at a business, a front office or an account admin, who
+B2B software at work, such as a front office, an office manager or an account admin, who
 read a guide once and come back to it for one task.
 
 ## Install
@@ -52,7 +52,7 @@ Then ask for a guide, or run `/how-to-guides:how-to-guide`.
   steps (action, "You'll see", why), help finding things on screen, availability callouts, an AI callout
   for AI features, who a message to a customer comes from, a troubleshooting table, and about 10 pages
   after the cover. It joins DITA, the Microsoft and Google style guides, Diátaxis and minimalism with
-  lessons from two rounds of review by a support team that writes a knowledge base.
+  lessons from support-team reviews of customer guides.
 - **Facts from the source.** The skill reads the code and the app read-only before it writes a sentence,
   and hands you three lists: questions for product, change requests for product (setup that could have
   defaults, gaps the guide has to work around) and bugs.

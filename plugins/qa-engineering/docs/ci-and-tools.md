@@ -123,8 +123,8 @@ failures reported separately.
 
 ### Running the per-variant matrix (when the system map has a variant axis)
 
-If `system-map.json` carries a **`variantAxis`** (the product changes behaviour by a client/tenant type,
-tier, role — see `knowledge/standards/variants-and-user-types.md`), a single-profile pipeline is a
+If `system-map.json` carries a **`variantAxis`** (the product changes behaviour by a tenant type,
+integration partner, tier, role — see `knowledge/standards/variants-and-user-types.md`), a single-profile pipeline is a
 **coverage lie**: it exercises one variant and reports green while every other variant is untested. The
 whole reason the architecture models per-variant profiles is to run them. So **when `variantAxis` is
 non-null, generate the pipeline as a matrix** over the in-scope variants (`inScope && hasTestAccount`);
@@ -139,13 +139,13 @@ they don't collide. URLs and the auth host are shared; only the credential block
 ```yaml
     strategy:
       matrix:
-        typeA: { partner_PROFILE: 'typeA', partner_USERNAME: '$(TYPEA_AUTH_USERNAME)', partner_PASSWORD: '$(TYPEA_AUTH_PASSWORD)', partner_TENANT: '$(TYPEA_AUTH_TENANT_ID)' }
-        typeB: { partner_PROFILE: 'typeB', partner_USERNAME: '$(TYPEB_AUTH_USERNAME)', partner_PASSWORD: '$(TYPEB_AUTH_PASSWORD)', partner_TENANT: '$(TYPEB_AUTH_TENANT_ID)' }
+        typeA: { VARIANT_PROFILE: 'typeA', VARIANT_USERNAME: '$(TYPEA_AUTH_USERNAME)', VARIANT_PASSWORD: '$(TYPEA_AUTH_PASSWORD)', VARIANT_TENANT: '$(TYPEA_AUTH_TENANT_ID)' }
+        typeB: { VARIANT_PROFILE: 'typeB', VARIANT_USERNAME: '$(TYPEB_AUTH_USERNAME)', VARIANT_PASSWORD: '$(TYPEB_AUTH_PASSWORD)', VARIANT_TENANT: '$(TYPEB_AUTH_TENANT_ID)' }
       maxParallel: 4
     # then in verify:setup + the test step's env:
-    #   AUTOMATION_PROFILE: $(partner_PROFILE)
-    #   AUTH_USERNAME: $(partner_USERNAME)   AUTH_PASSWORD: $(partner_PASSWORD)   AUTH_TENANT_ID: $(partner_TENANT)
-    # and publish per-leg:  artifact: 'playwright-report-$(partner_PROFILE)'
+    #   AUTOMATION_PROFILE: $(VARIANT_PROFILE)
+    #   AUTH_USERNAME: $(VARIANT_USERNAME)   AUTH_PASSWORD: $(VARIANT_PASSWORD)   AUTH_TENANT_ID: $(VARIANT_TENANT)
+    # and publish per-leg:  artifact: 'playwright-report-$(VARIANT_PROFILE)'
 ```
 
 **GitHub Actions** — `strategy.matrix.profile`, selecting the right secret block per leg (e.g. via a

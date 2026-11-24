@@ -1,0 +1,3 @@
+#!/bin/sh
+# Full-repo scan + every outgoing commit's author/committer/trailers before anything leaves the machine.
+exec python3 scripts/validate.py

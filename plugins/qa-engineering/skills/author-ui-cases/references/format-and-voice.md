@@ -15,7 +15,7 @@ This is where most test-case writers get it wrong. The reference standard:
 | Collapsed (wrong) | Correct (split) |
 |---|---|
 | Navigate to Settings and go to the Deals tab | Step 1: Navigate to Settings -> Settings page opens. Step 2: Move to the Deals tab -> Deals settings tab is displayed. |
-| Open the messenger and find the conversation | Step 1: Navigate to the Messenger module -> Messenger opens and conversation list is displayed. Step 2: Locate the conversation with <condition> -> The conversation is visible in the list. Step 3: Click the conversation to open it -> The conversation thread opens. |
+| Open the inbox and find the conversation | Step 1: Navigate to the Inbox module -> Inbox opens and conversation list is displayed. Step 2: Locate the conversation with <condition> -> The conversation is visible in the list. Step 3: Click the conversation to open it -> The conversation thread opens. |
 | Fill in the form and save | Step 1: Enter the name in the Name field -> Text appears in the Name field. Step 2: Enter the email in the Email field -> Text appears in the Email field. Step 3: Click the SAVE button -> Form submits and <result>. |
 
 The test is: can you point at any single step and ask "what specifically did the tester do?" If the answer could be two things, split it.

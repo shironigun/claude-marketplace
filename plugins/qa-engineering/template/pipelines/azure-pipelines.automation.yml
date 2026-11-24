@@ -46,16 +46,16 @@ jobs:
     displayName: 'API tests'
     timeoutInMinutes: 60
     # VARIANT AXIS? If system-map.json has a non-null variantAxis (the product behaves
-    # differently per client/tenant type, tier or role), this single-profile job is a
+    # differently per tenant type, partner, tier or role), this single-profile job is a
     # COVERAGE LIE — it tests one variant and reports green. Expand it to a matrix over the
     # in-scope variants (one leg each, with that variant's <VARIANT>_AUTH_* creds + a distinct
     # artifact name). See "Running the per-variant matrix" in docs/ci-and-tools.md.
     #   strategy:
     #     matrix:
-    #       typeA: { partner_PROFILE: 'typeA', partner_USERNAME: '$(TYPEA_AUTH_USERNAME)', partner_PASSWORD: '$(TYPEA_AUTH_PASSWORD)', partner_TENANT: '$(TYPEA_AUTH_TENANT_ID)' }
-    #       typeB: { partner_PROFILE: 'typeB', partner_USERNAME: '$(TYPEB_AUTH_USERNAME)', partner_PASSWORD: '$(TYPEB_AUTH_PASSWORD)', partner_TENANT: '$(TYPEB_AUTH_TENANT_ID)' }
+    #       typeA: { VARIANT_PROFILE: 'typeA', VARIANT_USERNAME: '$(TYPEA_AUTH_USERNAME)', VARIANT_PASSWORD: '$(TYPEA_AUTH_PASSWORD)', VARIANT_TENANT: '$(TYPEA_AUTH_TENANT_ID)' }
+    #       typeB: { VARIANT_PROFILE: 'typeB', VARIANT_USERNAME: '$(TYPEB_AUTH_USERNAME)', VARIANT_PASSWORD: '$(TYPEB_AUTH_PASSWORD)', VARIANT_TENANT: '$(TYPEB_AUTH_TENANT_ID)' }
     #     maxParallel: 4
-    #   # then set AUTOMATION_PROFILE: $(partner_PROFILE) and AUTH_USERNAME/PASSWORD/TENANT_ID to the partner_* vars.
+    #   # then set AUTOMATION_PROFILE: $(VARIANT_PROFILE) and AUTH_USERNAME/PASSWORD/TENANT_ID to the VARIANT_* vars.
     steps:
       - checkout: self
         fetchDepth: 2              # depth 2 so `npm run impacted` can diff HEAD~1 (see the optional step below)

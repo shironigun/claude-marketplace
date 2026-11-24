@@ -1,5 +1,5 @@
 {
-  "$id": "https://github.com/shironigun/claude-marketplace/plugins/design-studio/schemas/registry.schema.json",
+  "$id": "https://github.com/shironigun/marketplace/plugins/design-studio/schemas/registry.schema.json",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "additionalProperties": false,
   "properties": {

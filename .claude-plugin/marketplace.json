@@ -15,19 +15,19 @@
     },
     {
       "name": "bug-suite",
-      "description": "File Bugs and Defects on the Example Project ADO project in the team's QA house style, plus ticket comments",
+      "description": "File story and regression Bugs, production Defects and ticket comments in Azure DevOps in a QA house style; your boards and fields are discovered into a local profile",
       "source": "./plugins/bug-suite",
       "category": "bug-tracking"
     },
     {
       "name": "release-notes-suite",
-      "description": "Two-stage release pipeline: harvester builds the complete engineering inventory; releaser writes client-facing notes for the product and its PARTNER-facing variant",
+      "description": "Two-stage release pipeline: harvester builds the complete engineering inventory; releaser writes short, benefit-led client release notes, one variant per brand",
       "source": "./plugins/release-notes-suite",
       "category": "release-management"
     },
     {
       "name": "ui-testing",
-      "description": "UI test case authoring and Playwright script generation for the product — buggy (ADO Test Cases) and tester (cases + runnable UI specs)",
+      "description": "UI test case authoring and Playwright script generation: buggy (Azure DevOps Test Cases) and tester (cases + runnable UI specs)",
       "source": "./plugins/ui-testing",
       "category": "testing"
     },
@@ -51,7 +51,7 @@
     },
     {
       "name": "how-to-guides",
-      "description": "Customer how-to guides for B2B software (businesses and any B2B SaaS): one feature, researched read-only, written to a standard and built as a branded PDF. Your brand and house rules stay in your own howto-brand.json",
+      "description": "Customer how-to guides for any B2B software: one feature, researched read-only, written to a standard and built as a branded PDF. Your brand and house rules stay in your own howto-brand.json",
       "source": "./plugins/how-to-guides",
       "category": "documentation"
     }

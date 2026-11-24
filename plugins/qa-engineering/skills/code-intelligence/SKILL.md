@@ -1,6 +1,17 @@
 ---
 name: code-intelligence
-description: Native read-only engine of the qa-engineering — the mirror of story-intelligence for CODE. Given a module or code path (not a tracker story), read the code (reusing the confirmed flow-map when scan-and-confirm already ran), and produce a requirement understanding, a gaps/concerns list, and a QA review brief + test strategy — every claim labeled Confirmed / Inferred / Assumption / Gap-or-Question, and never inventing a requirement. Product-neutral; the module name and any product specifics come from the code + the house-profile, never hard-coded. Reads code only — contains no write to code, framework or tracker. Use whenever the user wants to "analyze this module to test it", "review this code / this module", "get me ready to test this module", "what should I test in <module/path>", "raise gaps on this code", "codebase → QA", or gives a bare module path / code area with intent to TEST it. It writes the module + review slices of qa-context and ends at the gaps gate — it does NOT author test cases (hand off to author-api-cases / author-ui-cases), does NOT scan-to-build (that is scan-and-confirm → kit-builder), and writes NOTHING to code or the tracker.
+description: >-
+  Read-only engine that mirrors story-intelligence for code. Given a module or code path (not a
+  tracker story), reads the code (reusing the confirmed flow map when scan-and-confirm already
+  ran) and produces a requirement understanding, a gaps/concerns list, and a QA review brief +
+  test strategy, every claim labeled Confirmed / Inferred / Assumption / Gap-or-Question and no
+  requirement invented. Specifics come from the code and the house-profile. Use whenever the user
+  wants to "analyze this module to test it", "review this code / this module", "get me ready to
+  test this module", "what should I test in this module or path", "raise gaps on this code",
+  "codebase to QA", or gives a bare module path or code area with intent to test it. Writes the
+  module + review slices of qa-context and ends at the gaps gate. Does not author test cases
+  (author-api-cases / author-ui-cases), does not scan-to-build (scan-and-confirm, then
+  kit-builder), and writes nothing to code, the framework or the tracker.
 ---
 
 # Code Intelligence — understand the module from its code, surface the gaps, brief the QA
@@ -45,7 +56,7 @@ for a remembered real value.
 | What you need | House-profile slot | If blank |
 |---|---|---|
 | Product domain nouns (to name the module as the team names it) | `product.name`, `product.domainNouns` | Use the nouns the code uses (controller/route/component names); say so |
-| Which integrations / external systems the product has (PARTNER, partners) | the profile's integration conventions | Name only the dependencies the code shows; flag the rest as a gap |
+| Which integrations / external systems the product has (partner systems, third-party services) | the profile's integration conventions | Name only the dependencies the code shows; flag the rest as a gap |
 | Roles / permission model the product uses | the profile's role conventions | Use the roles the code's auth checks name; flag unknowns as gaps |
 | Where the module's code lives (repo path, API vs UI) | `product.repoPaths` (or given by the QA) | Ask for the path; do not guess a repo location |
 
@@ -65,7 +76,7 @@ Build the fullest picture of the module the code allows, in this order. **Use on
 | 2 | **The module's surface** — for an API: controllers / route files / handlers (routes, methods, route templates, status codes), request/response DTOs, validation attributes. For a web UI: screens/components, the flows between them, form fields, states (loading/empty/error), and the client calls they make. For a **desktop/thick-client** module (`system-map.productKind: desktop`): the **forms / windows**, their **code-behind / event handlers** (button clicks, menu commands, validators), and the **business-logic / data-access** they call — the desktop analog of UI + backend (no HTTP endpoints). | Glob the module path; Grep for route/handler/component/form definitions; Read the key files |
 | 3 | **Inputs & validation** — every input the module accepts (fields, params, bodies) and the validation the code actually enforces (required, format, length, allowed values) — distinct from validation a story might *imply* but the code omits. | Read the DTOs / validators / form schemas |
 | 4 | **Auth / roles** — which routes or actions carry an auth/role/policy check, and which do not. A route with no check is itself a finding. | Grep for the auth/role/policy annotations the code uses |
-| 5 | **Cross-module dependencies** — what this module **calls** (other modules' services, shared helpers, external/PARTNER/partner APIs) and what **calls it**. The QA reuse and regression surface lives here. | Grep for imports / service calls crossing the module boundary |
+| 5 | **Cross-module dependencies** — what this module **calls** (other modules' services, shared helpers, external/partner APIs) and what **calls it**. The QA reuse and regression surface lives here. | Grep for imports / service calls crossing the module boundary |
 
 Rules for the gather:
 
@@ -90,8 +101,8 @@ From the gathered context, state — concisely, each claim labeled:
 - **Expected behaviour** — what the module does in observable terms (endpoints and their responses;
   screens and their state transitions).
 - **Affected modules / features** — the product areas this covers, in the team's domain nouns.
-- **Integrations / APIs / external systems** — every service, API, or external/partner system (e.g. a
-  PARTNER the house-profile names) this module calls or is called by, from step-5 evidence.
+- **Integrations / APIs / external systems** — every service, API, or external/partner system (e.g. an
+  integration partner the house-profile names) this module calls or is called by, from step-5 evidence.
 - **Existing behaviour at risk** — what the cross-module dependencies mean this module could break, or
   be broken by (the regression surface).
 
@@ -112,7 +123,7 @@ duplicated) and surface what applies **to this module**, read from the code. Cov
 - **Permissions / security** — routes/actions with no auth/role check; a lower-privilege caller able to
   reach an action by API even if a UI hides it; data a role shouldn't see; tenant/account isolation.
 - **Variant / user-type behaviour** — where this module branches on the product's variant axis (an
-  account/user/deployment type: client type, tenant type, tier, role — grep `== <Enum>.<Value>`,
+  account/user/deployment type: tenant type, integration partner, tier, role — grep `== <Enum>.<Value>`,
   `switch (type)`, a role/tier gate, a `=== <Enum>.<Value>` near a render). Each branch is a
   variant-specific behaviour to cover (cite the `file:line`); a branch that exists in one tier but not
   another is exactly the kind of regression a single-variant run misses. See
@@ -129,9 +140,9 @@ duplicated) and surface what applies **to this module**, read from the code. Cov
   stale/cached state; idempotency.
 - **Singleton / shared-instance resources** — a resource there is effectively **one of**, so a test can't
   own its own copy: a true per-tenant singleton (settings, config, feature flags), OR a **"create" that is
-  really an ensure/upsert/get-or-create** (the handler returns the existing row, e.g. `EnsureQuote`), OR a
-  resource **1:1 with a single shared prerequisite** the suite can't multiply (one quote per the one
-  configured opportunity). Flag it: say whether the parent is **creatable** (so tests can make a fresh one
+  really an ensure/upsert/get-or-create** (the handler returns the existing row, e.g. `EnsureProfile`), OR a
+  resource **1:1 with a single shared prerequisite** the suite can't multiply (one summary per the one
+  configured parent project). Flag it: say whether the parent is **creatable** (so tests can make a fresh one
   each and stay isolated) or a **single shared id** (so the resource must be treated as a singleton —
   serialized, not create/void-per-test). This is the isolation trap that passes serially and flakes in
   parallel; the authoring/generation engines need the flag (`isolation-and-parallelism.md`,
@@ -149,7 +160,7 @@ QA knows what the code *proves* versus what still needs the story / AC / product
 | **Confirmed** | Seen directly in the code (a route, a validator, a status, a flow-map flow) — with a source | "`DELETE /orders/{id}` sets status to `cancelled`, not a row delete. *(Confirmed — OrdersController:88)*" |
 | **Inferred** | Reasoned from the code, not stated outright | "This reuses the Orders permission filter. *(Inferred — the `[Authorize(Orders)]` attribute on the controller)*" |
 | **Assumption** | A silence in the code you filled to proceed — must be validated | "Assuming the 30-day window is a business rule, not a leftover constant. *(Assumption — a literal `30` in the handler, no comment)*" |
-| **Gap-or-Question** | Something the code **cannot** tell you — needs the story / BA / Dev before testing is safe | "What is the intended error when the downstream PARTNER times out? The code has no catch. *(Gap-or-Question)*" |
+| **Gap-or-Question** | Something the code **cannot** tell you — needs the story / BA / Dev before testing is safe | "What is the intended error when the downstream partner API times out? The code has no catch. *(Gap-or-Question)*" |
 
 > **Never invent a requirement.** Code shows behaviour, not intent. If the code doesn't prove it and you
 > can't source it, it is an **Assumption** or a **Gap-or-Question** — never a Confirmed requirement. Do
@@ -171,7 +182,7 @@ particular:
   or the product owner.
 - **Test strategy** — which test types apply **and why**, grounded in what the code shows: functional,
   regression, API, UI, integration, permissions, validation, negative, cross-browser, mobile,
-  PARTNER/external-integration, performance. Name the ones that do **not** apply and why.
+  partner/external-integration, performance. Name the ones that do **not** apply and why.
 
 This brief exists to help QA **think** about the module — it is not a test-case list. It does not
 enumerate click steps or request matrices (that is the authoring engines' job).

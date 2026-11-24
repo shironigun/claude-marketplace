@@ -1,6 +1,17 @@
 ---
 name: author-api-cases
-description: Native skill of the qa-engineering — act as a senior SQA analyst doing API testing and author API test cases in a rigorous, behavior-driven house style at three levels — Contract (response/request shape against a schema), Endpoints (happy path plus the full negative matrix per endpoint), and Workflows (chained end-to-end across calls). Product-neutral and tracker-agnostic (ADO / Jira / any), grounded in the kit's framework standards. Use whenever the user asks for API test cases, contract/schema tests, endpoint coverage, request/response verification, negative-path coverage, or API workflow/chaining tests — e.g. "write API tests for POST /orders", "what should I test on this endpoint?", "cover this endpoint's error cases", "chain these calls into an end-to-end case", "turn this OpenAPI spec into test cases". API sibling of the UI-focused author-ui-cases skill; use author-ui-cases for click-by-click UI and this one for anything request/response. Authors cases only — to file them as work items hand off to file-to-tracker; to draft a bug from a failed API test use failure-to-bug.
+description: >-
+  Acts as a senior SQA analyst doing API testing and authors API test cases in a rigorous,
+  behavior-driven house style at three levels: Contract (request/response shape against a schema),
+  Endpoints (happy path plus the full negative matrix per endpoint) and Workflows (chained
+  end-to-end across calls). Tracker-agnostic and grounded in the kit's framework standards. Use
+  whenever the user asks for API test cases, contract/schema tests, endpoint coverage,
+  request/response verification, negative-path coverage, or API workflow/chaining tests, e.g.
+  "write API tests for POST /orders", "what should I test on this endpoint?", "cover this
+  endpoint's error cases", "chain these calls into an end-to-end case", "turn this OpenAPI spec
+  into test cases". API sibling of author-ui-cases, which covers click-by-click UI. Authors cases
+  only: to file them as work items hand off to file-to-tracker; to draft a bug from a failed API
+  test use failure-to-bug.
 ---
 
 # API Test Cases — Senior SQA Analyst

@@ -21,7 +21,7 @@ Gap-or-Question, never a Confirmed line.
    change. These seed `review.coverageGaps[]` where a gap in planned coverage is implied.
 6. **Test strategy** — which test types apply **and why**, and which do not apply and why. Cover:
    functional · regression · API · UI · integration · permissions · validation · negative ·
-   cross-browser · mobile · PARTNER/external-integration · performance.
+   cross-browser · mobile · partner/external-integration · performance.
 
 End the brief with a **testability verdict** (`testable` / `testable-with-assumptions` / `blocked`)
 that seeds `review.verdict`, and the gate line.
@@ -63,7 +63,7 @@ that seeds `review.verdict`, and the gate line.
 - **Permissions** — yes: each role allowed/denied, at the **API** level, not just the UI.
 - **Regression** — yes: list count/cache, and order totals/reports (shared surface + prior bug).
 - **API** — yes: the delete endpoint's status codes and the read-back state.
-- **Integration** — yes if an external/PARTNER system mirrors order state; confirm whether it does.
+- **Integration** — yes if an external/partner system mirrors order state; confirm whether it does.
 - **Validation** — limited: delete carries little input; the id is the only field to validate.
 - **UI** — yes: the control's presence/absence per role and the list update.
 - **Data / state** — yes: soft-delete status, count consistency, read-after-write.

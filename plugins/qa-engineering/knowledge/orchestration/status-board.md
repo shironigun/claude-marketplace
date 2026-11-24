@@ -160,7 +160,7 @@ here; *rendering/reading* the board stays read-only.
 ## Worked example (illustrative — mock data)
 
 ```
-QA status — the product         (from qa-context)
+QA status — Product         (from qa-context)
 
 modules built 2/7 · last run 48 passed / 2 failed (last 3: ✓ ✓ ✗) · course fixtures (1 of 2 topics) · open bugs 1
 

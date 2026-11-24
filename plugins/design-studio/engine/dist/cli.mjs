@@ -23920,7 +23920,7 @@ import { basename, dirname, isAbsolute, join as join2, resolve as resolve2 } fro
 var strArr = { type: "array", items: { type: "string" } };
 var configSchema = {
   $schema: "https://json-schema.org/draft/2020-12/schema",
-  $id: "https://github.com/shironigun/ai-marketplace/plugins/design-studio/schemas/config.schema.json",
+  $id: "https://github.com/shironigun/marketplace/plugins/design-studio/schemas/config.schema.json",
   title: "design-studio product config",
   type: "object",
   additionalProperties: false,
@@ -26318,7 +26318,7 @@ var count2 = { type: "integer", minimum: 0 };
 var ratio = { type: ["number", "null"], minimum: 0, maximum: 1 };
 var registrySchema = {
   $schema: "https://json-schema.org/draft/2020-12/schema",
-  $id: "https://github.com/shironigun/ai-marketplace/plugins/design-studio/schemas/registry.schema.json",
+  $id: "https://github.com/shironigun/marketplace/plugins/design-studio/schemas/registry.schema.json",
   title: "design-studio inventory registry",
   type: "object",
   additionalProperties: false,

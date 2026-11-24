@@ -1,7 +1,7 @@
 # Variants and user types
 
-> Many products behave differently for different *kinds* of account, user, or deployment — a client
-> type, a tenant type, a subscription tier/edition, a user role, a client app. That axis is a
+> Many products behave differently for different *kinds* of account, user, or deployment — a tenant
+> type, an integration partner, a subscription tier/edition, a user role, a client app. That axis is a
 > first-class part of the architecture: discover it from the product, model it as config, and test
 > shared behaviour once and variant-specific behaviour where — and only where — the product branches.
 

@@ -1,0 +1,3 @@
+#!/bin/sh
+# Blocks commits that leak private data, break plugin standards, or carry a non-shironigun identity.
+exec python3 scripts/validate.py --staged

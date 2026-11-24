@@ -31,7 +31,7 @@ Only cold-read the whole surface (sections 1-2 below) when there is **no** confi
 | **Validation** | validation attributes / validator classes / schema guards on the inputs | the validation the code **actually enforces** (vs what a story only implies) |
 | **Auth / roles** | auth / role / policy annotations on the routes (`[Authorize]`, guards, middleware, policy attributes) | which routes are protected and which are **not** — an unprotected route is a finding |
 | **Status & errors** | the handler bodies: returns, thrown errors, try/catch | the error paths the code handles — and the ones it silently doesn't |
-| **Cross-module calls** | imports / service injections that cross the module boundary; calls to external/PARTNER/partner clients | the integration + regression surface (section 4) |
+| **Cross-module calls** | imports / service injections that cross the module boundary; calls to external/partner clients | the integration + regression surface (section 4) |
 
 ## 2. Read a UI module
 
@@ -65,7 +65,7 @@ rule of thumb:
 The single most QA-relevant thing code gives you that a story often doesn't: **what this module touches
 and what touches it.** Grep for calls crossing the module boundary, both directions:
 
-- **What this module calls** — another module's service, a shared helper, an external/PARTNER/partner API.
+- **What this module calls** — another module's service, a shared helper, an external/partner API.
   Each is an integration point (test the contract + the failure behaviour) *and* a reuse signal (the
   authored tests should reuse that module's setup, not re-implement it — see
   `knowledge/standards/cross-module-reuse.md`).

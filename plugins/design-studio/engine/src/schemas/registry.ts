@@ -9,7 +9,7 @@ const ratio = { type: ['number', 'null'], minimum: 0, maximum: 1 } as const;
 
 export const registrySchema = {
   $schema: 'https://json-schema.org/draft/2020-12/schema',
-  $id: 'https://github.com/shironigun/ai-marketplace/plugins/design-studio/schemas/registry.schema.json',
+  $id: 'https://github.com/shironigun/marketplace/plugins/design-studio/schemas/registry.schema.json',
   title: 'design-studio inventory registry',
   type: 'object',
   additionalProperties: false,

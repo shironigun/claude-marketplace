@@ -1,6 +1,18 @@
 ---
 name: run-suite
-description: Native skill of the qa-engineering — run the automation suite (or a scoped subset) on demand, capture the REAL pass/fail result, and hand failures to the gated failure-to-bug. It drives the framework's own scripts (test:api / test:ui / test:contracts|endpoints|workflows / test:smoke / test:impacted, or `playwright test --grep @<module>` / --project / a spec path) — it never reinvents a runner. Use whenever the user wants to "run the suite", "run these tests", "run the Orders tests", "run the contract/smoke tests", "run impacted / the changed tests", "run everything", "re-run the failures", or asks "did it pass?". It resolves the scope, confirms a broad/slow run first, executes, parses the result honestly (never claims green without a green run), writes the qa-context failures slice (red runs), and offers to send each real failure to failure-to-bug. It does NOT generate specs (automation-engine), author cases (author-*-cases), file bugs itself (failure-to-bug, gated), or run the brick-by-brick build (kit-builder). Product-neutral; reads scope from tags/levels/paths, never product names.
+description: >-
+  Runs the automation suite (or a scoped subset) on demand, captures the real pass/fail result and
+  hands failures to the gated failure-to-bug. Drives the framework's own scripts (test:api /
+  test:ui / test:contracts|endpoints|workflows / test:smoke / test:impacted, or playwright test
+  with --grep on a module tag, --project or a spec path) and never reinvents a runner. Use
+  whenever the user wants to "run the suite", "run these tests", "run the Orders tests", "run the
+  contract/smoke tests", "run impacted / the changed tests", "run everything", "re-run the
+  failures", or asks "did it pass?". Resolves the scope, confirms a broad or slow run first,
+  executes, parses the result honestly (never claims green without a green run), writes the
+  qa-context failures slice for red runs and offers to send each real failure to failure-to-bug.
+  Does not generate specs (automation-engine), author cases, file bugs itself or run the
+  brick-by-brick build (kit-builder). Reads scope from tags, levels and paths, never product
+  names.
 ---
 
 # Run suite — execute the tests, report the truth, hand failures off
