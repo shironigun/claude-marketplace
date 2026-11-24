@@ -3,7 +3,7 @@
 </p>
 
 <p align="center">
-  <a href="#the-catalog"><img alt="8 plugins" src="https://img.shields.io/badge/plugins-8-7c9cff?style=for-the-badge"></a>
+  <a href="#the-catalog"><img alt="9 plugins" src="https://img.shields.io/badge/plugins-9-7c9cff?style=for-the-badge"></a>
   <a href="https://code.claude.com/docs/en/plugins/overview"><img alt="Claude Code plugin marketplace" src="https://img.shields.io/badge/Claude%20Code-plugin%20marketplace-0b1020?style=for-the-badge"></a>
   <a href="#trust--safety"><img alt="No secrets in the repo" src="https://img.shields.io/badge/secrets%20in%20repo-none-2dd4bf?style=for-the-badge"></a>
   <a href="#trust--safety"><img alt="Human-gated writes" src="https://img.shields.io/badge/tracker%20writes-human--gated-fbbf24?style=for-the-badge"></a>
@@ -96,6 +96,14 @@ Select a card to open that plugin's folder and its README.
       <br><code>claude plugin install how-to-guides@shironigun</code>
     </td>
   </tr>
+  <tr>
+    <td width="50%" valign="top">
+      <a href="plugins/design-intelligence/"><img src="assets/readme/cards/design-intelligence.svg" alt="design-intelligence: from a Figma screen to compliant MUI code" width="100%"></a>
+      <br><b><a href="plugins/design-intelligence/">design-intelligence</a></b>: analyse a Figma screen, build it in MUI to your design system, and review it until it passes.
+      <br><code>claude plugin install design-intelligence@shironigun</code>
+    </td>
+    <td width="50%" valign="top"></td>
+  </tr>
 </table>
 
 ### At a glance
@@ -110,6 +118,7 @@ Select a card to open that plugin's folder and its README.
 | [release-notes-suite](plugins/release-notes-suite/) | Release management | 2 | An inventory and release-note drafts in the session | An Azure DevOps connection to harvest tickets | Yes (local profile) |
 | [feature-explainer](plugins/feature-explainer/) | Documentation | 1 | A private artifact page you choose to share | Node.js, Python 3 | Yes |
 | [how-to-guides](plugins/how-to-guides/) | Documentation | 1 | A PDF guide on your machine | Node.js, Chrome | Yes |
+| [design-intelligence](plugins/design-intelligence/) | Design | 6 skills, 1 agent | MUI code in your project; a Figma screen only when you ask | Node.js, Python 3; optional `ADO_ORG` | Yes (local overlay) |
 
 **Product-neutral** plugins ship no product data: your tracker, product and brand live in your own config.
 **Templates** are tuned to one team's project and house style; retarget the conventions in each skill's
@@ -127,7 +136,7 @@ Here is the flagship. The rest are under [The plugins in detail](#the-plugins-in
 ## Which plugin for which job
 
 <p align="center">
-  <img src="assets/readme/map.svg" alt="Which plugin for which job: Test it, Track it, Ship it, Explain it" width="100%">
+  <img src="assets/readme/map.svg" alt="Which plugin for which job: Test it, Track it, Ship it, Design and explain it" width="100%">
 </p>
 
 - **Building QA from scratch, or want one front door?** Start with **[qa-engineering](plugins/qa-engineering/)** and type `/qa`.
@@ -135,6 +144,7 @@ Here is the flagship. The rest are under [The plugins in detail](#the-plugins-in
 - **Filing what broke in a team's house style?** **[bug-suite](plugins/bug-suite/)**.
 - **Telling customers what shipped?** **[release-notes-suite](plugins/release-notes-suite/)**.
 - **Explaining a feature?** A page for your team: **[feature-explainer](plugins/feature-explainer/)**. A PDF for your customers: **[how-to-guides](plugins/how-to-guides/)**.
+- **Turning a Figma screen into code that follows your design system?** **[design-intelligence](plugins/design-intelligence/)**.
 
 ## How it works
 
@@ -386,6 +396,21 @@ font and house rules live in your own `howto-brand.json`, never in the plugin.
 
 <p align="center"><a href="plugins/how-to-guides/"><img src="assets/readme/previews/how-to-guides.png" alt="Three pages of an example guide for a made-up feature: the cover, the summary and contents, and numbered steps" width="85%"></a></p>
 
+### [design-intelligence](plugins/design-intelligence/)
+
+Turns a Figma screen into a compliant MUI implementation and reviews it against your organisation's design
+system, repeating the review until it passes. One steward agent picks the skills and their order. Your real
+design system (tokens, typography, icon map, rules) lives in a local, git-ignored overlay in your project;
+the plugin ships only labelled examples. Co-authored by Ayesha Imtiaz and shironigun.
+
+<p align="center"><a href="plugins/design-intelligence/"><img src="assets/readme/usecases/design-intelligence.svg" alt="design-intelligence in action: what you ask and what you get" width="100%"></a></p>
+
+<details>
+<summary><b>How design-intelligence works</b></summary>
+<br>
+<p align="center"><img src="assets/readme/diagrams/design-intelligence.svg" alt="How design-intelligence works" width="100%"></p>
+</details>
+
 ---
 
 ### Requirements (MCP servers) — all self-contained, no secrets
@@ -402,6 +427,8 @@ The three plugins that **write to Azure DevOps** each **bundle their own ADO MCP
   in the shell that launches Claude Code and run **`az login`** once.
 - **`qa-engineering`** ships the official Azure DevOps + Playwright MCP servers with **interactive** sign-in
   → just set **`ADO_ORG`** in the shell that launches Claude Code.
+- **`design-intelligence`** bundles the Figma (remote), MUI and Azure DevOps MCP servers, all pinned; Figma
+  and Azure DevOps sign in interactively, and the ADO org comes from **`ADO_ORG`**.
 
 No tokens live anywhere in this repo. Auth is your `az login` session or an interactive browser sign-in.
 No org is hardcoded: the bundled servers read your org from the environment and launch with `npx` (each

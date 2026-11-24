@@ -55,6 +55,12 @@
       "description": "Customer how-to guides for any B2B software: one feature, researched read-only, written to a standard and built as a branded PDF. Your brand and house rules stay in your own howto-brand.json",
       "source": "./plugins/how-to-guides",
       "category": "documentation"
+    },
+    {
+      "name": "design-intelligence",
+      "description": "Turn a Figma screen into a compliant MUI implementation and review it against your design system until it passes; six skills and a steward agent. Your design system stays in a local, git-ignored overlay. Co-authored by Ayesha Imtiaz (aishaimt002) and shironigun",
+      "source": "./plugins/design-intelligence",
+      "category": "design"
     }
   ]
 }

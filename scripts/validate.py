@@ -151,7 +151,7 @@ def check_json(path):
         if extra: err(path, f"only 'mcpServers' allowed at top level, found {sorted(extra)}")
         for n, srv in d.get("mcpServers", {}).items():
             if srv.get("command") == "cmd": err(path, f"server '{n}' uses a Windows-only 'cmd' launcher; use npx")
-            args = " ".join(srv.get("args", []))
+            args = " ".join(a for a in srv.get("args", []) if not re.match(r"https?://", a))  # remote URLs are not packages
             for pkg in re.findall(r"(@?[a-z0-9][\w.-]*/?[\w.-]*@[\w.^~-]+|@?[a-z0-9][\w.-]*/[\w.-]+)(?=\s|$)", args):
                 if "@" not in pkg.lstrip("@"): warn(path, f"server '{n}' package '{pkg}' is not version-pinned")
             for k, v in (srv.get("env") or {}).items():

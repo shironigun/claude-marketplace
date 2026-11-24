@@ -1,0 +1,19 @@
+{
+  "mcpServers": {
+    "figma": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "mcp-remote@0.16.7", "https://mcp.figma.com/mcp"]
+    },
+    "mui-mcp": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "@mui/mcp@0.1.10"]
+    },
+    "ado": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "@azure-devops/mcp@2.11.0", "${ADO_ORG}", "--authentication", "interactive"]
+    }
+  }
+}

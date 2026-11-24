@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="620" viewBox="0 0 1280 620" role="img" aria-label="How design-intelligence works" font-family="'Segoe UI', -apple-system, 'Helvetica Neue', Arial, sans-serif">
+<title>How design-intelligence works</title>
+<defs>
+  <linearGradient id="d-design-intelligence-bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0b1020"/><stop offset="1" stop-color="#151d3b"/></linearGradient>
+  <radialGradient id="d-design-intelligence-glow" cx="1" cy="0" r="0.9"><stop offset="0" stop-color="#f472b6" stop-opacity=".28"/><stop offset="1" stop-color="#f472b6" stop-opacity="0"/></radialGradient>
+  <pattern id="d-design-intelligence-dots" width="22" height="22" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1.1" fill="#ffffff" fill-opacity=".06"/></pattern>
+</defs>
+<rect width="1280" height="620" rx="26" fill="url(#d-design-intelligence-bg)"/>
+<rect width="1280" height="620" rx="26" fill="url(#d-design-intelligence-dots)"/>
+<rect width="1280" height="620" rx="26" fill="url(#d-design-intelligence-glow)"/>
+<rect x=".5" y=".5" width="1279" height="619" rx="26" fill="none" stroke="#ffffff" stroke-opacity=".08"/>
+<g transform="translate(64 46) scale(1.25)" fill="#f472b6"><path d="M12 3c-4.97 0-9 4.03-9 9s4.03 9 9 9c.83 0 1.5-.67 1.5-1.5 0-.39-.15-.74-.39-1.01-.23-.26-.38-.61-.38-.99 0-.83.67-1.5 1.5-1.5H16c2.76 0 5-2.24 5-5 0-4.42-4.03-8-9-8zm-5.5 9c-.83 0-1.5-.67-1.5-1.5S5.67 9 6.5 9 8 9.67 8 10.5 7.33 12 6.5 12zm3-4C8.67 8 8 7.33 8 6.5S8.67 5 9.5 5s1.5.67 1.5 1.5S10.33 8 9.5 8zm5 0c-.83 0-1.5-.67-1.5-1.5S13.67 5 14.5 5s1.5.67 1.5 1.5S15.33 8 14.5 8zm3 4c-.83 0-1.5-.67-1.5-1.5S16.67 9 17.5 9s1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></g>
+<text x="106" y="70" font-size="26" font-weight="700" fill="#ffffff">How design-intelligence works</text>
+<text x="64" y="104" font-size="16" fill="#c7d0e6">Your design system in, compliant MUI out, reviewed until it passes.</text>
+<text x="64" y="146" font-size="13" font-weight="700" letter-spacing="2" fill="#8b97b8">INPUTS</text>
+<rect x="64" y="160" width="220" height="100" rx="14" fill="#ffffff" fill-opacity="0.05" stroke="#f472b6" stroke-opacity="0.4" />
+<text x="174" y="198.5" text-anchor="middle" font-size="17" font-weight="700" fill="#ffffff">Figma screen</text>
+<text x="174" y="220.5" text-anchor="middle" font-size="14" fill="#aab4cf">a frame or its link</text>
+<rect x="64" y="280" width="220" height="100" rx="14" fill="#ffffff" fill-opacity="0.05" stroke="#f472b6" stroke-opacity="0.4" stroke-dasharray="6 5"/>
+<text x="174" y="309" text-anchor="middle" font-size="17" font-weight="700" fill="#ffffff">Your design system</text>
+<text x="174" y="331" text-anchor="middle" font-size="14" fill="#aab4cf">local, never in the</text>
+<text x="174" y="350" text-anchor="middle" font-size="14" fill="#aab4cf">plugin</text>
+<rect x="64" y="400" width="220" height="100" rx="14" fill="#ffffff" fill-opacity="0.05" stroke="#f472b6" stroke-opacity="0.4" />
+<text x="174" y="438.5" text-anchor="middle" font-size="17" font-weight="700" fill="#ffffff">Work item</text>
+<text x="174" y="460.5" text-anchor="middle" font-size="14" fill="#aab4cf">optional context</text>
+<rect x="330" y="300" width="180" height="110" rx="14" fill="#f472b6" fill-opacity="0.16" stroke="#f472b6" stroke-opacity="0.8" />
+<text x="420" y="334" text-anchor="middle" font-size="17" font-weight="700" fill="#ffffff">Analyse</text>
+<text x="420" y="356" text-anchor="middle" font-size="14" fill="#aab4cf">components, states,</text>
+<text x="420" y="375" text-anchor="middle" font-size="14" fill="#aab4cf">tokens</text>
+<path d="M300 210V450" stroke="#f472b6" stroke-opacity=".6" stroke-width="2.2"/>
+<path d="M300 210H288" stroke="#f472b6" stroke-opacity=".6" stroke-width="2"/>
+<path d="M300 330H288" stroke="#f472b6" stroke-opacity=".6" stroke-width="2"/>
+<path d="M300 450H288" stroke="#f472b6" stroke-opacity=".6" stroke-width="2"/>
+<path d="M303.9164216789504 330.8159211831147L326.08407832104956 335.434182983552" stroke="#f472b6" stroke-opacity="0.85" stroke-width="2.2" fill="none" />
+<path d="M326.08407832104956 335.434182983552l-11.99251014178566 3.6303857231936276M326.08407832104956 335.434182983552l-9.545059092441656 -8.117379313657635" stroke="#f472b6" stroke-opacity="0.85" stroke-width="2.2" stroke-linecap="round" fill="none"/>
+<rect x="560" y="300" width="180" height="110" rx="14" fill="#ffffff" fill-opacity="0.05" stroke="#f472b6" stroke-opacity="0.4" />
+<text x="650" y="343.5" text-anchor="middle" font-size="17" font-weight="700" fill="#ffffff">Generate</text>
+<text x="650" y="365.5" text-anchor="middle" font-size="14" fill="#aab4cf">MUI to your tokens</text>
+<rect x="790" y="300" width="180" height="110" rx="14" fill="#f472b6" fill-opacity="0.16" stroke="#f472b6" stroke-opacity="0.8" />
+<text x="880" y="343.5" text-anchor="middle" font-size="17" font-weight="700" fill="#ffffff">Review</text>
+<text x="880" y="365.5" text-anchor="middle" font-size="14" fill="#aab4cf">against your rules</text>
+<rect x="1030" y="300" width="186" height="110" rx="14" fill="#ffffff" fill-opacity="0.05" stroke="#f472b6" stroke-opacity="0.4" />
+<text x="1123" y="343.5" text-anchor="middle" font-size="17" font-weight="700" fill="#ffffff">PASS</text>
+<text x="1123" y="365.5" text-anchor="middle" font-size="14" fill="#aab4cf">compliant screen</text>
+<path d="M514 355L556 355" stroke="#f472b6" stroke-opacity="0.85" stroke-width="2.2" fill="none" />
+<path d="M556 355l-11 6M556 355l-11 -6" stroke="#f472b6" stroke-opacity="0.85" stroke-width="2.2" stroke-linecap="round" fill="none"/>
+<path d="M744 355L786 355" stroke="#f472b6" stroke-opacity="0.85" stroke-width="2.2" fill="none" />
+<path d="M786 355l-11 6M786 355l-11 -6" stroke="#f472b6" stroke-opacity="0.85" stroke-width="2.2" stroke-linecap="round" fill="none"/>
+<path d="M974 355L1026 355" stroke="#f472b6" stroke-opacity="0.85" stroke-width="2.2" fill="none" />
+<path d="M1026 355l-11 6M1026 355l-11 -6" stroke="#f472b6" stroke-opacity="0.85" stroke-width="2.2" stroke-linecap="round" fill="none"/>
+<text x="560" y="470" font-size="13" font-weight="700" letter-spacing="2" fill="#8b97b8">FIX AND REVIEW AGAIN UNTIL IT PASSES</text>
+<text x="330" y="146" font-size="13" font-weight="700" letter-spacing="2" fill="#8b97b8">ONE STEWARD AGENT PICKS THE SKILLS AND ORDER</text>
+</svg>

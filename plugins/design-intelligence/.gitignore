@@ -1,0 +1,4 @@
+# Local org design-system overlay and run records. Never commit them.
+.claude/design-intelligence/
+capabilities/documentation/runs/
+__pycache__/

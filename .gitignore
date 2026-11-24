@@ -31,6 +31,8 @@ Thumbs.db
 plugins/*/docs/enhancement/plugin-gaps-*.md
 .claude/workspace-profile.json
 **/.claude/workspace-profile.json
+.claude/design-intelligence/
+**/.claude/design-intelligence/
 
 # Private leak denylist (real employer/product/client/people terms) — local only
 .leak-denylist.local
