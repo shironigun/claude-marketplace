@@ -19,6 +19,14 @@
 | **Setup** | Node.js (`npx`), Python 3; optional `ADO_ORG` |
 | **Product-neutral** | Yes — your design system lives in a local, git-ignored overlay |
 
+## See it in action
+
+<p align="center"><img src="../../assets/readme/usecases/design-intelligence.svg" alt="design-intelligence in action: what you ask and what you get" width="100%"></p>
+
+## How it works at a glance
+
+<p align="center"><img src="../../assets/readme/diagrams/design-intelligence.svg" alt="How design-intelligence works: the steward agent orders the skills; figma-design-analysis analyses the frame, figma-to-code then design-system-generation (or figma-screen-generation) generates, design-system-review reviews and loops back until it passes; skill-maintenance keeps the skills current" width="100%"></p>
+
 An AI design-system layer that turns a Figma screen into a compliant MUI
 implementation and reviews it against the organization's design system — grounded
 at every step in the organization's own design knowledge, never generic design
