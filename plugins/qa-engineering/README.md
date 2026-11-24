@@ -232,15 +232,32 @@ command with the Windows launcher:
     "playwright": {
       "type": "stdio",
       "command": "cmd",
-      "args": ["/c", "npx", "-y", "@playwright/mcp@0.0.83"]
+      "args": ["/c", "npx", "-y", "@playwright/mcp@0.0.86"]
     },
     "ado": {
       "type": "stdio",
       "command": "cmd",
-      "args": ["/c", "npx", "-y", "@azure-devops/mcp@2.10.0", "${ADO_ORG}", "--authentication", "interactive"]
+      "args": ["/c", "npx", "-y", "@azure-devops/mcp@2.11.0", "${ADO_ORG}", "--authentication", "interactive"]
     }
   }
 }
 ```
 
 Keep the versions in step with `.mcp.json` when you bump them.
+
+### Use your own MCP server instead
+
+If you prefer one Azure DevOps and one Playwright server shared across all your plugins, register them
+once at user scope. Your org name then lives only in your own `~/.claude.json`, never in a repo:
+
+```bash
+claude mcp add --scope user ado -- npx -y @azure-devops/mcp@2.11.0 <your-org> --authentication interactive
+```
+
+```bash
+claude mcp add --scope user playwright -- npx -y @playwright/mcp@0.0.86
+```
+
+Keep these exact server names (`ado`, `playwright`) so the skills and agents recognise the tools
+(`mcp__ado__<tool>`, `mcp__playwright__<tool>`). When both your server and the bundled one exist, Claude
+Code connects once.

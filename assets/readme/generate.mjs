@@ -47,14 +47,14 @@ export const PLUGINS = [
     tagline: 'UI test cases and Playwright UI specs',
     detail: 'Click-by-click UI cases from a story, created as Test Cases, and runnable UI specs.',
     steps: ['Story', 'UI cases', 'Test Cases', 'UI specs'],
-    stats: ['2 skills', 'az login'],
+    stats: ['2 skills', 'ADO_ORG + sign-in'],
   },
   {
     name: 'bug-suite', color: '#f87171', short: 'Bugs, defects, comments', category: 'bug-tracking', icon: 'BugReport', parallel: true,
     tagline: 'Bugs, defects and comments in house style',
     detail: 'Files story and regression bugs, production defects and ticket comments in Azure DevOps.',
     steps: ['Bug', 'Defect', 'Comment'],
-    stats: ['3 skills', 'az login'],
+    stats: ['3 skills', 'ADO_ORG + sign-in'],
   },
   {
     name: 'release-notes-suite', color: '#fbbf24', short: 'Shipped work to notes', category: 'release-management', icon: 'NewReleases',
@@ -222,7 +222,7 @@ function howItWorks() {
     { icon: 'Storefront', title: 'Add the marketplace', text: 'Claude Code clones this repo once and lists its plugins.', code: 'marketplace add' },
     { icon: 'Download', title: 'Install a plugin', text: 'Pick only what you need, for you, a project or one folder.', code: 'plugin install' },
     { icon: 'Terminal', title: 'Use it in a session', text: 'Skills as /plugin:skill, agents, commands and MCP servers.', code: '/qa-engineering:qa' },
-    { icon: 'VerifiedUser', title: 'Stay in control', text: 'No secrets in the repo; every tracker write waits for your OK.', code: 'az login · your .env' },
+    { icon: 'VerifiedUser', title: 'Stay in control', text: 'No secrets in the repo; every tracker write waits for your OK.', code: 'browser sign-in · your .env' },
   ];
   const sw = (W - 64 * 2 - 40 * 3) / 4;
   const body = steps.map((s, i) => {
@@ -473,7 +473,7 @@ function diagram(p) {
       const buggy = node(380, 446, 240, 100, 'buggy', 'Writes the cases for the ticket', { accent: true });
       const items = node(690, 446, 526, 100, 'Test Case work items', 'In Azure DevOps, linked to the source ticket');
       arrow(story, tester); arrow(story, buggy); arrow(tester, cases); arrow(cases, spec); arrow(buggy, items, { gate: true });
-      out.push(`<text x="64" y="598" font-size="14" fill="#c7d0e6">tester needs no setup. buggy needs az login once.</text>`);
+      out.push(`<text x="64" y="598" font-size="14" fill="#c7d0e6">tester needs no setup. buggy needs ADO_ORG and a browser sign-in.</text>`);
       key();
     },
     'bug-suite': () => {

@@ -78,6 +78,13 @@ ids `#1001`, `example.com`, `learn.example.com`) and label them illustrative.
 - **MCP servers** (`.mcp.json`): only the `mcpServers` key; `npx` launcher (the README documents the
   `cmd /c` wrapper for native Windows); packages pinned to an exact version; org-specific values only
   through `${ENV_VAR}` expansion, never hardcoded.
+- **One definition per server, everywhere.** When several plugins bundle the same server, they use the
+  same key and an identical definition (Azure DevOps: key `ado`, `npx -y @azure-devops/mcp@<pinned>
+  ${ADO_ORG} --authentication interactive`; `playwright`; `figma` via `mcp-remote` to Figma's hosted endpoint; `mui-mcp`), so Claude Code
+  starts it once. Upgrade a server in every plugin in the same PR. Skills name MCP tools by their bare
+  name (the server may be bundled, `mcp__plugin_<plugin>_<server>__…`, or user-added with the README's
+  `claude mcp add` command, `mcp__<server>__…`); agent `tools` lists include both prefixes.
+- Any plugin that connects to a remote server sets `privacyPolicyUrl` to the repo's `PRIVACY.md`.
 - **Least privilege**: discovery and harvest steps are read-only. Any tracker or repo **write** (create a
   work item, comment, publish) is shown as a draft and done only after the user approves it.
 - **Hooks and scripts** run only what the plugin needs, never fetch and execute remote code, and never

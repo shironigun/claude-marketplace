@@ -16,7 +16,7 @@
 | **What it does** | Story and regression Bugs, production Defects and ticket comments |
 | **Includes** | 3 skills |
 | **Writes** | Bugs, Defects and comments in Azure DevOps, after your OK |
-| **Setup** | `AZURE_DEVOPS_ORG_URL` + `az login` |
+| **Setup** | Set `ADO_ORG`; browser sign-in on first use |
 | **Product-neutral** | Yes: org facts are discovered into a local workspace profile on first run |
 
 ## See it in action
@@ -59,7 +59,7 @@ What gets discovered and reused:
 
 ## Conventions the skills keep
 
-- **Auth:** the plugin **bundles** the `azure-devops` MCP (Azure Identity / `az login`, no PAT); it uses those `mcp__azure-devops__*` tools only.
+- **Auth:** the plugin **bundles** Microsoft's official Azure DevOps MCP server (`ado`, browser sign-in, no PAT); the skills use its tools only (`mcp__plugin_bug-suite_ado__*`, or `mcp__ado__*` from your own server).
 - **Spec docs first:** if your team keeps behaviour docs (`specDocs.path` in the profile), the relevant module doc and rules file are read before analysing a ticket.
 - **Title house style:** declarative negative-state statement, ALL-CAPS domain keywords (states, entities, integration partner names, environments), module breadcrumbs (`Settings > EMAIL`), environment suffix, bracketed client ID.
 - **Repro anatomy:** `<ul>` steps (environment first) → bold `OBSERVATION:` / `FINDINGS` block → screenshot/GIF → "I know this is resolved when:" acceptance criteria.
@@ -67,22 +67,36 @@ What gets discovered and reused:
 
 ## Setup — self-contained, no secrets
 
-The plugin **bundles** the `azure-devops` MCP server (in its `.mcp.json`) that `bugger`, `defector`, and
-`commentor` use to write to Azure DevOps. It authenticates with **Azure Identity** — **no PAT or token lives
-in the repo or is required**. Just once:
+The plugin **bundles** Microsoft's official Azure DevOps MCP server (`ado`, `@azure-devops/mcp@2.11.0`, in
+its `.mcp.json`) that `bugger`, `defector`, and `commentor` use to read and write Azure DevOps. It signs in
+**interactively in the browser** — **no PAT or token lives in the repo or is required**. Just once:
 
-1. Set **`AZURE_DEVOPS_ORG_URL`** in your shell environment, e.g.
-   `export AZURE_DEVOPS_ORG_URL=https://dev.azure.com/<organization>` (PowerShell:
-   `$env:AZURE_DEVOPS_ORG_URL = "https://dev.azure.com/<organization>"`). The `.mcp.json` reads it via
-   `${AZURE_DEVOPS_ORG_URL}`; no org is hardcoded.
-2. **`az login`** (Azure CLI) with an account that can create/update work items on the project.
-3. Install the plugin (below) and start or reload the session — the `azure-devops` server starts
-   automatically; confirm it in `/mcp`.
+1. Set **`ADO_ORG`** to your organization's **short name** (the `<organization>` in
+   `https://dev.azure.com/<organization>`) in **the shell that launches Claude Code**, e.g.
+   `export ADO_ORG=<organization>` (PowerShell: `$env:ADO_ORG = "<organization>"`), or in Claude Code's
+   settings `env`. The `.mcp.json` reads it via `${ADO_ORG}`; no org is hardcoded. A `.env` file does not
+   work for this.
+2. Install the plugin (below) and start or reload the session — the `ado` server starts automatically;
+   confirm it in `/mcp`.
+3. On the first Azure DevOps call a browser window opens: sign in with an account that can create/update
+   work items on the project.
 
 **Windows:** if `npx` doesn't launch directly, wrap it with `cmd /c` in the plugin's `.mcp.json`:
-`"command": "cmd", "args": ["/c", "npx", "-y", "@tiberriver256/mcp-server-azure-devops@0.1.48"]`.
+`"command": "cmd", "args": ["/c", "npx", "-y", "@azure-devops/mcp@2.11.0", "${ADO_ORG}", "--authentication", "interactive"]`.
 
-> Nothing sensitive is committed — auth is your `az login` session (Azure Identity), never a PAT in a file.
+> Nothing sensitive is committed — auth is your own browser sign-in, never a PAT in a file.
+
+### Use your own MCP server instead
+
+If you prefer one Azure DevOps server shared across all your plugins, register it once at user scope.
+Your org name then lives only in your own `~/.claude.json`, never in a repo:
+
+```bash
+claude mcp add --scope user ado -- npx -y @azure-devops/mcp@2.11.0 <your-org> --authentication interactive
+```
+
+Keep this exact server name (`ado`) so the skills recognise the tools (`mcp__ado__<tool>`). When both your
+server and the bundled one exist, Claude Code connects once.
 
 ## Install
 
@@ -91,5 +105,5 @@ claude plugin marketplace add shironigun/marketplace
 claude plugin install bug-suite@shironigun
 ```
 
-Then set `AZURE_DEVOPS_ORG_URL` and run `az login` (above). On first use, each skill discovers your
+Then set `ADO_ORG` (above) and sign in in the browser on first use. On first use, each skill discovers your
 project, boards, fields and identity into `.claude/workspace-profile.json` and asks you to confirm.

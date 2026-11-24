@@ -211,6 +211,24 @@ def check_identity(staged):
             err(f"commit {h}", "message links a private session")
 
 
+def check_mcp_consistency():
+    """A server key bundled by several plugins must have one identical definition (so it starts once)."""
+    seen = {}
+    for p in sorted(os.listdir("plugins")):
+        f = os.path.join("plugins", p, ".mcp.json")
+        if not os.path.isfile(f):
+            continue
+        try:
+            servers = json.load(open(f, encoding="utf-8")).get("mcpServers", {})
+        except Exception:  # noqa
+            continue
+        for key, spec in servers.items():
+            canon = json.dumps(spec, sort_keys=True)
+            if key in seen and seen[key][1] != canon:
+                err(f, f"server '{key}' differs from the definition in plugins/{seen[key][0]}/.mcp.json")
+            seen.setdefault(key, (p, canon))
+
+
 staged = "--staged" in sys.argv
 all_skill_files = [os.path.join(d, "SKILL.md") for d, _, fs in os.walk("plugins") if "SKILL.md" in fs and "node_modules" not in d]
 patterns = GENERIC_LEAKS + load_denylist()
@@ -225,6 +243,7 @@ for f in files(staged):
     if f.endswith(".json") and "node_modules" not in f and "/.vscode/" not in f and not f.endswith("package-lock.json"):
         check_json(f)  # .vscode/*.json is JSONC (comments allowed) and skipped
     scan_leaks(f, patterns)
+check_mcp_consistency()
 check_identity(staged)
 
 for w in warnings: print(w)

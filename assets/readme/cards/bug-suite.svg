@@ -19,7 +19,7 @@
 <text x="44" y="196" font-size="16" fill="#c7d0e6">Files story and regression bugs, production defects and ticket</text>
 <text x="44" y="220" font-size="16" fill="#c7d0e6">comments in Azure DevOps.</text>
 <rect x="44" y="272" width="84.32" height="27" rx="13.5" fill="#e6ebf7" fill-opacity="0" stroke="#e6ebf7" stroke-opacity=".55"/>
-<text x="86.16" y="288" text-anchor="middle" font-size="13" font-weight="600" fill="#e6ebf7">3 skills</text><rect x="138.32" y="272" width="84.32" height="27" rx="13.5" fill="#e6ebf7" fill-opacity="0" stroke="#e6ebf7" stroke-opacity=".55"/>
-<text x="180.48" y="288" text-anchor="middle" font-size="13" font-weight="600" fill="#e6ebf7">az login</text>
+<text x="86.16" y="288" text-anchor="middle" font-size="13" font-weight="600" fill="#e6ebf7">3 skills</text><rect x="138.32" y="272" width="152.17999999999998" height="27" rx="13.5" fill="#e6ebf7" fill-opacity="0" stroke="#e6ebf7" stroke-opacity=".55"/>
+<text x="214.40999999999997" y="288" text-anchor="middle" font-size="13" font-weight="600" fill="#e6ebf7">ADO_ORG + sign-in</text>
 <g transform="translate(570 276) scale(1)" fill="#ffffff"><path d="m12 4-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/></g>
 </svg>

@@ -15,7 +15,7 @@ description: >-
   question and wants the right workflow run end-to-end, including creating or
   updating a Figma screen. It never performs analysis, generation, review,
   Figma construction, or knowledge-base authoring itself.
-tools: Read, Grep, Glob, Skill, ListConnectors, mcp__Figma__whoami, mcp__Figma__get_metadata, mcp__Figma__get_design_context, mcp__Figma__get_screenshot, mcp__Figma__get_variable_defs, mcp__Figma__get_libraries, mcp__Figma__use_figma, mcp__Figma__create_new_file, mcp__mui-mcp__fetchDocs, mcp__mui-mcp__generateReactCode, mcp__remote-devices__mui-mcp__fetchDocs, mcp__remote-devices__mui-mcp__generateReactCode, mcp__ado__wit_work_item, mcp__ado__wit_query, mcp__ado__repo_pull_request, mcp__remote-devices__ado__wit_work_item, mcp__remote-devices__ado__wit_query, mcp__remote-devices__ado__repo_pull_request, mcp__knowledge-base__search, mcp__knowledge-base__get_article
+tools: Read, Grep, Glob, Skill, ListConnectors, mcp__Figma__whoami, mcp__plugin_design-intelligence_figma__whoami, mcp__figma__whoami, mcp__Figma__get_metadata, mcp__plugin_design-intelligence_figma__get_metadata, mcp__figma__get_metadata, mcp__Figma__get_design_context, mcp__plugin_design-intelligence_figma__get_design_context, mcp__figma__get_design_context, mcp__Figma__get_screenshot, mcp__plugin_design-intelligence_figma__get_screenshot, mcp__figma__get_screenshot, mcp__Figma__get_variable_defs, mcp__plugin_design-intelligence_figma__get_variable_defs, mcp__figma__get_variable_defs, mcp__Figma__get_libraries, mcp__plugin_design-intelligence_figma__get_libraries, mcp__figma__get_libraries, mcp__Figma__use_figma, mcp__plugin_design-intelligence_figma__use_figma, mcp__figma__use_figma, mcp__Figma__create_new_file, mcp__plugin_design-intelligence_figma__create_new_file, mcp__figma__create_new_file, mcp__plugin_design-intelligence_mui-mcp__useMuiDocs, mcp__mui-mcp__useMuiDocs, mcp__plugin_design-intelligence_mui-mcp__fetchDocs, mcp__mui-mcp__fetchDocs, mcp__plugin_design-intelligence_mui-mcp__generateReactCode, mcp__mui-mcp__generateReactCode, mcp__plugin_design-intelligence_ado__wit_work_item, mcp__ado__wit_work_item, mcp__plugin_design-intelligence_ado__wit_query, mcp__ado__wit_query, mcp__plugin_design-intelligence_ado__repo_pull_request, mcp__ado__repo_pull_request, mcp__knowledge-base__search, mcp__knowledge-base__get_article
 ---
 
 # Design System Steward
@@ -108,10 +108,12 @@ servers — but a declared server can still be disconnected at runtime, so
 always verify the corresponding tools are actually present in your current
 tool list rather than assuming availability from `CONNECTORS.md` or
 `.mcp.json` alone. The exact tool-name prefix an MCP server registers under
-can vary by how it's launched (e.g. `mcp__mui-mcp__*` if run directly by this
-plugin's `.mcp.json`, or `mcp__remote-devices__mui-mcp__*` if proxied through
-a connected device) — check your live tool list for whichever prefix is
-actually present rather than assuming one.
+can vary by how it's launched: `mcp__plugin_design-intelligence_<server>__*`
+when started from this plugin's `.mcp.json`, `mcp__<server>__*` (`mcp__figma__*`,
+`mcp__mui-mcp__*`, `mcp__ado__*`) when the user registered the same server
+themselves, or `mcp__Figma__*` for the claude.ai Figma connector — check your
+live tool list for whichever prefix is actually present rather than assuming
+one.
 
 - **Figma URL provided** → confirm Figma MCP tools (e.g.
   `mcp__Figma__get_design_context`, `mcp__Figma__get_metadata`) are available.
@@ -121,13 +123,14 @@ actually present rather than assuming one.
   `figma-screen-generation` for the write path) — never call them yourself
   outside of executing one of those skill's explicit instructions.
 - **ADO work item referenced** → confirm ADO MCP tools (e.g.
-  `mcp__ado__wit_work_item` / `mcp__remote-devices__ado__wit_work_item`,
-  `...wit_query`) are available before pulling ticket context. If not, say so
+  `wit_work_item` / `wit_query` / `repo_pull_request` under
+  `mcp__plugin_design-intelligence_ado__` or `mcp__ado__`) are available before pulling ticket context. If not, say so
   and proceed using only what the developer typed. ADO MCP routes to Azure
   DevOps workflows — pulling ticket/PR/work-item context into whichever skill
   runs first in Step 4, never resolved by guessing.
 - **MUI live documentation/implementation questions arise** → prefer live MUI
-  MCP tools (e.g. `mcp__mui-mcp__fetchDocs` / `mcp__remote-devices__mui-mcp__fetchDocs`)
+  MCP tools (e.g. `useMuiDocs` / `fetchDocs` under `mcp__plugin_design-intelligence_mui-mcp__`
+  or `mcp__mui-mcp__`)
   when connected; otherwise note that `design-system-generation` will fall
   back to `_shared/knowledge/mui-reference.md`. MUI MCP routes to MUI
   implementation workflows (the `design-system-generation` code path) —

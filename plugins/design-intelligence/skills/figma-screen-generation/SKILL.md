@@ -93,6 +93,10 @@ Do not proceed on a Figma URL alone with no `analysis` — report that
   `mcp__Figma__get_screenshot`, `mcp__Figma__get_variable_defs`,
   `mcp__Figma__get_libraries` — used for discovery and validation, per the
   Workflow below.
+- These names use the claude.ai Figma connector's `mcp__Figma__` prefix. The
+  same tools appear as `mcp__plugin_design-intelligence_figma__<tool>` from this
+  plugin's bundled `figma` server, or `mcp__figma__<tool>` from a user-registered
+  `figma` server; use whichever prefix is present in the session.
 
 # Step 0 — Org design system
 

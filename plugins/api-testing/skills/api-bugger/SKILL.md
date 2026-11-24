@@ -142,7 +142,7 @@ Severity string mapping is exact: `Critical→"1 - Critical"`, `High→"2 - High
 Present the draft(s) for review; let the user edit and Approve/Reject. When they choose to file, hand off:
 
 - Give the drafted fields to the user's tracker-filing tool, targeting the delivery board for QA/Staging regressions and the support board when the failure is on PRODUCTION / live clients.
-- Or file directly via ADO tooling using the field map above (create `$Bug` in `tracker.project`, then link **Related** to the source `adoTestCaseId` if known). On success, set the draft `status` to `Pushed` and record `adoBugId`.
+- Or file directly via ADO tooling using the field map above (create `$Bug` in `tracker.project`, then link **Related** to the source `adoTestCaseId` if known). With the official Azure DevOps MCP server that is `wit_work_item_write` (action `create`, the fields as `{ name, value, format }`, `format: "Html"` on the HTML fields), then `wit_work_item_link_write` (action `link`, `type: "related"`); the tools appear as `mcp__ado__<tool>` or under a plugin's bundled `ado` server prefix. Show the draft and get approval first. On success, set the draft `status` to `Pushed` and record `adoBugId`.
 
 ## After drafting
 

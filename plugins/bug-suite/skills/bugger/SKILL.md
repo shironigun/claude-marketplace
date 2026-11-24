@@ -24,12 +24,12 @@ If any are missing, run discovery for those keys only, confirm with the user, sa
 - **Tracker:** `tracker.org` / `tracker.project` (`tracker.projectId` when a GUID is needed).
 - **Board / area path:** the delivery board (`boards.delivery.areaPath`) — where story and regression bugs live. Production defects belong on the support board (`boards.support.areaPath`); that's `defector`.
 - **Author / QA identity:** `identity.displayName` / `identity.email` — asked during discovery, never guessed. Never substitute a shared, service or differently named account.
-- **Auth:** this plugin **bundles** the `azure-devops` MCP (Azure Identity / `az login`, no PAT or token); use its `mcp__azure-devops__*` tools only.
+- **Auth / tools:** this plugin **bundles** the official Azure DevOps MCP server (`ado`, `@azure-devops/mcp` 2.11.0): the org short name comes from the `ADO_ORG` environment variable and sign-in happens in the browser on first use (no PAT or token). Tools are named here by their bare name; they appear as `mcp__plugin_bug-suite_ado__<tool>`, or `mcp__ado__<tool>` if the user registered their own `ado` server. Use only that server's tools.
 - **Spec docs:** if the team keeps behaviour/flow docs (`specDocs.path`, rules in `specDocs.rulesFile`), read the relevant module doc + the rules file before analysing the ticket. Verify any `[UNCLEAR]`/`[ASSUMED]` flags before asserting behaviour. If `specDocs` is empty, rely on the Story's acceptance criteria.
 
 ## Workflow
 
-1. **Read the source.** If a Story/work-item ID is given, pull it (`mcp__azure-devops__get_work_item`, expand `all`). Extract the feature touched, the client/environment, and the acceptance criteria the bug violates.
+1. **Read the source.** If a Story/work-item ID is given, pull it (the Azure DevOps server's `wit_work_item` tool, action `get`, `expand: "All"`). Extract the feature touched, the client/environment, and the acceptance criteria the bug violates.
 2. **Read the spec doc module** the bug touches (+ its rules-file anchors) so the bug names the correct expected behaviour. If a rule is `[UNCLEAR]`/`[ASSUMED]`, flag it rather than asserting.
 3. **Gather repro facts:** environment (one of `environments`, plus which integration partner from `variants.values` when relevant), client ID + credentials, the exact steps, and the actual (broken) result. Ask the user for anything missing — especially the screenshot/GIF and credentials.
 4. **Draft the Bug** (title + repro + acceptance) in the format below and **show the user for approval before creating anything.**
@@ -104,31 +104,37 @@ Field defaults for a **Bug** (see `references/ado-bug-fields.md` for the full ta
 
 ## Creating in ADO
 
+Use the Azure DevOps server's `wit_work_item_write` tool, action `create`. Every field goes in `fields` as
+`{ name, value, format }`; values are strings, and the HTML fields carry `format: "Html"` so they are
+stored exactly as drafted:
+
 ```
-mcp__azure-devops__create_work_item
+wit_work_item_write
+  action: "create"
+  project: "<tracker.project>"
   workItemType: "<workItemTypes.bug>"
-  title: "<title per house style>"
-  projectId: "<tracker.project>"
-  areaPath: "<boards.delivery.areaPath>"
-  priority: 2
-  additionalFields:
-    "Microsoft.VSTS.TCM.ReproSteps": "<repro HTML>"
-    "Microsoft.VSTS.Common.AcceptanceCriteria": "<acceptance HTML>"
-    "Microsoft.VSTS.TCM.SystemInfo": "<creds block, if any>"
-    "Microsoft.VSTS.Common.Severity": "3 - Medium"
-    "Microsoft.VSTS.Common.ValueArea": "Business"
-    "<each Bug field from fields.bug, e.g. Custom.Example>": "<its typical value, or identity.email for a QA-owner field>"
+  fields:
+    - { name: "System.Title", value: "<title per house style>" }
+    - { name: "System.AreaPath", value: "<boards.delivery.areaPath>" }
+    - { name: "Microsoft.VSTS.Common.Priority", value: "2" }
+    - { name: "Microsoft.VSTS.TCM.ReproSteps", value: "<repro HTML>", format: "Html" }
+    - { name: "Microsoft.VSTS.Common.AcceptanceCriteria", value: "<acceptance HTML>", format: "Html" }
+    - { name: "Microsoft.VSTS.TCM.SystemInfo", value: "<creds block, if any>", format: "Html" }
+    - { name: "Microsoft.VSTS.Common.Severity", value: "3 - Medium" }
+    - { name: "Microsoft.VSTS.Common.ValueArea", value: "Business" }
+    - { name: "<each Bug field from fields.bug, e.g. Custom.Example>", value: "<its typical value, or identity.email for a QA-owner field>" }
 ```
 
-Use resolved profile values in the call, never the key names.
+Use resolved profile values in the call, never the key names. Add `System.AssignedTo` the same way when
+an assignee is set.
 
-Then parent it to the Story it was found against:
+Then parent it to the Story it was found against with the `wit_work_item_link_write` tool:
 ```
-mcp__azure-devops__manage_work_item_link
-  operation: "add"
-  relationType: "System.LinkTypes.Hierarchy-Reverse"   # this Bug's parent = the Story
-  sourceWorkItemId: <new Bug ID>
-  targetWorkItemId: <Story ID>
+wit_work_item_link_write
+  action: "link"
+  project: "<tracker.project>"
+  updates:
+    - { id: <new Bug ID>, linkToId: <Story ID>, type: "parent" }   # System.LinkTypes.Hierarchy-Reverse: this Bug's parent = the Story
 ```
 
 ## Voice rules

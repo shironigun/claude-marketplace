@@ -39,7 +39,7 @@ Approving the cases is not permission to write them to the tracker — that is t
 ## Trackers other than Azure DevOps
 
 `ado-publish` implements the **Azure DevOps** filing path (the plugin's ADO MCP, incl.
-`testplan_add_test_cases_to_suite`). For another tracker (Jira, Linear, …) the **same gated flow** applies via
+`testplan_test_suite_write` action `add_test_cases`). For another tracker (Jira, Linear, …) the **same gated flow** applies via
 that tracker's connector — author → approve → dry-run → confirm → create + link. `references/tracker-field-mapping.md`
 covers how the house step table renders in **Jira** (Xray/Zephyr step APIs, or a formatted description) and a
 **generic** fallback. The Azure DevOps field mapping, the Steps-XML shape, and the create/add/link ops live

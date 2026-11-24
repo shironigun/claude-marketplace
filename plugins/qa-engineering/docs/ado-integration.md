@@ -154,8 +154,9 @@ grep -rnE '^\s*\*\s*traces-case:' modules | grep -vE '^[^:]+:[0-9]+:\s*\*\s*trac
 
 Phase 4 starts with **one read-only probe** of the ADO MCP and lets the result choose the path. It
 creates nothing. Use the cheapest call that needs a signed-in session — list the organization's
-projects (`core_list_projects` in the `@azure-devops/mcp` server; tool names differ by server
-version, so match by capability) — and confirm the QA's target project is in the result.
+projects (`core_list_projects` in the `@azure-devops/mcp` 2.11.0 server the kit bundles; it shows as
+`mcp__plugin_qa-engineering_ado__core_list_projects`, or `mcp__ado__core_list_projects` with the QA's own
+`ado` server) — and confirm the QA's target project is in the result.
 
 | Probe result | Meaning | Path |
 |---|---|---|
@@ -178,9 +179,9 @@ Say it plainly, in the phase report, with the path chosen:
 >    work for this: Claude Code does not read `.env` when it expands `${ADO_ORG}` in `.mcp.json`. Do
 >    not commit it or put it in source.
 > 2. Restart the Claude Code session in this folder so the plugin's `.mcp.json` re-reads the variable,
->    then run `/mcp` and confirm `ado` shows as connected (approve it if prompted). On macOS/Linux,
->    first swap the shipped Windows `command`/`args` for `npx -y @azure-devops/mcp ${ADO_ORG}
->    --authentication interactive`, as the plugin `README.md` shows.
+>    then run `/mcp` and confirm `ado` shows as connected (approve it if prompted). The plugin ships
+>    `npx -y @azure-devops/mcp@2.11.0 ${ADO_ORG} --authentication interactive`; on native Windows, if
+>    `npx` does not launch, use the `cmd /c` wrapper the plugin `README.md` shows.
 > 3. The server signs in interactively: the first ADO call opens a browser sign-in. Complete it with an
 >    account that can access the organization and the target project.
 > 4. Make sure that account can create work items in the project and, if you want cases added to a Test
@@ -212,9 +213,9 @@ slice — it refuses unless `cases.approved` is `true`) plus whatever the QA alr
 source story id, project / area / default Test Plan+Suite / assignee if known). Then let it run its gated
 flow; this doc does not restate it:
 
-- It confirms the cases, lists the project's **Test Plans + Suites** (`testplan_list_test_plans/suites`), the
+- It confirms the cases, lists the project's **Test Plans + Suites** (`testplan`, actions `list_plans` / `list_suites`), the
   QA **picks** plan + suite, it shows a **dry-run** of exactly what will be written, and only on an
-  **explicit confirm** creates each Test Case, **adds it to the suite** (`testplan_add_test_cases_to_suite` —
+  **explicit confirm** creates each Test Case, **adds it to the suite** (`testplan_test_suite_write`, action `add_test_cases` —
   native, not a manual UI step), and **links it to the story** (the case *tests* the story).
 - It carries the house step table into the native Steps field and stamps each new id back onto the case's
   **`adoCaseId`** in the `cases` slice (the field map + the exact create/add/link ops live in
@@ -239,24 +240,31 @@ the end — a failure halfway must leave the finished links on disk):
 | # | Link | How | Owner |
 |---|---|---|---|
 | 1 | **script → Test Case** | Edit the matching `traces-case:` line, appending ` -> ado:<id>` (section 2). | this doc |
-| 2 | **Test Case → story** | the case *tests* the story — set by `ado-publish` at create (`testsWorkItemId` / `wit_work_items_link type: "tests"`). Confirm in the report which relation was used. | `ado-publish` |
+| 2 | **Test Case → story** | the case *tests* the story — set by `ado-publish` at create (`testsWorkItemId` / `wit_work_item_link_write` action `link`, `type: "tests"`). Confirm in the report which relation was used. | `ado-publish` |
 | 3 | **Test Case → script** | Add the back-pointer comment (section 2.3). | this doc |
 
 Use the ADO MCP directly only for the small pieces this doc owns — the comment in row 3 and the
 read-backs in 4.5. Creation, add-to-suite and the case → story link stay with `ado-publish`.
 
 ```
- capability                         used for                              typical ADO MCP tool*
- ─────────────────────────────────  ────────────────────────────────────  ───────────────────────
+ capability                         used for                              ADO MCP tool (2.11.0)*
+ ─────────────────────────────────  ────────────────────────────────────  ───────────────────────────────
  list projects                      step 0 auth probe                     core_list_projects
- search work items / WIQL           duplicate check (4.1, 4.4)            search_workitem, wit_query_by_wiql
- add a work-item comment            Test Case -> script back-pointer      wit_add_work_item_comment
- get work item(s) by id             verify links resolve (4.5)            wit_get_work_item
- create Test Case + add to suite    owned by ado-publish (gated)          wit_create_work_item,
- + link case -> story                                                     testplan_add_test_cases_to_suite,
-                                                                          wit_work_items_link
- file a bug (gated) + link          owned by failure-to-bug (gated)       wit_create_work_item, wit_work_items_link
- * names vary by MCP server version; match by capability, never by exact name.
+ search work items / WIQL           duplicate check (4.1, 4.4)            search_workitem,
+                                                                          wit_query (action wiql)
+ add a work-item comment            Test Case -> script back-pointer      wit_work_item_comment_write
+                                                                          (action add)
+ get work item(s) by id             verify links resolve (4.5)            wit_work_item (action get /
+                                                                          get_batch)
+ create Test Case + add to suite    owned by ado-publish (gated)          wit_work_item_write (create),
+ + link case -> story                                                     testplan_test_suite_write
+                                                                          (add_test_cases),
+                                                                          wit_work_item_link_write (link)
+ file a bug (gated) + link          owned by failure-to-bug (gated)       wit_work_item_write (create),
+                                                                          wit_work_item_link_write (link)
+ * bare tool names: they appear as mcp__plugin_qa-engineering_ado__<tool> (bundled server) or
+   mcp__ado__<tool> (the QA's own `ado` server). Another server version may name them differently;
+   match by capability.
 ```
 
 ### 4.4 File bugs for failing tests — `failure-to-bug` (gated)
@@ -268,8 +276,8 @@ Sources: any test still red now. Invoke **`failure-to-bug`** with the failing te
 
 The engine owns its own **gated filing** — this doc does not restate it. Per bug it: presents the draft
 (**gate 1 — approve**) → shows a **dry-run** (type, fields, links, and an idempotency check so a re-run never
-double-files) → takes an **explicit confirm (gate 2)** → `wit_create_work_item` (`defectFormat.type`, default
-`Bug`) → `wit_work_items_link type: "related"` to the **case** (a bug *relates to* its case — the `adoCaseId`
+double-files) → takes an **explicit confirm (gate 2)** → `wit_work_item_write` create (`defectFormat.type`, default
+`Bug`) → `wit_work_item_link_write` link, `type: "related"`, to the **case** (a bug *relates to* its case — the `adoCaseId`
 from §4.2) and to the story. It reads the defect shape from the `defectFormat` profile slot and reports each
 outcome from the API response.
 

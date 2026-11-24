@@ -1,6 +1,6 @@
 # Comment templates (the house voice)
 
-Post by writing the HTML to `System.History` via `update_work_item`. Always get approval first. Replace `GUID` with the person's identity GUID (from the work item's AssignedTo/CreatedBy or `get_me`); fall back to plain `@Name` text if unknown. All filled-in examples are illustrative and use fictional placeholders.
+Post by writing the HTML to `System.History` via the `wit_work_item_write` tool (action `update`, a JSON-patch `add` on `/fields/System.History`). Always get approval first. Replace `GUID` with the person's identity GUID (from the work item's AssignedTo/CreatedBy or `core_get_identity_ids`); fall back to plain `@Name` text if unknown. All filled-in examples are illustrative and use fictional placeholders.
 
 Mention anchor:
 ```html

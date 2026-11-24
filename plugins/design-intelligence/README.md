@@ -175,14 +175,34 @@ What touch-target size does our design system require on mobile?
 ## MCP servers
 
 `.mcp.json` starts three servers with `npx`, each pinned to an exact version:
-`mcp-remote@0.16.7` (Figma's hosted endpoint), `@mui/mcp@0.1.10`, and
-`@azure-devops/mcp@2.11.0` (org from `${ADO_ORG}`, interactive sign-in). Details and
+Figma's hosted endpoint via the mcp-remote bridge (`mcp-remote@0.16.7`), `@mui/mcp@0.1.10`, and
+Microsoft's official `@azure-devops/mcp@2.11.0` (org from `${ADO_ORG}`, interactive sign-in). Details and
 the availability rules the skills follow are in [`CONNECTORS.md`](CONNECTORS.md).
 
 **Windows (native, not WSL):** if a server fails with "executable not found", wrap
 the launcher in your local copy of `.mcp.json`: `"command": "cmd"` with
 `"args": ["/c", "npx", "-y", ...]` followed by the same pinned package and
 arguments. macOS, Linux and WSL use the file as shipped.
+
+### Use your own MCP server instead
+
+If you prefer one server of each kind shared across all your plugins, register them once at user
+scope. Your org name then lives only in your own `~/.claude.json`, never in a repo:
+
+```bash
+claude mcp add --scope user figma -- npx -y mcp-remote@0.16.7 https://mcp.figma.com/mcp
+```
+
+```bash
+claude mcp add --scope user mui-mcp -- npx -y @mui/mcp@0.1.10
+```
+
+```bash
+claude mcp add --scope user ado -- npx -y @azure-devops/mcp@2.11.0 <your-org> --authentication interactive
+```
+
+Keep these exact server names (`figma`, `mui-mcp`, `ado`) so the skills and the steward agent recognise
+the tools. When both your server and the bundled one exist, Claude Code connects once.
 
 ## Roadmap
 
