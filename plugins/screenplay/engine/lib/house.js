@@ -61,4 +61,4 @@ function nextId(rules, letter) {
   return `${letter}-${String(n + 1).padStart(2, '0')}`;
 }
 
-module.exports = { STYLE_MODS, housePaths, houseStyle, houseModProblems, nextId };
+module.exports = { STYLE_MODS, housePaths, houseStyle, houseRules, houseModProblems, nextId };

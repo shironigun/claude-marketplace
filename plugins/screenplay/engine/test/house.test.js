@@ -4,7 +4,7 @@ const assert = require('node:assert/strict');
 const fs = require('fs');
 const path = require('path');
 const { readyFilm, tempDir } = require('./helpers');
-const { repoPaths } = require('../lib/paths');
+const { repoPaths, repoInfo, workspaceKey } = require('../lib/paths');
 const { houseStyle, houseModProblems, nextId } = require('../lib/house');
 
 test('house style: the user\'s rules, then the repository\'s, each later one\'s mods over the earlier\'s', () => {
@@ -28,6 +28,17 @@ test('house style: the user\'s rules, then the repository\'s, each later one\'s 
   assert.match(houseModProblems({ look: 'split-panel' })[0], /^\/mods\/look: "split-panel" is not an option of look in this release; use one of: floating-desk, full-bleed$/);
   assert.match(houseModProblems({ pacing: 'slow' })[0], /^\/mods\/pacing: "slow" is not an option/);
   assert.deepEqual([nextId([], 'H'), nextId([{ id: 'H-01' }, { id: 'H-07' }], 'H'), nextId([], 'U')], ['H-01', 'H-08', 'U-01']);
+});
+
+test('sp house: a house file that is not a house style is refused by its path before anything changes', () => {
+  const { runSp, repo, env } = readyFilm('reminders', 'promo');
+  const file = repoPaths(env.SCREENPLAY_HOME, workspaceKey(env.SCREENPLAY_HOME, repoInfo(repo))).houseStyle;
+  fs.mkdirSync(path.dirname(file), { recursive: true });
+  fs.writeFileSync(file, '{}');
+  const r = runSp(repo, ['house', 'add', '--text', 'Hold each callout calmly.', '--scope', 'generic'], env);
+  assert.equal(r.code, 1);
+  assert.ok(r.stderr.includes(file) && /is not a house style/.test(r.stderr), r.stderr);
+  assert.equal(fs.readFileSync(file, 'utf8'), '{}');
 });
 
 test('sp house: a rule saved in the repository, promoted for every repository only when generic, and new films start from it', () => {

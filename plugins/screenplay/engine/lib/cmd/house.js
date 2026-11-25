@@ -1,11 +1,9 @@
 'use strict';
 const { usageError, checkError } = require('../errors');
-const { readJson, writeJson } = require('../files');
+const { writeJson } = require('../files');
 const { repoInfo, checkHome, repoPaths, workspaceKey, claimWorkspace } = require('../paths');
 const { check } = require('../schema');
-const { housePaths, houseStyle, houseModProblems, nextId } = require('../house');
-
-const NONE = { rules: [] };
+const { housePaths, houseStyle, houseRules, houseModProblems, nextId } = require('../house');
 
 // --mods pacing=calm,look=full-bleed: the mods a rule sets.
 function parseMods(text) {
@@ -48,17 +46,17 @@ module.exports = {
       const mods = args.flags.mods ? parseMods(args.flags.mods) : null;
       const problems = houseModProblems(mods);
       if (problems.length) throw checkError(`the rule's mods have ${problems.length} problem${problems.length === 1 ? '' : 's'}:\n  ${problems.join('\n  ')}`);
-      const current = readJson(p.repository, NONE);
+      const current = { rules: houseRules(p.repository) };
       const rule = { id: nextId(current.rules, 'H'), text, scope, ...(mods ? { mods } : {}) };
       claimWorkspace(ctx.home, repo, key);
       save(p.repository, { rules: [...current.rules, rule] });
       return { json: rule, text: `House rule ${rule.id} saved in the repository's profile: ${text}` };
     }
     if (verb === 'promote') {
-      const rule = readJson(p.repository, NONE).rules.find((r) => r.id === id);
+      const rule = houseRules(p.repository).find((r) => r.id === id);
       if (!rule) throw usageError(`the repository has no house rule ${id || ''}`.trim());
       if (rule.scope === 'product') throw checkError(`${id} is about this product; a product rule never leaves its repository`);
-      const user = readJson(p.user, NONE);
+      const user = { rules: houseRules(p.user) };
       if (user.rules.some((r) => r.text === rule.text)) throw checkError(`the user's house style already has "${rule.text}"`);
       const copy = { ...rule, id: nextId(user.rules, 'U') };
       save(p.user, { rules: [...user.rules, copy] });
@@ -66,7 +64,7 @@ module.exports = {
     }
     if (verb === 'remove') {
       const file = /^U-/.test(id || '') ? p.user : p.repository;
-      const current = readJson(file, NONE);
+      const current = { rules: houseRules(file) };
       if (!current.rules.some((r) => r.id === id)) throw usageError(`no house rule ${id || ''}`.trim());
       save(file, { rules: current.rules.filter((r) => r.id !== id) });
       return { json: { removed: id }, text: `House rule ${id} removed` };
