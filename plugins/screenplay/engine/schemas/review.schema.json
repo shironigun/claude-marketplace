@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "review.json: the film reviewer's verdict on a film's frames and sheets, against the film rules and the truth ledger (spec 5.13)",
+  "type": "object",
+  "required": ["verdict", "findings"],
+  "additionalProperties": false,
+  "properties": {
+    "verdict": { "enum": ["PASS", "BLOCKED"] },
+    "findings": {
+      "type": "array",
+      "maxItems": 100,
+      "items": {
+        "type": "object",
+        "required": ["brand", "scene", "rule", "text"],
+        "additionalProperties": false,
+        "properties": {
+          "brand": { "type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$", "maxLength": 64 },
+          "scene": { "type": "string", "pattern": "^S-\\d{2,}$" },
+          "at": { "type": "number", "minimum": 0 },
+          "rule": { "type": "string", "pattern": "^(?:[1-9]|1[0-2]|truth|brand)$" },
+          "text": { "type": "string", "minLength": 1, "maxLength": 600, "pattern": "^[^\\r\\n]*$" }
+        }
+      }
+    }
+  }
+}

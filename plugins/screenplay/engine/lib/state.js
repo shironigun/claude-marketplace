@@ -90,7 +90,8 @@ function renderState(s) {
     `- phase: ${s.phase} (${phaseLabel(s.phase)})`,
     `- updated: ${s.updated}`,
     ...(s.gate1 ? [`- gate-1: passed ${s.gate1}`] : []),
-    ...(s.gate2 ? [`- gate-2: passed ${s.gate2}`] : []), '',
+    ...(s.gate2 ? [`- gate-2: passed ${s.gate2}`] : []),
+    ...(s.gate3 ? [`- gate-3: passed ${s.gate3}`] : []), '',
     '## Decisions', ...list(s.decisions, '(none yet)'), '',
     '## Pending', ...list(s.pending, '(none)'), '',
   ].join('\n');
@@ -137,6 +138,7 @@ function parseState(text) {
     pending: section('Pending'),
     ...(passed('gate-1') ? { gate1: passed('gate-1') } : {}),
     ...(passed('gate-2') ? { gate2: passed('gate-2') } : {}),
+    ...(passed('gate-3') ? { gate3: passed('gate-3') } : {}),
   };
 }
 

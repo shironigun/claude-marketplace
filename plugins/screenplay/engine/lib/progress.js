@@ -3,7 +3,7 @@ const fs = require('fs');
 const path = require('path');
 const { readJson } = require('./files');
 const { PHASE_IDS } = require('./state');
-const { filmBuilt } = require('./built');
+const { filmBuilt, filmVerified } = require('./built');
 
 // The analysis chain a subject walks (spec 5.1), with the files each step leaves behind. The brand profile is not
 // in it: it belongs to the repository, and app-map works without it (spec 4.1).
@@ -45,8 +45,10 @@ function filmFiles(fp) {
 }
 
 // A film's next step (spec 5.1): a confirmed brand profile and the subject's analysis to gate 1 come first, then the
-// mods, the story and gate 2, then the screens from code (`ui`), the build, and verify once every brand's film holds
-// the build. A gate 2 passed before the latest gate 1 or brand confirmation is passed again.
+// mods, the story and gate 2, then the screens from code (`ui`), the build, verify once every brand's film holds the
+// build, gate 3 once its checks and the reviewer pass it, and the comment loop (`review`) once the user has the films.
+// A gate 2 passed before the latest gate 1 or brand confirmation is passed again, and a gate 3 before the latest
+// review.
 function filmNext(rp, subj, subjectState, fp, filmState) {
   const brand = brandStatus(rp);
   if (!brand.confirmed) return 'brand';
@@ -60,7 +62,11 @@ function filmNext(rp, subj, subjectState, fp, filmState) {
   const shown = new Set((readJson(fp.beats).scenes || []).filter((s) => s.kind === 'screen').map((s) => s.screen));
   const saved = fs.existsSync(rp.theme) && [...shown].every((id) => fs.existsSync(path.join(fp.screens, `${id}.json`)));
   if (!saved) return 'ui';
-  return filmBuilt(rp, fp, [...shown], subj) ? 'verify' : 'build';
+  if (!filmBuilt(rp, fp, [...shown], subj)) return 'build';
+  const { inputs } = readJson(path.join(fp.film, 'build.json'));
+  if (!filmVerified(fp, readJson(fp.mods).brands, inputs)) return 'verify';
+  const review = readJson(path.join(fp.verify, 'review.json'));
+  return filmState.gate3 && filmState.gate3 >= review.at ? 'review' : 'gate-3';
 }
 
 // Whether a film's next step comes after gate 2 (spec 5.1), when its storyboard is approved.

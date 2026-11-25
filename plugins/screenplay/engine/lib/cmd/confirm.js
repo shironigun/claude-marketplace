@@ -41,15 +41,24 @@ function passGate2(ctx, key, rp, subject, film) {
   return { json: { confirmed: 'gate-2', subject, film, at: ctx.now }, text: `${subject}/${film}: gate 2 passed at ${ctx.now}` };
 }
 
+// Gate 3 (spec 5.14): the user has the films of a verified cut, with what was checked; from then on, the comment loop.
+function passGate3(ctx, key, rp, subject, film) {
+  const f = loadFilm(ctx.home, key, subject, film);
+  const next = filmNext(rp, f.subj, f.subjectState, f.fp, f.filmState);
+  if (next !== 'gate-3' && next !== 'review') throw checkError(`gate 3 comes once the films pass verify; the next step is ${next}`);
+  writeState(f.fp.state, { ...f.filmState, gate3: ctx.now, updated: ctx.now });
+  return { json: { confirmed: 'gate-3', subject, film, at: ctx.now }, text: `${subject}/${film}: gate 3 passed at ${ctx.now}` };
+}
+
 module.exports = {
   name: 'confirm',
-  usage: 'confirm <brands|gate-1|gate-2> [--subject <slug>] [--film <film slug>] [--repo <dir>]',
-  summary: "Record the user's confirmation of the brand profile (spec 5.3), a subject's gate 1 (spec 5.7), or a film's gate 2 (spec 5.10).",
+  usage: 'confirm <brands|gate-1|gate-2|gate-3> [--subject <slug>] [--film <film slug>] [--repo <dir>]',
+  summary: "Record the user's confirmation of the brand profile (spec 5.3), a subject's gate 1 (spec 5.7), a film's gate 2 (spec 5.10), or the films handed to the user at gate 3 (spec 5.14).",
   flags: { subject: 'string', film: 'string', repo: 'string' },
   run(ctx, args) {
     const [what] = args._;
-    if (!['brands', 'gate-1', 'gate-2'].includes(what)) {
-      throw usageError('confirm what? use: brands; gate-1 with --subject <slug>; or gate-2 with --subject <slug> --film <film slug>');
+    if (!['brands', 'gate-1', 'gate-2', 'gate-3'].includes(what)) {
+      throw usageError('confirm what? use: brands; gate-1 with --subject <slug>; or gate-2 or gate-3 with --subject <slug> --film <film slug>');
     }
     const repo = repoInfo(args.flags.repo || ctx.cwd);
     checkHome(ctx.home, repo);
@@ -62,6 +71,10 @@ module.exports = {
     if (what === 'gate-2') {
       if (!args.flags.subject) throw usageError('confirm gate-2 needs --subject <slug> and --film <film slug>');
       return passGate2(ctx, key, rp, args.flags.subject, args.flags.film);
+    }
+    if (what === 'gate-3') {
+      if (!args.flags.subject) throw usageError('confirm gate-3 needs --subject <slug> and --film <film slug>');
+      return passGate3(ctx, key, rp, args.flags.subject, args.flags.film);
     }
     if (!fs.existsSync(rp.brands)) throw usageError('no brand profile saved yet; save it with sp save brands first');
     // Every place shows its logo before the user confirms the brands: one the repository does not hold is the user's

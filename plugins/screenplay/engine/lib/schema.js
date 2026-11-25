@@ -5,7 +5,7 @@ const { readText } = require('./text');
 const { checkError } = require('./errors');
 
 const SCHEMA_DIR = path.join(__dirname, '..', 'schemas');
-const SCHEMA_KINDS = ['stack', 'brands', 'theme', 'screens', 'api-calls', 'truth', 'mods', 'beats', 'demo-data', 'screen'];
+const SCHEMA_KINDS = ['stack', 'brands', 'theme', 'screens', 'api-calls', 'truth', 'mods', 'beats', 'demo-data', 'screen', 'review'];
 // The JSON Schema subset this validator understands. A schema using anything else fails its test, so no check
 // can silently not happen.
 const KEYWORDS = new Set(['$schema', '$id', 'title', 'description', '$defs', '$ref', 'type', 'required', 'properties',

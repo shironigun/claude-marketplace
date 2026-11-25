@@ -167,3 +167,44 @@ test('sp check: once every brand\'s film holds the build, with the renderer inst
   assert.equal(r.code, 1);
   assert.match(r.stderr, /the renderer is not installed/);
 });
+
+test('sp check --review: the reviewer\'s verdict on a checked build; gate 3 once it passes, then the comment loop', () => {
+  const { sp, runSp, repo, env, film } = readyFilm('reminders', 'promo');
+  const next = () => sp('status', 'reminders', '--film', 'promo', '--json').json.next;
+  const review = (value) => runSp(repo, ['check', 'reminders', '--film', 'promo', '--review', inputFile(value, repo)], env);
+  sp('build', 'reminders', '--film', 'promo');
+  for (const brand of ['harbor', 'lumen']) {
+    const s = sp('stage', 'reminders', '--film', 'promo', '--brand', brand, '--json').json;
+    sp('record', 'reminders', '--film', 'promo', '--brand', brand, '--url', `${'https:'}//example.invalid/${brand}`);
+    sp('record', 'reminders', '--film', 'promo', '--brand', brand, '--versions', inputFile({ stage: s.id, ...Object.fromEntries(s.batches.flat().map((w) => [`${w.collection}/${w.doc_id}`, 1])) }, repo));
+  }
+  assert.equal(next(), 'verify');
+  const pass = { verdict: 'PASS', findings: [] };
+  assert.match(review(pass).stderr, /the checks have not passed on this build for harbor, lumen; run sp check reminders --film promo first/);
+  // What sp check writes when every check passes on the build, for each brand.
+  const { inputs } = JSON.parse(fs.readFileSync(path.join(film, 'film', 'build.json'), 'utf8'));
+  for (const brand of ['harbor', 'lumen']) {
+    fs.mkdirSync(path.join(film, 'verify', brand), { recursive: true });
+    fs.writeFileSync(path.join(film, 'verify', brand, 'check.json'), JSON.stringify({ brand, inputs, problems: [], notes: [] }));
+  }
+  assert.equal(next(), 'verify');
+  // A verdict that does not fit the schema or the film is refused; a BLOCKED one keeps the film in verify.
+  assert.match(review({ verdict: 'MAYBE', findings: [] }).stderr, /review has 1 problem:/);
+  assert.match(review({ verdict: 'BLOCKED', findings: [] }).stderr, /a BLOCKED review names its findings/);
+  const finding = { brand: 'harbor', scene: 'S-02', at: 12.9, rule: '4', text: 'The dialog opens off the frame.' };
+  assert.match(review({ verdict: 'PASS', findings: [finding] }).stderr, /a PASS has no findings/);
+  assert.match(review({ verdict: 'BLOCKED', findings: [{ ...finding, scene: 'S-09' }] }).stderr, /review names harbor S-09, which the film does not have/);
+  const blocked = review({ verdict: 'BLOCKED', findings: [finding] });
+  assert.equal(blocked.code, 1);
+  assert.match(blocked.stdout, /the reviewer blocks the cut:\n {2}harbor S-02 \(rule 4\): The dialog opens off the frame\./);
+  assert.equal(next(), 'verify');
+  assert.match(runSp(repo, ['confirm', 'gate-3', '--subject', 'reminders', '--film', 'promo'], env).stderr, /gate 3 comes once the films pass verify; the next step is verify/);
+  assert.equal(review(pass).code, 0);
+  assert.equal(next(), 'gate-3');
+  sp('confirm', 'gate-3', '--subject', 'reminders', '--film', 'promo');
+  assert.equal(next(), 'review');
+  assert.match(fs.readFileSync(path.join(film, 'state.md'), 'utf8'), /- gate-3: passed /);
+  // A new build needs the checks, the review and gate 3 again.
+  sp('state', 'reminders', '--decision', 'Name: Nudges');
+  assert.equal(next(), 'build');
+});

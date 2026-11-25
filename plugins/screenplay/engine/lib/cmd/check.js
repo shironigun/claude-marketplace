@@ -3,6 +3,9 @@ const fs = require('fs');
 const path = require('path');
 const { usageError, checkError } = require('../errors');
 const { readJson, writeJson } = require('../files');
+const { readJsonFile } = require('../args');
+const { check } = require('../schema');
+const { verifyResults } = require('../built');
 const { repoInfo, checkHome, repoPaths, workspaceKey } = require('../paths');
 const { loadFilm, approvedFilm } = require('../film');
 const { filmNext } = require('../progress');
@@ -62,9 +65,9 @@ async function checkBrand(launch, tools, fp, built, id, rebuild) {
 
 module.exports = {
   name: 'check',
-  usage: 'check <subject slug> --film <film slug> [--brand <brand id>] [--repo <dir>]',
-  summary: "The film checks of spec 5.13 on each brand's film through the Motion player's own renderer: timing, layout, stillness, exit before a move, bleed-through, purity, brand and the player's log, after the story's and screens' own checks. Writes each brand's frames, sheets, check.json and report.md in the film's verify folder.",
-  flags: { film: 'string', brand: 'string', repo: 'string' },
+  usage: 'check <subject slug> --film <film slug> [--brand <brand id>] [--review <file>] [--repo <dir>]',
+  summary: "The film checks of spec 5.13 on each brand's film through the Motion player's own renderer: timing, layout, stillness, exit before a move, bleed-through, purity, brand and the player's log, after the story's and screens' own checks. Writes each brand's frames, sheets, check.json and report.md in the film's verify folder. With --review, records the film reviewer's verdict on the checked build.",
+  flags: { film: 'string', brand: 'string', review: 'string', repo: 'string' },
   run(ctx, args) {
     const repo = repoInfo(args.flags.repo || ctx.cwd);
     checkHome(ctx.home, repo);
@@ -80,6 +83,22 @@ module.exports = {
     const status = screensStatus(fc, rp, f.fp);
     const source = [...status.theme.problems.map((p) => `theme: ${p}`), ...status.screens.flatMap((s) => s.problems.map((p) => `${s.id}: ${p}`))];
     const built = readJson(path.join(f.fp.film, 'build.json'));
+    if (args.flags.review) {
+      // The reviewer judges what the checks rendered: every brand's checks passed on this build first.
+      const value = readJsonFile(ctx.cwd, args.flags.review);
+      const errors = check('review', value);
+      if (errors.length) throw checkError(`review has ${errors.length} problem${errors.length === 1 ? '' : 's'}:\n  ${errors.join('\n  ')}`);
+      const { checks } = verifyResults(f.fp, fc.mods.brands, built.inputs);
+      const unchecked = Object.entries(checks).filter(([, c]) => !c || c.problems.length).map(([id]) => id);
+      if (unchecked.length) throw checkError(`the checks have not passed on this build for ${unchecked.join(', ')}; run sp check ${fc.subject} --film ${fc.film} first`);
+      const stray = value.findings.filter((x) => !fc.mods.brands.includes(x.brand) || !fc.beats.scenes.some((s) => s.id === x.scene));
+      if (stray.length) throw checkError(`review names ${stray.map((x) => `${x.brand} ${x.scene}`).join(', ')}, which the film does not have`);
+      if (value.verdict === 'PASS' && value.findings.length) throw checkError('a PASS has no findings; a finding blocks the cut');
+      if (value.verdict === 'BLOCKED' && !value.findings.length) throw checkError('a BLOCKED review names its findings');
+      writeJson(path.join(f.fp.verify, 'review.json'), { inputs: built.inputs, at: ctx.now, ...value });
+      const said = value.verdict === 'PASS' ? 'the reviewer passes the cut' : `the reviewer blocks the cut:\n  ${value.findings.map((x) => `${x.brand} ${x.scene} (rule ${x.rule}): ${x.text}`).join('\n  ')}`;
+      return { json: { verdict: value.verdict, findings: value.findings }, text: said, exitCode: value.verdict === 'PASS' ? 0 : 1 };
+    }
     const tools = readyTools(ctx.home);
     // playwright-core lives in the tools folder, installed on first use.
     const { chromium } = require(tools.playwrightDir);

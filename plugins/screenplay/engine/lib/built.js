@@ -39,4 +39,23 @@ function filmBuilt(rp, fp, screens, subj) {
   return mods.brands.every((id) => films[id] && films[id].url && films[id].built === built.inputs);
 }
 
-module.exports = { buildInputs, filmBuilt };
+// A film's verify results for a build (spec 5.13): each brand's check.json and the reviewer's review.json, or null for
+// one that is missing or was made for another build.
+function verifyResults(fp, brands, inputs) {
+  const current = (file) => {
+    const r = readJson(file, null);
+    return r && r.inputs === inputs ? r : null;
+  };
+  return {
+    checks: Object.fromEntries(brands.map((id) => [id, current(path.join(fp.verify, id, 'check.json'))])),
+    review: current(path.join(fp.verify, 'review.json')),
+  };
+}
+
+// Whether a film passed verify for its build: every brand's checks with no problem, and the reviewer's PASS.
+function filmVerified(fp, brands, inputs) {
+  const { checks, review } = verifyResults(fp, brands, inputs);
+  return Object.values(checks).every((c) => c && !c.problems.length) && Boolean(review) && review.verdict === 'PASS';
+}
+
+module.exports = { buildInputs, filmBuilt, verifyResults, filmVerified };
