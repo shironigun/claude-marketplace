@@ -27,8 +27,9 @@ theme, so the new one changes which screens pass. Then, for each of `screens` th
 `problems`, in the order they come:
 
 1. Run `sp screens <slug> --film <film> --brief <screen id> --json`.
-2. Dispatch `screenplay:sp-ui-builder` with the brief's path and the result's path. The screens are independent, so
-   their builders can run together.
+2. Dispatch `screenplay:sp-ui-builder` with the brief's path and the result's path, and the house style's product
+   rules from `sp house --json` (`references/house-style.md`). The screens are independent, so their builders can run
+   together.
 3. Write each JSON it returns to its `result` with the Write tool, and save it:
    `sp save screen <result> --subject <slug> --film <film>`.
 

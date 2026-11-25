@@ -10,6 +10,7 @@ const { check } = require('./schema');
 const { modsProblems } = require('./mods');
 const { forbiddenNames } = require('./brief');
 const { renderStoryboard } = require('./storyboard');
+const { houseStyle } = require('./house');
 const { filmNext, pastGate2 } = require('./progress');
 const { beatsProblems, demoProblems } = require('./story');
 const { timingTable, timingProblems, lengthProblems } = require('./timing');
@@ -30,8 +31,8 @@ function loadFilm(home, key, subject, film) {
 
 // What a film's checks read (spec 5.8-5.10): the subject's display name (its Name decision from gate 1, or the name it
 // was started with), its analysis and the names its brief forbids, the brand profile's brands with their logo
-// variants and the places they show one in, the release status, and the film's own files, each null until it is
-// saved.
+// variants and the places they show one in, the release status, the house style (spec 10), and the film's own files,
+// each null until it is saved.
 function filmContext(rp, { subj, fp, subjectState, filmState }) {
   for (const file of [subj.screens, subj.apiCalls, subj.truth]) {
     if (!fs.existsSync(file)) throw checkError(`the subject has no ${path.basename(file)} yet; map it with app-map first`);
@@ -48,6 +49,7 @@ function filmContext(rp, { subj, fp, subjectState, filmState }) {
     forbidden: fs.existsSync(subj.brief) ? forbiddenNames(fs.readFileSync(subj.brief)) : [],
     brands: readJson(rp.brands, { brands: [] }).brands.map((b) => ({ id: b.id, name: b.name, chrome: b.chrome || {}, logos: Object.keys(b.logos || {}) })),
     release: decisionValue(subjectState.decisions, 'Release'),
+    house: houseStyle(rp),
     mods: readJson(fp.mods, null),
     beats: readJson(fp.beats, null),
     demo: readJson(fp.demoData, null),

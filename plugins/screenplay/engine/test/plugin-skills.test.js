@@ -7,7 +7,7 @@ const { SKILLS_DIR, AGENTS_DIR, COMMANDS_DIR, frontmatter } = require('./plugin-
 
 // The three skills (spec 4.1): their playbooks and the scouts they dispatch.
 const SKILLS = {
-  'app-film': { references: ['build.md', 'film-rules.md', 'mods.md', 'screens.md', 'story.md', 'verify.md'], scouts: ['sp-ui-builder', 'sp-film-reviewer'] },
+  'app-film': { references: ['build.md', 'film-rules.md', 'house-style.md', 'mods.md', 'screens.md', 'story.md', 'verify.md'], scouts: ['sp-ui-builder', 'sp-film-reviewer'] },
   'app-map': { references: ['backend-trace.md', 'context.md', 'dossier.md', 'screen-map.md'], scouts: ['sp-screen-scout', 'sp-backend-tracer'] },
   'brand-profile': { references: ['brand-profile.md'], scouts: ['sp-brand-scout'] },
 };

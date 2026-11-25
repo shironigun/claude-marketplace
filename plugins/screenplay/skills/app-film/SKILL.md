@@ -72,6 +72,11 @@ not: the code may have changed under any of them.
 `/screenplay:build` builds a film, or brings every brand's film back in line with its source after a change. Choose
 the film as for the mods. Then run `references/build.md` from its start: it builds again and writes only what changed.
 
+## House style
+
+Rules learned from review rounds, the repository's and the user's own, on top of the film rules: where they come from
+and where they go is `references/house-style.md`.
+
 ## Checking the films
 
 `/screenplay:check` renders a film's brand films and checks them, then has the film reviewer judge them. Choose the

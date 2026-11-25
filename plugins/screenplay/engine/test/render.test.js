@@ -192,6 +192,7 @@ test('sp check --review: the reviewer\'s verdict on a checked build; gate 3 once
   const b = JSON.parse(fs.readFileSync(sp('check', 'reminders', '--film', 'promo', '--brief', '--json').json.brief, 'utf8'));
   assert.deepEqual(b.brands.map((x) => [x.id, x.sheets]), [['harbor', ['harbor/sheets/S-01.png']], ['lumen', ['lumen/sheets/S-01.png']]]);
   assert.ok([b.beats, b.storyboard, b.truth, b.brief, b.rules, b.schema].every((p) => fs.existsSync(p)), JSON.stringify(b));
+  assert.deepEqual(b.house, []);
   assert.equal(runSp(repo, ['check', 'reminders', '--film', 'promo', '--brief', '--review', 'x.json'], env).code, 2);
   // A verdict that does not fit the schema or the film is refused; a BLOCKED one keeps the film in verify.
   assert.match(review({ verdict: 'MAYBE', findings: [] }).stderr, /review has 1 problem:/);

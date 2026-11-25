@@ -3,12 +3,12 @@ const { CATALOG, formatOf } = require('./catalog');
 
 const modOf = (id) => CATALOG.mods.find((m) => m.id === id);
 
-// Where the mods form starts (spec 5.8): each mod's default, then the format's own defaults, the status chip the
-// release status calls for, and every brand. No pattern yet: the skill proposes one per screen. House style joins
-// in plan 6.
+// Where the mods form starts (spec 5.8, 10): each mod's default, then the format's own defaults, then the mods of the
+// house style, the user's and then the repository's; the status chip the release status calls for, and every brand.
+// No pattern yet: the skill proposes one per screen.
 function preselect(fc) {
   const choice = Object.fromEntries(CATALOG.mods.map((m) => [m.id, m.options[0].id]));
-  Object.assign(choice, formatOf(fc.format).defaults);
+  Object.assign(choice, formatOf(fc.format).defaults, fc.house ? fc.house.mods : {});
   const chip = modOf('chip').options.find((o) => o.release === fc.release);
   if (chip) choice.chip = chip.id;
   return { format: fc.format, ...choice, patterns: [], brands: fc.brands.map((b) => b.id) };

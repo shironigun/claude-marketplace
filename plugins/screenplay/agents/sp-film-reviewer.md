@@ -22,7 +22,8 @@ A JSON file that `sp check --brief` wrote. It names:
   `report` (what the engine's checks measured, and what could not be verified offline);
 - the story (`beats`: the scenes, each beat's target and caption with its truth link), the `storyboard`, the subject's
   truth ledger (`truth`) and its `brief`, whose "What not to show" section lists what must never appear;
-- the film `rules`, the `schema` and an `example` of what you return.
+- the film `rules`, the `house` rules learned from earlier review rounds (each with its `id`), the `schema` and an
+  `example` of what you return.
 
 Read every sheet of every brand. Open a frame from a brand's `frames` folder, beside its sheets, when a sheet's still
 is too small to judge.
@@ -48,6 +49,7 @@ only eyes can:
    status chip on the end card.
 9. **Demo data only** (rule 11): no name the brief forbids, anywhere in any frame.
 10. **Brand** (its `rule` is `brand`): each brand's film shows that brand's logos, colours and words only.
+11. **House rules**: each of the brief's `house` rules holds; a finding against one names its `id` as its `rule`.
 
 The brands' films share one source: a finding in one is usually in all. Look at each, and name each brand you saw it
 in, one finding a brand. When the report says the renderer used a stand-in font, judge no typeface or spacing by it.
@@ -57,4 +59,4 @@ in, one finding a brand. When the report says the renderer used a stand-in font,
 Only the JSON object, matching `<plugin root>/engine/schemas/review.schema.json`, with nothing before or after it:
 `verdict` is `PASS` when you found nothing, and `BLOCKED` otherwise; each finding is
 `{ "brand", "scene", "at", "rule", "text" }`, where `at` is the still's time in seconds, `rule` the film rule's number
-or `truth` or `brand`, and `text` one sentence on what is wrong and where.
+or `truth`, `brand` or a house rule's `id`, and `text` one sentence on what is wrong and where.

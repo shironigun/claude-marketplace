@@ -104,6 +104,7 @@ module.exports = {
         truth: f.subj.truth,
         brief: f.subj.brief,
         rules: path.join(ctx.pluginRoot, 'skills', 'app-film', 'references', 'film-rules.md'),
+        house: fc.house.rules,
         schema: path.join(ctx.pluginRoot, 'engine', 'schemas', 'review.schema.json'),
         example: { verdict: 'BLOCKED', findings: [{ brand: fc.mods.brands[0], scene: 'S-02', at: 12.9, rule: '4', text: 'The dialog its click opens shows cut off by the frame\'s edge.' }] },
       };

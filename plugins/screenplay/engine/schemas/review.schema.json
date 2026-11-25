@@ -17,7 +17,7 @@
           "brand": { "type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$", "maxLength": 64 },
           "scene": { "type": "string", "pattern": "^S-\\d{2,}$" },
           "at": { "type": "number", "minimum": 0 },
-          "rule": { "type": "string", "pattern": "^(?:[1-9]|1[0-2]|truth|brand)$" },
+          "rule": { "type": "string", "pattern": "^(?:[1-9]|1[0-2]|truth|brand|[HU]-\\d{2,})$" },
           "text": { "type": "string", "minLength": 1, "maxLength": 600, "pattern": "^[^\\r\\n]*$" }
         }
       }
