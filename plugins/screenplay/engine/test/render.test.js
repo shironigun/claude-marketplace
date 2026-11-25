@@ -142,7 +142,15 @@ test('sp render: a built film, the times or the plan, and the installed renderer
   assert.match(render('--brand', 'harbor', '--plan').stderr, /the film has no build yet; run sp build reminders --film promo/);
   sp('build', 'reminders', '--film', 'promo');
   assert.equal(render('--brand', 'acme', '--plan').code, 2);
-  assert.match(render('--brand', 'harbor').stderr, /give one of --at <seconds,\.\.\.> or --plan/);
+  assert.match(render('--brand', 'harbor').stderr, /give one of --at <seconds,\.\.\.>, --plan or --anchor/);
+  assert.match(render('--brand', 'harbor', '--at', '1', '--plan').stderr, /give one of/);
+  // A comment's anchor comes in a file: one that names no time inside the film, or a stretch that ends before it
+  // starts, is refused.
+  const anchor = (line) => inputFile(line, repo);
+  assert.match(render('--brand', 'harbor', '--anchor', anchor('Location: 0:40')).stderr, /--anchor takes a file holding a comment's "Anchor detail" or "Element path" line, at a time inside the film/);
+  assert.match(render('--brand', 'harbor', '--anchor', anchor('at 40.2 s, the point at x 10% y 10% of the frame')).stderr, /--anchor takes/);
+  assert.match(render('--brand', 'harbor', '--anchor', anchor('Anchor detail: from 5.4 s to 2.1 s of the film')).stderr, /--anchor takes/);
+  assert.equal(render('--brand', 'harbor', '--anchor', 'missing.txt').code, 2);
   assert.match(render('--brand', 'harbor', '--at', '1,40').stderr, /--at takes seconds inside the film, from 0 to under 34.8/);
   assert.match(render('--brand', 'harbor', '--at', '1', '--crop', '0,0,2000,10').stderr, /--crop takes x,y,w,h in whole pixels inside the 1920 by 1080 stage/);
   const r = render('--brand', 'harbor', '--plan', '--sheet');
@@ -211,6 +219,10 @@ test('sp check --review: the reviewer\'s verdict on a checked build; gate 3 once
   assert.equal(next(), 'gate-3');
   sp('confirm', 'gate-3', '--subject', 'reminders', '--film', 'promo');
   assert.equal(next(), 'review');
+  // Status gives each brand's film, where the comments are.
+  const status = sp('status', 'reminders', '--film', 'promo', '--json').json;
+  assert.deepEqual(status.urls, { harbor: `${'https:'}//example.invalid/harbor`, lumen: `${'https:'}//example.invalid/lumen` });
+  assert.match(status.gate3, /^2026-/);
   assert.match(fs.readFileSync(path.join(film, 'state.md'), 'utf8'), /- gate-3: passed /);
   // A new build needs the checks, the review and gate 3 again.
   sp('state', 'reminders', '--decision', 'Name: Nudges');

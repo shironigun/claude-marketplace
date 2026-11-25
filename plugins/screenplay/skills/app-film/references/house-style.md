@@ -8,8 +8,8 @@ Rules learned from review rounds (spec 10), on top of the film rules, which hold
 
 ## Where the rules come from
 
-The comment loop saves a rule when a comment's fix holds film-wide: one sentence, in the words a reviewer can check on
-a frame.
+The comment loop (`references/review.md`) saves a rule when a comment's fix holds film-wide: one sentence, in the
+words a reviewer can check on a frame.
 
 1. Save it in the repository: `sp house add --text "<the rule>" --scope <generic|product>`. When the rule picks a
    mod (a calmer pace, a look, a callout style), add `--mods <mod>=<option>`, so new films start from it; `sp mods`

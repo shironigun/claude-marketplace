@@ -57,4 +57,4 @@ not be verified offline: each report's "Not verified here", such as a web font t
 live player is the reference for type. Say that the films start muted. Then record the hand-over:
 `sp confirm gate-3 --subject <slug> --film <film>`.
 
-From here, the user's comments on the films are the comment loop (`/screenplay:review`).
+From here, the user's comments on the films are the comment loop (`references/review.md`, `/screenplay:review`).

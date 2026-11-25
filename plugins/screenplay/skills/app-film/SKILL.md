@@ -47,12 +47,13 @@ Motion film per brand, which the engine and the film reviewer check frame by fra
 | `build` | Build | `references/build.md` | you |
 | `verify` | Verify | `references/verify.md` | you, with the film reviewer |
 | `gate-3` | First cut | `references/verify.md`, its "Gate 3" | you, with the user |
+| `review` | Comment loop | `references/review.md` | you, with the user |
 
 Record each film step as you start it: `sp state <slug> --film <film> --phase <next>`, with the `next` value
-(`mods`, `story`, `gate-2`, `ui`, `build`, `verify` or `gate-3`). When brand-profile or app-map hands back, run
+(`mods`, `story`, `gate-2`, `ui`, `build`, `verify`, `gate-3` or `review`). When brand-profile or app-map hands back, run
 `sp status <slug> --film <film> --json` again and go on from its `next`.
 
-When `next` is `review`, the user has the films: stop, and say that they can comment on the films.
+When `next` is `review` and no comment is open, the user has the films: stop, and say that they can comment on them.
 
 ## Changing the mods
 
@@ -81,3 +82,8 @@ and where they go is `references/house-style.md`.
 
 `/screenplay:check` renders a film's brand films and checks them, then has the film reviewer judge them. Choose the
 film as for the mods. Then run `references/verify.md` from its start.
+
+## Working through comments
+
+`/screenplay:review` works through the comments on a film's brand films. Choose the film as for the mods. Then run
+`references/review.md`.

@@ -2,6 +2,7 @@
 const fs = require('fs');
 const path = require('path');
 const { usageError } = require('../errors');
+const { readJson } = require('../files');
 const { repoInfo, repoPaths, workspaceKey, subjectPaths, filmPaths, checkSlug, SLUG_RE } = require('../paths');
 const { readState, phaseLabel } = require('../state');
 const { subjectFiles, subjectNext, filmFiles, filmNext, brandStatus, brandLine } = require('../progress');
@@ -85,6 +86,8 @@ module.exports = {
         json: {
           repository: key, subject: slug, film: film.film, name: film.name, format: film.format, phase: film.phase,
           updated: film.updated, next, files, pending: film.pending, brand, ...(film.gate2 ? { gate2: film.gate2 } : {}),
+          ...(film.gate3 ? { gate3: film.gate3 } : {}),
+          urls: Object.fromEntries(Object.entries(readJson(fp.films, {})).filter(([, e]) => e.url).map(([b, e]) => [b, e.url])),
         },
         text: [
           `${film.name} (${slug}/${film.film}, ${film.format}) in ${key}`,
