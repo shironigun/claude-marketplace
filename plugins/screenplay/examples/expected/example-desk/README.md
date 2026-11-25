@@ -32,6 +32,10 @@ subjects record the release status `new` and demo data. The films' names and dat
 seed data in `data/`. The engine tests save each film through `sp save` on its subject's expected analysis, render
 its storyboard, compare it with the one here, and pass gate 2.
 
+`reminders/promo/check.json` holds what `sp check` gives on the promo's reference cut, built from these files: the
+number of moments it renders, and each brand's problems (none) and notes (the fixture's brand fonts are not web
+fonts, so the renderer shows the player's stand-in).
+
 ## Truths planted in the code
 
 The backend trace (Plan 2) must find each one with its `path:line`:

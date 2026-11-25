@@ -1,0 +1,13 @@
+{
+  "moments": 68,
+  "brands": {
+    "harbor": {
+      "problems": [],
+      "notes": ["The renderer could not load the film's web font, so type in these frames is the player's stand-in; the live player is the reference for type."]
+    },
+    "lumen": {
+      "problems": [],
+      "notes": ["The renderer could not load the film's web font, so type in these frames is the player's stand-in; the live player is the reference for type."]
+    }
+  }
+}

@@ -2,7 +2,8 @@
 const test = require('node:test');
 const assert = require('node:assert/strict');
 const path = require('path');
-const { EXAMPLES } = require('./helpers');
+const fs = require('fs');
+const { EXAMPLES, readyFilm } = require('./helpers');
 const { timingTable } = require('../lib/timing');
 const { FRAME, framePlan, playedProblems, alphaOf, imageOpaque, measuredProblems, purityProblems, logFindings, verifyReport } = require('../lib/verify');
 
@@ -36,6 +37,16 @@ test('verify: a still at every cut, every beat and the frame before every camera
   assert.ok(!at(plan, 'move').some(([hook]) => hook === 'S-02.3'));
   // The shot each beat holds, from the camera's landing to the beat's end.
   assert.deepEqual(at(plan, 'hold').filter(([hook]) => hook === 'S-04.5'), [['S-04.5', 28.45], ['S-04.5', 31.75]]);
+});
+
+test('verify: the reference cut\'s expected check results: every moment its plan renders, each brand, and no problem', () => {
+  const { sp, film } = readyFilm('reminders', 'promo');
+  sp('build', 'reminders', '--film', 'promo');
+  const built = JSON.parse(fs.readFileSync(path.join(film, 'film', 'modules', 'film.json'), 'utf8'));
+  const want = expected('reminders', 'promo', 'check.json');
+  assert.equal(framePlan(built).length, want.moments);
+  assert.deepEqual(Object.keys(want.brands), built.mods.brands);
+  for (const r of Object.values(want.brands)) assert.deepEqual(r.problems, []);
 });
 
 test('verify: the player plays the timing table: its length, its cuts on the beat, and every sound on its frame', () => {

@@ -6,7 +6,7 @@ const path = require('path');
 const { PLUGIN, SKILLS_DIR, frontmatter } = require('./plugin-files');
 
 const EVALS = path.join(PLUGIN, 'evals');
-// The trigger and guard cases of spec 11.3 for the three skills: [tag, the skill a trigger starts].
+// The trigger, guard and pipeline cases of spec 11.3: [tag, the skill a trigger starts].
 const CASES = {
   'guard-code-question': ['guard'],
   'guard-explainer-page': ['guard'],
@@ -14,6 +14,7 @@ const CASES = {
   'guard-release-notes': ['guard'],
   'guard-short-film': ['guard'],
   'guard-test-cases': ['guard'],
+  'pipeline-promo-reminders': ['pipeline'],
   'trigger-brand-colours': ['trigger', 'brand-profile'],
   'trigger-build-films': ['trigger', 'app-film'],
   'trigger-promo-feature': ['trigger', 'app-film'],
@@ -23,7 +24,7 @@ const CASES = {
   'trigger-what-module-does': ['trigger', 'app-map'],
 };
 
-test('plugin evals: the trigger and guard cases, read-only, each graded on the skill it starts or on none', () => {
+test('plugin evals: the trigger and guard cases, read-only, each graded on the skill it starts or on none; the pipeline, judged on its summary', () => {
   const dirs = fs.readdirSync(EVALS, { withFileTypes: true }).filter((e) => e.isDirectory()).map((e) => e.name).sort();
   assert.deepEqual(dirs, Object.keys(CASES));
   for (const [name, [tag, skill]] of Object.entries(CASES)) {
@@ -31,9 +32,18 @@ test('plugin evals: the trigger and guard cases, read-only, each graded on the s
     assert.ok(prompt, `${name}/prompt.md starts with a frontmatter block`);
     assert.ok(prompt.data.description && prompt.body.trim(), name);
     assert.equal(prompt.data.tags, `[${tag}]`, name);
-    assert.equal(prompt.data.allowed_tools, '[Read, Glob, Grep, Skill]', name);
     const graders = fs.readdirSync(path.join(EVALS, name, 'graders'));
     const grader = (file) => frontmatter(path.join(EVALS, name, 'graders', file)).data;
+    if (tag === 'pipeline') {
+      // The whole workflow on a copy of example-desk: it writes and runs the engine, but creates no Motion film.
+      assert.equal(prompt.data.allowed_tools, '[Read, Write, Edit, Glob, Grep, Bash, Skill, Agent]', name);
+      assert.match(prompt.body, /outside any git\s+repository/);
+      assert.match(prompt.body, /Do not create any\s+Motion film/);
+      assert.deepEqual(graders, ['analysis.md', 'film.md'], name);
+      for (const g of graders) assert.equal(grader(g).type, 'llm', `${name}/${g}`);
+      continue;
+    }
+    assert.equal(prompt.data.allowed_tools, '[Read, Glob, Grep, Skill]', name);
     if (tag === 'trigger') {
       assert.deepEqual(graders, ['skill-fired.md'], name);
       const g = grader('skill-fired.md');
