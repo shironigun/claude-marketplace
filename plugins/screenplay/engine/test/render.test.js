@@ -185,9 +185,14 @@ test('sp check --review: the reviewer\'s verdict on a checked build; gate 3 once
   const { inputs } = JSON.parse(fs.readFileSync(path.join(film, 'film', 'build.json'), 'utf8'));
   for (const brand of ['harbor', 'lumen']) {
     fs.mkdirSync(path.join(film, 'verify', brand), { recursive: true });
-    fs.writeFileSync(path.join(film, 'verify', brand, 'check.json'), JSON.stringify({ brand, inputs, problems: [], notes: [] }));
+    fs.writeFileSync(path.join(film, 'verify', brand, 'check.json'), JSON.stringify({ brand, inputs, problems: [], notes: [], sheets: [`${brand}/sheets/S-01.png`] }));
   }
   assert.equal(next(), 'verify');
+  // The reviewer's brief: each brand's sheets, frames and report, the story, the ledger, the rules and the schema.
+  const b = JSON.parse(fs.readFileSync(sp('check', 'reminders', '--film', 'promo', '--brief', '--json').json.brief, 'utf8'));
+  assert.deepEqual(b.brands.map((x) => [x.id, x.sheets]), [['harbor', ['harbor/sheets/S-01.png']], ['lumen', ['lumen/sheets/S-01.png']]]);
+  assert.ok([b.beats, b.storyboard, b.truth, b.brief, b.rules, b.schema].every((p) => fs.existsSync(p)), JSON.stringify(b));
+  assert.equal(runSp(repo, ['check', 'reminders', '--film', 'promo', '--brief', '--review', 'x.json'], env).code, 2);
   // A verdict that does not fit the schema or the film is refused; a BLOCKED one keeps the film in verify.
   assert.match(review({ verdict: 'MAYBE', findings: [] }).stderr, /review has 1 problem:/);
   assert.match(review({ verdict: 'BLOCKED', findings: [] }).stderr, /a BLOCKED review names its findings/);

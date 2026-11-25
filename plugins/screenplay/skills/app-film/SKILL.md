@@ -1,6 +1,6 @@
 ---
 name: app-film
-description: "Plans films of a web app's features, modules and flows, made from its own screens rebuilt from its code, in its own branding: promos, walkthroughs, trailers, teasers, release highlights, store previews and how-tos. Starts a film of a subject in a format, runs the brand profile and the subject's analysis when they are missing, offers the mods form (look, callouts, pointer, pacing, intro, end card, sound, brands), writes the story and demo data with every caption traced to the truth ledger, has the user approve the storyboard, rebuilds its screens from the code without running the app, and builds a Motion film per brand. Use it when the user asks to make, plan or storyboard a promo video, a walkthrough, a trailer, a teaser, a release highlight, a store preview or a how-to video of a feature, module or flow of their app, or to change a film's mods, rebuild its screens or build its films. Not for a screenplay or script for a live-action film, recording the screen, explainer pages, slide decks or release notes."
+description: "Makes films of a web app's features, modules and flows from its own screens, rebuilt from its code, in its own branding: promos, walkthroughs, trailers, teasers, release highlights, store previews and how-tos. Runs the brand profile and the subject's analysis when they are missing, offers the mods form, writes the story and demo data with every caption traced to the truth ledger, has the user approve the storyboard, rebuilds the screens without running the app, builds a Motion film per brand, checks every frame, and works through the user's comments on the films. Use it when the user asks to make, plan or storyboard a promo video, a walkthrough, a trailer, a teaser, a release highlight, a store preview or a how-to video of a feature, module or flow of their app, or to change a film's mods, rebuild its screens, or build, check or review its films. Not for a screenplay or script for a live-action film, recording the screen, explainer pages, slide decks or release notes."
 ---
 
 # App film
@@ -9,7 +9,7 @@ You plan a film of one subject of a web app (a feature, a module or a flow) in o
 subject's analysis: every caption traces to its truth ledger, and nothing the app cannot do appears. You choose the
 mods with the user and write the story and its demo data; the engine checks them and renders the storyboard the
 user approves at gate 2. Then you rebuild the film's screens from the app's code with the UI builder, and build one
-Motion film per brand. Checking the films arrives in the next release.
+Motion film per brand, which the engine and the film reviewer check frame by frame before the user has them.
 
 ## Rules that hold in every step
 
@@ -45,14 +45,14 @@ Motion film per brand. Checking the films arrives in the next release.
 | `gate-2` | Storyboard | `references/story.md`, its "Gate 2" | you, with the user |
 | `ui` | Screens from code | `references/screens.md` | you, with the UI builder |
 | `build` | Build | `references/build.md` | you |
-| `verify` | Verify | arrives in the next release | |
+| `verify` | Verify | `references/verify.md` | you, with the film reviewer |
+| `gate-3` | First cut | `references/verify.md`, its "Gate 3" | you, with the user |
 
 Record each film step as you start it: `sp state <slug> --film <film> --phase <next>`, with the `next` value
-(`mods`, `story`, `gate-2`, `ui` or `build`). When brand-profile or app-map hands back, run
+(`mods`, `story`, `gate-2`, `ui`, `build`, `verify` or `gate-3`). When brand-profile or app-map hands back, run
 `sp status <slug> --film <film> --json` again and go on from its `next`.
 
-When `next` is `verify`, give the user each brand's film, and say that checking the films arrives in the next release
-of screenplay. Stop there.
+When `next` is `review`, the user has the films: stop, and say that they can comment on the films.
 
 ## Changing the mods
 
@@ -71,3 +71,8 @@ not: the code may have changed under any of them.
 
 `/screenplay:build` builds a film, or brings every brand's film back in line with its source after a change. Choose
 the film as for the mods. Then run `references/build.md` from its start: it builds again and writes only what changed.
+
+## Checking the films
+
+`/screenplay:check` renders a film's brand films and checks them, then has the film reviewer judge them. Choose the
+film as for the mods. Then run `references/verify.md` from its start.

@@ -7,12 +7,12 @@ const { SKILLS_DIR, AGENTS_DIR, COMMANDS_DIR, frontmatter } = require('./plugin-
 
 // The three skills (spec 4.1): their playbooks and the scouts they dispatch.
 const SKILLS = {
-  'app-film': { references: ['build.md', 'film-rules.md', 'mods.md', 'screens.md', 'story.md'], scouts: ['sp-ui-builder'] },
+  'app-film': { references: ['build.md', 'film-rules.md', 'mods.md', 'screens.md', 'story.md', 'verify.md'], scouts: ['sp-ui-builder', 'sp-film-reviewer'] },
   'app-map': { references: ['backend-trace.md', 'context.md', 'dossier.md', 'screen-map.md'], scouts: ['sp-screen-scout', 'sp-backend-tracer'] },
   'brand-profile': { references: ['brand-profile.md'], scouts: ['sp-brand-scout'] },
 };
 // Each command and the skill it uses (spec 4.1).
-const COMMANDS = { brand: 'brand-profile', build: 'app-film', map: 'app-map', mods: 'app-film', new: 'app-film', screens: 'app-film', status: 'app-map' };
+const COMMANDS = { brand: 'brand-profile', build: 'app-film', check: 'app-film', map: 'app-map', mods: 'app-film', new: 'app-film', screens: 'app-film', status: 'app-map' };
 
 test('plugin skills: brand-profile, app-map and app-film, with their playbooks, triggers and the scouts they dispatch', () => {
   assert.deepEqual(fs.readdirSync(SKILLS_DIR).sort(), Object.keys(SKILLS));
@@ -37,7 +37,7 @@ test('plugin skills: brand-profile, app-map and app-film, with their playbooks, 
   }
 });
 
-test('plugin commands: brand, build, map, new, mods, screens and status, each with a description, an argument hint and the skill it uses', () => {
+test('plugin commands: brand, build, check, map, new, mods, screens and status, each with a description, an argument hint and the skill it uses', () => {
   assert.deepEqual(fs.readdirSync(COMMANDS_DIR).sort(), Object.keys(COMMANDS).map((c) => `${c}.md`));
   for (const [command, skill] of Object.entries(COMMANDS)) {
     const fm = frontmatter(path.join(COMMANDS_DIR, `${command}.md`));
@@ -51,7 +51,7 @@ test('plugin commands: brand, build, map, new, mods, screens and status, each wi
 test('plugin skills: app-film has a step for every next value a film can have, and hands the analyses to their skills', () => {
   const { body } = frontmatter(path.join(SKILLS_DIR, 'app-film', 'SKILL.md'));
   const rows = [...body.matchAll(/^\| `([a-z0-9-]+)` \|/gm)].map((m) => m[1]);
-  assert.deepEqual(rows, ['next', 'brand', 'map', 'mods', 'story', 'gate-2', 'ui', 'build', 'verify']); // the header row first
+  assert.deepEqual(rows, ['next', 'brand', 'map', 'mods', 'story', 'gate-2', 'ui', 'build', 'verify', 'gate-3']); // the header row first
   for (const skill of ['brand-profile', 'app-map']) assert.ok(body.includes(`screenplay:${skill}`), `app-film runs ${skill}`);
   const rules = fs.readFileSync(path.join(SKILLS_DIR, 'app-film', 'references', 'film-rules.md'), 'utf8');
   assert.deepEqual([...rules.matchAll(/^(\d+)\. /gm)].map((m) => Number(m[1])), [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]);

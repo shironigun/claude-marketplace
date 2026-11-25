@@ -65,9 +65,9 @@ async function checkBrand(launch, tools, fp, built, id, rebuild) {
 
 module.exports = {
   name: 'check',
-  usage: 'check <subject slug> --film <film slug> [--brand <brand id>] [--review <file>] [--repo <dir>]',
-  summary: "The film checks of spec 5.13 on each brand's film through the Motion player's own renderer: timing, layout, stillness, exit before a move, bleed-through, purity, brand and the player's log, after the story's and screens' own checks. Writes each brand's frames, sheets, check.json and report.md in the film's verify folder. With --review, records the film reviewer's verdict on the checked build.",
-  flags: { film: 'string', brand: 'string', review: 'string', repo: 'string' },
+  usage: 'check <subject slug> --film <film slug> [--brand <brand id>] [--brief | --review <file>] [--repo <dir>]',
+  summary: "The film checks of spec 5.13 on each brand's film through the Motion player's own renderer: timing, layout, stillness, exit before a move, bleed-through, purity, brand and the player's log, after the story's and screens' own checks. Writes each brand's frames, sheets, check.json and report.md in the film's verify folder. With --brief, writes the film reviewer's brief; with --review, records its verdict on the checked build.",
+  flags: { film: 'string', brand: 'string', brief: 'boolean', review: 'string', repo: 'string' },
   run(ctx, args) {
     const repo = repoInfo(args.flags.repo || ctx.cwd);
     checkHome(ctx.home, repo);
@@ -83,14 +83,39 @@ module.exports = {
     const status = screensStatus(fc, rp, f.fp);
     const source = [...status.theme.problems.map((p) => `theme: ${p}`), ...status.screens.flatMap((s) => s.problems.map((p) => `${s.id}: ${p}`))];
     const built = readJson(path.join(f.fp.film, 'build.json'));
-    if (args.flags.review) {
-      // The reviewer judges what the checks rendered: every brand's checks passed on this build first.
-      const value = readJsonFile(ctx.cwd, args.flags.review);
-      const errors = check('review', value);
-      if (errors.length) throw checkError(`review has ${errors.length} problem${errors.length === 1 ? '' : 's'}:\n  ${errors.join('\n  ')}`);
+    // The reviewer judges what the checks rendered: every brand's checks passed on this build first.
+    const checked = () => {
       const { checks } = verifyResults(f.fp, fc.mods.brands, built.inputs);
       const unchecked = Object.entries(checks).filter(([, c]) => !c || c.problems.length).map(([id]) => id);
       if (unchecked.length) throw checkError(`the checks have not passed on this build for ${unchecked.join(', ')}; run sp check ${fc.subject} --film ${fc.film} first`);
+      return checks;
+    };
+    if (args.flags.brief && args.flags.review) throw usageError('give one of --brief or --review <file>');
+    if (args.flags.brief) {
+      // The film reviewer's brief (spec 5.13): what it reads and what it returns, assembled by the engine.
+      const checks = checked();
+      const brief = {
+        kind: 'review',
+        title: fc.name,
+        format: fc.format,
+        brands: fc.mods.brands.map((id) => ({ id, sheets: checks[id].sheets, frames: path.join(f.fp.verify, id, 'frames'), report: path.join(f.fp.verify, id, 'report.md') })),
+        beats: f.fp.beats,
+        storyboard: f.fp.storyboard,
+        truth: f.subj.truth,
+        brief: f.subj.brief,
+        rules: path.join(ctx.pluginRoot, 'skills', 'app-film', 'references', 'film-rules.md'),
+        schema: path.join(ctx.pluginRoot, 'engine', 'schemas', 'review.schema.json'),
+        example: { verdict: 'BLOCKED', findings: [{ brand: fc.mods.brands[0], scene: 'S-02', at: 12.9, rule: '4', text: 'The dialog its click opens shows cut off by the frame\'s edge.' }] },
+      };
+      const file = path.join(rp.inbox, `${fc.subject}.${fc.film}.review.brief.json`);
+      writeJson(file, brief);
+      return { json: { brief: file }, text: `The film reviewer's brief: ${file}` };
+    }
+    if (args.flags.review) {
+      const value = readJsonFile(ctx.cwd, args.flags.review);
+      const errors = check('review', value);
+      if (errors.length) throw checkError(`review has ${errors.length} problem${errors.length === 1 ? '' : 's'}:\n  ${errors.join('\n  ')}`);
+      checked();
       const stray = value.findings.filter((x) => !fc.mods.brands.includes(x.brand) || !fc.beats.scenes.some((s) => s.id === x.scene));
       if (stray.length) throw checkError(`review names ${stray.map((x) => `${x.brand} ${x.scene}`).join(', ')}, which the film does not have`);
       if (value.verdict === 'PASS' && value.findings.length) throw checkError('a PASS has no findings; a finding blocks the cut');
@@ -111,7 +136,7 @@ module.exports = {
         const record = { brand: id, inputs: built.inputs, at: ctx.now, moments: r.moments, problems: r.problems, notes: r.notes, warnings: r.warnings, sheets: r.sheets };
         writeJson(path.join(r.dir, 'check.json'), record);
         fs.writeFileSync(path.join(r.dir, 'report.md'), verifyReport({ ...record, title: r.title }));
-        out[id] = { ...record, report: path.join(r.dir, 'report.md') };
+        out[id] = { ...record, url: (readJson(f.fp.films, {})[id] || {}).url || null, report: path.join(r.dir, 'report.md') };
       }
       const failed = Object.values(out).filter((r) => r.problems.length);
       const text = Object.values(out).map((r) => `${r.brand}: ${r.problems.length ? `${r.problems.length} problems\n  ${r.problems.join('\n  ')}` : 'every check passes'}${r.notes.length ? `\n  note: ${r.notes.join('\n  note: ')}` : ''}\n  ${r.report}`).join('\n');
