@@ -192,6 +192,8 @@ test('sp check --review: the reviewer\'s verdict on a checked build; gate 3 once
   assert.match(review({ verdict: 'MAYBE', findings: [] }).stderr, /review has 1 problem:/);
   assert.match(review({ verdict: 'BLOCKED', findings: [] }).stderr, /a BLOCKED review names its findings/);
   const finding = { brand: 'harbor', scene: 'S-02', at: 12.9, rule: '4', text: 'The dialog opens off the frame.' };
+  const { at: when, ...untimed } = finding;
+  assert.match(review({ verdict: 'BLOCKED', findings: [untimed] }).stderr, /review has 1 problem:/);
   assert.match(review({ verdict: 'PASS', findings: [finding] }).stderr, /a PASS has no findings/);
   assert.match(review({ verdict: 'BLOCKED', findings: [{ ...finding, scene: 'S-09' }] }).stderr, /review names harbor S-09, which the film does not have/);
   const blocked = review({ verdict: 'BLOCKED', findings: [finding] });
