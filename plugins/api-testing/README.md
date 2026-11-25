@@ -15,7 +15,7 @@
 | **Category** | Testing |
 | **What it does** | API cases and runnable Playwright + TypeScript + zod specs, both ways, plus bug drafts |
 | **Includes** | 2 skills |
-| **Writes** | Nothing outside the session: cases, specs and drafts |
+| **Writes** | Cases in the session; spec files and bug drafts in your `automation/` folder (drafts after you confirm the path); `.claude/workspace-profile.json` after you confirm it |
 | **Setup** | None |
 | **Product-neutral** | Yes: org facts come from a local workspace profile |
 
@@ -42,8 +42,8 @@ into test cases", "the contract test failed, write it up".
 
 ## Prerequisites
 
-**None for the plugin itself** — both skills produce their output in the session (test cases, runnable
-spec files, or a bug draft). To actually **file** a drafted bug into Azure DevOps afterward, you can use
+**None for the plugin itself** — cases appear in the session, and spec files and bug drafts are written
+inside your `automation/` folder, never into product source. To actually **file** a drafted bug into Azure DevOps afterward, you can use
 an optional companion plugin from this marketplace (**bug-suite** or **qa-engineering**); those plugins
 **bundle** Microsoft's official Azure DevOps MCP server (set `ADO_ORG`, sign in in the browser, no token), so filing works with no extra setup. The generated scripts target the Playwright + TypeScript + zod automation framework;
 running them is done in that framework (`npx playwright test`), not through this plugin.

@@ -19,6 +19,7 @@
 | **Requires** | **Claude Code 2.1.293 or later** (the mods runtime). On older versions the whole plugin fails to load: see [Live status pane](#live-status-pane-optional--needs-the-mods-runtime) |
 | **Setup** | Set `ADO_ORG`; interactive sign-in |
 | **Product-neutral** | Yes |
+| **In use** | Run live by a QA department on their own products and projects ([verification](docs/verification.md#live-use-november-2026)) |
 
 ## See it in action
 

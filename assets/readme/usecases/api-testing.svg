@@ -24,17 +24,16 @@
 <path d="M458 326h28m-10 -10 10 10-10 10" fill="none" stroke="#a3e635" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
 <rect x="500" y="108" width="716" height="436" rx="18" fill="#f8fafc"/>
 <rect x="500" y="108" width="716" height="56" rx="18" fill="#e2e8f0"/><rect x="500" y="146" width="716" height="18" fill="#e2e8f0"/>
-<g transform="translate(524 124) scale(1)" fill="#0f172a"><path d="m14 12-2 2-2-2 2-2zm-2-6 2.12 2.12 2.5-2.5L12 1 7.38 5.62l2.5 2.5zm-6 6 2.12-2.12-2.5-2.5L1 12l4.62 4.62 2.5-2.5zm12 0-2.12 2.12 2.5 2.5L23 12l-4.62-4.62-2.5 2.5zm-6 6-2.12-2.12-2.5 2.5L12 23l4.62-4.62-2.5-2.5z"/></g><text x="560" y="143" font-size="17" font-weight="700" fill="#0f172a">orders.contract.spec.ts</text>
+<g transform="translate(524 124) scale(1)" fill="#0f172a"><path d="m14 12-2 2-2-2 2-2zm-2-6 2.12 2.12 2.5-2.5L12 1 7.38 5.62l2.5 2.5zm-6 6 2.12-2.12-2.5-2.5L1 12l4.62 4.62 2.5-2.5zm12 0-2.12 2.12 2.5 2.5L23 12l-4.62-4.62-2.5 2.5zm-6 6-2.12-2.12-2.5 2.5L12 23l4.62-4.62-2.5-2.5z"/></g><text x="560" y="143" font-size="17" font-weight="700" fill="#0f172a">orders-create.spec.ts</text>
 <text x="1192" y="143" text-anchor="end" font-size="13" fill="#64748b">YOU GET</text>
 <rect x="528" y="170" width="660" height="336" rx="12" fill="#0f172a"/>
-<text x="550" y="200" font-size="15" fill="#e2e8f0" xml:space="preserve" font-family="Consolas, 'Cascadia Mono', Menlo, monospace">test('POST /orders creates an order', async ({ request }) =&gt; {</text>
-<text x="550" y="230" font-size="15" fill="#e2e8f0" xml:space="preserve" font-family="Consolas, 'Cascadia Mono', Menlo, monospace">  const res = await request.post('/orders', { data: order });</text>
-<text x="550" y="260" font-size="15" fill="#e2e8f0" xml:space="preserve" font-family="Consolas, 'Cascadia Mono', Menlo, monospace">  expect(res.status()).toBe(201);</text>
-<text x="550" y="290" font-size="15" fill="#e2e8f0" xml:space="preserve" font-family="Consolas, 'Cascadia Mono', Menlo, monospace">  OrderSchema.parse(await res.json());   <tspan fill="#86efac">// zod contract</tspan></text>
-<text x="550" y="320" font-size="15" fill="#e2e8f0" xml:space="preserve" font-family="Consolas, 'Cascadia Mono', Menlo, monospace">});</text>
-<text x="550" y="350" font-size="15" fill="#e2e8f0" xml:space="preserve" font-family="Consolas, 'Cascadia Mono', Menlo, monospace"></text>
-<text x="550" y="380" font-size="15" fill="#e2e8f0" xml:space="preserve" font-family="Consolas, 'Cascadia Mono', Menlo, monospace">test('POST /orders rejects an empty order', async ({ request }) =&gt; {</text>
-<text x="550" y="410" font-size="15" fill="#e2e8f0" xml:space="preserve" font-family="Consolas, 'Cascadia Mono', Menlo, monospace">  const res = await request.post('/orders', { data: { items: [] } });</text>
-<text x="550" y="440" font-size="15" fill="#e2e8f0" xml:space="preserve" font-family="Consolas, 'Cascadia Mono', Menlo, monospace">  expect(res.status()).toBe(400);</text>
-<text x="550" y="470" font-size="15" fill="#e2e8f0" xml:space="preserve" font-family="Consolas, 'Cascadia Mono', Menlo, monospace">});</text>
+<text x="550" y="200" font-size="15" fill="#e2e8f0" xml:space="preserve" font-family="Consolas, 'Cascadia Mono', Menlo, monospace"><tspan fill="#86efac">// traces-case: &quot;Orders - Verify that POST orders creates an order</tspan></text>
+<text x="550" y="230" font-size="15" fill="#e2e8f0" xml:space="preserve" font-family="Consolas, 'Cascadia Mono', Menlo, monospace"><tspan fill="#86efac">//   successfully.&quot;</tspan></text>
+<text x="550" y="260" font-size="15" fill="#e2e8f0" xml:space="preserve" font-family="Consolas, 'Cascadia Mono', Menlo, monospace">test('Orders - Verify that POST orders creates an order successfully.',</text>
+<text x="550" y="290" font-size="15" fill="#e2e8f0" xml:space="preserve" font-family="Consolas, 'Cascadia Mono', Menlo, monospace">  async ({ apiClient }) =&gt; {</text>
+<text x="550" y="320" font-size="15" fill="#e2e8f0" xml:space="preserve" font-family="Consolas, 'Cascadia Mono', Menlo, monospace">    const { res } = await apiClient.post(routes.orders, { data: order });</text>
+<text x="550" y="350" font-size="15" fill="#e2e8f0" xml:space="preserve" font-family="Consolas, 'Cascadia Mono', Menlo, monospace">    expect(res.status()).toBe(201);</text>
+<text x="550" y="380" font-size="15" fill="#e2e8f0" xml:space="preserve" font-family="Consolas, 'Cascadia Mono', Menlo, monospace">    const parsed = orderSchema.safeParse(await json(res)); <tspan fill="#86efac">// zod contract</tspan></text>
+<text x="550" y="410" font-size="15" fill="#e2e8f0" xml:space="preserve" font-family="Consolas, 'Cascadia Mono', Menlo, monospace">    expect(parsed.success).toBe(true);</text>
+<text x="550" y="440" font-size="15" fill="#e2e8f0" xml:space="preserve" font-family="Consolas, 'Cascadia Mono', Menlo, monospace">  });</text>
 </svg>

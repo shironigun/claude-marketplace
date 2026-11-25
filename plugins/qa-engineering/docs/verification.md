@@ -137,6 +137,13 @@ It catches what the self-check missed.
 
 So the per-phase order is: **generate → self-check → review gate (blocking) → objective verify → report.**
 
+## Live use (November 2026)
+
+After these dry runs, a QA department ran `qa-engineering` live on their own products and projects. No
+product, team or result details are recorded here: the plugin ships none, and each QA's specifics stay in
+their own git-ignored `house-profile.json` and `.env`. The two runs above remain the reproducible record;
+the limitations below describe those runs only.
+
 ## Honest limitations of this run
 
 - Phase 3 UI and phase 5 CI were **verified statically** (compile/collect; YAML parse + schedule +

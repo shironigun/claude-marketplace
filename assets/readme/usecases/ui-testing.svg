@@ -24,7 +24,7 @@
 <path d="M458 326h28m-10 -10 10 10-10 10" fill="none" stroke="#f472b6" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
 <rect x="500" y="108" width="716" height="436" rx="18" fill="#f8fafc"/>
 <rect x="500" y="108" width="716" height="56" rx="18" fill="#e2e8f0"/><rect x="500" y="146" width="716" height="18" fill="#e2e8f0"/>
-<g transform="translate(524 124) scale(1)" fill="#0f172a"><path d="M13 1.07V9h7c0-4.08-3.05-7.44-7-7.93M4 15c0 4.42 3.58 8 8 8s8-3.58 8-8v-4H4zm7-13.93C7.05 1.56 4 4.92 4 9h7z"/></g><text x="560" y="143" font-size="17" font-weight="700" fill="#0f172a">UI test case · Create an order</text>
+<g transform="translate(524 124) scale(1)" fill="#0f172a"><path d="M13 1.07V9h7c0-4.08-3.05-7.44-7-7.93M4 15c0 4.42 3.58 8 8 8s8-3.58 8-8v-4H4zm7-13.93C7.05 1.56 4 4.92 4 9h7z"/></g><text x="560" y="143" font-size="17" font-weight="700" fill="#0f172a">Orders - New order - Verify that an order is created.</text>
 <text x="1192" y="143" text-anchor="end" font-size="13" fill="#64748b">YOU GET</text>
 <rect x="528" y="168" width="660" height="42" rx="8" fill="#e2e8f0"/>
 <text x="542" y="195" font-size="13" font-weight="700" letter-spacing="1" fill="#334155">#</text>
@@ -32,19 +32,23 @@
 <text x="912" y="195" font-size="13" font-weight="700" letter-spacing="1" fill="#334155">EXPECTED RESULT</text>
 <rect x="528" y="220" width="660" height="46" fill="#ffffff"/>
 <text x="542" y="249" font-size="16" font-weight="700" fill="#0f172a">1</text>
-<text x="582" y="249" font-size="16" fill="#1e293b">Open Orders, select New order</text>
-<text x="912" y="249" font-size="16" fill="#1e293b">The New order drawer opens</text>
+<text x="582" y="249" font-size="16" fill="#1e293b">Navigate to the Orders module</text>
+<text x="912" y="249" font-size="16" fill="#1e293b">The Orders list is displayed</text>
 <rect x="528" y="270" width="660" height="46" fill="#f1f5f9"/>
 <text x="542" y="299" font-size="16" font-weight="700" fill="#0f172a">2</text>
-<text x="582" y="299" font-size="16" fill="#1e293b">Add a product, select Save</text>
-<text x="912" y="299" font-size="16" fill="#1e293b">The order is first in the list</text>
+<text x="582" y="299" font-size="16" fill="#1e293b">Click the New order button</text>
+<text x="912" y="299" font-size="16" fill="#1e293b">The New order drawer opens</text>
 <rect x="528" y="320" width="660" height="46" fill="#ffffff"/>
 <text x="542" y="349" font-size="16" font-weight="700" fill="#0f172a">3</text>
-<text x="582" y="349" font-size="16" fill="#1e293b">Clear Customer, select Save</text>
-<text x="912" y="349" font-size="16" fill="#1e293b">&quot;Customer is required&quot; displays</text>
+<text x="582" y="349" font-size="16" fill="#1e293b">Select a product in the Product field</text>
+<text x="912" y="349" font-size="16" fill="#1e293b">The product is in the order</text>
 <rect x="528" y="370" width="660" height="46" fill="#f1f5f9"/>
 <text x="542" y="399" font-size="16" font-weight="700" fill="#0f172a">4</text>
-<text x="582" y="399" font-size="16" fill="#1e293b">Select the order</text>
-<text x="912" y="399" font-size="16" fill="#1e293b">Its details match what you saved</text>
+<text x="582" y="399" font-size="16" fill="#1e293b">Click the Save button</text>
+<text x="912" y="399" font-size="16" fill="#1e293b">The drawer closes</text>
+<rect x="528" y="420" width="660" height="46" fill="#ffffff"/>
+<text x="542" y="449" font-size="16" font-weight="700" fill="#0f172a">5</text>
+<text x="582" y="449" font-size="16" fill="#1e293b">Verify that the order is created</text>
+<text x="912" y="449" font-size="16" fill="#1e293b">The order is first in the list</text>
 <g transform="translate(528 498) scale(0.9166666666666666)" fill="#16a34a"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2m-2 15-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8z"/></g><text x="560" y="515" font-size="15" font-weight="600" fill="#166534">Created as a Test Case and linked to the story, after your OK</text>
 </svg>

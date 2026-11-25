@@ -27,14 +27,14 @@
 <g transform="translate(524 124) scale(1)" fill="#0f172a"><path d="M20 8h-2.81c-.45-.78-1.07-1.45-1.82-1.96L17 4.41 15.59 3l-2.17 2.17C12.96 5.06 12.49 5 12 5s-.96.06-1.41.17L8.41 3 7 4.41l1.62 1.63C7.88 6.55 7.26 7.22 6.81 8H4v2h2.09c-.05.33-.09.66-.09 1v1H4v2h2v1c0 .34.04.67.09 1H4v2h2.81c1.04 1.79 2.97 3 5.19 3s4.15-1.21 5.19-3H20v-2h-2.09c.05-.33.09-.66.09-1v-1h2v-2h-2v-1c0-.34-.04-.67-.09-1H20zm-6 8h-4v-2h4zm0-4h-4v-2h4z"/></g><text x="560" y="143" font-size="17" font-weight="700" fill="#0f172a">Bug draft · waiting for your approval</text>
 <text x="1192" y="143" text-anchor="end" font-size="13" fill="#64748b">YOU GET</text>
 <text x="528" y="196" font-size="13" font-weight="700" letter-spacing="1" fill="#475569">TITLE</text>
-<text x="528" y="221" font-size="16.5" font-weight="700" fill="#0f172a">[Orders] Order total doesn't update after removing an item</text>
+<text x="528" y="221" font-size="16.5" font-weight="700" fill="#0f172a">Orders &gt; Order total is not updating on QA environment</text>
 <text x="528" y="258" font-size="13" font-weight="700" letter-spacing="1" fill="#475569">STEPS</text>
 <text x="546" y="283" font-size="16.5" fill="#0f172a">1.  Environment: QA</text>
 <text x="546" y="307" font-size="16.5" fill="#0f172a">2.  Open an order with two items</text>
 <text x="546" y="331" font-size="16.5" fill="#0f172a">3.  Remove one item</text>
 <text x="528" y="368" font-size="13" font-weight="700" letter-spacing="1" fill="#b91c1c">OBSERVATION</text>
 <text x="528" y="393" font-size="16.5" fill="#0f172a">The total still includes the removed item</text>
-<text x="528" y="430" font-size="13" font-weight="700" letter-spacing="1" fill="#475569">I KNOW THIS IS RESOLVED WHEN</text>
+<text x="528" y="430" font-size="13" font-weight="700" letter-spacing="1" fill="#475569">I KNOW THIS BUG IS RESOLVED WHEN</text>
 <text x="528" y="455" font-size="16.5" fill="#0f172a">The total recalculates as soon as an item is removed</text>
 <rect x="528" y="482" width="660" height="40" rx="10" fill="#fef3c7" stroke="#f59e0b" stroke-opacity=".6"/><g transform="translate(540 490) scale(0.9166666666666666)" fill="#b45309"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2m-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2m3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1s3.1 1.39 3.1 3.1z"/></g><text x="572" y="508" font-size="15" font-weight="600" fill="#92400e">Created in your tracker only after you approve the draft</text>
 </svg>

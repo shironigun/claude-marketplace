@@ -117,18 +117,19 @@ Select a card to open that plugin's folder and its README.
 |---|---|---|---|---|---|
 | [qa-engineering](plugins/qa-engineering/) | Testing | 16 skills, 4 agents, 9 commands | Test Cases, suites and bugs in Azure DevOps, each after your OK; framework code in your repo | Claude Code 2.1.293+; set `ADO_ORG`; interactive sign-in | Yes |
 | [qa-toolkit](plugins/qa-toolkit/) | Testing | 4 | Cases and bug drafts in the session; Test Cases in your tracker (Azure DevOps, Jira, Linear and more) | A tracker connector, only to push cases | Yes |
-| [api-testing](plugins/api-testing/) | Testing | 2 | Cases, spec files and bug drafts in the session | None | Yes (local profile) |
-| [ui-testing](plugins/ui-testing/) | Testing | 2 | Test Case work items (`buggy`, after your OK); UI specs in the session | Set `ADO_ORG`; browser sign-in, for `buggy` only | Yes (local profile) |
+| [api-testing](plugins/api-testing/) | Testing | 2 | Cases in the session; spec files and bug drafts in your `automation/` folder | None | Yes (local profile) |
+| [ui-testing](plugins/ui-testing/) | Testing | 2 | Test Case work items (`buggy`, after your OK); UI specs in your `automation/` folder | Set `ADO_ORG`; browser sign-in, for `buggy` only | Yes (local profile) |
 | [bug-suite](plugins/bug-suite/) | Bug tracking | 3 | Bugs, Defects and comments in Azure DevOps | Set `ADO_ORG`; browser sign-in | Yes (local profile) |
-| [release-notes-suite](plugins/release-notes-suite/) | Release management | 2 | An inventory and release-note drafts in the session | An Azure DevOps connection to harvest tickets | Yes (local profile) |
+| [release-notes-suite](plugins/release-notes-suite/) | Release management | 2 | An inventory and release-note drafts in the session; a local profile after you confirm | An Azure DevOps connection to harvest tickets | Yes (local profile) |
 | [feature-explainer](plugins/feature-explainer/) | Documentation | 1 | A private artifact page you choose to share | Node.js, Python 3 | Yes |
 | [how-to-guides](plugins/how-to-guides/) | Documentation | 1 | A PDF guide on your machine | Node.js, Chrome | Yes |
 | [design-intelligence](plugins/design-intelligence/) | Design | 6 skills, 1 agent | MUI code in your project; a Figma screen only when you ask | Node.js, Python 3; optional `ADO_ORG` | Yes (local overlay) |
 | [standout](plugins/standout/) | Career | 1 | A fact ledger and a profile draft in a folder you choose; you paste into LinkedIn | Node.js | Yes |
 
-**Product-neutral** plugins ship no product data: your tracker, product and brand live in your own config.
-**Templates** are tuned to one team's project and house style; retarget the conventions in each skill's
-`references/` folder for yours.
+**Product-neutral** plugins ship no product data and work on any product: your tracker, product and brand
+live in your own config. **Local profile** plugins discover your org's facts once, read-only, and save them
+to `.claude/workspace-profile.json` in your project only after you confirm. **House styles** (titles,
+repro format, voice) follow one QA team's conventions; retarget them in each skill's `references/` folder.
 
 ## See it in action
 
@@ -289,6 +290,8 @@ Start it by invoking the **`qa-orchestrator`** agent and saying what you want, o
 (e.g. `kit-builder` for the build). See [its README](plugins/qa-engineering/) and
 [`docs/`](plugins/qa-engineering/docs/) for the full map, and the
 [end-to-end rehearsal](plugins/qa-engineering/docs/enhancement/end-to-end-rehearsal.md) for a trace of the whole loop.
+A QA department has run it live on their own products and projects
+([verification](plugins/qa-engineering/docs/verification.md#live-use-november-2026)).
 
 <p align="center"><a href="plugins/qa-engineering/"><img src="assets/readme/usecases/qa-engineering.svg" alt="qa-engineering in action: what you ask and what you get" width="100%"></a></p>
 
@@ -315,7 +318,7 @@ push them to your tracker. The lightweight, à-la-carte alternative to `qa-engin
 
 `api-tester` authors contract / endpoint / workflow API cases and generates runnable Playwright + TypeScript
 specs (forward from cases, or reverse from existing specs); `api-bugger` triages a failed API test and drafts
-a review-ready bug. (Tuned to a specific product's conventions.)
+a review-ready bug. Product-neutral: it works on any HTTP API, with your conventions in a local profile.
 
 <p align="center"><a href="plugins/api-testing/"><img src="assets/readme/usecases/api-testing.svg" alt="api-testing in action: what you ask and what you get" width="100%"></a></p>
 
@@ -328,7 +331,8 @@ a review-ready bug. (Tuned to a specific product's conventions.)
 ### [ui-testing](plugins/ui-testing/)
 
 `buggy` writes ADO Test Case work items in a house style; `tester` authors UI cases and generates runnable
-Playwright + TypeScript UI specs (forward and reverse). (Tuned to a specific product.)
+Playwright + TypeScript UI specs (forward and reverse). Product-neutral: it works on any web product, with
+your conventions in a local profile.
 
 <p align="center"><a href="plugins/ui-testing/"><img src="assets/readme/usecases/ui-testing.svg" alt="ui-testing in action: what you ask and what you get" width="100%"></a></p>
 

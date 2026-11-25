@@ -15,7 +15,7 @@
 | **Category** | Release management |
 | **What it does** | A complete release inventory, then short benefit-led release notes |
 | **Includes** | 2 skills |
-| **Writes** | Nothing outside the session: an inventory and drafts |
+| **Writes** | An inventory and drafts in the session; `.claude/workspace-profile.json` in your project after you confirm it |
 | **Setup** | A tracker connection (Azure DevOps today) to harvest; none to transform a pasted draft |
 | **Product-neutral** | Yes: your org's boards, integrations, plans and brands are discovered once into a local, git-ignored profile |
 

@@ -119,7 +119,7 @@ The guide is a draft until the people who support the readers review it. Don't s
 | A paragraph starting "You'll see" | The result line under a step. |
 | `*Optional:*` at the start of a step | An optional step. |
 | `![Full sentence caption.](images/x.png)` alone on a line | A framed, numbered figure. |
-| `> [!NOTE]`, `[!TIP]`, `[!WARNING]`, `[!CAUTION]`, `[!DONE]`, `[!AVAILABILITY]`, `[!AI]` | Callouts. `[!DONE]` ends a task with what the reader sees when it worked. `[!AI]` is the purple "AI feature" note; the build warns when a guide mentions AI without one. |
+| `> [!NOTE]`, `[!TIP]`, `[!IMPORTANT]`, `[!WARNING]`, `[!CAUTION]`, `[!DONE]`, `[!AVAILABILITY]`, `[!AI]` | Callouts. `[!DONE]` ends a task with what the reader sees when it worked. `[!AI]` is the purple "AI feature" note; the build warns when a guide mentions AI without one. |
 | `**Bold**` | On-screen text, spelled exactly as the app spells it. The word checks skip bold text. |
 
 The build adds the closing help line ("Still stuck?") from the brand profile's `help`.

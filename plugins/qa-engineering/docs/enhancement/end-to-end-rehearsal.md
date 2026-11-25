@@ -2,9 +2,13 @@
 
 A **documented trace** of the full QA loop through every engine, proving the hand-offs chain: each engine
 reads the `qa-context` slice(s) it depends on and writes its own, and every human gate fires where it should.
-This is a **rehearsal on paper**, not a live run — the committed plugin is product-neutral and does not touch
+This page is a **rehearsal on paper**, not a live run — the committed plugin is product-neutral and does not touch
 a real tracker or app. All names (Orders, `#0000`, `Plan/Suite Name`) are generic placeholders; the real
 values come from the QA's git-ignored `house-profile.json` and `.env`.
+
+> **Live use since (November 2026):** a QA department has run the plugin live on their own products and
+> projects. This page still traces the loop with placeholders, because the plugin ships no product data;
+> see [verification.md](../verification.md#live-use-november-2026).
 
 > How to read it: each step shows **intent → engine → gate(s) → the `qa-context` slice after the step**.
 > Slices are additive; a step only writes its own slice (and the traceability links). Follow one `tracesStory`
@@ -122,6 +126,7 @@ links through the same gated `ado-publish` / `failure-to-bug`. Build-seeded or c
 levels, the Standards, and the traceability thread are identical.
 
 ## Honesty note
-This rehearsal demonstrates the **contracts and gates**, not a live execution. On a real engagement the ids,
+This rehearsal demonstrates the **contracts and gates**, not a live execution; live use by a QA department
+is recorded in [verification.md](../verification.md#live-use-november-2026). On a real engagement the ids,
 plan/suite, fields and environment come from the QA's `house-profile.json` + `.env`, the ADO/Playwright MCPs
 sign in interactively, and every tracker write still waits for the QA's explicit confirm.
