@@ -70,19 +70,26 @@ async function still(session, t, scale = 1) {
 
 // What the player plays (spec 5.13's timing check): its length and its scenes' starts, the score's events and the
 // sounds it lacks, and the lines the film logged that were not plain logs (a font it could not load, a throw).
+// The player's own log so far (spec 5.13): every line but plain `log` ones, each cut to 600 characters. The film's code
+// writes some of these lines, so a reader takes them as data.
+async function playerLog(session) {
+  const log = await session.page.evaluate(() => window.__animation.consoleLog());
+  return log.filter((l) => l.level !== 'log').map((l) => ({ level: String(l.level), text: String(l.text).slice(0, 600) }));
+}
+
 async function played(session, meta) {
   const r = await session.page.evaluate(async () => {
     const a = window.__animation;
     const score = await a.score();
     const report = await a.scoreReport();
-    return { events: (score && score.events) || [], unknown: (report && report.unknown) || [], log: a.consoleLog() };
+    return { events: (score && score.events) || [], unknown: (report && report.unknown) || [] };
   });
   return {
     duration: meta.duration,
     chapters: meta.chapters.map((c) => c.t),
     events: r.events.map((e) => ({ t: e.t, kind: e.kind, patch: e.patch })),
     unknown: r.unknown,
-    log: r.log.filter((l) => l.level !== 'log').map((l) => ({ level: String(l.level), text: String(l.text).slice(0, 600) })),
+    log: await playerLog(session),
   };
 }
 
@@ -224,4 +231,4 @@ async function writeStills(session, moments, dir, { sheets = false, box = null }
   return out;
 }
 
-module.exports = { ARGS, STAGE, playerFiles, openPlayer, loadFilm, still, played, measureFrame, measure, sheet, crop, writeStills };
+module.exports = { ARGS, STAGE, playerFiles, openPlayer, loadFilm, still, played, playerLog, measureFrame, measure, sheet, crop, writeStills };

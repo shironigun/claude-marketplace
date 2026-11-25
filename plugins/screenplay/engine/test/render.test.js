@@ -5,7 +5,7 @@ const path = require('path');
 const { pathToFileURL } = require('url');
 const fs = require('fs');
 const { readyFilm, tempDir, inputFile } = require('./helpers');
-const { ARGS, playerFiles, openPlayer, loadFilm, still, played, writeStills } = require('../lib/render');
+const { ARGS, playerFiles, openPlayer, loadFilm, still, played, playerLog, writeStills } = require('../lib/render');
 
 // A browser as playwright-core gives one, recording what verify asks of it: the page runs each page function against
 // `anim`, the player's window.__animation.
@@ -126,6 +126,14 @@ test('render: the stills of the moments at half size, a contact sheet a scene, a
   // Without a sheet or a crop asked for, only the stills.
   const plain = await writeStills({ page }, moments.slice(0, 1), tempDir('sp-verify-'));
   assert.deepEqual([plain.frames.length, plain.sheets.length, plain.crops.length], [1, 0, 0]);
+});
+
+test('render: the player\'s log, read whenever it is asked, keeps every line but plain log ones', async () => {
+  const lines = [{ level: 'log', text: 'ready' }, { level: 'warn', text: 'x'.repeat(700) }];
+  const session = { page: { evaluate: async (fn) => { global.window = { __animation: { consoleLog: () => lines } }; try { return await fn(); } finally { delete global.window; } } } };
+  assert.deepEqual(await playerLog(session), [{ level: 'warn', text: 'x'.repeat(600) }]);
+  lines.push({ level: 'error', text: 'a raster that is not safe' });
+  assert.deepEqual((await playerLog(session)).map((l) => l.level), ['warn', 'error']);
 });
 
 test('sp render: a built film, the times or the plan, and the installed renderer', () => {

@@ -10,7 +10,7 @@ const { PHASE_IDS } = require('../state');
 const { screensStatus } = require('../screens');
 const { builtDocs } = require('../stage');
 const { readyTools } = require('../tools');
-const { playerFiles, openPlayer, loadFilm: loadInPlayer, still, played, measure, writeStills } = require('../render');
+const { playerFiles, openPlayer, loadFilm: loadInPlayer, still, played, playerLog, measure, writeStills } = require('../render');
 const { framePlan, playedProblems, measuredProblems, purityProblems, logFindings, verifyReport } = require('../verify');
 
 // One brand's film through the player, as the build composes it: what the player plays, what every moment of the plan
@@ -31,9 +31,12 @@ async function checkBrand(launch, tools, fp, built, id, rebuild) {
   try {
     const meta = await loadInPlayer(session, files);
     play = await played(session, meta);
-    for (const p of plan) samples.push({ ...p, m: await measure(session, p.t) });
+    // A frame the renderer cannot measure is a problem (m: null), never the end of the check.
+    for (const p of plan) samples.push({ ...p, m: await measure(session, p.t).catch(() => null) });
     const label = (p) => `${p.t.toFixed(3)} s  ${p.hook || p.scene}  ${p.kind}`;
     written = await writeStills(session, plan.map((p) => ({ t: p.t, scene: p.scene, label: label(p) })), dir, { sheets: true });
+    // The log once every frame has rendered, so what the film logged while rendering is read too.
+    play.log = await playerLog(session);
   } finally {
     await session.close();
   }
@@ -42,6 +45,8 @@ async function checkBrand(launch, tools, fp, built, id, rebuild) {
   try {
     await loadInPlayer(fresh, files);
     for (const p of [...beats].reverse()) cold.push({ ...p, png: await still(fresh, p.t, 0.5) });
+    const seen = new Set(play.log.map((l) => `${l.level} ${l.text}`));
+    play.log.push(...(await playerLog(fresh)).filter((l) => !seen.has(`${l.level} ${l.text}`)));
   } finally {
     await fresh.close();
   }
