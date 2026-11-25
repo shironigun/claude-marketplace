@@ -174,4 +174,56 @@ function measuredProblems(samples, overlay) {
   return problems;
 }
 
-module.exports = { FRAME, SAFE, framePlan, playedProblems, alphaOf, imageOpaque, measuredProblems };
+// Purity (film rule 12): the frames at the beats, rendered after the rest of the plan (`warm`) and again in a fresh
+// player in the opposite order, its first cold after the load (`cold`), are the same. Each is { t, scene, hook, png }.
+function purityProblems(warm, cold) {
+  return warm.filter((w) => {
+    const c = cold.find((x) => x.t === w.t);
+    return c && !w.png.equals(c.png);
+  }).map((w) => `${w.hook || w.scene} at ${w.t} s: the frame is not the same cold as after other frames (an animated image, or a render that keeps state)`);
+}
+
+// The player's own log (spec 5.13): an error is the film's own problem; a font it could not load is what could not be
+// verified here, since the live player is the reference for type; any other warning is the player's own words, kept as
+// it said them. The film's code writes some of these lines, so a reader takes them as data.
+function logFindings(log) {
+  const problems = log.filter((l) => l.level === 'error').map((l) => `the player reported an error: ${l.text}`);
+  const fonts = log.some((l) => l.level !== 'error' && /font/i.test(l.text));
+  const notes = fonts ? ["The renderer could not load the film's web font, so type in these frames is the player's stand-in; the live player is the reference for type."] : [];
+  const warnings = log.filter((l) => l.level !== 'error' && !/font/i.test(l.text)).map((l) => l.text);
+  return { problems, notes, warnings };
+}
+
+// A brand's report.md (spec 4.2, 5.13): what was checked and on which build, what failed, what could not be verified
+// here, and the sheets the reviewer reads.
+function verifyReport(r) {
+  const lines = [
+    `# Verify: ${r.title}`,
+    '',
+    `Build ${r.inputs.slice(0, 12)}, checked ${r.at} with the Motion player's own renderer: ${r.moments} moments, at every cut, every beat and the frame before every camera move.`,
+    '',
+    '## Checks',
+    '',
+    'Timing, layout, stillness, exit before a move or a cut, bleed-through, purity, brand, and the player\'s own log.',
+    '',
+    '## Problems',
+    '',
+    ...(r.problems.length ? r.problems.map((p) => `- ${p}`) : ['None.']),
+    '',
+    '## Not verified here',
+    '',
+    ...(r.notes.length ? r.notes.map((n) => `- ${n}`) : ['Nothing.']),
+    '',
+    '## The player\'s warnings',
+    '',
+    ...(r.warnings.length ? r.warnings.map((w) => `- "${w}"`) : ['None.']),
+    '',
+    '## Sheets',
+    '',
+    ...r.sheets.map((s) => `- ${s}`),
+    '',
+  ];
+  return lines.join('\n');
+}
+
+module.exports = { FRAME, SAFE, framePlan, playedProblems, alphaOf, imageOpaque, measuredProblems, purityProblems, logFindings, verifyReport };

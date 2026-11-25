@@ -1,4 +1,5 @@
 'use strict';
+const fs = require('fs');
 const path = require('path');
 const { pathToFileURL } = require('url');
 const { checkError } = require('./errors');
@@ -193,4 +194,34 @@ async function crop(session, pngBytes, box) {
   }, [`data:image/png;base64,${pngBytes.toString('base64')}`, box]));
 }
 
-module.exports = { ARGS, STAGE, playerFiles, openPlayer, loadFilm, still, played, measureFrame, measure, sheet, crop };
+// A still's file name, in film order: t_012.300.png.
+const stillName = (t) => `t_${t.toFixed(3).padStart(7, '0')}.png`;
+
+// Writes the stills of `moments` ({ t, label, scene }) at half size into dir/frames; asked, a contact sheet a scene
+// (one for all when the moments name none) into dir/sheets, and a full-size crop of `box` from each into dir/crops.
+// Returns the files written, and each still's bytes by its time.
+async function writeStills(session, moments, dir, { sheets = false, box = null } = {}) {
+  const out = { frames: [], sheets: [], crops: [], pngs: new Map() };
+  const write = (file, bytes) => {
+    fs.mkdirSync(path.dirname(file), { recursive: true });
+    fs.writeFileSync(file, bytes);
+    return file;
+  };
+  for (const m of moments) {
+    const bytes = await still(session, m.t, 0.5);
+    out.pngs.set(m.t, bytes);
+    out.frames.push(write(path.join(dir, 'frames', stillName(m.t)), bytes));
+    if (box) {
+      const name = `c_${m.t.toFixed(3).padStart(7, '0')}_${box.x}_${box.y}_${box.w}_${box.h}.png`;
+      out.crops.push(write(path.join(dir, 'crops', name), await crop(session, await still(session, m.t, 1), box)));
+    }
+  }
+  if (sheets) {
+    const groups = new Map();
+    for (const m of moments) groups.set(m.scene || 'stills', [...(groups.get(m.scene || 'stills') || []), { label: m.label, png: out.pngs.get(m.t) }]);
+    for (const [name, list] of groups) out.sheets.push(write(path.join(dir, 'sheets', `${name}.png`), await sheet(session, list)));
+  }
+  return out;
+}
+
+module.exports = { ARGS, STAGE, playerFiles, openPlayer, loadFilm, still, played, measureFrame, measure, sheet, crop, writeStills };

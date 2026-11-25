@@ -3,8 +3,9 @@ const test = require('node:test');
 const assert = require('node:assert/strict');
 const path = require('path');
 const { pathToFileURL } = require('url');
-const { readyFilm, tempDir } = require('./helpers');
-const { ARGS, playerFiles, openPlayer, loadFilm, still, played } = require('../lib/render');
+const fs = require('fs');
+const { readyFilm, tempDir, inputFile } = require('./helpers');
+const { ARGS, playerFiles, openPlayer, loadFilm, still, played, writeStills } = require('../lib/render');
 
 // A browser as playwright-core gives one, recording what verify asks of it: the page runs each page function against
 // `anim`, the player's window.__animation.
@@ -96,6 +97,37 @@ test('render: a brand\'s film goes to the player as the stage would write it, an
   await assert.rejects(loadFilm(failing, files), /the player could not load the film: scene-s-02\.js: W is not defined/);
 });
 
+test('render: the stills of the moments at half size, a contact sheet a scene, and a full-size crop of each', async () => {
+  const dir = tempDir('sp-verify-');
+  const scales = [];
+  const png = (text) => `data:image/png;base64,${Buffer.from(text).toString('base64')}`;
+  // The page draws sheets and crops on its own canvas; this one names what it was asked to draw.
+  const page = {
+    evaluate: async (fn, arg) => {
+      if (fn.name === 'drawSheet') return png(`sheet of ${arg[0].length}`);
+      if (fn.name === 'cropStill') return png(`crop ${arg[1].w}x${arg[1].h}`);
+      global.window = { __animation: { frame: (t, o) => { scales.push(o.scale); return png(String(t)); } } };
+      try {
+        return await fn(arg);
+      } finally {
+        delete global.window;
+      }
+    },
+  };
+  const moments = [{ t: 3, scene: 'S-02', label: '3.000 s' }, { t: 4.75, scene: 'S-02', label: '4.750 s' }, { t: 14, scene: 'S-03', label: '14.000 s' }];
+  const out = await writeStills({ page }, moments, dir, { sheets: true, box: { x: 0, y: 0, w: 640, h: 360 } });
+  assert.deepEqual(out.frames.map((f) => path.basename(f)), ['t_003.000.png', 't_004.750.png', 't_014.000.png']);
+  assert.equal(fs.readFileSync(out.frames[1], 'utf8'), '4.75');
+  assert.deepEqual(out.sheets.map((f) => [path.basename(f), fs.readFileSync(f, 'utf8')]), [['S-02.png', 'sheet of 2'], ['S-03.png', 'sheet of 1']]);
+  assert.deepEqual(out.crops.map((f) => path.basename(f)), ['c_003.000_0_0_640_360.png', 'c_004.750_0_0_640_360.png', 'c_014.000_0_0_640_360.png']);
+  assert.equal(fs.readFileSync(out.crops[0], 'utf8'), 'crop 640x360');
+  assert.deepEqual(scales, [0.5, 1, 0.5, 1, 0.5, 1]);
+  assert.equal(out.pngs.get(14).toString(), '14');
+  // Without a sheet or a crop asked for, only the stills.
+  const plain = await writeStills({ page }, moments.slice(0, 1), tempDir('sp-verify-'));
+  assert.deepEqual([plain.frames.length, plain.sheets.length, plain.crops.length], [1, 0, 0]);
+});
+
 test('sp render: a built film, the times or the plan, and the installed renderer', () => {
   const { sp, runSp, repo, env } = readyFilm('reminders', 'promo');
   const render = (...more) => runSp(repo, ['render', 'reminders', '--film', 'promo', ...more], env);
@@ -108,4 +140,22 @@ test('sp render: a built film, the times or the plan, and the installed renderer
   const r = render('--brand', 'harbor', '--plan', '--sheet');
   assert.equal(r.code, 1);
   assert.match(r.stderr, /the renderer is not installed; read the Motion player's files into a folder and run sp render --install <folder>/);
+});
+
+test('sp check: once every brand\'s film holds the build, with the renderer installed', () => {
+  const { sp, runSp, repo, env } = readyFilm('reminders', 'promo');
+  const check = (...more) => runSp(repo, ['check', 'reminders', '--film', 'promo', ...more], env);
+  const early = check();
+  assert.equal(early.code, 1);
+  assert.match(early.stderr, /the films do not hold the film's build yet; the next step is build/);
+  sp('build', 'reminders', '--film', 'promo');
+  for (const brand of ['harbor', 'lumen']) {
+    const s = sp('stage', 'reminders', '--film', 'promo', '--brand', brand, '--json').json;
+    sp('record', 'reminders', '--film', 'promo', '--brand', brand, '--url', `${'https:'}//example.invalid/${brand}`);
+    sp('record', 'reminders', '--film', 'promo', '--brand', brand, '--versions', inputFile({ stage: s.id, ...Object.fromEntries(s.batches.flat().map((w) => [`${w.collection}/${w.doc_id}`, 1])) }, repo));
+  }
+  assert.equal(check('--brand', 'acme').code, 2);
+  const r = check();
+  assert.equal(r.code, 1);
+  assert.match(r.stderr, /the renderer is not installed/);
 });

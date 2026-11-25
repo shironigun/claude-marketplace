@@ -4,7 +4,7 @@ const assert = require('node:assert/strict');
 const path = require('path');
 const { EXAMPLES } = require('./helpers');
 const { timingTable } = require('../lib/timing');
-const { FRAME, framePlan, playedProblems, alphaOf, imageOpaque, measuredProblems } = require('../lib/verify');
+const { FRAME, framePlan, playedProblems, alphaOf, imageOpaque, measuredProblems, purityProblems, logFindings, verifyReport } = require('../lib/verify');
 
 const expected = (...parts) => require(path.join(EXAMPLES, 'expected', 'example-desk', ...parts));
 // The example promo as film.json holds its timing: the table's scenes by id, with the film's length and tempo.
@@ -145,6 +145,34 @@ test('verify: what the frames measure against the film rules: layout, stillness,
 test('verify: a background\'s alpha in every colour syntax a browser gives', () => {
   assert.deepEqual(['transparent', 'rgb(255, 255, 255)', 'rgba(0, 0, 0, 0)', 'rgba(0, 0, 0, 0.5)', 'hsla(10, 50%, 50%, 40%)'].map(alphaOf), [0, 1, 0, 0.5, 0.4]);
   assert.deepEqual(['oklch(0.7 0.1 200 / 0.4)', 'color(srgb 1 1 1 / 50%)', 'lab(50 20 30)', 'color-mix(in srgb, red 40%, transparent)', 'color-mix(in srgb, red, blue)'].map(alphaOf), [0.4, 0.5, 1, 0.5, 1]);
+});
+
+test('verify: the same frame cold and after others, the player\'s own log, and the report', () => {
+  const frame = (t, bytes, hook) => ({ t, scene: 'S-02', hook, png: Buffer.from(bytes) });
+  const warm = [frame(4.75, 'a', 'S-02.1'), frame(7.1, 'b', 'S-02.2')];
+  assert.deepEqual(purityProblems(warm, [frame(7.1, 'b', 'S-02.2'), frame(4.75, 'a', 'S-02.1')]), []);
+  assert.deepEqual(purityProblems(warm, [frame(7.1, 'c', 'S-02.2'), frame(4.75, 'a', 'S-02.1')]), [
+    'S-02.2 at 7.1 s: the frame is not the same cold as after other frames (an animated image, or a render that keeps state)',
+  ]);
+  const log = [
+    { level: 'warn', text: 'modules/scenes.json: "fonts"."sans" names no family in the player\'s list of Google Fonts families' },
+    { level: 'error', text: 'raster-safety: an image the player cannot draw' },
+    { level: 'warn', text: 'a scene ran long' },
+  ];
+  const found = logFindings(log);
+  assert.deepEqual(found.problems, ['the player reported an error: raster-safety: an image the player cannot draw']);
+  assert.equal(found.notes.length, 1);
+  assert.match(found.notes[0], /the live player is the reference for type/);
+  assert.deepEqual(found.warnings, ['a scene ran long']);
+  assert.deepEqual(logFindings([]), { problems: [], notes: [], warnings: [] });
+  const report = verifyReport({ title: 'Reminders, promo (Harbor)', inputs: '0123456789abcdef', at: '2026-11-23T10:00:00.000Z', moments: 68, ...found, sheets: ['sheets/S-01.png'] });
+  assert.match(report, /^# Verify: Reminders, promo \(Harbor\)\n/);
+  assert.match(report, /Build 0123456789ab, checked 2026-11-23T10:00:00\.000Z with the Motion player's own renderer: 68 moments/);
+  assert.match(report, /## Problems\n\n- the player reported an error: raster-safety/);
+  // The player's words are quoted in a section of their own.
+  assert.match(report, /## The player's warnings\n\n- "a scene ran long"\n/);
+  assert.match(report, /## Sheets\n\n- sheets\/S-01\.png\n$/);
+  assert.match(verifyReport({ title: 'T', inputs: 'x', at: 'now', moments: 1, problems: [], notes: [], warnings: [], sheets: [] }), /## Problems\n\nNone\.\n\n## Not verified here\n\nNothing\.\n\n## The player's warnings\n\nNone\./);
 });
 
 test('verify: a background image hides what is under it only when every colour it names is opaque', () => {

@@ -1,5 +1,4 @@
 'use strict';
-const fs = require('fs');
 const path = require('path');
 const { usageError, checkError } = require('../errors');
 const { readJson } = require('../files');
@@ -7,11 +6,8 @@ const { repoInfo, checkHome, workspaceKey } = require('../paths');
 const { loadFilm } = require('../film');
 const { builtDocs } = require('../stage');
 const { installTools, readyTools } = require('../tools');
-const { playerFiles, openPlayer, loadFilm: loadInPlayer, still, sheet, crop } = require('../render');
+const { playerFiles, openPlayer, loadFilm: loadInPlayer, writeStills } = require('../render');
 const { framePlan } = require('../verify');
-
-// A still's file name, in film order: t_012.300.png.
-const stillName = (t) => `t_${t.toFixed(3).padStart(7, '0')}.png`;
 
 // The times --at names, each a number of seconds inside the film.
 function times(list, length) {
@@ -64,38 +60,14 @@ module.exports = {
     const dir = path.join(f.fp.verify, id);
     return (async () => {
       const session = await openPlayer(tools, (o) => chromium.launch(o));
-      const out = { brand: id, frames: [], sheets: [], crops: [] };
+      let written;
       try {
         await loadInPlayer(session, playerFiles(docs));
-        const shots = [];
-        for (const m of moments) {
-          const bytes = await still(session, m.t, 0.5);
-          const file = path.join(dir, 'frames', stillName(m.t));
-          fs.mkdirSync(path.dirname(file), { recursive: true });
-          fs.writeFileSync(file, bytes);
-          out.frames.push(file);
-          shots.push({ ...m, png: bytes });
-          if (box) {
-            const part = path.join(dir, 'crops', `c_${m.t.toFixed(3).padStart(7, '0')}_${box.x}_${box.y}_${box.w}_${box.h}.png`);
-            fs.mkdirSync(path.dirname(part), { recursive: true });
-            fs.writeFileSync(part, await crop(session, await still(session, m.t, 1), box));
-            out.crops.push(part);
-          }
-        }
-        if (args.flags.sheet) {
-          // One sheet a scene when the stills are the plan's, else one for all of them.
-          const groups = new Map();
-          for (const s of shots) groups.set(s.scene || 'stills', [...(groups.get(s.scene || 'stills') || []), s]);
-          for (const [name, list] of groups) {
-            const file = path.join(dir, 'sheets', `${name}.png`);
-            fs.mkdirSync(path.dirname(file), { recursive: true });
-            fs.writeFileSync(file, await sheet(session, list));
-            out.sheets.push(file);
-          }
-        }
+        written = await writeStills(session, moments, dir, { sheets: args.flags.sheet, box });
       } finally {
         await session.close();
       }
+      const out = { brand: id, frames: written.frames, sheets: written.sheets, crops: written.crops };
       return { json: out, text: `${out.frames.length} stills, ${out.sheets.length} sheets and ${out.crops.length} crops of ${id}'s film in ${dir}` };
     })();
   },
