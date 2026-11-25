@@ -15,7 +15,7 @@
 | **Category** | Testing |
 | **What it does** | Click-by-click UI cases and runnable Playwright UI specs |
 | **Includes** | 2 skills |
-| **Writes** | Test Case work items (`buggy`, after your OK) |
+| **Writes** | Test Case work items (`buggy`, after your OK); UI specs in your `automation/` folder (`tester`); `.claude/workspace-profile.json` after you confirm it |
 | **Setup** | Set `ADO_ORG`; browser sign-in on first use, for `buggy` only |
 | **Product-neutral** | Yes: org facts come from a local workspace profile |
 

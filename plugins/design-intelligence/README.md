@@ -57,8 +57,8 @@ Final Review               (→ PASS)
 A parallel path builds a Figma screen instead of code:
 `figma-design-analysis → figma-screen-generation → design-system-review`.
 
-Validated end-to-end on two real screens (one web, one mobile) — both reached
-FAIL → correction → PASS. The run record shipped in
+Validated live on a whole new module: every screen built in React + MUI from the Figma references
+alone, matching the designs. The run record shipped in
 `capabilities/documentation/examples/` is a fictional example of that output.
 
 ## Skills (6)

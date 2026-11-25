@@ -1,6 +1,6 @@
 {
   "name": "design-intelligence",
-  "version": "0.2.4",
+  "version": "0.2.5",
   "description": "Turns a Figma screen into a compliant MUI implementation (or a Figma screen) and reviews it against your organization's design system. Bundles six skills (Figma analysis, Figma-to-code adapter, design-system generation, Figma screen generation, design-system review, and skill maintenance), a steward agent, and shared design-system knowledge and configuration, with your org's values kept in a local, git-ignored overlay.",
   "author": {
     "name": "shironigun",

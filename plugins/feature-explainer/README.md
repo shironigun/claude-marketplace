@@ -51,7 +51,8 @@ designers", "a dev handover", "something sales can use"), or the skill asks once
 | Everyone (default) | a How it works page for product and QA, reference pages, developer detail collapsed |
 
 A lint step checks each page against its audience's rules before it is built (for example: pictures
-first, a prose budget, dated issues, no secrets anywhere, and no code or internal issues on a sales page).
+first, a prose budget, dated issues, no token, key or password patterns anywhere the page shows text, and
+no code or internal issues on a sales page).
 
 ## What the page looks like
 

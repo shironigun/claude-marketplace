@@ -51,6 +51,13 @@ function proseWords(html) {
 // Things that must never be on a page, whoever it is for.
 const SECRET = [/eyJ[A-Za-z0-9_-]{15,}\.[A-Za-z0-9_-]{15,}\./, /\b(?:api[_-]?key|password|passwd|secret|client[_-]?secret)\b["']?\s*[:=]\s*["'][^"'\s<]{6,}/i, /\bBearer\s+[A-Za-z0-9._-]{20,}/];
 
+// Every string value in a plain object or array, at any depth (functions are skipped).
+const stringsIn = (v, out = []) => {
+  if (typeof v === 'string') out.push(v);
+  else if (v && typeof v === 'object') Object.values(v).forEach((x) => stringsIn(x, out));
+  return out;
+};
+
 // Returns [{ level: 'fail' | 'warn', page, msg }] for one content module.
 function lint(C) {
   const out = [], add = (level, page, msg) => out.push({ level, page, msg });
@@ -60,8 +67,13 @@ function lint(C) {
   const all = C.pages.map((p) => ({ id: p.id, html: htmlOf(p) }));
   const everything = all.map((p) => p.html).join('\n') + JSON.stringify(C.hero || {}) + JSON.stringify(C.glossary || []);
 
-  // 1. Safety, every audience: no secrets, no unlabelled invented data
-  SECRET.forEach((rx) => { all.forEach((p) => { if (rx.test(p.html)) add('fail', p.id, 'looks like a token, key or password; take it out'); }); });
+  // 1. Safety, every audience: no secrets, no unlabelled invented data. Page bodies, then every other
+  //    string the page shows (hero, glossary, meta, footer, title, brand), read value by value.
+  const outside = stringsIn(Object.assign({}, C, { pages: [] }));
+  SECRET.forEach((rx) => {
+    all.forEach((p) => { if (rx.test(p.html)) add('fail', p.id, 'looks like a token, key or password; take it out'); });
+    if (outside.some((s) => rx.test(s))) add('fail', '-', 'looks like a token, key or password outside the pages (hero, glossary, meta or footer); take it out');
+  });
 
   // 2. The first page must be a picture story, not an essay
   const pics = pictures(how), words = proseWords(how);
