@@ -103,6 +103,17 @@ function alphaOf(color) {
   return parts.length === 4 ? value(parts[3]) : 1;
 }
 
+// Whether a computed background-image hides what is under it: none hides nothing; an image whose colours are all fully
+// opaque does, and a url() image, which names no colour, is taken as opaque. `transparent`, or any colour with alpha
+// under 1, makes it see-through. The url() parts are set aside first, so a data URI's text is never read as a colour.
+function imageOpaque(image, alphaOf) {
+  if (!image || image === 'none') return false;
+  const css = image.replace(/url\((?:"[^"]*"|'[^']*'|[^)]*)\)/g, 'url()');
+  if (/\btransparent\b/.test(css)) return false;
+  const colours = css.match(/\b(?:rgba?|hsla?|hwb|lab|lch|oklab|oklch|color)\([^)]*\)/g) || [];
+  return colours.every((c) => alphaOf(c) >= 1);
+}
+
 // What the film's frames measure against the film rules (spec 5.13, 8): each sample is a moment of the plan with `m`,
 // what measureFrame gave there. `overlay` is the brand's brand.json. Each problem is said once, at its first moment.
 // - layout: a beat's target is shown when the beat acts, has a size, and lies in the app's window and the frame; a
@@ -163,4 +174,4 @@ function measuredProblems(samples, overlay) {
   return problems;
 }
 
-module.exports = { FRAME, SAFE, framePlan, playedProblems, alphaOf, measuredProblems };
+module.exports = { FRAME, SAFE, framePlan, playedProblems, alphaOf, imageOpaque, measuredProblems };

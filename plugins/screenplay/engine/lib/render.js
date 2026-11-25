@@ -3,7 +3,7 @@ const path = require('path');
 const { pathToFileURL } = require('url');
 const { checkError } = require('./errors');
 const { PLAYER_FILES } = require('./tools');
-const { alphaOf } = require('./verify');
+const { alphaOf, imageOpaque } = require('./verify');
 
 // The Motion player's own offline entry (index.html#tools, window.__animation), opened in the user's Chromium with no
 // network (spec 12, 13): the page loads only the player's three files, and the film's documents reach it through
@@ -123,7 +123,7 @@ async function sheet(session, tiles, columns = 4, width = 480) {
 // stage pixels: the camera, the app's window, every hook's element, the callouts and a card's parts, each layer with
 // whether something opaque covers it, and each logo in a place. Runs in the page, given `alphaOf` (lib/verify.js), which
 // the page has not otherwise. `scale` is the window's own size on the stage, the look's scale times the camera's zoom.
-function measureFrame(alphaOf) {
+function measureFrame(alphaOf, imageOpaque) {
   const r1 = (n) => Math.round(n * 10) / 10;
   const box = (e) => {
     const r = e.getBoundingClientRect();
@@ -138,10 +138,7 @@ function measureFrame(alphaOf) {
   };
   const opaque = (e) => {
     const cs = getComputedStyle(e);
-    const image = cs.backgroundImage;
-    // An image counts only when every colour it names is fully opaque; a url() names none and is taken as opaque.
-    const solidImage = image !== 'none' && !/transparent/.test(image) && (image.match(/(?:rgba?|hsla?|color)([^)]*)/g) || []).every((c) => alphaOf(c) >= 1);
-    return alphaOf(cs.backgroundColor) >= 1 || solidImage;
+    return alphaOf(cs.backgroundColor) >= 1 || imageOpaque(cs.backgroundImage, alphaOf);
   };
   const all = (sel, kind) => [...document.querySelectorAll(sel)].map((e) => ({ kind, ...box(e), shown: shown(e) }));
   const world = document.querySelector('.sp-world');
@@ -176,7 +173,7 @@ function measureFrame(alphaOf) {
 async function measure(session, t) {
   await session.page.evaluate((time) => window.__animation.seek(time), t);
   const frame = session.page.frames().find((f) => f.url() === 'about:srcdoc');
-  return frame ? frame.evaluate(`(${measureFrame})(${alphaOf})`) : null;
+  return frame ? frame.evaluate(`(${measureFrame})(${alphaOf}, ${imageOpaque})`) : null;
 }
 
 // A part of a still, at full scale: `box` is { x, y, w, h } on the 1920 by 1080 stage.

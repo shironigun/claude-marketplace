@@ -4,7 +4,7 @@ const assert = require('node:assert/strict');
 const path = require('path');
 const { EXAMPLES } = require('./helpers');
 const { timingTable } = require('../lib/timing');
-const { FRAME, framePlan, playedProblems, alphaOf, measuredProblems } = require('../lib/verify');
+const { FRAME, framePlan, playedProblems, alphaOf, imageOpaque, measuredProblems } = require('../lib/verify');
 
 const expected = (...parts) => require(path.join(EXAMPLES, 'expected', 'example-desk', ...parts));
 // The example promo as film.json holds its timing: the table's scenes by id, with the film's length and tempo.
@@ -145,4 +145,15 @@ test('verify: what the frames measure against the film rules: layout, stillness,
 test('verify: a background\'s alpha in every colour syntax a browser gives', () => {
   assert.deepEqual(['transparent', 'rgb(255, 255, 255)', 'rgba(0, 0, 0, 0)', 'rgba(0, 0, 0, 0.5)', 'hsla(10, 50%, 50%, 40%)'].map(alphaOf), [0, 1, 0, 0.5, 0.4]);
   assert.deepEqual(['oklch(0.7 0.1 200 / 0.4)', 'color(srgb 1 1 1 / 50%)', 'lab(50 20 30)', 'color-mix(in srgb, red 40%, transparent)', 'color-mix(in srgb, red, blue)'].map(alphaOf), [0.4, 0.5, 1, 0.5, 1]);
+});
+
+test('verify: a background image hides what is under it only when every colour it names is opaque', () => {
+  assert.equal(imageOpaque('none', alphaOf), false);
+  assert.equal(imageOpaque('linear-gradient(rgb(0, 0, 0), rgb(255, 255, 255))', alphaOf), true);
+  assert.equal(imageOpaque('linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5))', alphaOf), false);
+  assert.equal(imageOpaque('linear-gradient(hsla(10, 50%, 50%, 0.4), white)', alphaOf), false);
+  assert.equal(imageOpaque('linear-gradient(oklch(0.7 0.1 200 / 0.4), rgb(255, 255, 255))', alphaOf), false);
+  assert.equal(imageOpaque('linear-gradient(transparent, rgb(255, 255, 255))', alphaOf), false);
+  assert.equal(imageOpaque('url("data:image/svg+xml;utf8,<svg fill=\'transparent\'/>")', alphaOf), true);
+  assert.equal(imageOpaque('url("panel.png"), linear-gradient(rgba(0, 0, 0, 0.2), rgb(0, 0, 0))', alphaOf), false);
 });
