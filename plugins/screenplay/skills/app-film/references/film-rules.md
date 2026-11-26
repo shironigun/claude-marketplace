@@ -12,7 +12,8 @@ build and the checks hold a film to all twelve.
    gone before the next shot enters.
 5. Point at the real control a user would touch (the navigation entry, not the page title).
 6. Captions are plain "label: value" in the product's own words.
-7. Small targets get a close-up.
+7. Small targets get a close-up, but for a click that opens a layer: its shot holds the layer too (rule 2), since
+   what the click opens is what the beat shows.
 8. A lifted card keeps 12 px padding on every side and holds only its target. Cards, chips and captions stay inside
    the safe area, 40 px from each frame edge at 1080p.
 9. Leaders end on edges; the cursor stays on its target.

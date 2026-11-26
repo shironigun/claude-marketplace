@@ -22,21 +22,21 @@ test('verify: a still at every cut, every beat and the frame before every camera
   assert.deepEqual(plan.map((p) => p.t), [...plan.map((p) => p.t)].sort((a, b) => a - b));
   assert.ok(plan.every((p) => p.t >= 0 && p.t < film.film.length));
   // Each scene's first frame, the frame before each cut, a card's middle, and the film's last frame.
-  assert.deepEqual(at(plan, 'cut'), [0, 3, 13.8, 19.2, 31.8]);
-  assert.deepEqual(at(plan, 'before-cut'), [2.983, 13.783, 19.183, 31.783]);
-  assert.deepEqual(at(plan, 'card'), [1.5, 33.3]);
-  assert.deepEqual(at(plan, 'end'), [34.783]);
+  assert.deepEqual(at(plan, 'cut'), [0, 3, 14.4, 19.8, 33]);
+  assert.deepEqual(at(plan, 'before-cut'), [2.983, 14.383, 19.783, 32.983]);
+  assert.deepEqual(at(plan, 'card'), [1.5, 34.5]);
+  assert.deepEqual(at(plan, 'end'), [35.983]);
   // Every beat once: when it acts, or its caption's middle when it holds.
   assert.deepEqual(at(plan, 'beat').slice(0, 3), [['S-02.1', 4.85], ['S-02.2', 7.3], ['S-02.3', 7.85]]);
   assert.equal(at(plan, 'beat').length, 12);
   // A beat that acts and has a caption is measured again while its caption shows.
-  assert.deepEqual(at(plan, 'caption'), [['S-03.1', 15.95]]);
+  assert.deepEqual(at(plan, 'caption'), [['S-03.1', 16.55]]);
   // The frame before each glide inside a scene, and each glide's middle; a beat on the shot before moves nothing.
   assert.deepEqual(at(plan, 'before-move').slice(0, 2), [['S-02.2', 5.983], ['S-02.4', 8.783]]);
   assert.deepEqual(at(plan, 'move').slice(0, 2), [['S-02.1', 3.4], ['S-02.2', 6.4]]);
   assert.ok(!at(plan, 'move').some(([hook]) => hook === 'S-02.3'));
   // The shot each beat holds, from the camera's landing to the beat's end.
-  assert.deepEqual(at(plan, 'hold').filter(([hook]) => hook === 'S-04.5'), [['S-04.5', 29.25], ['S-04.5', 31.75]]);
+  assert.deepEqual(at(plan, 'hold').filter(([hook]) => hook === 'S-04.5'), [['S-04.5', 30.55], ['S-04.5', 32.95]]);
 });
 
 test('verify: the reference cut\'s expected check results: every moment its plan renders, each brand, and no problem', () => {
@@ -47,6 +47,8 @@ test('verify: the reference cut\'s expected check results: every moment its plan
   assert.equal(framePlan(built).length, want.moments);
   assert.deepEqual(Object.keys(want.brands), built.mods.brands);
   for (const r of Object.values(want.brands)) assert.deepEqual(r.problems, []);
+  // S-03 types into the Send dialog and then clicks its Send: two parts of one dialog share its shot, so the camera holds.
+  assert.deepEqual(built.scenes['S-03'].beats.map((b) => b.move !== null), [true, false]);
 });
 
 test('verify: the player plays the timing table: its length, its cuts on the beat, and every sound on its frame', () => {
@@ -213,11 +215,15 @@ test('verify: a layer a beat opens lies wholly in the frame from when it shows t
   // in the frame, is not.
   const frame = (layers) => ({ camera: [1, 0, 0, 1, 0, 0], scale: 1, window: { x: 0, y: 0, w: 1920, h: 1080 }, hooks: [], callouts: [], cards: [], layers, logos: [] });
   const dialog = (x, y, more = {}) => ({ kind: 'dialog', action: 'Send', x, y, w: 700, h: 400, shown: true, opaque: true, ...more });
-  const sample = (m) => [{ t: 5.95, kind: 'hold', scene: 'S-01', hook: 'S-01.2', layer: 'Send', m }];
+  const sample = (m, kind = 'hold') => [{ t: 5.95, kind, scene: 'S-01', hook: 'S-01.2', layer: 'Send', layerKind: 'dialog', m }];
   const overlay = { name: 'Harbor', logos: {}, places: {} };
   assert.deepEqual(measuredProblems(sample(frame([dialog(-300, -120)])), overlay), ['S-01.2 at 5.95 s: the dialog it opens is cut by the frame\'s edge']);
   assert.deepEqual(measuredProblems(sample(frame([dialog(600, 300)])), overlay), []);
   assert.deepEqual(measuredProblems(sample(frame([dialog(-300, -120, { shown: false })])), overlay), []);
+  // Checked only once the camera is still: mid-glide a layer may sit across the frame's edge.
+  assert.deepEqual(measuredProblems(sample(frame([dialog(-300, -120)]), 'move'), overlay), []);
+  // The layer is the one of that kind and name: a toast named Send is not the dialog.
+  assert.deepEqual(measuredProblems(sample(frame([{ ...dialog(600, 300), kind: 'toast' }, dialog(-300, -120)])), overlay), ['S-01.2 at 5.95 s: the dialog it opens is cut by the frame\'s edge']);
   // Another layer cut by the frame is no problem: a close-up of part of a drawer is a shot, not a flaw.
   assert.deepEqual(measuredProblems(sample(frame([dialog(600, 300), { kind: 'drawer', action: 'Details', x: 1500, y: 0, w: 600, h: 1080, shown: true, opaque: true }])), overlay), []);
 });

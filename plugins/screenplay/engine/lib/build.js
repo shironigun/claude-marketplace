@@ -12,16 +12,17 @@ const KINDS = { '.js': 'js', '.css': 'css', '.json': 'json', '.html': 'html' };
 const kindOf = (name) => KINDS[name.slice(name.lastIndexOf('.'))] || 'text';
 const label = (mod, id) => CATALOG.mods.find((m) => m.id === mod).options.find((o) => o.id === id).label;
 
-// Whether two beats share a target, from the screens: one element carries both their hooks (spec 5.11).
+// Whether two beats share a target, from the screens: one element carries both their hooks (spec 5.11), or both sit in
+// one dialog or toast, which the camera shows whole, so its parts share its shot and the callouts show them in turn.
 function hooksTogether(screens) {
   const pairs = new Set();
+  const together = (hooks) => { for (const a of hooks) for (const b of hooks) pairs.add(`${a}|${b}`); };
   for (const screen of screens) {
     for (const scene of screen.scenes) {
       for (const surface of scene.surfaces) {
-        for (const value of attrValues(joined(surface.html), 'data-sp')) {
-          const hooks = value.split(/\s+/).filter(Boolean);
-          for (const a of hooks) for (const b of hooks) pairs.add(`${a}|${b}`);
-        }
+        const values = attrValues(joined(surface.html), 'data-sp').map((v) => v.split(/\s+/).filter(Boolean));
+        for (const hooks of values) together(hooks);
+        if (['dialog', 'toast'].includes(surface.kind)) together(values.flat());
       }
     }
   }

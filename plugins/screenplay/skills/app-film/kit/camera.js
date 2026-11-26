@@ -17,15 +17,15 @@
 
   // The box each beat's shot frames: its target's, and each layer a beat opens joins the box of the shot that beat
   // holds, which is its own when it moves, or that of the last beat before it that moved (a click on the target the
-  // beat before pointed at keeps that shot). `boxes[i]` is beat i's target box, `opened[i]` the box of the layer it
-  // opens, or null.
+  // beat before pointed at keeps that shot); a shot with no target of its own frames the layer. `boxes[i]` is beat i's
+  // target box, `opened[i]` the box of the layer it opens, or null.
   SP.shotBoxes = function (beats, boxes, opened) {
     const out = [...boxes];
     opened.forEach((layer, i) => {
       if (!layer) return;
       let j = i;
       while (j > 0 && !beats[j].move) j -= 1;
-      if (out[j]) out[j] = SP.shotBox(out[j], layer);
+      out[j] = out[j] ? SP.shotBox(out[j], layer) : layer;
     });
     return out;
   };

@@ -3,7 +3,7 @@ const test = require('node:test');
 const assert = require('node:assert/strict');
 const path = require('path');
 const { EXAMPLES } = require('./helpers');
-const { PACE, GLIDE, TEMPO, beatPhases, timingTable, timingProblems, lengthProblems } = require('../lib/timing');
+const { PACE, LAYERS, GLIDE, TEMPO, beatPhases, timingTable, timingProblems, lengthProblems } = require('../lib/timing');
 
 const expected = (...parts) => require(path.join(EXAMPLES, 'expected', 'example-desk', ...parts));
 // The example promo's film context: what the timing table reads.
@@ -17,10 +17,10 @@ test('timing: every scene starts where the one before ends, in the Motion type\'
   const silent = { ...promo(), mods: { ...promo().mods, sound: 'silent' } };
   const table = timingTable(silent);
   assert.equal(table.fps, 60);
-  assert.equal(table.length, 33.8);
+  assert.equal(table.length, 35.2);
   assert.equal(table.tempo, null);
   assert.deepEqual(table.scenes.map((s) => [s.id, s.motion, s.start, s.dur]), [
-    ['S-01', 's-01', 0, 3], ['S-02', 's-02', 3, 10.4], ['S-03', 's-03', 13.4, 5.2], ['S-04', 's-04', 18.6, 12.2], ['S-05', 's-05', 30.8, 3],
+    ['S-01', 's-01', 0, 3], ['S-02', 's-02', 3, 11.1], ['S-03', 's-03', 14.1, 5.2], ['S-04', 's-04', 19.3, 12.9], ['S-05', 's-05', 32.2, 3],
   ]);
 });
 
@@ -32,23 +32,24 @@ test("timing: the camera glides at its pacing's speed, and a beat that glides la
   const at = (pacing, transitions = 'glide') => timingTable({ ...promo(), mods: { ...promo().mods, pacing, transitions, sound: 'silent' } });
   const moves = (table) => table.scenes[1].beats.map((b) => [b.dur, b.move]);
   // The story gives S-02 beats of 3, 1.4, 1.2, 3 and 1.2 s; the third acts on the second's target, so the camera stays.
-  assert.deepEqual(moves(at('brisk')), [[3, [0, 0.5]], [1.4, [0, 0.5]], [1.2, null], [3, [0, 0.5]], [1.2, [0, 0.5]]]);
-  assert.deepEqual(moves(at('standard')), [[3, [0, 0.8]], [1.6, [0, 0.8]], [1.2, null], [3, [0, 0.8]], [1.6, [0, 0.8]]]);
-  assert.deepEqual(moves(at('calm')), [[3, [0, 1]], [2, [0, 1]], [1.2, null], [3, [0, 1]], [2, [0, 1]]]);
-  assert.deepEqual([at('brisk').length, at('standard').length, at('calm').length], [32, 33.8, 35.8]);
-  // A cut lands at once, so it lengthens nothing.
-  assert.equal(at('standard', 'cut').length, 32);
+  // The fifth opens the Send reminder dialog, so it also runs long enough for the dialog to open (D39).
+  assert.deepEqual(moves(at('brisk')), [[3, [0, 0.5]], [1.4, [0, 0.5]], [1.2, null], [3, [0, 0.5]], [2, [0, 0.5]]]);
+  assert.deepEqual(moves(at('standard')), [[3, [0, 0.8]], [1.6, [0, 0.8]], [1.2, null], [3, [0, 0.8]], [2.3, [0, 0.8]]]);
+  assert.deepEqual(moves(at('calm')), [[3, [0, 1]], [2, [0, 1]], [1.2, null], [3, [0, 1]], [2.5, [0, 1]]]);
+  assert.deepEqual([at('brisk').length, at('standard').length, at('calm').length], [33.6, 35.2, 36.8]);
+  // A cut lands at once: it lengthens only a click that opens a layer, so the layer has time to open.
+  assert.equal(at('standard', 'cut').length, 32.6);
 });
 
 test('timing: a film with a score cuts on its beat: every scene but the last lasts whole beats of the tempo its pacing sets', () => {
   const table = timingTable(promo());
   assert.deepEqual(table.tempo, { bpm: TEMPO.standard, t0: 0 });
-  // At 100 beats a minute a beat is 0.6 s: S-02's 10.4 s ends on the next beat, and the time goes to its last beat.
+  // At 100 beats a minute a beat is 0.6 s: S-02's 11.1 s ends on the next beat, and the time goes to its last beat.
   assert.deepEqual(table.scenes.map((s) => [s.id, s.start, s.dur]), [
-    ['S-01', 0, 3], ['S-02', 3, 10.8], ['S-03', 13.8, 5.4], ['S-04', 19.2, 12.6], ['S-05', 31.8, 3],
+    ['S-01', 0, 3], ['S-02', 3, 11.4], ['S-03', 14.4, 5.4], ['S-04', 19.8, 13.2], ['S-05', 33, 3],
   ]);
-  assert.equal(table.length, 34.8);
-  assert.equal(table.scenes[1].beats.at(-1).dur, 2);
+  assert.equal(table.length, 36);
+  assert.equal(table.scenes[1].beats.at(-1).dur, 2.6);
   const beat = 60 / TEMPO.standard;
   assert.ok(table.scenes.every((s) => Math.abs(s.start / beat - Math.round(s.start / beat)) < 1e-6), JSON.stringify(table.scenes.map((s) => s.start)));
   // A calm film's beats are longer; its starts stay on its own grid, to the millisecond.
@@ -65,7 +66,7 @@ test('timing: a film with a score cuts on its beat: every scene but the last las
   const story = promo();
   const short = { ...story, beats: { ...story.beats, scenes: story.beats.scenes.map((s, i, all) => (i === all.length - 1 ? { ...s, ms: 2000 } : s)) } };
   const ended = timingTable(short);
-  assert.deepEqual([ended.scenes.at(-1).start, ended.scenes.at(-1).dur, ended.length], [31.8, 2, 33.8]);
+  assert.deepEqual([ended.scenes.at(-1).start, ended.scenes.at(-1).dur, ended.length], [33, 2, 35]);
 });
 
 test('timing: each screen scene opens on the whole window, and a new target moves the camera', () => {
@@ -144,8 +145,12 @@ test('timing: a click that opens a layer acts early enough for the layer to open
   assert.equal(PACE.open, 0.35);
   for (const pacing of ['brisk', 'standard', 'calm']) {
     const table = timingTable({ ...promo(), mods: { ...promo().mods, pacing } });
-    const opening = table.scenes.flatMap((s) => s.beats || []).filter((b) => b.do === 'click' && b.opens && ['drawer', 'dialog', 'toast', 'menu'].includes(b.opens.kind));
+    const opening = table.scenes.flatMap((s) => s.beats || []).filter((b) => b.do === 'click' && b.opens && LAYERS.includes(b.opens.kind));
     assert.deepEqual(opening.map((b) => b.hook), ['S-02.3', 'S-02.5', 'S-04.4'], pacing);
-    for (const b of opening) assert.ok(b.dur - b.act >= PACE.open + PACE.tail - 1e-9, `${pacing} ${b.hook} acts at ${b.act} s of ${b.dur} s`);
+    for (const b of opening) {
+      assert.ok(b.dur - b.act >= PACE.open + PACE.tail - 1e-9, `${pacing} ${b.hook} acts at ${b.act} s of ${b.dur} s`);
+      // The time is added to the beat, not taken from the cursor: it still settles and travels before the click.
+      if (b.move) assert.ok(b.act - b.move[1] >= PACE.settle + PACE.travel - 1e-9, `${pacing} ${b.hook} leaves the cursor ${b.act - b.move[1]} s`);
+    }
   }
 });

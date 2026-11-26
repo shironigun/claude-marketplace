@@ -244,3 +244,21 @@ test('kit camera: a beat that opens a layer frames its target and the layer toge
   const middle = SP.project(alone, FLOATING.x + 720 * FLOATING.s, FLOATING.y + 420 * FLOATING.s);
   assert.ok(middle.x < 0 || middle.y < 0, `the dialog's middle lands at ${middle.x},${middle.y} in the button's close-up`);
 });
+
+test('kit world: a layer opens on the engine\'s timing, a toast leaves after its beat, and a shot with no target frames its layer', () => {
+  const SP = kit();
+  const { PACE } = require('../lib/timing');
+  assert.deepEqual([SP.LAYER.show, SP.LAYER.show + SP.LAYER.open], [PACE.show, PACE.open]);
+  const sc = {
+    surfaces: [{ kind: 'page' }, { kind: 'toast', action: 'Sent' }, { kind: 'drawer', action: 'Details' }, { kind: 'toast', action: 'Saved' }],
+    beats: [
+      { start: 0, dur: 3, do: 'hold', act: null, opens: { kind: 'toast', action: 'Sent' } },
+      { start: 3, dur: 2, do: 'click', act: 1, opens: { kind: 'drawer', action: 'Details' } },
+    ],
+  };
+  // The toast its beat shows leaves at that beat's end; one left from an earlier scene, after the first beat; a drawer
+  // stays.
+  assert.deepEqual(SP.layerEnds(sc).map((v) => (v === Infinity ? 'stays' : v)), ['stays', 3, 'stays', 3]);
+  const layer = { x: 100, y: 100, w: 400, h: 200 };
+  assert.deepEqual(plain(SP.shotBoxes([{ move: [0, 0.8] }], [null], [layer])), [layer]);
+});

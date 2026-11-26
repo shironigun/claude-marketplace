@@ -1,5 +1,6 @@
 'use strict';
 const { kitSandbox } = require('./kit');
+const { PACE } = require('./timing');
 
 // One frame of a film at 60 fps: a cut, a sound or a still sits on its moment when it is within one frame of it.
 const FRAME = 1 / 60;
@@ -13,7 +14,7 @@ function framePlan(film) {
   const out = [];
   let layer = null;
   const add = (t, kind, scene, hook) => out.push({
-    t: ms(Math.max(0, t)), kind, scene, ...(hook ? { hook } : {}), ...(layer && hook && t > layer.from ? { layer: layer.action } : {}),
+    t: ms(Math.max(0, t)), kind, scene, ...(hook ? { hook } : {}), ...(layer && hook && t > layer.from ? { layer: layer.action, layerKind: layer.kind } : {}),
   });
   let prev = null;
   for (const id of film.order) {
@@ -23,9 +24,9 @@ function framePlan(film) {
     if (!sc.beats) add(sc.start + sc.dur / 2, 'card', id);
     for (const b of sc.beats || []) {
       const at = sc.start + b.start;
-      // A beat that opens a layer marks each of its moments once the layer shows (as the kit's layerTimes has it: 0.1 s
-      // after a click acts, or from the beat's start), so the layer's place in the frame is checked there.
-      layer = b.opens ? { action: b.opens.action, from: at + (b.do === 'click' && b.act !== null ? b.act + 0.1 : 0) } : null;
+      // A beat that opens a layer marks each of its moments once the layer shows, as the kit's layerTimes has it:
+      // `PACE.show` after a click acts, or from the beat's start; the layer's place in the frame is checked there.
+      layer = b.opens ? { action: b.opens.action, kind: b.opens.kind, from: at + (b.do === 'click' && b.act !== null ? b.act + PACE.show : 0) } : null;
       // A glide moves the camera; a cut lands at once, so it has no middle to measure.
       if (b.move && b.move[1] > b.move[0]) {
         if (b.start + b.move[0] > 0) add(at + b.move[0] - FRAME, 'before-move', id, b.hook);
@@ -165,14 +166,14 @@ function measuredProblems(samples, overlay) {
     // A dialog or toast that shows is seen whole or not at all: one cut by the frame's edge reads as cropped. A drawer's
     // close-ups show a part of it, so a drawer is checked only by the beat that opens it (below).
     if (['beat', 'caption', 'hold'].includes(s.kind)) {
-      for (const l of m.layers.filter((x) => visible(x) && ['dialog', 'toast'].includes(x.kind) && x.action !== s.layer && overlaps(x, FULL) && !inside(x, FULL))) {
+      for (const l of m.layers.filter((x) => visible(x) && ['dialog', 'toast'].includes(x.kind) && !(x.action === s.layer && x.kind === s.layerKind) && overlaps(x, FULL) && !inside(x, FULL))) {
         say(`cut ${s.scene} ${l.kind}`, `${at}: the ${l.kind} is cut by the frame's edge`);
       }
     }
     // A layer a beat opens lies wholly in the frame once it shows: one cut by the frame's edge opens off the shot.
     // Another layer cut by the frame is a close-up of part of it, which is a shot, not a flaw.
-    if (s.layer) {
-      const l = m.layers.find((x) => x.action === s.layer);
+    if (s.layer && ['beat', 'caption', 'hold'].includes(s.kind)) {
+      const l = m.layers.find((x) => x.action === s.layer && x.kind === s.layerKind);
       if (l && visible(l) && !inside(l, FULL)) say(`layer ${s.hook}`, `${s.hook} at ${s.t} s: the ${l.kind} it opens is cut by the frame's edge`);
     }
     for (const l of m.layers.filter((x) => visible(x) && !x.opaque)) {

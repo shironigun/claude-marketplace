@@ -5,11 +5,12 @@
 const MOTION = { scenes: 24, seconds: 300, sceneSeconds: 1 };
 // The house numbers for a beat, in seconds (spec 7.2-7.5, 8): the camera's glide to a new shot, the pause before an act
 // once it lands, the cursor's travel, the time a click leaves before the next beat, the lead before a caption shows
-// and the margin it leaves before the beat ends, the typing speed in characters per second, and the time a layer takes
-// to open after the click that opens it (the kit shows it 0.1 s after the click and opens it over 0.25 s).
-const PACE = { move: 0.8, settle: 0.25, travel: 0.6, tail: 0.3, captionLead: 0.1, captionExit: 0.2, cps: 22, open: 0.35 };
-// The kinds of action that open a layer over the page.
-const LAYERS = ['drawer', 'dialog', 'toast', 'menu'];
+// and the margin it leaves before the beat ends, the typing speed in characters per second, when a layer shows after
+// the click that opens it, and when it has finished opening (the kit's SP.LAYER: it shows 0.1 s after the click and
+// opens over 0.25 s).
+const PACE = { move: 0.8, settle: 0.25, travel: 0.6, tail: 0.3, captionLead: 0.1, captionExit: 0.2, cps: 22, show: 0.1, open: 0.35 };
+// The kinds of action that open a layer over the page: the layers a screen draws.
+const LAYERS = ['drawer', 'dialog', 'toast'];
 // The camera's glide to a new shot for each pacing, in seconds (spec 7.2, D38): a calm film glides slower, a brisk one
 // faster. `PACE.move` is the standard one.
 const GLIDE = { standard: 0.8, calm: 1, brisk: 0.5 };
@@ -60,7 +61,8 @@ const sameWords = (a, b) => a.target === b.target;
 // with a score starts each scene on a beat of its tempo: every scene but the last ends on the first beat at or after the
 // time it needs, and gives the extra time to its last beat (a card's to the card). The last scene keeps its own length,
 // so an end card holds what its format allows. The camera glides at its pacing's speed, and a beat that glides lasts at
-// least twice its glide: a story's short beat is lengthened rather than hurried (D38).
+// least twice its glide: a story's short beat is lengthened rather than hurried (D38). A click that opens a layer lasts
+// long enough for the camera to land, the cursor to settle and travel, and the layer to open before its tail (D39).
 function timingTable(fc, same = sameWords, pace = PACE) {
   const cut = fc.mods.transitions === 'cut';
   const glide = { ...pace, move: GLIDE[fc.mods.pacing] || pace.move };
@@ -71,14 +73,19 @@ function timingTable(fc, same = sameWords, pace = PACE) {
   const scenes = fc.beats.scenes.map((scene, i) => {
     const entry = { id: scene.id, motion: motionId(scene.id), kind: scene.kind, start: round(start) };
     const beats = scene.kind === 'screen' ? scene.beats : [];
+    const map = scene.kind === 'screen' ? fc.screens.find((s) => s.id === scene.screen) : null;
     const moves = beats.map((b, n) => n === 0 || !same(beats[n - 1], b, `${scene.id}.${n}`, `${scene.id}.${n + 1}`));
-    const timed = beats.map((b, n) => (moves[n] && !cut ? { ...b, ms: Math.max(b.ms, Math.round(2 * glide.move * 1000)) } : b));
+    const opens = beats.map((b) => b.do === 'click' && LAYERS.includes((actionOf(b, map) || {}).kind));
+    const timed = beats.map((b, n) => {
+      const glides = moves[n] && !cut;
+      const least = Math.max(glides ? 2 * glide.move : 0, opens[n] ? (glides ? glide.move : 0) + glide.settle + (moves[n] ? glide.travel : 0) + glide.open + glide.tail : 0);
+      return { ...b, ms: Math.max(b.ms, Math.round(least * 1000)) };
+    });
     const needs = scene.kind === 'screen' ? timed.reduce((n, b) => n + b.ms, 0) : scene.ms;
     const end = i === last ? round(start + sec(needs)) : onBeat(start + sec(needs));
     if (scene.kind !== 'screen') {
       entry.dur = round(end - start);
     } else {
-      const map = fc.screens.find((s) => s.id === scene.screen);
       const extra = Math.round((end - start) * 1000) - needs;
       entry.screen = scene.screen;
       let at = 0;
@@ -86,7 +93,7 @@ function timingTable(fc, same = sameWords, pace = PACE) {
         const beat = n === timed.length - 1 ? { ...story, ms: story.ms + extra } : story;
         const hook = `${scene.id}.${n + 1}`;
         const action = actionOf(beat, map);
-        const phases = beatPhases(beat, moves[n], cut, glide, Boolean(action && LAYERS.includes(action.kind)));
+        const phases = beatPhases(beat, moves[n], cut, glide, opens[n]);
         const out = { hook, do: beat.do, start: round(at), dur: sec(beat.ms), ...phases };
         if (beat.text) out.typing = [phases.act, round(phases.act + beat.text.length / glide.cps)];
         if (action && action.kind === 'tab') out.tab = action.label;
@@ -131,4 +138,4 @@ function timingProblems(table, pace = PACE) {
   return problems;
 }
 
-module.exports = { MOTION, PACE, GLIDE, TEMPO, motionId, beatPhases, timingTable, timingProblems, lengthProblems };
+module.exports = { MOTION, PACE, LAYERS, GLIDE, TEMPO, motionId, beatPhases, timingTable, timingProblems, lengthProblems };

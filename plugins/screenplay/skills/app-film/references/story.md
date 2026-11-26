@@ -33,7 +33,8 @@ list names them). Each screen scene is on one persona's screen.
   states), its `persona`, and optionally a `pattern` the mods put on that screen. Its `beats` play in order. The kit
   draws a column sweep, a row pop-in and a timeline build on the first beat whose target fits them; the other patterns
   are the beats you write: a section tour holds on each section in turn, a tab tour clicks each tab and holds about
-  4 s on it, a dialog step-through opens the dialog and holds on each of its parts, focused typing gives each field
+  4 s on it, a dialog step-through opens the dialog and points out each of its parts in turn while the camera holds
+  the whole dialog (a dialog or toast is shown whole, so its parts share one shot), focused typing gives each field
   of the form a `type` beat of its own, a hand-off does the action on one screen and opens the next scene on the
   screen where its result shows, and before and after counters hold on a number, do the action that changes it, and
   hold on it again where the next scene's screen shows it. The changed number is one the next scene's demo data
@@ -41,10 +42,12 @@ list names them). Each screen scene is on one persona's screen.
 - **A beat** is `hold` (a still shot), `point`, `click` or `type` (with the `text` it types), at a
   `target` named as a user sees it ("the Send button", "Reminders in the side rail"), for `ms` milliseconds. Point
   at the control a user would touch (rule 5). A beat that opens or shows one of the screen's actions names it in
-  `action`, with its label from `screens.json`. A layer stays open for the rest of its scene, as the app keeps it
-  open until its own control closes it: show what is under a panel before you open it, or open it last. A film does
-  not play `scroll` yet: hold on what the scroll shows. A typed beat runs at least its words' time at 22 characters a second, and 1.2 s more for the camera
-  and the pointer; the build says when one is short.
+  `action`, with its label from `screens.json`. A drawer or dialog stays open for the rest of its scene, as the app
+  keeps it open until its own control closes it: show what is under a panel before you open it, or open it last. A
+  toast leaves when the beat that shows it ends. A click that opens a layer runs long enough for the layer to open
+  before the next beat (about 2.3 s at standard pacing when the camera moves to it); the build lengthens a shorter
+  one. A film does not play `scroll` yet: hold on what the scroll shows. A typed beat runs at least its words' time
+  at 22 characters a second, and 1.2 s more for the camera and the pointer; the build says when one is short.
 - **A new screen scene** starts when an action changes what the app shows, such as after a send: the screens and
   the demo data go scene by scene.
 - **A caption** is plain "label: value" in the product's own words (rule 6). It sits on a beat that holds at least

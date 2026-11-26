@@ -4,8 +4,9 @@
 // reaches them through the wrapper: lib/filmcss.js). Layers open on the beats that open them, a tab click shows what
 // its tab names, the logo slots show the brand's logos, and nothing on the must-not-show list is painted.
 (function (SP) {
-  // How long a layer takes to open, eased: product UI only eases (no overshoot).
-  const OPEN = 0.25;
+  // When a layer shows after the click that opens it, and how long it takes to open, eased: product UI only eases (no
+  // overshoot). The engine's timing leaves a click that opens a layer this long (its PACE.show and PACE.open).
+  SP.LAYER = { show: 0.1, open: 0.25 };
 
   // When each surface shows, in seconds from the scene's start: the page from the start; a layer a beat names, when a
   // click on it acts, or from that beat's start for any other beat; any other layer from the start, as one an earlier
@@ -15,7 +16,18 @@
       if (s.kind === 'page') return 0;
       const b = sc.beats.find((x) => SP.openedSurface(sc, x) === i);
       if (!b) return 0;
-      return b.start + (b.do === 'click' && b.act !== null ? b.act + 0.1 : 0);
+      return b.start + (b.do === 'click' && b.act !== null ? b.act + SP.LAYER.show : 0);
+    });
+  };
+
+  // When each surface goes: a toast is passing, so it leaves when the beat that shows it ends (the scene's first beat,
+  // for one an earlier scene left showing); every other layer stays for the rest of its scene, as the app keeps it open
+  // until its own control closes it.
+  SP.layerEnds = function (sc) {
+    return sc.surfaces.map((s, i) => {
+      if (s.kind !== 'toast' || !sc.beats.length) return Infinity;
+      const b = sc.beats.find((x) => SP.openedSurface(sc, x) === i) || sc.beats[0];
+      return b.start + b.dur;
     });
   };
 
@@ -109,6 +121,7 @@
     return {
       look, world, win, body, surfaces,
       layerAt: SP.layerTimes(sc),
+      layerEnd: SP.layerEnds(sc),
       switches: SP.tabSwitches(sc),
       groups: [...groups.values()].map((g) => ({ items: g, labels: g.map((x) => x.label) })),
     };
@@ -131,7 +144,8 @@
   SP.showLayers = function (w, t) {
     w.surfaces.forEach((s, i) => {
       const at = w.layerAt[i];
-      const p = at <= 0 ? 1 : SP.at(t, at, OPEN);
+      const end = w.layerEnd[i];
+      const p = (at <= 0 ? 1 : SP.at(t, at, SP.LAYER.open)) * (end === Infinity ? 1 : 1 - SP.at(t, end, SP.LAYER.open));
       s.box.style.visibility = p > 0 ? 'visible' : 'hidden';
       s.box.style.opacity = String(p);
       const q = 1 - p;
@@ -160,7 +174,7 @@
     // it. The scene opens on the whole window.
     const layerBox = (surface) => {
       const root = surface && [...surface.children].find((c) => !c.classList.contains('sp-backdrop'));
-      const box = root && SP.boxIn(root, w.win);
+      const box = root && SP.frameBox(root, w.win);
       return box && box.w > 0 && box.h > 0 ? box : null;
     };
     const opened = sc.beats.map((b) => {
