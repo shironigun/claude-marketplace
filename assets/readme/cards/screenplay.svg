@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="340" viewBox="0 0 640 340" role="img" aria-label="screenplay: Films of your web app, made from its own code" font-family="'Segoe UI', -apple-system, 'Helvetica Neue', Arial, sans-serif">
+<title>screenplay: Films of your web app, made from its own code</title>
+<defs>
+  <linearGradient id="c-screenplay-bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0b1020"/><stop offset="1" stop-color="#151d3b"/></linearGradient>
+  <radialGradient id="c-screenplay-glow" cx="1" cy="0" r="0.9"><stop offset="0" stop-color="#e879f9" stop-opacity=".28"/><stop offset="1" stop-color="#e879f9" stop-opacity="0"/></radialGradient>
+  <pattern id="c-screenplay-dots" width="22" height="22" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1.1" fill="#ffffff" fill-opacity=".06"/></pattern>
+</defs>
+<rect width="640" height="340" rx="24" fill="url(#c-screenplay-bg)"/>
+<rect width="640" height="340" rx="24" fill="url(#c-screenplay-dots)"/>
+<rect width="640" height="340" rx="24" fill="url(#c-screenplay-glow)"/>
+<rect x=".5" y=".5" width="639" height="339" rx="24" fill="none" stroke="#ffffff" stroke-opacity=".08"/>
+<rect x="44" y="40" width="108" height="108" rx="26" fill="#e879f9" fill-opacity=".14" stroke="#e879f9" stroke-opacity=".5"/>
+<g transform="translate(68 64) scale(2.5)" fill="#e879f9"><path d="m18 4 2 4h-3l-2-4h-2l2 4h-3l-2-4H8l2 4H7L5 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V4z"/></g>
+<rect x="176" y="44" width="61.699999999999996" height="27" rx="13.5" fill="#c7d0e6" fill-opacity="0.16" stroke="#c7d0e6" stroke-opacity=".55"/>
+<text x="206.85" y="60" text-anchor="middle" font-size="13" font-weight="600" fill="#c7d0e6">Video</text><rect x="247.7" y="44" width="137.1" height="27" rx="13.5" fill="#93c5fd" fill-opacity="0.16" stroke="#93c5fd" stroke-opacity=".55"/>
+<text x="316.25" y="60" text-anchor="middle" font-size="13" font-weight="600" fill="#93c5fd">Product-neutral</text>
+<text x="176" y="112" font-size="34" font-weight="700" fill="#ffffff">screenplay</text>
+<text x="176" y="140" font-size="17" font-weight="500" fill="#e879f9">Films of your web app, made from its own code</text>
+<text x="44" y="196" font-size="16" fill="#c7d0e6">Promos, walkthroughs and how-tos rebuilt from the code with demo</text>
+<text x="44" y="220" font-size="16" fill="#c7d0e6">data, one film per brand, every frame checked.</text>
+<rect x="44" y="272" width="84.32" height="27" rx="13.5" fill="#e6ebf7" fill-opacity="0" stroke="#e6ebf7" stroke-opacity=".55"/>
+<text x="86.16" y="288" text-anchor="middle" font-size="13" font-weight="600" fill="#e6ebf7">3 skills</text><rect x="138.32" y="272" width="84.32" height="27" rx="13.5" fill="#e6ebf7" fill-opacity="0" stroke="#e6ebf7" stroke-opacity=".55"/>
+<text x="180.48" y="288" text-anchor="middle" font-size="13" font-weight="600" fill="#e6ebf7">5 agents</text><rect x="232.64" y="272" width="99.39999999999999" height="27" rx="13.5" fill="#e6ebf7" fill-opacity="0" stroke="#e6ebf7" stroke-opacity=".55"/>
+<text x="282.34" y="288" text-anchor="middle" font-size="13" font-weight="600" fill="#e6ebf7">9 commands</text>
+<g transform="translate(570 276) scale(1)" fill="#ffffff"><path d="m12 4-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/></g>
+</svg>

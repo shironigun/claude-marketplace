@@ -3,7 +3,7 @@
 </p>
 
 <p align="center">
-  <a href="#the-catalog"><img alt="10 plugins" src="https://img.shields.io/badge/plugins-10-7c9cff?style=for-the-badge"></a>
+  <a href="#the-catalog"><img alt="11 plugins" src="https://img.shields.io/badge/plugins-11-7c9cff?style=for-the-badge"></a>
   <a href="https://code.claude.com/docs/en/plugins/overview"><img alt="Claude Code plugin marketplace" src="https://img.shields.io/badge/Claude%20Code-plugin%20marketplace-0b1020?style=for-the-badge"></a>
   <a href="#trust--safety"><img alt="No secrets in the repo" src="https://img.shields.io/badge/secrets%20in%20repo-none-2dd4bf?style=for-the-badge"></a>
   <a href="#trust--safety"><img alt="Human-gated writes" src="https://img.shields.io/badge/tracker%20writes-human--gated-fbbf24?style=for-the-badge"></a>
@@ -21,7 +21,7 @@
 
 A [Claude Code](https://code.claude.com/docs/en/plugins/overview) **plugin marketplace**: a curated set of
 plugins (skills, agents, commands and MCP servers) for the work around shipping software. **Test it**, track
-what broke, **ship it** with release notes customers read, and **explain it** with pages and guides. Then
+what broke, **ship it** with release notes customers read, and **explain it** with pages, guides and films. Then
 **show it**: a LinkedIn profile built from your own record. Install them into Claude Code in the terminal,
 the Claude desktop app, or the VS Code extension.
 
@@ -109,6 +109,14 @@ Select a card to open that plugin's folder and its README.
       <br><code>claude plugin install standout@shironigun</code>
     </td>
   </tr>
+  <tr>
+    <td width="50%" valign="top">
+      <a href="plugins/screenplay/"><img src="assets/readme/cards/screenplay.svg" alt="screenplay: films of your web app, made from its own code" width="100%"></a>
+      <br><b><a href="plugins/screenplay/">screenplay</a></b>: promos, walkthroughs and how-tos of your web app, rebuilt from its code with demo data, one film per brand, every frame checked.
+      <br><code>claude plugin install screenplay@shironigun</code>
+    </td>
+    <td width="50%" valign="top"></td>
+  </tr>
 </table>
 
 ### At a glance
@@ -125,6 +133,7 @@ Select a card to open that plugin's folder and its README.
 | [how-to-guides](plugins/how-to-guides/) | Documentation | 1 | A PDF guide on your machine | Node.js, Chrome | Yes |
 | [design-intelligence](plugins/design-intelligence/) | Design | 6 skills, 1 agent | MUI code in your project; a Figma screen only when you ask | Node.js, Python 3; optional `ADO_ORG` | Yes (local overlay) |
 | [standout](plugins/standout/) | Career | 1 | A fact ledger and a profile draft in a folder you choose; you paste into LinkedIn | Node.js | Yes |
+| [screenplay](plugins/screenplay/) | Video | 3 skills, 5 agents, 9 commands | Private Motion films on your Claude account; its notes under `~/.screenplay`, never in your app's repo | Node.js 20+, the Motion artifact type; Chrome or Edge to check films | Yes |
 
 **Product-neutral** plugins ship no product data and work on any product: your tracker, product and brand
 live in your own config. **Local profile** plugins discover your org's facts once, read-only, and save them
@@ -153,6 +162,7 @@ Here is the flagship. The rest are under [The plugins in detail](#the-plugins-in
 - **Explaining a feature?** A page for your team: **[feature-explainer](plugins/feature-explainer/)**. A PDF for your customers: **[how-to-guides](plugins/how-to-guides/)**.
 - **Turning a Figma screen into code that follows your design system?** **[design-intelligence](plugins/design-intelligence/)**.
 - **Showing your own work?** A LinkedIn profile built from facts you can back: **[standout](plugins/standout/)**.
+- **Showing a feature in a promo, walkthrough or how-to video?** **[screenplay](plugins/screenplay/)**.
 
 ## How it works
 
@@ -440,13 +450,32 @@ each section before it is final. It never logs in to or automates LinkedIn; the 
 <p align="center"><img src="assets/readme/diagrams/standout.svg" alt="How standout works" width="100%"></p>
 </details>
 
+### [screenplay](plugins/screenplay/)
+
+Name a feature, a module or a flow of your web app and a format (promo, walkthrough, trailer, teaser, release
+highlight, store preview or how-to), and **screenplay** makes the film from the app's code alone. It learns
+every brand's logos, colours and fonts, maps the screens and traces them to the backend into a truth ledger, so
+no caption claims what the app cannot do. You choose the look and pace and approve the storyboard; it rebuilds
+the screens from the code with demo data, never running the app, and builds one Motion film per brand. Every
+frame is rendered in your own browser and checked against fixed film rules, three reviewers vote on the cut, and
+your comments on the film fix its source.
+
+<p align="center"><a href="plugins/screenplay/"><img src="assets/readme/usecases/screenplay.svg" alt="screenplay in action: what you ask and what you get" width="100%"></a></p>
+
+<details>
+<summary><b>How screenplay works</b></summary>
+<br>
+<p align="center"><img src="assets/readme/diagrams/screenplay.svg" alt="How screenplay works" width="100%"></p>
+</details>
+
 ---
 
 ### Requirements (MCP servers) — all self-contained, no secrets
 
 Every plugin is self-contained. Most work the moment they install — they produce test cases, scripts, notes,
 pages, guides or drafts **in the session** with no external dependency: `qa-toolkit`, `release-notes-suite`,
-`api-testing`, `feature-explainer` and `how-to-guides`.
+`api-testing`, `feature-explainer` and `how-to-guides`. `screenplay` bundles no MCP server either: it needs
+Node.js 20 or later and the Motion artifact type, and keeps what it learns under `~/.screenplay`.
 
 The plugins that talk to other tools **bundle their own MCP servers** (in the plugin's `.mcp.json`), so
 there's no manual MCP config. **No PAT or token is committed or required**: every server signs in with
@@ -526,6 +555,7 @@ own git-ignored `.env`. See the [plugin security docs](https://code.claude.com/d
 | Research doesn't change anything | The documentation plugins read code, branches and tickets read-only: no commits, pushes or branch switches. |
 | Your data stays yours | Product, tracker, brand and credentials live in your own git-ignored files, never in this repo. |
 | Screenshots use demo data | `how-to-guides` takes shots from a local or test build and refuses any other host unless you allow it. |
+| Films never run your app | `screenplay` rebuilds screens from the code with made-up data, never reads app data, and asks before its one download (playwright-core from npm, to check films). |
 
 ## Contributors
 

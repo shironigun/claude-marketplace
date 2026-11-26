@@ -1,9 +1,14 @@
-# screenplay (in development)
+# screenplay
 
-> **In development, not yet registered in the marketplace.** Plans 1 to 6 of the first release are in: the
-> shared `sp` engine, the two analysis skills (brand-profile and app-map) with their three scouts, and the film
-> skill from the mods to an approved storyboard, the film's screens rebuilt from the code by the UI builder, one
-> Motion film per brand, the checks of every frame with the film reviewer, house style and the comment loop.
+<p align="center">
+  <img src="../../assets/readme/banners/screenplay.svg" alt="screenplay" width="100%">
+</p>
+
+<p align="center">
+  <a href="../../README.md#the-catalog">← All plugins</a> ·
+  <a href="#install">Install</a> ·
+  <a href="../../README.md#trust--safety">Trust &amp; safety</a>
+</p>
 
 Turn any part of a web app (one feature, a whole module, or a flow across modules) into polished films: a promo, a
 walkthrough, a trailer, a teaser, a release highlight, a store preview or a how-to. screenplay reads the repository
@@ -17,11 +22,11 @@ repository: everything it learns lives under `$SCREENPLAY_HOME` (default `~/.scr
 
 ## Skills
 
-| Skill | Answers | Arrives |
-|---|---|---|
-| brand-profile | "what are this app's logos, colours and fonts?" | plan 2 |
-| app-map | "what does this feature or module really do?" | plan 2 |
-| app-film | "make a promo, a walkthrough or a trailer of it" | plan 3 to the storyboard; plan 4 the screens; plan 5 the films; plan 6 the checks and the comments |
+| Skill | Answers |
+|---|---|
+| brand-profile | "what are this app's logos, colours and fonts?" |
+| app-map | "what does this feature or module really do?" |
+| app-film | "make a promo, a walkthrough or a trailer of it" |
 
 A subject is analysed once; every film of it, in any format, reuses that analysis.
 
@@ -86,11 +91,22 @@ examples/          example-desk/ (the fixture app), expected/ (what screenplay s
 evals/             trigger, guard and pipeline cases for claude plugin eval
 ```
 
-## Engine
+## Install
 
-`node engine/sp.js help` lists the commands. Node 20 or later; the engine itself has no dependencies. To check films, `sp render --install`
-puts playwright-core and the Motion player's files in `$SCREENPLAY_HOME/tools/` once, and drives your own browser.
-Tests, from the repository root:
+```bash
+claude plugin install screenplay@shironigun
+```
+
+- **Node.js 20 or later.** The engine itself has no dependencies; `node engine/sp.js help` lists its commands.
+- **The Motion artifact type on your Claude account**, which the films are built as. The film skill checks for it
+  first and says so when it is missing.
+- **To check films:** your own Chrome, Edge or Chromium. The first check asks before it runs `sp render --install`,
+  which reads the Motion player's three files from one of your films and downloads playwright-core (about 14 MB)
+  from `registry.npmjs.org` into `$SCREENPLAY_HOME/tools/`, once. Rendering itself needs no network.
+
+## Engine tests
+
+From the repository root:
 
 ```bash
 node --test plugins/screenplay/engine/test/*.test.js

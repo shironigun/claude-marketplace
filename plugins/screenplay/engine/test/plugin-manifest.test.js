@@ -8,12 +8,12 @@ const { PLUGIN, SKILLS_DIR, foreignNames, frontmatter } = require('./plugin-file
 // The marketplace's rules: the author is the marketplace's account, the licence MIT, and nothing names a person.
 const AUTHOR = { name: 'shironigun' };
 
-test('plugin manifest: screenplay, in development, by the marketplace account under MIT, naming no other plugin', () => {
+test('plugin manifest: screenplay, registered, by the marketplace account under MIT, naming no other plugin', () => {
   const file = path.join(PLUGIN, '.claude-plugin', 'plugin.json');
   const manifest = JSON.parse(fs.readFileSync(file, 'utf8'));
   assert.equal(manifest.name, 'screenplay');
-  assert.match(manifest.version, /^0\.0\.\d+$/);
-  assert.match(manifest.description, /^IN DEVELOPMENT, not yet registered in the marketplace\./);
+  assert.match(manifest.version, /^\d+\.\d+\.\d+$/);
+  assert.doesNotMatch(manifest.description, /IN DEVELOPMENT/);
   for (const word of ['promo', 'walkthrough', 'trailer', 'module']) assert.ok(manifest.description.includes(word), word);
   assert.deepEqual(manifest.author, AUTHOR);
   assert.equal(manifest.license, 'MIT');
