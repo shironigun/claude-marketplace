@@ -59,7 +59,7 @@ A subject is analysed once; every film of it, in any format, reuses that analysi
   your own Chrome, Edge or Chromium, with no network, and measured at every cut, every beat and the frame before
   every camera move: timing (every cut on the score's beat), layout and the safe area, each layer a beat opens in the
   frame, stillness, exit before a move, bleed-through, purity and each brand's logo, with a contact sheet a scene
-  for the film reviewer; then your comments,
+  for three film reviewers, a flaw two of them name blocking the cut; then your comments,
   pinned to a moment and a point, mapped to their beat and element, fixed in the source, and answered in their
   threads. Rules learned from the rounds become house style, the repository's and, when you say so, your own.
 - Three read-only scouts (`sp-brand-scout`, `sp-screen-scout`, `sp-backend-tracer`), the read-only UI builder

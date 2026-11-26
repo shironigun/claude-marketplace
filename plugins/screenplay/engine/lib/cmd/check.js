@@ -14,7 +14,10 @@ const { screensStatus } = require('../screens');
 const { builtDocs } = require('../stage');
 const { readyTools } = require('../tools');
 const { playerFiles, openPlayer, loadFilm: loadInPlayer, still, played, playerLog, measure, writeStills } = require('../render');
-const { framePlan, playedProblems, measuredProblems, purityProblems, logFindings, verifyReport } = require('../verify');
+const { framePlan, playedProblems, measuredProblems, purityProblems, logFindings, verifyReport, reviewVote } = require('../verify');
+
+// How many film reviews of a cut vote on it (D40).
+const REVIEWS = 3;
 
 // One brand's film through the player, as the build composes it: what the player plays, what every moment of the plan
 // measures, the beats rendered twice for purity, and the frames and sheets the reviewer reads.
@@ -65,8 +68,8 @@ async function checkBrand(launch, tools, fp, built, id, rebuild) {
 
 module.exports = {
   name: 'check',
-  usage: 'check <subject slug> --film <film slug> [--brand <brand id>] [--brief | --review <file>] [--repo <dir>]',
-  summary: "The film checks of spec 5.13 on each brand's film through the Motion player's own renderer: timing, layout, stillness, exit before a move, bleed-through, purity, brand and the player's log, after the story's and screens' own checks. Writes each brand's frames, sheets, check.json and report.md in the film's verify folder. With --brief, writes the film reviewer's brief; with --review, records its verdict on the checked build.",
+  usage: 'check <subject slug> --film <film slug> [--brand <brand id>] [--brief | --review <file>,<file>,<file>] [--repo <dir>]',
+  summary: "The film checks of spec 5.13 on each brand's film through the Motion player's own renderer: timing, layout, stillness, exit before a move, bleed-through, purity, brand and the player's log, after the story's and screens' own checks. Writes each brand's frames, sheets, check.json and report.md in the film's verify folder. With --brief, writes the film reviewer's brief; with --review, records the vote of three reviews on the checked build.",
   flags: { film: 'string', brand: 'string', brief: 'boolean', review: 'string', repo: 'string' },
   run(ctx, args) {
     const repo = repoInfo(args.flags.repo || ctx.cwd);
@@ -90,7 +93,7 @@ module.exports = {
       if (unchecked.length) throw checkError(`the checks have not passed on this build for ${unchecked.join(', ')}; run sp check ${fc.subject} --film ${fc.film} first`);
       return checks;
     };
-    if (args.flags.brief && args.flags.review) throw usageError('give one of --brief or --review <file>');
+    if (args.flags.brief && args.flags.review) throw usageError('give one of --brief or --review <file>,<file>,<file>');
     if (args.flags.brief) {
       // The film reviewer's brief (spec 5.13): what it reads and what it returns, assembled by the engine.
       const checks = checked();
@@ -113,17 +116,28 @@ module.exports = {
       return { json: { brief: file }, text: `The film reviewer's brief: ${file}` };
     }
     if (args.flags.review) {
-      const value = readJsonFile(ctx.cwd, args.flags.review);
-      const errors = check('review', value);
-      if (errors.length) throw checkError(`review has ${errors.length} problem${errors.length === 1 ? '' : 's'}:\n  ${errors.join('\n  ')}`);
+      // Three reviews of the cut, made apart, vote (D40): a flaw two of them name blocks it.
+      const files = args.flags.review.split(',').map((x) => x.trim()).filter(Boolean);
+      if (files.length !== REVIEWS) throw usageError(`give the ${REVIEWS} reviews' verdicts: --review <file>,<file>,<file>`);
+      const reviews = files.map((file, i) => {
+        const value = readJsonFile(ctx.cwd, file);
+        const errors = check('review', value);
+        if (errors.length) throw checkError(`review ${i + 1} has ${errors.length} problem${errors.length === 1 ? '' : 's'}:\n  ${errors.join('\n  ')}`);
+        return value;
+      });
       checked();
-      const stray = value.findings.filter((x) => !fc.mods.brands.includes(x.brand) || !fc.beats.scenes.some((s) => s.id === x.scene));
-      if (stray.length) throw checkError(`review names ${stray.map((x) => `${x.brand} ${x.scene}`).join(', ')}, which the film does not have`);
-      if (value.verdict === 'PASS' && value.findings.length) throw checkError('a PASS has no findings; a finding blocks the cut');
-      if (value.verdict === 'BLOCKED' && !value.findings.length) throw checkError('a BLOCKED review names its findings');
-      writeJson(path.join(f.fp.verify, 'review.json'), { inputs: built.inputs, at: ctx.now, ...value });
-      const said = value.verdict === 'PASS' ? 'the reviewer passes the cut' : `the reviewer blocks the cut:\n  ${value.findings.map((x) => `${x.brand} ${x.scene} (rule ${x.rule}): ${x.text}`).join('\n  ')}`;
-      return { json: { verdict: value.verdict, findings: value.findings }, text: said, exitCode: value.verdict === 'PASS' ? 0 : 1 };
+      reviews.forEach((value, i) => {
+        const stray = value.findings.filter((x) => !fc.mods.brands.includes(x.brand) || !fc.beats.scenes.some((s) => s.id === x.scene));
+        if (stray.length) throw checkError(`review ${i + 1} names ${stray.map((x) => `${x.brand} ${x.scene}`).join(', ')}, which the film does not have`);
+        if (value.verdict === 'PASS' && value.findings.length) throw checkError(`review ${i + 1}: a PASS has no findings; a finding blocks the cut`);
+        if (value.verdict === 'BLOCKED' && !value.findings.length) throw checkError(`review ${i + 1}: a BLOCKED review names its findings`);
+      });
+      const vote = reviewVote(reviews);
+      writeJson(path.join(f.fp.verify, 'review.json'), { inputs: built.inputs, at: ctx.now, ...vote, reviews });
+      const said = vote.verdict === 'PASS'
+        ? `the reviewers pass the cut: no flaw is named by two of the ${REVIEWS} reviews`
+        : `the reviewers block the cut, on the flaws two or more of the ${REVIEWS} reviews name:\n  ${vote.findings.map((x) => `${x.brand} ${x.scene} (rule ${x.rule}, ${x.votes} of ${REVIEWS}): ${x.text}`).join('\n  ')}`;
+      return { json: vote, text: said, exitCode: vote.verdict === 'PASS' ? 0 : 1 };
     }
     const tools = readyTools(ctx.home);
     // playwright-core lives in the tools folder, installed on first use.

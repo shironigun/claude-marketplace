@@ -250,4 +250,21 @@ function verifyReport(r) {
   return lines.join('\n');
 }
 
-module.exports = { FRAME, SAFE, framePlan, playedProblems, alphaOf, imageOpaque, measuredProblems, purityProblems, logFindings, verifyReport };
+// The film reviewers' verdicts on one cut, taken as a vote (spec 5.13, D40): one review is not steady enough to gate a
+// film, as reviews of one cut differ, so several review it apart and a flaw blocks the cut only when more than half of
+// them name it (the same brand, scene and rule); a flaw only one names is that review's noise. Each agreed finding is
+// as the first review to name it says it, with its votes.
+function reviewVote(reviews) {
+  const need = Math.floor(reviews.length / 2) + 1;
+  const key = (x) => `${x.brand}|${x.scene}|${x.rule}`;
+  const first = new Map();
+  const votes = new Map();
+  for (const r of reviews) {
+    for (const x of r.findings) if (!first.has(key(x))) first.set(key(x), x);
+    for (const k of new Set(r.findings.map(key))) votes.set(k, (votes.get(k) || 0) + 1);
+  }
+  const findings = [...first].filter(([k]) => votes.get(k) >= need).map(([k, x]) => ({ ...x, votes: votes.get(k) }));
+  return { verdict: findings.length ? 'BLOCKED' : 'PASS', findings };
+}
+
+module.exports = { FRAME, SAFE, framePlan, playedProblems, alphaOf, imageOpaque, measuredProblems, purityProblems, logFindings, verifyReport, reviewVote };

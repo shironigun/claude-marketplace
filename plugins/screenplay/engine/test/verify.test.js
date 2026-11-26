@@ -5,7 +5,7 @@ const path = require('path');
 const fs = require('fs');
 const { EXAMPLES, readyFilm } = require('./helpers');
 const { timingTable } = require('../lib/timing');
-const { FRAME, framePlan, playedProblems, alphaOf, imageOpaque, measuredProblems, purityProblems, logFindings, verifyReport } = require('../lib/verify');
+const { FRAME, framePlan, playedProblems, alphaOf, imageOpaque, measuredProblems, purityProblems, logFindings, verifyReport, reviewVote } = require('../lib/verify');
 
 const expected = (...parts) => require(path.join(EXAMPLES, 'expected', 'example-desk', ...parts));
 // The example promo as film.json holds its timing: the table's scenes by id, with the film's length and tempo.
@@ -236,4 +236,19 @@ test('verify: a dialog or toast that shows is never cut by the frame\'s edge', (
   assert.deepEqual(at('caption', [layer('toast', 1500, 900)]), ['S-03 at 18.25 s: the toast is cut by the frame\'s edge']);
   // Wholly in the frame, or wholly out of it, is fine; so is a drawer, whose close-ups show a part of it.
   assert.deepEqual(at('hold', [layer('dialog', 600, 300), layer('toast', 2200, 900), layer('drawer', 1500, -40)]), []);
+});
+
+test('verify: three reviews vote, and a flaw blocks the cut only when two of them name it', () => {
+  const f = (brand, scene, rule, at = 1) => ({ brand, scene, at, rule, text: `${brand} ${scene} rule ${rule}` });
+  const pass = { verdict: 'PASS', findings: [] };
+  const block = (...findings) => ({ verdict: 'BLOCKED', findings });
+  assert.deepEqual(reviewVote([pass, pass, pass]), { verdict: 'PASS', findings: [] });
+  // Two reviews block on different flaws and one passes: no flaw has two votes, so each is that review's noise.
+  assert.deepEqual(reviewVote([block(f('harbor', 'S-02', '1')), block(f('harbor', 'S-04', '8')), pass]), { verdict: 'PASS', findings: [] });
+  // Two name the same brand, scene and rule, at other moments and in other words: it blocks, as the first says it.
+  const a = f('harbor', 'S-02', '4', 13.75);
+  const b = { ...f('harbor', 'S-02', '4', 13.8), text: 'In other words' };
+  assert.deepEqual(reviewVote([pass, block(a), block(b, f('lumen', 'S-03', '2'))]), { verdict: 'BLOCKED', findings: [{ ...a, votes: 2 }] });
+  // A review that names one flaw twice gives it one vote.
+  assert.equal(reviewVote([block(a, b), pass, pass]).verdict, 'PASS');
 });

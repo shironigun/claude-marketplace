@@ -80,8 +80,8 @@ and where they go is `references/house-style.md`.
 
 ## Checking the films
 
-`/screenplay:check` renders a film's brand films and checks them, then has the film reviewer judge them. Choose the
-film as for the mods. Then run `references/verify.md` from its start.
+`/screenplay:check` renders a film's brand films and checks them, then has three film reviewers judge them apart: a
+flaw two of them name blocks the cut. Choose the film as for the mods. Then run `references/verify.md` from its start.
 
 ## Working through comments
 

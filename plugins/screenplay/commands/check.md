@@ -1,5 +1,5 @@
 ---
-description: Render a film's brand films with the Motion player's own renderer, check every frame, and have the film reviewer judge them, before the user gets the first cut.
+description: Render a film's brand films with the Motion player's own renderer, check every frame, and have three film reviewers vote on them, before the user gets the first cut.
 argument-hint: "<subject> [film]"
 ---
 

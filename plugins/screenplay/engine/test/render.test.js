@@ -176,10 +176,11 @@ test('sp check: once every brand\'s film holds the build, with the renderer inst
   assert.match(r.stderr, /the renderer is not installed/);
 });
 
-test('sp check --review: the reviewer\'s verdict on a checked build; gate 3 once it passes, then the comment loop', () => {
+test('sp check --review: three reviews vote on a checked build; gate 3 once it passes, then the comment loop', () => {
   const { sp, runSp, repo, env, film } = readyFilm('reminders', 'promo');
   const next = () => sp('status', 'reminders', '--film', 'promo', '--json').json.next;
-  const review = (value) => runSp(repo, ['check', 'reminders', '--film', 'promo', '--review', inputFile(value, repo)], env);
+  // Three reviews of the cut; one verdict given alone stands for all three.
+  const review = (...values) => runSp(repo, ['check', 'reminders', '--film', 'promo', '--review', (values.length === 1 ? [values[0], values[0], values[0]] : values).map((v) => inputFile(v, repo)).join(',')], env);
   sp('build', 'reminders', '--film', 'promo');
   for (const brand of ['harbor', 'lumen']) {
     const s = sp('stage', 'reminders', '--film', 'promo', '--brand', brand, '--json').json;
@@ -203,19 +204,26 @@ test('sp check --review: the reviewer\'s verdict on a checked build; gate 3 once
   assert.deepEqual(b.house, []);
   assert.equal(runSp(repo, ['check', 'reminders', '--film', 'promo', '--brief', '--review', 'x.json'], env).code, 2);
   // A verdict that does not fit the schema or the film is refused; a BLOCKED one keeps the film in verify.
-  assert.match(review({ verdict: 'MAYBE', findings: [] }).stderr, /review has 1 problem:/);
-  assert.match(review({ verdict: 'BLOCKED', findings: [] }).stderr, /a BLOCKED review names its findings/);
+  assert.equal(runSp(repo, ['check', 'reminders', '--film', 'promo', '--review', [pass, pass].map((v) => inputFile(v, repo)).join(',')], env).code, 2);
+  assert.match(review(pass, { verdict: 'MAYBE', findings: [] }, pass).stderr, /review 2 has 1 problem:/);
+  assert.match(review({ verdict: 'BLOCKED', findings: [] }).stderr, /review 1: a BLOCKED review names its findings/);
   const finding = { brand: 'harbor', scene: 'S-02', at: 12.9, rule: '4', text: 'The dialog opens off the frame.' };
   const { at: when, ...untimed } = finding;
-  assert.match(review({ verdict: 'BLOCKED', findings: [untimed] }).stderr, /review has 1 problem:/);
-  assert.match(review({ verdict: 'PASS', findings: [finding] }).stderr, /a PASS has no findings/);
-  assert.match(review({ verdict: 'BLOCKED', findings: [{ ...finding, scene: 'S-09' }] }).stderr, /review names harbor S-09, which the film does not have/);
-  const blocked = review({ verdict: 'BLOCKED', findings: [finding] });
+  assert.match(review({ verdict: 'BLOCKED', findings: [untimed] }).stderr, /review 1 has 1 problem:/);
+  assert.match(review({ verdict: 'PASS', findings: [finding] }).stderr, /review 1: a PASS has no findings/);
+  assert.match(review(pass, pass, { verdict: 'BLOCKED', findings: [{ ...finding, scene: 'S-09' }] }).stderr, /review 3 names harbor S-09, which the film does not have/);
+  // Two of three name the flaw: it blocks the cut, and review.json keeps every review.
+  const blocked = review({ verdict: 'BLOCKED', findings: [finding] }, pass, { verdict: 'BLOCKED', findings: [{ ...finding, at: 13.1, text: 'Cut off.' }] });
   assert.equal(blocked.code, 1);
-  assert.match(blocked.stdout, /the reviewer blocks the cut:\n {2}harbor S-02 \(rule 4\): The dialog opens off the frame\./);
+  assert.match(blocked.stdout, /the reviewers block the cut, on the flaws two or more of the 3 reviews name:\n {2}harbor S-02 \(rule 4, 2 of 3\): The dialog opens off the frame\./);
+  assert.equal(JSON.parse(fs.readFileSync(path.join(film, 'verify', 'review.json'), 'utf8')).reviews.length, 3);
   assert.equal(next(), 'verify');
   assert.match(runSp(repo, ['confirm', 'gate-3', '--subject', 'reminders', '--film', 'promo'], env).stderr, /gate 3 comes once the films pass verify; the next step is verify/);
-  assert.equal(review(pass).code, 0);
+  // Two reviews block on different flaws: neither has two votes, so the cut passes.
+  const other = { brand: 'lumen', scene: 'S-04', at: 25.6, rule: '8', text: 'The card holds the rows.' };
+  const passed = review({ verdict: 'BLOCKED', findings: [finding] }, { verdict: 'BLOCKED', findings: [other] }, pass);
+  assert.equal(passed.code, 0, passed.stderr);
+  assert.match(passed.stdout, /the reviewers pass the cut: no flaw is named by two of the 3 reviews/);
   assert.equal(next(), 'gate-3');
   sp('confirm', 'gate-3', '--subject', 'reminders', '--film', 'promo');
   assert.equal(next(), 'review');

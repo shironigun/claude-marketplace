@@ -43,12 +43,16 @@ each brand, its frames, a contact sheet a scene, `check.json` and `report.md` in
 ## 3. The film reviewer
 
 1. Run `sp check <slug> --film <film> --brief --json`. It writes the reviewer's brief and gives its path.
-2. Dispatch the film reviewer with the Agent tool, subagent type `screenplay:sp-film-reviewer`, with the brief's path.
-   It returns JSON: write it into the inbox, as `<inbox>/<slug>.<film>.review.json`.
-3. Record it: `sp check <slug> --film <film> --review <file>`.
+2. Dispatch the film reviewer three times, in parallel and apart, with the Agent tool, subagent type
+   `screenplay:sp-film-reviewer`, each with the brief's path and nothing of the others. One review of a cut is not
+   steady: reviews of the same frames name different flaws, so three vote. Each returns JSON: write each into the
+   inbox, as `<inbox>/<slug>.<film>.review-1.json`, `-2` and `-3`.
+3. Record them: `sp check <slug> --film <film> --review <file>,<file>,<file>`. A flaw blocks the cut when two of the
+   three reviews name it (the same brand, scene and rule); a flaw only one names is left out, and `review.json` keeps
+   all three reviews for the record.
    - `PASS`: go on to gate 3.
-   - `BLOCKED`: fix each finding in the film's source, as for the checks; build again, check again, and dispatch the
-     reviewer again with a new brief. After two rounds, show the user the findings left, and stop.
+   - `BLOCKED`: fix each agreed finding in the film's source, as for the checks; build again, check again, and
+     dispatch three reviewers again with a new brief. After two rounds, show the user the findings left, and stop.
 
 ## 4. Gate 3: the first cut
 
