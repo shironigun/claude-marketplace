@@ -72,8 +72,8 @@ test('timing: each screen scene opens on the whole window, and a new target move
   const [, s2, s3, s4] = timingTable(promo()).scenes;
   // Beat 3 clicks the reminder that beat 2 points at, so the camera holds; every other beat names a new target.
   assert.deepEqual(s2.beats.map((b) => b.move !== null), [true, true, false, true, true]);
-  // Each scene's first beat moves in from the whole window; S-04's last beat holds on the tab its click selected.
-  assert.deepEqual([s3.beats[0].move !== null, s4.beats[0].move !== null, s4.beats[4].move], [true, true, null]);
+  // Each scene's first beat moves in from the whole window; S-04's third beat holds on the tab its click selected.
+  assert.deepEqual([s3.beats[0].move !== null, s4.beats[0].move !== null, s4.beats[2].move], [true, true, null]);
 });
 
 test('timing: a beat moves first, acts once the camera has landed, and its caption is gone before the beat ends', () => {
@@ -95,7 +95,8 @@ test('timing: a click names the layer it opens or the tab it selects, and a type
   const [, s2, s3, s4] = timingTable(promo()).scenes;
   assert.deepEqual(s2.beats[2].opens, { kind: 'drawer', action: 'Details' });
   assert.deepEqual(s2.beats[4].opens, { kind: 'dialog', action: 'Send reminder' });
-  assert.equal(s4.beats[3].tab, 'Sent');
+  assert.equal(s4.beats[1].tab, 'Sent');
+  assert.deepEqual(s4.beats[3].opens, { kind: 'drawer', action: 'Notifications' });
   const typed = s3.beats[0];
   assert.deepEqual(typed.typing, [typed.act, Math.round((typed.act + 'Follow up by phone on Thursday.'.length / PACE.cps) * 1000) / 1000]);
   assert.ok(typed.typing[1] <= typed.dur, 'the note is typed inside its beat');
@@ -136,4 +137,15 @@ test('timing: typing ends before its beat does, and a scroll waits until the kit
     'S-01.1 types until 4.532 s into a 2 s beat; make it at least 4900 ms, or its text shorter',
     'S-01.3 scrolls, which a film does not play yet; hold on what the scroll shows instead',
   ]);
+});
+
+test('timing: a click that opens a layer acts early enough for the layer to open and hold before the beat ends', () => {
+  // As the kit draws it: a layer shows 0.1 s after the click and opens over 0.25 s.
+  assert.equal(PACE.open, 0.35);
+  for (const pacing of ['brisk', 'standard', 'calm']) {
+    const table = timingTable({ ...promo(), mods: { ...promo().mods, pacing } });
+    const opening = table.scenes.flatMap((s) => s.beats || []).filter((b) => b.do === 'click' && b.opens && ['drawer', 'dialog', 'toast', 'menu'].includes(b.opens.kind));
+    assert.deepEqual(opening.map((b) => b.hook), ['S-02.3', 'S-02.5', 'S-04.4'], pacing);
+    for (const b of opening) assert.ok(b.dur - b.act >= PACE.open + PACE.tail - 1e-9, `${pacing} ${b.hook} acts at ${b.act} s of ${b.dur} s`);
+  }
 });

@@ -155,15 +155,20 @@
       return box && box.w > 0 && box.h > 0 ? { node, box } : { node: null, box: null };
     });
     // A layer a beat opens joins the shot that beat holds, so the layer opens in frame; a layer keeps its layout while
-    // it waits to show, so its box is there to measure. A beat whose target is not there, or has no box then, holds
-    // the shot before it. The scene opens on the whole window.
-    const opened = sc.beats.map((b) => {
-      const i = SP.openedSurface(sc, b);
-      const root = i < 0 ? null : [...w.surfaces[i].box.children].find((c) => !c.classList.contains('sp-backdrop'));
+    // it waits to show, so its box is there to measure. A target inside a dialog or toast frames that whole layer,
+    // which is seen whole or not at all. A beat whose target is not there, or has no box then, holds the shot before
+    // it. The scene opens on the whole window.
+    const layerBox = (surface) => {
+      const root = surface && [...surface.children].find((c) => !c.classList.contains('sp-backdrop'));
       const box = root && SP.boxIn(root, w.win);
       return box && box.w > 0 && box.h > 0 ? box : null;
+    };
+    const opened = sc.beats.map((b) => {
+      const i = SP.openedSurface(sc, b);
+      return i < 0 ? null : layerBox(w.surfaces[i].box);
     });
-    w.shots = SP.shotBoxes(sc.beats, w.targets.map((x) => x.box), opened).map((box) => (box ? SP.shotFor(box, w.look) : null));
+    const boxes = w.targets.map((x) => x.box && SP.shotBox(x.box, layerBox(x.node.closest('.sp-surface[data-kind="dialog"], .sp-surface[data-kind="toast"]'))));
+    w.shots = SP.shotBoxes(sc.beats, boxes, opened).map((box) => (box ? SP.shotFor(box, w.look) : null));
     w.shots.forEach((s, i) => { if (!s) w.shots[i] = i ? w.shots[i - 1] : SP.wide(); });
     w.cam = SP.cameraKeys(sc.beats, w.shots, SP.wide());
     w.lifts = SP.el('div', 'sp-lifts');

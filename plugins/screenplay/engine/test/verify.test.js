@@ -36,7 +36,7 @@ test('verify: a still at every cut, every beat and the frame before every camera
   assert.deepEqual(at(plan, 'move').slice(0, 2), [['S-02.1', 3.4], ['S-02.2', 6.4]]);
   assert.ok(!at(plan, 'move').some(([hook]) => hook === 'S-02.3'));
   // The shot each beat holds, from the camera's landing to the beat's end.
-  assert.deepEqual(at(plan, 'hold').filter(([hook]) => hook === 'S-04.5'), [['S-04.5', 28.45], ['S-04.5', 31.75]]);
+  assert.deepEqual(at(plan, 'hold').filter(([hook]) => hook === 'S-04.5'), [['S-04.5', 29.25], ['S-04.5', 31.75]]);
 });
 
 test('verify: the reference cut\'s expected check results: every moment its plan renders, each brand, and no problem', () => {
@@ -220,4 +220,14 @@ test('verify: a layer a beat opens lies wholly in the frame from when it shows t
   assert.deepEqual(measuredProblems(sample(frame([dialog(-300, -120, { shown: false })])), overlay), []);
   // Another layer cut by the frame is no problem: a close-up of part of a drawer is a shot, not a flaw.
   assert.deepEqual(measuredProblems(sample(frame([dialog(600, 300), { kind: 'drawer', action: 'Details', x: 1500, y: 0, w: 600, h: 1080, shown: true, opaque: true }])), overlay), []);
+});
+
+test('verify: a dialog or toast that shows is never cut by the frame\'s edge', () => {
+  const frame = (layers) => ({ camera: [1, 0, 0, 1, 0, 0], scale: 1, window: { x: 0, y: 0, w: 1920, h: 1080 }, hooks: [], callouts: [], cards: [], layers, logos: [] });
+  const layer = (kind, x, y) => ({ kind, action: null, x, y, w: 600, h: 300, shown: true, opaque: true });
+  const at = (kind, layers) => measuredProblems([{ t: 18.25, kind, scene: 'S-03', hook: 'S-03.2', m: frame(layers) }], { name: 'Harbor', logos: {}, places: {} });
+  assert.deepEqual(at('hold', [layer('dialog', 40, -60)]), ['S-03 at 18.25 s: the dialog is cut by the frame\'s edge']);
+  assert.deepEqual(at('caption', [layer('toast', 1500, 900)]), ['S-03 at 18.25 s: the toast is cut by the frame\'s edge']);
+  // Wholly in the frame, or wholly out of it, is fine; so is a drawer, whose close-ups show a part of it.
+  assert.deepEqual(at('hold', [layer('dialog', 600, 300), layer('toast', 2200, 900), layer('drawer', 1500, -40)]), []);
 });

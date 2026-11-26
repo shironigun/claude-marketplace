@@ -41,8 +41,9 @@ list names them). Each screen scene is on one persona's screen.
 - **A beat** is `hold` (a still shot), `point`, `click` or `type` (with the `text` it types), at a
   `target` named as a user sees it ("the Send button", "Reminders in the side rail"), for `ms` milliseconds. Point
   at the control a user would touch (rule 5). A beat that opens or shows one of the screen's actions names it in
-  `action`, with its label from `screens.json`. A film does not play `scroll` yet: hold on what the scroll
-  shows. A typed beat runs at least its words' time at 22 characters a second, and 1.2 s more for the camera
+  `action`, with its label from `screens.json`. A layer stays open for the rest of its scene, as the app keeps it
+  open until its own control closes it: show what is under a panel before you open it, or open it last. A film does
+  not play `scroll` yet: hold on what the scroll shows. A typed beat runs at least its words' time at 22 characters a second, and 1.2 s more for the camera
   and the pointer; the build says when one is short.
 - **A new screen scene** starts when an action changes what the app shows, such as after a send: the screens and
   the demo data go scene by scene.

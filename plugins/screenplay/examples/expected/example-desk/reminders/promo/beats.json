@@ -37,10 +37,10 @@
       "persona": "P-01",
       "beats": [
         { "do": "hold", "target": "the toast", "action": "Reminder sent to <customer>", "ms": 3000, "caption": { "label": "Toast", "value": "names the customer", "truth": "T-09" } },
-        { "do": "click", "target": "the Notifications bell", "action": "Notifications", "ms": 1200 },
-        { "do": "hold", "target": "the notifications panel", "ms": 3000, "caption": { "label": "Notifications", "value": "one line for each reminder sent", "truth": "T-10" } },
         { "do": "click", "target": "the Sent tab", "action": "Sent", "ms": 1200 },
-        { "do": "hold", "target": "the Sent tab", "ms": 3000, "caption": { "label": "Sent", "value": "the reminders that went out", "truth": "T-08" } }
+        { "do": "hold", "target": "the Sent tab", "ms": 3000, "caption": { "label": "Sent", "value": "the reminders that went out", "truth": "T-08" } },
+        { "do": "click", "target": "the Notifications bell", "action": "Notifications", "ms": 1200 },
+        { "do": "hold", "target": "the notifications panel", "ms": 3000, "caption": { "label": "Notifications", "value": "one line for each reminder sent", "truth": "T-10" } }
       ]
     },
     { "id": "S-05", "kind": "end", "text": "Reminders", "line": "Every follow-up, on time", "ms": 3000 }

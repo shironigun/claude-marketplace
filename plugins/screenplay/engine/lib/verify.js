@@ -93,6 +93,7 @@ function playedProblems(film, played) {
 const SAFE = { x: 40, y: 40, w: 1840, h: 1000 };
 const FULL = { x: 0, y: 0, w: 1920, h: 1080 };
 const inside = (b, a) => b.x >= a.x - 0.5 && b.y >= a.y - 0.5 && b.x + b.w <= a.x + a.w + 0.5 && b.y + b.h <= a.y + a.h + 0.5;
+const overlaps = (b, a) => b.x < a.x + a.w && b.x + b.w > a.x && b.y < a.y + a.h && b.y + b.h > a.y;
 const visible = (e) => e.shown && e.w > 0 && e.h > 0;
 
 // A colour's alpha as getComputedStyle gives it: 0 for transparent; the value after a slash in any colour function
@@ -127,7 +128,8 @@ function imageOpaque(image, alphaOf) {
 //   chip, caption, lifted card, step badge or a card's words stay in the safe area;
 // - stillness: the camera is where it was at both ends of a hold;
 // - exit before move: no callout shows while the camera moves, in the frame before it moves, or before a cut;
-// - a layer a beat opens lies wholly in the frame from when it shows to the beat's end;
+// - a layer a beat opens lies wholly in the frame from when it shows to the beat's end, and a dialog or toast that
+//   shows is never cut by the frame's edge;
 // - bleed-through: something opaque covers each drawer, dialog or toast that shows;
 // - brand: each logo place shows the brand's own logo for it, at the brand's height.
 function measuredProblems(samples, overlay) {
@@ -159,6 +161,13 @@ function measuredProblems(samples, overlay) {
     if (['move', 'before-move', 'before-cut'].includes(s.kind)) {
       const left = m.callouts.filter(visible);
       if (left.length) say(`exit ${s.t}`, `${at}: a ${left[0].kind} still shows ${s.kind === 'before-cut' ? 'in the last frame before the cut' : 'while the camera moves'}`);
+    }
+    // A dialog or toast that shows is seen whole or not at all: one cut by the frame's edge reads as cropped. A drawer's
+    // close-ups show a part of it, so a drawer is checked only by the beat that opens it (below).
+    if (['beat', 'caption', 'hold'].includes(s.kind)) {
+      for (const l of m.layers.filter((x) => visible(x) && ['dialog', 'toast'].includes(x.kind) && x.action !== s.layer && overlaps(x, FULL) && !inside(x, FULL))) {
+        say(`cut ${s.scene} ${l.kind}`, `${at}: the ${l.kind} is cut by the frame's edge`);
+      }
     }
     // A layer a beat opens lies wholly in the frame once it shows: one cut by the frame's edge opens off the shot.
     // Another layer cut by the frame is a close-up of part of it, which is a shot, not a flaw.

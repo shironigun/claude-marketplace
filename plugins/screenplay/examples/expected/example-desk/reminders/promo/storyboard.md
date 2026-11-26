@@ -59,10 +59,10 @@ Persona: Maya Okafor.
 | # | Beat | Caption | Truth | Time |
 |---|---|---|---|---|
 | 1 | Hold on the toast (toast: Reminder sent to \<customer>) | Toast: names the customer | T-09 does | 3.0 s |
-| 2 | Click the Notifications bell (drawer: Notifications) |  |  | 1.2 s |
-| 3 | Hold on the notifications panel | Notifications: one line for each reminder sent | T-10 does | 3.0 s |
-| 4 | Click the Sent tab (tab: Sent) |  |  | 1.2 s |
-| 5 | Hold on the Sent tab | Sent: the reminders that went out | T-08 does | 3.0 s |
+| 2 | Click the Sent tab (tab: Sent) |  |  | 1.2 s |
+| 3 | Hold on the Sent tab | Sent: the reminders that went out | T-08 does | 3.0 s |
+| 4 | Click the Notifications bell (drawer: Notifications) |  |  | 1.2 s |
+| 5 | Hold on the notifications panel | Notifications: one line for each reminder sent | T-10 does | 3.0 s |
 
 ### S-05 End card, 3.0 s
 
