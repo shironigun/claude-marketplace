@@ -7,6 +7,29 @@
   // safe area.
   SP.CAM = { pad: 48, zMin: 1, zMax: 2.4, snap: 1.1, room: 0.22, floor: 0.75 };
 
+  // The box a beat's shot frames: its target's, and the layer it opens with it, if any, so the layer opens in frame.
+  SP.shotBox = function (target, layer) {
+    if (!layer) return target;
+    const l = Math.min(target.x, layer.x);
+    const t = Math.min(target.y, layer.y);
+    return { x: l, y: t, w: Math.max(target.x + target.w, layer.x + layer.w) - l, h: Math.max(target.y + target.h, layer.y + layer.h) - t };
+  };
+
+  // The box each beat's shot frames: its target's, and each layer a beat opens joins the box of the shot that beat
+  // holds, which is its own when it moves, or that of the last beat before it that moved (a click on the target the
+  // beat before pointed at keeps that shot). `boxes[i]` is beat i's target box, `opened[i]` the box of the layer it
+  // opens, or null.
+  SP.shotBoxes = function (beats, boxes, opened) {
+    const out = [...boxes];
+    opened.forEach((layer, i) => {
+      if (!layer) return;
+      let j = i;
+      while (j > 0 && !beats[j].move) j -= 1;
+      if (out[j]) out[j] = SP.shotBox(out[j], layer);
+    });
+    return out;
+  };
+
   // The whole window, as the look sets it on the stage: where every scene starts unless it carries a shot over.
   SP.wide = () => ({ cx: SP.STAGE.w / 2, cy: SP.STAGE.h / 2, z: 1 });
 

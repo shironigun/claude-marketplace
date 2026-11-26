@@ -5,7 +5,7 @@ build and the checks hold a film to all twelve.
 
 1. The app looks like its code: its own markup, classes, values and fonts, measured after layout, with scoped CSS, no
    stray scrollbars, and no outline, glow or tint the code does not have.
-2. Nothing bleeds through an overlay.
+2. Nothing bleeds through an overlay, and an overlay a beat opens opens wholly in the frame.
 3. Holds are still; the camera moves only between shots.
 4. One thing at a time: a caption and its focus leave before the camera moves or the scene cuts, and scene text is
    gone before the next shot enters.

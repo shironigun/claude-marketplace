@@ -11,7 +11,10 @@ const ms = (t) => Math.round(t * 1000) / 1000;
 // of the shot it holds; a card's middle; and the film's last frame. Each is { t, kind, scene, hook? }, in film order.
 function framePlan(film) {
   const out = [];
-  const add = (t, kind, scene, hook) => out.push({ t: ms(Math.max(0, t)), kind, scene, ...(hook ? { hook } : {}) });
+  let layer = null;
+  const add = (t, kind, scene, hook) => out.push({
+    t: ms(Math.max(0, t)), kind, scene, ...(hook ? { hook } : {}), ...(layer && hook && t > layer.from ? { layer: layer.action } : {}),
+  });
   let prev = null;
   for (const id of film.order) {
     const sc = film.scenes[id];
@@ -20,6 +23,9 @@ function framePlan(film) {
     if (!sc.beats) add(sc.start + sc.dur / 2, 'card', id);
     for (const b of sc.beats || []) {
       const at = sc.start + b.start;
+      // A beat that opens a layer marks each of its moments once the layer shows (as the kit's layerTimes has it: 0.1 s
+      // after a click acts, or from the beat's start), so the layer's place in the frame is checked there.
+      layer = b.opens ? { action: b.opens.action, from: at + (b.do === 'click' && b.act !== null ? b.act + 0.1 : 0) } : null;
       // A glide moves the camera; a cut lands at once, so it has no middle to measure.
       if (b.move && b.move[1] > b.move[0]) {
         if (b.start + b.move[0] > 0) add(at + b.move[0] - FRAME, 'before-move', id, b.hook);
@@ -35,6 +41,7 @@ function framePlan(film) {
         add(at + b.dur - 0.05, 'hold', id, b.hook);
       }
     }
+    layer = null;
     prev = id;
   }
   if (prev) add(film.film.length - FRAME, 'end', prev);
@@ -120,6 +127,7 @@ function imageOpaque(image, alphaOf) {
 //   chip, caption, lifted card, step badge or a card's words stay in the safe area;
 // - stillness: the camera is where it was at both ends of a hold;
 // - exit before move: no callout shows while the camera moves, in the frame before it moves, or before a cut;
+// - a layer a beat opens lies wholly in the frame from when it shows to the beat's end;
 // - bleed-through: something opaque covers each drawer, dialog or toast that shows;
 // - brand: each logo place shows the brand's own logo for it, at the brand's height.
 function measuredProblems(samples, overlay) {
@@ -151,6 +159,12 @@ function measuredProblems(samples, overlay) {
     if (['move', 'before-move', 'before-cut'].includes(s.kind)) {
       const left = m.callouts.filter(visible);
       if (left.length) say(`exit ${s.t}`, `${at}: a ${left[0].kind} still shows ${s.kind === 'before-cut' ? 'in the last frame before the cut' : 'while the camera moves'}`);
+    }
+    // A layer a beat opens lies wholly in the frame once it shows: one cut by the frame's edge opens off the shot.
+    // Another layer cut by the frame is a close-up of part of it, which is a shot, not a flaw.
+    if (s.layer) {
+      const l = m.layers.find((x) => x.action === s.layer);
+      if (l && visible(l) && !inside(l, FULL)) say(`layer ${s.hook}`, `${s.hook} at ${s.t} s: the ${l.kind} it opens is cut by the frame's edge`);
     }
     for (const l of m.layers.filter((x) => visible(x) && !x.opaque)) {
       say(`bleed ${s.scene} ${l.kind}`, `${at}: the page shows through the ${l.kind}, which nothing opaque covers`);

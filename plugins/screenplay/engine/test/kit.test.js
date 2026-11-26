@@ -213,3 +213,34 @@ test('kit world: a layer shows when its click lands, a named layer from its beat
   assert.equal(SP.tabAt(switches, ['Open', 'Sent'], SP.measureAt(sc.beats[2])), null);
   assert.equal(SP.tabAt(switches, ['Open', 'Sent'], SP.measureAt({ start: 6.4, do: 'hold', act: null })), 'Sent');
 });
+
+test('kit camera: a beat that opens a layer frames its target and the layer together, so the layer opens in frame', () => {
+  const SP = kit();
+  const sc = {
+    surfaces: [{ kind: 'page' }, { kind: 'drawer', action: 'Details' }, { kind: 'dialog', action: 'Send' }],
+    beats: [{ start: 0, do: 'click', act: 1, opens: { kind: 'dialog', action: 'Send' } }, { start: 2, do: 'hold', act: null }],
+  };
+  assert.equal(SP.openedSurface(sc, sc.beats[0]), 2);
+  assert.equal(SP.openedSurface(sc, sc.beats[1]), -1);
+  // A button at the window's bottom right opens a dialog in its middle: the shot frames both.
+  const button = { x: 1300, y: 860, w: 120, h: 36 };
+  const dialog = { x: 470, y: 300, w: 500, h: 240 };
+  assert.deepEqual(plain(SP.shotBox(button, null)), button);
+  const box = plain(SP.shotBox(button, dialog));
+  assert.deepEqual(box, { x: 470, y: 300, w: 950, h: 596 });
+  const shot = SP.shotFor(box, FLOATING);
+  for (const [x, y] of [[470, 300], [970, 540], [1300, 860], [1420, 896]]) {
+    const p = SP.project(shot, FLOATING.x + x * FLOATING.s, FLOATING.y + y * FLOATING.s);
+    assert.ok(p.x >= 0 && p.x <= SP.STAGE.w && p.y >= 0 && p.y <= SP.STAGE.h, `${x},${y} lands at ${p.x},${p.y}`);
+  }
+  // A click on the target the beat before pointed at keeps that beat's shot, so the layer joins that shot instead.
+  const row = { x: 100, y: 200, w: 900, h: 30 };
+  const drawer = { x: 1060, y: 0, w: 380, h: 900 };
+  const beats = [{ move: [0, 0.8] }, { move: [0, 0.8] }, { move: null }];
+  assert.deepEqual(plain(SP.shotBoxes(beats, [button, row, row], [null, null, drawer])), [button, { x: 100, y: 0, w: 1340, h: 900 }, row]);
+  assert.deepEqual(plain(SP.shotBoxes(beats, [button, row, row], [null, null, null])), [button, row, row]);
+  // The button alone gets a close-up that leaves the dialog's middle out of frame: the flaw this fixes.
+  const alone = SP.shotFor(button, FLOATING);
+  const middle = SP.project(alone, FLOATING.x + 720 * FLOATING.s, FLOATING.y + 420 * FLOATING.s);
+  assert.ok(middle.x < 0 || middle.y < 0, `the dialog's middle lands at ${middle.x},${middle.y} in the button's close-up`);
+});

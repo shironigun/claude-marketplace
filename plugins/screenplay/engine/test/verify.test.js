@@ -196,3 +196,28 @@ test('verify: a background image hides what is under it only when every colour i
   assert.equal(imageOpaque('url("data:image/svg+xml;utf8,<svg fill=\'transparent\'/>")', alphaOf), true);
   assert.equal(imageOpaque('url("panel.png"), linear-gradient(rgba(0, 0, 0, 0.2), rgb(0, 0, 0))', alphaOf), false);
 });
+
+test('verify: a layer a beat opens lies wholly in the frame from when it shows to the beat end', () => {
+  // The frame plan marks each moment of an opening beat after its layer shows: 0.1 s after a click acts.
+  const film = {
+    film: { length: 6 },
+    order: ['S-01'],
+    scenes: { 'S-01': { kind: 'screen', start: 0, dur: 6, beats: [
+      { hook: 'S-01.1', start: 0, dur: 3, do: 'hold', act: null, move: null, caption: null },
+      { hook: 'S-01.2', start: 3, dur: 3, do: 'click', act: 1.65, move: [0, 0.8], caption: null, opens: { kind: 'dialog', action: 'Send' } },
+    ] } },
+  };
+  const marked = framePlan(film).filter((p) => p.layer);
+  assert.deepEqual(marked.map((p) => [p.kind, p.t, p.layer]), [['hold', 5.95, 'Send']]);
+  // Measured there: a dialog cut by the frame's edge is a problem; one wholly in the frame, or one that has not opened
+  // in the frame, is not.
+  const frame = (layers) => ({ camera: [1, 0, 0, 1, 0, 0], scale: 1, window: { x: 0, y: 0, w: 1920, h: 1080 }, hooks: [], callouts: [], cards: [], layers, logos: [] });
+  const dialog = (x, y, more = {}) => ({ kind: 'dialog', action: 'Send', x, y, w: 700, h: 400, shown: true, opaque: true, ...more });
+  const sample = (m) => [{ t: 5.95, kind: 'hold', scene: 'S-01', hook: 'S-01.2', layer: 'Send', m }];
+  const overlay = { name: 'Harbor', logos: {}, places: {} };
+  assert.deepEqual(measuredProblems(sample(frame([dialog(-300, -120)])), overlay), ['S-01.2 at 5.95 s: the dialog it opens is cut by the frame\'s edge']);
+  assert.deepEqual(measuredProblems(sample(frame([dialog(600, 300)])), overlay), []);
+  assert.deepEqual(measuredProblems(sample(frame([dialog(-300, -120, { shown: false })])), overlay), []);
+  // Another layer cut by the frame is no problem: a close-up of part of a drawer is a shot, not a flaw.
+  assert.deepEqual(measuredProblems(sample(frame([dialog(600, 300), { kind: 'drawer', action: 'Details', x: 1500, y: 0, w: 600, h: 1080, shown: true, opaque: true }])), overlay), []);
+});

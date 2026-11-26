@@ -11,13 +11,16 @@
   // click on it acts, or from that beat's start for any other beat; any other layer from the start, as one an earlier
   // scene left open.
   SP.layerTimes = function (sc) {
-    return sc.surfaces.map((s) => {
+    return sc.surfaces.map((s, i) => {
       if (s.kind === 'page') return 0;
-      const b = sc.beats.find((x) => x.opens && x.opens.kind === s.kind && x.opens.action === s.action);
+      const b = sc.beats.find((x) => SP.openedSurface(sc, x) === i);
       if (!b) return 0;
       return b.start + (b.do === 'click' && b.act !== null ? b.act + 0.1 : 0);
     });
   };
+
+  // The surface a beat opens: the index of the layer its action names, or -1.
+  SP.openedSurface = (sc, b) => (b.opens ? sc.surfaces.findIndex((s) => s.kind !== 'page' && s.kind === b.opens.kind && s.action === b.opens.action) : -1);
 
   // The tabs the scene's beats click, each with the moment its click lands.
   SP.tabSwitches = (sc) => sc.beats.filter((b) => b.tab && b.act !== null).map((b) => ({ at: b.start + b.act + 0.1, label: b.tab }));
@@ -64,7 +67,8 @@
     win.style.transform = `scale(${look.s})`;
     const body = SP.el('div', `sp-body ${sc.prefix}`);
     const surfaces = sc.surfaces.map((s) => {
-      const box = SP.el('div', 'sp-surface', { 'data-kind': s.kind });
+      // The action that opens a layer names it, so verify can find the layer a beat opens.
+      const box = SP.el('div', 'sp-surface', { 'data-kind': s.kind, ...(s.action ? { 'data-sp-action': s.action } : {}) });
       if (s.kind === 'dialog') box.append(SP.el('div', 'sp-backdrop'));
       box.insertAdjacentHTML('beforeend', s.module.endsWith('.json') ? kit.json(s.module)[s.key] : kit.module(s.module));
       body.append(box);
@@ -150,9 +154,16 @@
       const box = node && SP.frameBox(node, w.win);
       return box && box.w > 0 && box.h > 0 ? { node, box } : { node: null, box: null };
     });
-    // A beat whose target is not there, or has no box then, holds the shot before it. The scene opens on the whole
-    // window.
-    w.shots = w.targets.map((x) => (x.box ? SP.shotFor(x.box, w.look) : null));
+    // A layer a beat opens joins the shot that beat holds, so the layer opens in frame; a layer keeps its layout while
+    // it waits to show, so its box is there to measure. A beat whose target is not there, or has no box then, holds
+    // the shot before it. The scene opens on the whole window.
+    const opened = sc.beats.map((b) => {
+      const i = SP.openedSurface(sc, b);
+      const root = i < 0 ? null : [...w.surfaces[i].box.children].find((c) => !c.classList.contains('sp-backdrop'));
+      const box = root && SP.boxIn(root, w.win);
+      return box && box.w > 0 && box.h > 0 ? box : null;
+    });
+    w.shots = SP.shotBoxes(sc.beats, w.targets.map((x) => x.box), opened).map((box) => (box ? SP.shotFor(box, w.look) : null));
     w.shots.forEach((s, i) => { if (!s) w.shots[i] = i ? w.shots[i - 1] : SP.wide(); });
     w.cam = SP.cameraKeys(sc.beats, w.shots, SP.wide());
     w.lifts = SP.el('div', 'sp-lifts');

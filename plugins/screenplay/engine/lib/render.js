@@ -168,7 +168,7 @@ function measureFrame(alphaOf, imageOpaque) {
       const b = box(root);
       // Something opaque covers nearly all of the layer: its own background, or one of its parts'.
       const covered = [root, ...root.querySelectorAll('*')].some((e) => opaque(e) && box(e).w * box(e).h >= 0.9 * b.w * b.h);
-      return { kind: s.getAttribute('data-kind'), ...b, shown: shown(root), opaque: covered };
+      return { kind: s.getAttribute('data-kind'), action: s.getAttribute('data-sp-action'), ...b, shown: shown(root), opaque: covered };
     }).filter(Boolean),
     logos: [...document.querySelectorAll('[data-sp-logo] img.sp-logo')].map((e) => ({
       place: e.closest('[data-sp-logo]').getAttribute('data-sp-logo'), src: e.getAttribute('src'), ...box(e), shown: shown(e),
