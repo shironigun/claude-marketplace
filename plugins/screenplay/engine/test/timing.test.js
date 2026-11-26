@@ -73,8 +73,9 @@ test('timing: each screen scene opens on the whole window, and a new target move
   const [, s2, s3, s4] = timingTable(promo()).scenes;
   // Beat 3 clicks the reminder that beat 2 points at, so the camera holds; every other beat names a new target.
   assert.deepEqual(s2.beats.map((b) => b.move !== null), [true, true, false, true, true]);
-  // Each scene's first beat moves in from the whole window; S-04's third beat holds on the tab its click selected.
-  assert.deepEqual([s3.beats[0].move !== null, s4.beats[0].move !== null, s4.beats[2].move], [true, true, null]);
+  // Each scene's first beat moves in from the whole window; S-04's third beat holds on the list its tab click showed, a
+  // new target, so the camera moves to it.
+  assert.deepEqual([s3.beats[0].move !== null, s4.beats[0].move !== null, s4.beats[2].move !== null], [true, true, true]);
 });
 
 test('timing: a beat moves first, acts once the camera has landed, and its caption is gone before the beat ends', () => {
