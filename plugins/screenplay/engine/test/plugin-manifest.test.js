@@ -17,6 +17,7 @@ test('plugin manifest: screenplay, in development, by the marketplace account un
   for (const word of ['promo', 'walkthrough', 'trailer', 'module']) assert.ok(manifest.description.includes(word), word);
   assert.deepEqual(manifest.author, AUTHOR);
   assert.equal(manifest.license, 'MIT');
+  assert.deepEqual(manifest.network, { hosts: ['registry.npmjs.org'] }, "the one host the renderer's install reaches");
   assert.deepEqual(foreignNames(file), []);
 });
 

@@ -18,6 +18,8 @@ results are in `examples/expected/example-desk/reminders/promo/check.json`.
 | `trigger-trailer-module` | trigger | "cut a trailer of this module" starts app-film |
 | `trigger-rebuild-screens` | trigger | "rebuild the promo's screens from the code" starts app-film |
 | `trigger-build-films` | trigger | "build the films for both brands" starts app-film |
+| `trigger-check-films` | trigger | "check every frame of the films before I share them" starts app-film |
+| `trigger-review-comments` | trigger | "work through the comments on the promo's films" starts app-film |
 | `guard-code-question` | guard | a question about one function starts no screenplay skill |
 | `guard-explainer-page` | guard | explaining a feature as a page starts no screenplay skill |
 | `guard-release-notes` | guard | release notes start no screenplay skill |

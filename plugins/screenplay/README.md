@@ -1,9 +1,9 @@
 # screenplay (in development)
 
-> **In development, not yet registered in the marketplace.** Plans 1 to 5 of the first release are in: the
+> **In development, not yet registered in the marketplace.** Plans 1 to 6 of the first release are in: the
 > shared `sp` engine, the two analysis skills (brand-profile and app-map) with their three scouts, and the film
-> skill from the mods to an approved storyboard, the film's screens rebuilt from the code by the UI builder, and one
-> Motion film per brand. The checks and the comment loop arrive in plan 6.
+> skill from the mods to an approved storyboard, the film's screens rebuilt from the code by the UI builder, one
+> Motion film per brand, the checks of every frame with the film reviewer, house style and the comment loop.
 
 Turn any part of a web app (one feature, a whole module, or a flow across modules) into polished films: a promo, a
 walkthrough, a trailer, a teaser, a release highlight, a store preview or a how-to. screenplay reads the repository
@@ -21,7 +21,7 @@ repository: everything it learns lives under `$SCREENPLAY_HOME` (default `~/.scr
 |---|---|---|
 | brand-profile | "what are this app's logos, colours and fonts?" | plan 2 |
 | app-map | "what does this feature or module really do?" | plan 2 |
-| app-film | "make a promo, a walkthrough or a trailer of it" | plan 3 to the storyboard; plan 4 the screens; plan 5 the films |
+| app-film | "make a promo, a walkthrough or a trailer of it" | plan 3 to the storyboard; plan 4 the screens; plan 5 the films; plan 6 the checks and the comments |
 
 A subject is analysed once; every film of it, in any format, reuses that analysis.
 
@@ -35,6 +35,8 @@ A subject is analysed once; every film of it, in any format, reuses that analysi
 | `/screenplay:mods <subject> [film]` | Changes a film's mods, then checks its story against them and asks for the storyboard's approval again |
 | `/screenplay:screens <subject> [film]` | Rebuilds a film's screens from the code, after a change in the code or for a new state, and checks them again |
 | `/screenplay:build <subject> [film]` | Builds a film as one Motion film per brand, or brings every brand's film back in line with its source after a change |
+| `/screenplay:check <subject> [film]` | Renders each brand's film with the Motion player's own renderer, checks every frame against the film rules, has the film reviewer judge them, and hands you the first cut |
+| `/screenplay:review <subject> [film]` | Works through your comments on the films: fixes the source, checks again, syncs every brand's film and answers each thread |
 | `/screenplay:status` | Shows where each subject and film stands and the state of the brand profile; changes nothing |
 
 ## In this release
@@ -53,12 +55,19 @@ A subject is analysed once; every film of it, in any format, reuses that analysi
   pinned cursor, typing, the walkthrough patterns, title, act and end cards, and an original score; each brand's
   overlay of theme, logos and colours over one shared source; and one Motion film per brand, written through pinned,
   staged writes so a re-sync sends only what changed.
-- Three read-only scouts (`sp-brand-scout`, `sp-screen-scout`, `sp-backend-tracer`) and the read-only UI builder
-  (`sp-ui-builder`), which return JSON; only the engine writes the workspace.
+- **app-film**, verify and review: each brand's film rendered through the Motion player's own offline renderer in
+  your own Chrome, Edge or Chromium, with no network, and measured at every cut, every beat and the frame before
+  every camera move: timing (every cut on the score's beat), layout and the safe area, stillness, exit before a move,
+  bleed-through, purity and each brand's logo, with a contact sheet a scene for the film reviewer; then your comments,
+  pinned to a moment and a point, mapped to their beat and element, fixed in the source, and answered in their
+  threads. Rules learned from the rounds become house style, the repository's and, when you say so, your own.
+- Three read-only scouts (`sp-brand-scout`, `sp-screen-scout`, `sp-backend-tracer`), the read-only UI builder
+  (`sp-ui-builder`) and the read-only film reviewer (`sp-film-reviewer`, with no shell), which return JSON; only
+  the engine writes the workspace.
 - The engine: `sp init`, `sp status`, `sp state`, `sp detect`, `sp save` (which checks every citation against the
   repository, every film result against the subject, and every screen against the film), `sp dossier`, `sp film`,
-  `sp mods`, `sp storyboard`, `sp confirm`, `sp answers`, `sp screens`, `sp logo`, `sp build`, `sp stage` and
-  `sp record`.
+  `sp mods`, `sp storyboard`, `sp confirm`, `sp answers`, `sp screens`, `sp logo`, `sp build`, `sp stage`,
+  `sp record`, `sp render`, `sp check` and `sp house`.
 - `examples/example-desk`: a dependency-free two-brand app with a reminders queue, and in `examples/expected/` what
   screenplay should find in it, plan from it and rebuild from its code: the theme, and a promo of the feature and a
   walkthrough of the module with their screens.
@@ -68,17 +77,19 @@ A subject is analysed once; every film of it, in any format, reuses that analysi
 ```text
 .claude-plugin/plugin.json
 skills/            brand-profile/, app-map/, app-film/ (SKILL.md, references/, and the film kit in kit/)
-agents/            sp-brand-scout, sp-screen-scout, sp-backend-tracer, sp-ui-builder
-commands/          brand, map, new, mods, screens, build, status
+agents/            sp-brand-scout, sp-screen-scout, sp-backend-tracer, sp-ui-builder, sp-film-reviewer
+commands/          brand, map, new, mods, screens, build, check, review, status
 shared/            bootstrap, detectors (used by every skill)
 engine/            sp.js, lib/, schemas/, catalog/ (the mods), fixtures/, test/
 examples/          example-desk/ (the fixture app), expected/ (what screenplay should find)
-evals/             trigger and guard cases for claude plugin eval
+evals/             trigger, guard and pipeline cases for claude plugin eval
 ```
 
 ## Engine
 
-`node engine/sp.js help` lists the commands. Node 20 or later, no dependencies. Tests, from the repository root:
+`node engine/sp.js help` lists the commands. Node 20 or later, no dependencies. To check films, `sp render --install`
+puts playwright-core and the Motion player's files in `$SCREENPLAY_HOME/tools/` once, and drives your own browser.
+Tests, from the repository root:
 
 ```bash
 node --test plugins/screenplay/engine/test/*.test.js
