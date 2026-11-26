@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="620" viewBox="0 0 1280 620" role="img" aria-label="How screenplay works" font-family="'Segoe UI', -apple-system, 'Helvetica Neue', Arial, sans-serif">
+<title>How screenplay works</title>
+<defs>
+  <linearGradient id="d-screenplay-bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0b1020"/><stop offset="1" stop-color="#151d3b"/></linearGradient>
+  <radialGradient id="d-screenplay-glow" cx="1" cy="0" r="0.9"><stop offset="0" stop-color="#e879f9" stop-opacity=".28"/><stop offset="1" stop-color="#e879f9" stop-opacity="0"/></radialGradient>
+  <pattern id="d-screenplay-dots" width="22" height="22" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1.1" fill="#ffffff" fill-opacity=".06"/></pattern>
+</defs>
+<rect width="1280" height="620" rx="26" fill="url(#d-screenplay-bg)"/>
+<rect width="1280" height="620" rx="26" fill="url(#d-screenplay-dots)"/>
+<rect width="1280" height="620" rx="26" fill="url(#d-screenplay-glow)"/>
+<rect x=".5" y=".5" width="1279" height="619" rx="26" fill="none" stroke="#ffffff" stroke-opacity=".08"/>
+<g transform="translate(64 46) scale(1.25)" fill="#e879f9"><path d="m18 4 2 4h-3l-2-4h-2l2 4h-3l-2-4H8l2 4H7L5 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V4z"/></g>
+<text x="106" y="70" font-size="26" font-weight="700" fill="#ffffff">How screenplay works</text>
+<text x="64" y="104" font-size="16" fill="#c7d0e6">The code in, films out: every caption traced to what the app really does, every frame checked.</text>
+<text x="64" y="146" font-size="13" font-weight="700" letter-spacing="2" fill="#8b97b8">THE APP'S CODE, READ-ONLY</text>
+<rect x="64" y="160" width="220" height="100" rx="14" fill="#ffffff" fill-opacity="0.05" stroke="#e879f9" stroke-opacity="0.4" />
+<text x="174" y="198.5" text-anchor="middle" font-size="17" font-weight="700" fill="#ffffff">Brand</text>
+<text x="174" y="220.5" text-anchor="middle" font-size="14" fill="#aab4cf">logos, colours, fonts</text>
+<rect x="64" y="280" width="220" height="100" rx="14" fill="#ffffff" fill-opacity="0.05" stroke="#e879f9" stroke-opacity="0.4" />
+<text x="174" y="318.5" text-anchor="middle" font-size="17" font-weight="700" fill="#ffffff">Screens</text>
+<text x="174" y="340.5" text-anchor="middle" font-size="14" fill="#aab4cf">states and actions</text>
+<rect x="64" y="400" width="220" height="100" rx="14" fill="#ffffff" fill-opacity="0.05" stroke="#e879f9" stroke-opacity="0.4" />
+<text x="174" y="438.5" text-anchor="middle" font-size="17" font-weight="700" fill="#ffffff">Backend</text>
+<text x="174" y="460.5" text-anchor="middle" font-size="14" fill="#aab4cf">what it really does</text>
+<rect x="330" y="300" width="180" height="110" rx="14" fill="#e879f9" fill-opacity="0.16" stroke="#e879f9" stroke-opacity="0.8" />
+<text x="420" y="343.5" text-anchor="middle" font-size="17" font-weight="700" fill="#ffffff">Truth ledger</text>
+<text x="420" y="365.5" text-anchor="middle" font-size="14" fill="#aab4cf">every claim cited</text>
+<path d="M300 210V450" stroke="#e879f9" stroke-opacity=".6" stroke-width="2.2"/>
+<path d="M300 210H288" stroke="#e879f9" stroke-opacity=".6" stroke-width="2"/>
+<path d="M300 330H288" stroke="#e879f9" stroke-opacity=".6" stroke-width="2"/>
+<path d="M300 450H288" stroke="#e879f9" stroke-opacity=".6" stroke-width="2"/>
+<path d="M303.9164216789504 330.8159211831147L326.08407832104956 335.434182983552" stroke="#e879f9" stroke-opacity="0.85" stroke-width="2.2" fill="none" />
+<path d="M326.08407832104956 335.434182983552l-11.99251014178566 3.6303857231936276M326.08407832104956 335.434182983552l-9.545059092441656 -8.117379313657635" stroke="#e879f9" stroke-opacity="0.85" stroke-width="2.2" stroke-linecap="round" fill="none"/>
+<rect x="560" y="300" width="180" height="110" rx="14" fill="#ffffff" fill-opacity="0.05" stroke="#e879f9" stroke-opacity="0.4" />
+<text x="650" y="343.5" text-anchor="middle" font-size="17" font-weight="700" fill="#ffffff">Storyboard</text>
+<text x="650" y="365.5" text-anchor="middle" font-size="14" fill="#aab4cf">demo data, your mods</text>
+<rect x="790" y="300" width="180" height="110" rx="14" fill="#e879f9" fill-opacity="0.16" stroke="#e879f9" stroke-opacity="0.8" />
+<text x="880" y="343.5" text-anchor="middle" font-size="17" font-weight="700" fill="#ffffff">Films</text>
+<text x="880" y="365.5" text-anchor="middle" font-size="14" fill="#aab4cf">one per brand</text>
+<rect x="1030" y="300" width="186" height="110" rx="14" fill="#ffffff" fill-opacity="0.05" stroke="#e879f9" stroke-opacity="0.4" />
+<text x="1123" y="334" text-anchor="middle" font-size="17" font-weight="700" fill="#ffffff">Checks</text>
+<text x="1123" y="356" text-anchor="middle" font-size="14" fill="#aab4cf">every frame, 3</text>
+<text x="1123" y="375" text-anchor="middle" font-size="14" fill="#aab4cf">reviewers</text>
+<path d="M514 355L556 355" stroke="#e879f9" stroke-opacity="0.85" stroke-width="2.2" fill="none" />
+<path d="M556 355l-11 6M556 355l-11 -6" stroke="#e879f9" stroke-opacity="0.85" stroke-width="2.2" stroke-linecap="round" fill="none"/>
+<path d="M744 355L786 355" stroke="#e879f9" stroke-opacity="0.85" stroke-width="2.2" fill="none" />
+<path d="M786 355l-11 6M786 355l-11 -6" stroke="#e879f9" stroke-opacity="0.85" stroke-width="2.2" stroke-linecap="round" fill="none"/>
+<circle cx="765" cy="355" r="14" fill="#fbbf24"/><g transform="translate(756 346) scale(0.75)" fill="#0b1020"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2m-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2m3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1s3.1 1.39 3.1 3.1z"/></g>
+<path d="M974 355L1026 355" stroke="#e879f9" stroke-opacity="0.85" stroke-width="2.2" fill="none" />
+<path d="M1026 355l-11 6M1026 355l-11 -6" stroke="#e879f9" stroke-opacity="0.85" stroke-width="2.2" stroke-linecap="round" fill="none"/>
+<text x="560" y="470" font-size="13" font-weight="700" letter-spacing="2" fill="#8b97b8">YOUR COMMENTS FIX THE SOURCE; THE FILMS REBUILD</text>
+<text x="330" y="146" font-size="13" font-weight="700" letter-spacing="2" fill="#8b97b8">THE APP NEVER RUNS: ITS SCREENS ARE REBUILT FROM CODE</text>
+<circle cx="1048" cy="94" r="11" fill="#fbbf24"/><g transform="translate(1041 87) scale(0.5833333333333334)" fill="#0b1020"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2m-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2m3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1s3.1 1.39 3.1 3.1z"/></g><text x="1066" y="99" font-size="14" fill="#c7d0e6">waits for your OK</text>
+</svg>

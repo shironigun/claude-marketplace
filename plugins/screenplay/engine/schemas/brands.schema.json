@@ -1,0 +1,133 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "brands.json: the brand profile, every value with its evidence (spec 5.3)",
+  "type": "object",
+  "required": ["rule", "brands"],
+  "additionalProperties": false,
+  "properties": {
+    "rule": {
+      "type": "object",
+      "required": ["summary", "evidence"],
+      "additionalProperties": false,
+      "properties": {
+        "summary": { "type": "string", "minLength": 1 },
+        "evidence": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/quotedEvidence" } }
+      }
+    },
+    "brands": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/brand" } }
+  },
+  "$defs": {
+    "evidence": {
+      "type": "object",
+      "required": ["path", "line"],
+      "additionalProperties": false,
+      "properties": {
+        "path": { "type": "string", "minLength": 1 },
+        "line": { "type": "integer", "minimum": 1 },
+        "commit": { "type": "string", "pattern": "^[0-9a-f]{7,40}$" },
+        "quote": { "type": "string", "minLength": 1 }
+      }
+    },
+    "quotedEvidence": {
+      "type": "object",
+      "required": ["path", "line", "quote"],
+      "additionalProperties": false,
+      "properties": {
+        "path": { "type": "string", "minLength": 1 },
+        "line": { "type": "integer", "minimum": 1 },
+        "commit": { "type": "string", "pattern": "^[0-9a-f]{7,40}$" },
+        "quote": { "type": "string", "minLength": 1 }
+      }
+    },
+    "color": { "type": "string", "pattern": "^#[0-9a-fA-F]{6}$" },
+    "logo": {
+      "description": "One of: path, a file in the repository; svg, the markup of a logo drawn in code; file, a file the user supplied, which sp logo copies into the profile",
+      "type": "object",
+      "required": ["format"],
+      "additionalProperties": false,
+      "properties": {
+        "path": { "type": "string", "minLength": 1 },
+        "svg": { "type": "string", "minLength": 1, "maxLength": 65536 },
+        "file": { "type": "string", "pattern": "^logos/[a-z0-9]+(?:-[a-z0-9]+)*\\.(?:svg|png|jpg|webp|ico)$" },
+        "format": { "enum": ["svg", "png", "jpg", "webp", "ico"] },
+        "width": { "type": "integer", "minimum": 1 },
+        "height": { "type": "integer", "minimum": 1 }
+      }
+    },
+    "place": {
+      "type": "object",
+      "required": ["logo", "height"],
+      "additionalProperties": false,
+      "properties": {
+        "logo": { "enum": ["full", "mark", "collapsed", "favicon", "dark"] },
+        "height": { "type": "integer", "minimum": 1 },
+        "inset": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "brand": {
+      "type": "object",
+      "required": ["id", "name", "when", "logos", "palette", "type", "evidence"],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$" },
+        "name": { "type": "string", "minLength": 1 },
+        "when": { "type": "string", "minLength": 1 },
+        "logos": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "full": { "$ref": "#/$defs/logo" },
+            "mark": { "$ref": "#/$defs/logo" },
+            "collapsed": { "$ref": "#/$defs/logo" },
+            "favicon": { "$ref": "#/$defs/logo" },
+            "dark": { "$ref": "#/$defs/logo" }
+          }
+        },
+        "chrome": {
+          "description": "Each place the app shows a logo in (a side rail, a header, a sign-in card), keyed by the lower-case name a screen's logo slot gives it: the logo variant it shows there, its height and the space before it, in px",
+          "type": "object",
+          "additionalProperties": { "$ref": "#/$defs/place" }
+        },
+        "palette": {
+          "type": "object",
+          "required": ["primary"],
+          "additionalProperties": false,
+          "properties": {
+            "primary": { "$ref": "#/$defs/color" },
+            "secondary": { "$ref": "#/$defs/color" },
+            "error": { "$ref": "#/$defs/color" },
+            "warning": { "$ref": "#/$defs/color" },
+            "info": { "$ref": "#/$defs/color" },
+            "success": { "$ref": "#/$defs/color" },
+            "background": { "$ref": "#/$defs/color" },
+            "text": { "$ref": "#/$defs/color" }
+          }
+        },
+        "type": {
+          "type": "object",
+          "required": ["family", "weights"],
+          "additionalProperties": false,
+          "properties": {
+            "family": { "type": "string", "minLength": 1 },
+            "weights": { "type": "array", "minItems": 1, "items": { "type": "integer", "minimum": 100, "maximum": 900 } },
+            "source": { "type": "string", "minLength": 1 },
+            "titleWeight": { "type": "integer", "minimum": 100, "maximum": 900 }
+          }
+        },
+        "names": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "product": { "type": "string", "minLength": 1 },
+            "modules": { "type": "object", "additionalProperties": { "type": "string", "minLength": 1 } }
+          }
+        },
+        "evidence": {
+          "description": "One entry per value, keyed by its dotted path: when, logos.<variant>, chrome.<place>, palette.<role>, type.family, type.weights, type.source, type.titleWeight, names.product, names.modules.<module>",
+          "type": "object",
+          "additionalProperties": { "$ref": "#/$defs/evidence" }
+        }
+      }
+    }
+  }
+}

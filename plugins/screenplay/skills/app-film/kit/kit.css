@@ -1,0 +1,37 @@
+#stage { font-family: var(--sans, system-ui, sans-serif); }
+.sp-ground { position: absolute; inset: -50%; background: var(--ground); }
+.sp-world { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; transform-origin: 0 0; }
+.sp-window { position: absolute; width: 1440px; height: 900px; overflow: hidden; contain: layout paint; transform-origin: 0 0; border-radius: 14px; box-shadow: 0 40px 100px rgba(0, 0, 0, .16), 0 0 0 1px rgba(0, 0, 0, .06); }
+.sp-window > .sp-body { position: absolute !important; inset: 0 !important; overflow: hidden !important; }
+.sp-surface { position: absolute; inset: 0; z-index: 1; }
+.sp-surface[data-kind=page] { z-index: 0; }
+:where(.sp-surface[data-kind=dialog] > dialog) { position: fixed; inset: 0; margin: auto; max-width: calc(100% - 6px - 2em); max-height: calc(100% - 6px - 2em); }
+:where(.sp-backdrop) { position: fixed; inset: 0; background: rgba(0, 0, 0, .1); }
+@layer sp-kit {
+  .sp-window *, .sp-window *::before, .sp-window *::after { transition: none !important; animation: none !important; scrollbar-width: none !important; }
+  .sp-window [data-sp-hide] { visibility: hidden !important; opacity: 0 !important; }
+  .sp-window [data-sp-off] { display: none !important; }
+}
+.sp-window *::-webkit-scrollbar { display: none; }
+.sp-logo { display: block; width: auto; }
+.sp-lifts { position: absolute; width: 1440px; height: 900px; transform-origin: 0 0; }
+@layer sp-kit {
+  .sp-lifts *, .sp-lifts *::before, .sp-lifts *::after { transition: none !important; animation: none !important; scrollbar-width: none !important; }
+}
+.sp-lift { position: absolute; z-index: 1; overflow: hidden; box-shadow: 0 18px 50px rgba(0, 0, 0, .22); }
+.sp-band { position: absolute; z-index: 2; border-radius: 10px; background: color-mix(in srgb, var(--accent) 14%, transparent); box-shadow: inset 0 0 0 2px color-mix(in srgb, var(--accent) 55%, transparent); }
+.sp-overlay { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; }
+.sp-chip { position: absolute; max-width: 560px; padding: 14px 22px; border-radius: 14px; font-size: 28px; line-height: 1.3; color: var(--second); background: var(--ground); box-shadow: 0 10px 30px rgba(0, 0, 0, .18); }
+.sp-chip b, .sp-subtitle b { font-weight: 600; color: var(--main); }
+.sp-leaders { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; overflow: visible; }
+.sp-leader { stroke: var(--main); stroke-width: 3; stroke-linecap: round; }
+.sp-step { position: absolute; width: 36px; height: 36px; border-radius: 50%; font-size: 20px; font-weight: 600; line-height: 36px; text-align: center; color: var(--ground); background: var(--main); }
+.sp-subtitle { position: absolute; left: 50%; bottom: 72px; max-width: 1500px; padding: 16px 30px; border-radius: 14px; font-size: 32px; text-align: center; color: var(--second); background: var(--ground); transform: translateX(-50%); box-shadow: 0 10px 30px rgba(0, 0, 0, .18); }
+.sp-cursor { position: absolute; z-index: 2; left: 0; top: 0; width: 30px; height: 30px; background: no-repeat url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='30' height='30' viewBox='0 0 30 30'%3E%3Cpath d='M3 2v22l6-6 4 9 4-2-4-8.5h8z' fill='%23fff' stroke='%23111' stroke-width='1.6' stroke-linejoin='round'/%3E%3C/svg%3E"); }
+.sp-ripple { position: absolute; z-index: 1; left: 0; top: 0; width: 52px; height: 52px; margin: -26px 0 0 -26px; border-radius: 50%; border: 3px solid var(--main); }
+.sp-card { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; color: var(--second); transform-origin: 50% 50%; }
+.sp-card-logo { display: block; height: 116px; width: auto; margin-bottom: 44px; }
+.sp-card-title { font-size: 96px; font-weight: 600; line-height: 1.1; color: var(--main); }
+.sp-card-line { max-width: 1400px; margin-top: 26px; font-size: 40px; line-height: 1.3; }
+.sp-card-chip { margin-top: 40px; padding: 10px 28px; border-radius: 999px; font-size: 30px; font-weight: 600; color: var(--ground); background: var(--accent); }
+.sp-card-note { margin-top: 30px; font-size: 24px; opacity: .72; }

@@ -1,0 +1,81 @@
+{
+  "personas": [{ "id": "P-01", "name": "Maya Okafor", "role": "Account manager" }],
+  "scenes": [
+    { "id": "S-01", "kind": "title", "text": "The Desk", "line": "Every follow-up, from the dashboard to the customer", "ms": 3000 },
+    { "id": "S-02", "kind": "act", "text": "Dashboard", "ms": 3000 },
+    {
+      "id": "S-03",
+      "kind": "screen",
+      "screen": "SCR-01",
+      "state": "populated",
+      "persona": "P-01",
+      "pattern": "section-tour",
+      "beats": [
+        { "do": "hold", "target": "the dashboard", "ms": 2000 },
+        { "do": "hold", "target": "the three counters", "ms": 3000, "caption": { "label": "Counters", "value": "open, due today and sent this week", "truth": "T-14" } },
+        { "do": "point", "target": "Reminders in the side rail", "ms": 1400 },
+        { "do": "click", "target": "Reminders in the side rail", "ms": 1200 }
+      ]
+    },
+    { "id": "S-04", "kind": "act", "text": "Reminders", "ms": 3000 },
+    {
+      "id": "S-05",
+      "kind": "screen",
+      "screen": "SCR-02",
+      "state": "populated",
+      "persona": "P-01",
+      "pattern": "tab-tour",
+      "beats": [
+        { "do": "hold", "target": "the Open tab", "ms": 4000, "caption": { "label": "Open", "value": "soonest due first", "truth": "T-08" } },
+        { "do": "click", "target": "the Snoozed tab", "action": "Snoozed", "ms": 1200 },
+        { "do": "hold", "target": "the Snoozed tab", "ms": 4000, "caption": { "label": "Snoozed", "value": "set aside with Snooze", "truth": "T-16" } },
+        { "do": "click", "target": "the Sent tab", "action": "Sent", "ms": 1200 },
+        { "do": "hold", "target": "the Sent tab", "ms": 4000, "caption": { "label": "Sent", "value": "the reminders that went out", "truth": "T-08" } },
+        { "do": "click", "target": "the Open tab", "action": "Open", "ms": 1200 }
+      ]
+    },
+    {
+      "id": "S-06",
+      "kind": "screen",
+      "screen": "SCR-02",
+      "state": "populated",
+      "persona": "P-01",
+      "pattern": "dialog-steps",
+      "beats": [
+        { "do": "click", "target": "Elena Ruiz's reminder", "action": "Details", "ms": 1200 },
+        { "do": "hold", "target": "the reminder drawer", "ms": 3000, "caption": { "label": "Details", "value": "subject, due date, owner, channel and status", "truth": "T-15" } },
+        { "do": "click", "target": "Send reminder", "action": "Send reminder", "ms": 1200 },
+        { "do": "type", "target": "the note", "text": "Follow up by phone on Thursday.", "ms": 3600, "caption": { "label": "Note", "value": "up to 280 characters", "truth": "T-06" } },
+        { "do": "click", "target": "Send", "ms": 1200 }
+      ]
+    },
+    {
+      "id": "S-07",
+      "kind": "screen",
+      "screen": "SCR-02",
+      "state": "populated",
+      "persona": "P-01",
+      "beats": [
+        { "do": "hold", "target": "the toast", "action": "Reminder sent to <customer>", "ms": 3000, "caption": { "label": "Sending", "value": "only when someone presses Send", "truth": "T-01" } },
+        { "do": "click", "target": "the Notifications bell", "action": "Notifications", "ms": 1200 },
+        { "do": "hold", "target": "the notifications panel", "ms": 3000, "caption": { "label": "Notifications", "value": "one line for each reminder sent", "truth": "T-10" } },
+        { "do": "point", "target": "Customers in the side rail", "ms": 1400 },
+        { "do": "click", "target": "Customers in the side rail", "ms": 1200 }
+      ]
+    },
+    { "id": "S-08", "kind": "act", "text": "Customers", "ms": 3000 },
+    {
+      "id": "S-09",
+      "kind": "screen",
+      "screen": "SCR-03",
+      "state": "populated",
+      "persona": "P-01",
+      "pattern": "column-sweep",
+      "beats": [
+        { "do": "hold", "target": "the customers list", "ms": 3000, "caption": { "label": "Customers", "value": "name, company and city", "truth": "T-17" } },
+        { "do": "hold", "target": "the Reminder tag on Tomas Berg", "ms": 3000, "caption": { "label": "Reminder tag", "value": "on customers with an open reminder", "truth": "T-12" } }
+      ]
+    },
+    { "id": "S-10", "kind": "end", "text": "The Desk", "line": "One send, seen across the desk", "ms": 3000 }
+  ]
+}

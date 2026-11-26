@@ -1,0 +1,6 @@
+{
+  "calls": [
+    { "id": "API-01", "style": "rest", "method": "GET", "path": "/api/orders", "responseType": "Order[]", "auth": "feature", "caller": { "path": "src/api/orders.ts", "line": 2 } },
+    { "id": "API-02", "style": "rest", "method": "GET", "path": "/api/orders/:id", "responseType": "Order", "auth": "feature", "caller": { "path": "src/api/orders.ts", "line": 4 } }
+  ]
+}

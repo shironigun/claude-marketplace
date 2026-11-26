@@ -1,0 +1,87 @@
+{
+  "calls": {
+    "API-01": [
+      { "body": { "user": { "name": "Maya Okafor", "role": "Account manager" }, "workspace": { "name": "Example Desk", "partner": false } } }
+    ],
+    "API-02": [
+      { "body": [{ "id": "N-1", "text": "Reminder sent to Omar Haddad", "at": "2026-11-11" }] },
+      {
+        "from": "S-07",
+        "body": [
+          { "id": "N-2", "text": "Reminder sent to Elena Ruiz", "at": "2026-11-12" },
+          { "id": "N-1", "text": "Reminder sent to Omar Haddad", "at": "2026-11-11" }
+        ]
+      }
+    ],
+    "API-03": [
+      { "body": { "open": 3, "dueToday": 1, "sentThisWeek": 1, "avgResponseHours": null } }
+    ],
+    "API-04": [
+      {
+        "when": { "query": { "status": "open" } },
+        "body": [
+          { "id": "R-201", "customerId": "C-21", "customer": "Elena Ruiz", "subject": "Contract renewal", "due": "2026-11-12", "owner": "Maya Okafor", "status": "open", "channel": "email" },
+          { "id": "R-202", "customerId": "C-22", "customer": "Tomas Berg", "subject": "Delivery date", "due": "2026-11-13", "owner": "Maya Okafor", "status": "open", "channel": "sms" },
+          { "id": "R-203", "customerId": "C-23", "customer": "Hana Sato", "subject": "Quarterly review", "due": "2026-11-14", "owner": "Jon Bell", "status": "open", "channel": "email" }
+        ]
+      },
+      {
+        "when": { "query": { "status": "open" } },
+        "from": "S-07",
+        "body": [
+          { "id": "R-202", "customerId": "C-22", "customer": "Tomas Berg", "subject": "Delivery date", "due": "2026-11-13", "owner": "Maya Okafor", "status": "open", "channel": "sms" },
+          { "id": "R-203", "customerId": "C-23", "customer": "Hana Sato", "subject": "Quarterly review", "due": "2026-11-14", "owner": "Jon Bell", "status": "open", "channel": "email" }
+        ]
+      },
+      {
+        "when": { "query": { "status": "snoozed" } },
+        "body": [
+          { "id": "R-204", "customerId": "C-25", "customer": "Lina Park", "subject": "Price list", "due": "2026-11-19", "owner": "Jon Bell", "status": "snoozed", "channel": "sms" }
+        ]
+      },
+      {
+        "when": { "query": { "status": "sent" } },
+        "body": [
+          { "id": "R-205", "customerId": "C-24", "customer": "Omar Haddad", "subject": "Invoice copy", "due": "2026-11-11", "owner": "Maya Okafor", "status": "sent", "channel": "email", "sentAt": "2026-11-11", "note": "Copy attached, as asked." }
+        ]
+      },
+      {
+        "when": { "query": { "status": "sent" } },
+        "from": "S-07",
+        "body": [
+          { "id": "R-201", "customerId": "C-21", "customer": "Elena Ruiz", "subject": "Contract renewal", "due": "2026-11-12", "owner": "Maya Okafor", "status": "sent", "channel": "email", "sentAt": "2026-11-12", "note": "Follow up by phone on Thursday." },
+          { "id": "R-205", "customerId": "C-24", "customer": "Omar Haddad", "subject": "Invoice copy", "due": "2026-11-11", "owner": "Maya Okafor", "status": "sent", "channel": "email", "sentAt": "2026-11-11", "note": "Copy attached, as asked." }
+        ]
+      }
+    ],
+    "API-05": [
+      {
+        "when": { "params": { "id": "R-201" } },
+        "body": { "id": "R-201", "customerId": "C-21", "customer": "Elena Ruiz", "subject": "Contract renewal", "due": "2026-11-12", "owner": "Maya Okafor", "status": "open", "channel": "email" }
+      }
+    ],
+    "API-06": [
+      {
+        "when": { "params": { "id": "R-201" } },
+        "body": { "id": "R-201", "customerId": "C-21", "customer": "Elena Ruiz", "subject": "Contract renewal", "due": "2026-11-12", "owner": "Maya Okafor", "status": "sent", "channel": "email", "sentAt": "2026-11-12", "note": "Follow up by phone on Thursday." }
+      }
+    ],
+    "API-07": [
+      {
+        "when": { "params": { "id": "R-201" } },
+        "body": { "id": "R-201", "customerId": "C-21", "customer": "Elena Ruiz", "subject": "Contract renewal", "due": "2026-11-12", "owner": "Maya Okafor", "status": "snoozed", "channel": "email" }
+      }
+    ],
+    "API-08": [
+      {
+        "body": [
+          { "id": "C-21", "name": "Elena Ruiz", "company": "Ruiz Landscaping", "city": "Tucson", "openReminder": false },
+          { "id": "C-22", "name": "Tomas Berg", "company": "Berg Bikes", "city": "Duluth", "openReminder": true },
+          { "id": "C-23", "name": "Hana Sato", "company": "Sato Ceramics", "city": "Asheville", "openReminder": true },
+          { "id": "C-24", "name": "Omar Haddad", "company": "Haddad Imports", "city": "Dayton", "openReminder": false },
+          { "id": "C-25", "name": "Lina Park", "company": "Park Florist", "city": "Boise", "openReminder": false }
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "calls": [
+    { "id": "API-01", "style": "rest", "method": "GET", "path": "/api/session", "auth": "sign-in", "caller": { "path": "public/app.js", "line": 33 } },
+    { "id": "API-02", "style": "rest", "method": "GET", "path": "/api/notifications", "auth": "feature", "caller": { "path": "public/app.js", "line": 20 } },
+    { "id": "API-03", "style": "rest", "method": "GET", "path": "/api/dashboard", "responseType": "Dashboard", "auth": "feature", "caller": { "path": "public/app.js", "line": 50 } },
+    { "id": "API-04", "style": "rest", "method": "GET", "path": "/api/reminders", "responseType": "Reminder[]", "auth": "feature", "caller": { "path": "public/reminders.js", "line": 11 } },
+    { "id": "API-05", "style": "rest", "method": "GET", "path": "/api/reminders/:id", "responseType": "Reminder", "auth": "feature", "caller": { "path": "public/reminders.js", "line": 19 } },
+    { "id": "API-06", "style": "rest", "method": "POST", "path": "/api/reminders/:id/send", "requestType": "{ note: string }", "responseType": "Reminder", "auth": "feature", "caller": { "path": "public/reminders.js", "line": 37 } },
+    { "id": "API-07", "style": "rest", "method": "POST", "path": "/api/reminders/:id/snooze", "responseType": "Reminder", "auth": "feature", "caller": { "path": "public/reminders.js", "line": 62 } },
+    { "id": "API-08", "style": "rest", "method": "GET", "path": "/api/customers", "auth": "feature", "caller": { "path": "public/app.js", "line": 58 } }
+  ]
+}

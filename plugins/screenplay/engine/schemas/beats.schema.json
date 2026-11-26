@@ -1,0 +1,64 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "beats.json: a film's story, its personas and its scenes in order; a card shows text, a screen scene plays beats (spec 5.9)",
+  "type": "object",
+  "required": ["personas", "scenes"],
+  "additionalProperties": false,
+  "properties": {
+    "personas": { "type": "array", "items": { "$ref": "#/$defs/persona" } },
+    "scenes": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/scene" } }
+  },
+  "$defs": {
+    "words": { "type": "string", "pattern": "^[^\\r\\n]*$", "minLength": 1, "maxLength": 120 },
+    "ms": { "type": "integer", "minimum": 200, "maximum": 30000 },
+    "persona": {
+      "type": "object",
+      "required": ["id", "name", "role"],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "type": "string", "pattern": "^P-\\d{2,}$" },
+        "name": { "$ref": "#/$defs/words" },
+        "role": { "$ref": "#/$defs/words" }
+      }
+    },
+    "scene": {
+      "type": "object",
+      "required": ["id", "kind"],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "type": "string", "pattern": "^S-\\d{2,}$" },
+        "kind": { "enum": ["title", "act", "screen", "end"] },
+        "text": { "$ref": "#/$defs/words" },
+        "line": { "$ref": "#/$defs/words" },
+        "ms": { "$ref": "#/$defs/ms" },
+        "screen": { "type": "string", "pattern": "^SCR-\\d{2,}$" },
+        "state": { "enum": ["empty", "loading", "error", "populated"] },
+        "persona": { "type": "string", "pattern": "^P-\\d{2,}$" },
+        "pattern": { "type": "string", "minLength": 1 },
+        "beats": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/beat" } }
+      }
+    },
+    "beat": {
+      "type": "object",
+      "required": ["do", "target", "ms"],
+      "additionalProperties": false,
+      "properties": {
+        "do": { "enum": ["hold", "point", "click", "type", "scroll"] },
+        "target": { "$ref": "#/$defs/words" },
+        "text": { "type": "string", "pattern": "^[^\\r\\n]*$", "minLength": 1, "maxLength": 280 },
+        "action": { "type": "string", "minLength": 1 },
+        "ms": { "$ref": "#/$defs/ms" },
+        "caption": {
+          "type": "object",
+          "required": ["label", "value", "truth"],
+          "additionalProperties": false,
+          "properties": {
+            "label": { "type": "string", "pattern": "^[^:\\r\\n]+$", "minLength": 1, "maxLength": 40 },
+            "value": { "type": "string", "pattern": "^[^\\r\\n]*$", "minLength": 1, "maxLength": 80 },
+            "truth": { "type": "string", "pattern": "^T-\\d{2,}$" }
+          }
+        }
+      }
+    }
+  }
+}

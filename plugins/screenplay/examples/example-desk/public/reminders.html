@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Reminders · Example Desk</title>
+  <link rel="stylesheet" href="/app.css">
+  <script src="/brand.js"></script>
+  <script src="/app.js" defer></script>
+  <script src="/reminders.js" defer></script>
+</head>
+<body data-page="reminders">
+  <div class="shell">
+    <nav class="rail" id="rail"></nav>
+    <main class="main">
+      <header class="topbar"><h1>Reminders</h1><button class="bell" id="bell" type="button">Notifications <span class="badge" id="badge" hidden></span></button></header>
+      <div class="tabs" role="tablist">
+        <button role="tab" data-status="open" aria-selected="true">Open</button>
+        <button role="tab" data-status="snoozed" aria-selected="false">Snoozed</button>
+        <button role="tab" data-status="sent" aria-selected="false">Sent</button>
+      </div>
+      <table class="grid">
+        <thead><tr><th>Customer</th><th>Subject</th><th>Due</th><th>Owner</th><th>Channel</th></tr></thead>
+        <tbody id="rows"></tbody>
+      </table>
+      <p class="empty" id="empty" hidden>No reminders here.</p>
+    </main>
+    <aside class="drawer" id="drawer" hidden>
+      <header><h2 id="d-title"></h2><button type="button" id="d-close" aria-label="Close">×</button></header>
+      <div class="tabs" role="tablist">
+        <button role="tab" aria-selected="true">Details</button>
+        <button role="tab" aria-selected="false" hidden>History</button>
+      </div>
+      <dl id="d-details"></dl>
+      <footer><button type="button" id="d-snooze">Snooze</button><button type="button" class="primary" id="d-send">Send reminder</button></footer>
+    </aside>
+    <aside class="panel" id="panel" hidden><h2>Notifications</h2><ul id="notes"></ul></aside>
+  </div>
+  <dialog id="send-dialog">
+    <form method="dialog">
+      <h2>Send reminder</h2>
+      <label for="note">Note to customer</label>
+      <textarea id="note" maxlength="280" rows="4"></textarea>
+      <menu><button value="cancel" class="danger-outline">Cancel</button><button value="send" class="primary">Send</button></menu>
+    </form>
+  </dialog>
+  <div class="toast" id="toast" role="status" hidden></div>
+</body>
+</html>

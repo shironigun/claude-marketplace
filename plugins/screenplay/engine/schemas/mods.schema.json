@@ -1,0 +1,37 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "mods.json: a film's mods, one option of each from the catalog in engine/catalog/mods.json (spec 5.8, 9)",
+  "type": "object",
+  "required": ["format", "look", "ground", "callouts", "pointer", "transitions", "pacing", "intro", "chip", "demoNote", "sound", "polish", "patterns", "brands"],
+  "additionalProperties": false,
+  "properties": {
+    "format": { "$ref": "#/$defs/option" },
+    "look": { "$ref": "#/$defs/option" },
+    "ground": { "$ref": "#/$defs/option" },
+    "callouts": { "$ref": "#/$defs/option" },
+    "pointer": { "$ref": "#/$defs/option" },
+    "transitions": { "$ref": "#/$defs/option" },
+    "pacing": { "$ref": "#/$defs/option" },
+    "intro": { "$ref": "#/$defs/option" },
+    "chip": { "$ref": "#/$defs/option" },
+    "demoNote": { "$ref": "#/$defs/option" },
+    "sound": { "$ref": "#/$defs/option" },
+    "polish": { "$ref": "#/$defs/option" },
+    "patterns": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["screen", "pattern"],
+        "additionalProperties": false,
+        "properties": {
+          "screen": { "type": "string", "pattern": "^SCR-\\d{2,}$" },
+          "pattern": { "$ref": "#/$defs/option" }
+        }
+      }
+    },
+    "brands": { "type": "array", "minItems": 1, "items": { "type": "string", "minLength": 1 } }
+  },
+  "$defs": {
+    "option": { "type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$" }
+  }
+}

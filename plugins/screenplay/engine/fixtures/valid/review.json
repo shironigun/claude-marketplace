@@ -1,0 +1,6 @@
+{
+  "verdict": "BLOCKED",
+  "findings": [
+    { "brand": "sample", "scene": "S-02", "at": 12.9, "rule": "4", "text": "The dialog opens off the frame while the camera holds on the button that opened it." }
+  ]
+}

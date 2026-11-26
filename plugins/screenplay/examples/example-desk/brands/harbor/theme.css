@@ -1,0 +1,16 @@
+:root {
+  --brand-primary: #1f5fbf;
+  --brand-info: #0277bd;
+  --brand-error: #c62828;
+  --brand-success: #2e7d32;
+  --brand-background: #f6f8fb;
+  --brand-text: #1d2733;
+  --brand-font: 'Harbor Sans', 'Segoe UI', Arial, sans-serif;
+  --brand-title-weight: 600;
+}
+
+@font-face {
+  font-family: 'Harbor Sans';
+  src: local('Segoe UI'), local('Helvetica Neue'), local('Arial');
+  font-weight: 400 700;
+}

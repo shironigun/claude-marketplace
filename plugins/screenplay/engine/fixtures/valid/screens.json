@@ -1,0 +1,17 @@
+{
+  "subject": "Orders",
+  "entryPoints": [{ "path": "src/pages/Orders.tsx", "line": 4, "foundBy": "name" }],
+  "navigation": [{ "label": "Orders", "route": "/orders", "icon": "receipt", "position": "side rail, second" }],
+  "screens": [
+    {
+      "id": "SCR-01",
+      "title": "Orders list",
+      "route": "/orders",
+      "states": ["empty", "populated"],
+      "actions": [{ "kind": "drawer", "label": "Open order", "calls": ["API-02"] }],
+      "calls": ["API-01"],
+      "evidence": { "path": "src/pages/Orders.tsx", "line": 4 }
+    }
+  ],
+  "neighbours": [{ "where": "Dashboard", "what": "an Orders card with today's count", "evidence": { "path": "src/pages/Dashboard.tsx", "line": 4 } }]
+}

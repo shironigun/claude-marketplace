@@ -1,0 +1,121 @@
+{
+  "formats": [
+    { "id": "walkthrough", "label": "Walkthrough", "summary": "Every screen of the subject in order; its length follows the content.", "seconds": null },
+    { "id": "promo", "label": "Promo", "summary": "The problem, the subject in action, the outcome.", "seconds": { "min": 30, "max": 60 } },
+    { "id": "trailer", "label": "Trailer", "summary": "Highlights across a module or flow, in acts with act cards.", "seconds": { "min": 60, "max": 90 }, "defaults": { "pacing": "brisk" } },
+    { "id": "teaser", "label": "Teaser", "summary": "One hook.", "seconds": { "min": 10, "max": 20 }, "defaults": { "pacing": "brisk" } },
+    { "id": "release-highlight", "label": "Release highlight", "summary": "What is new.", "seconds": { "min": 45, "max": 60 } },
+    { "id": "store-preview", "label": "Store preview", "summary": "30 s or less, with an end card of 2 s or less.", "seconds": { "max": 30 }, "endCardSeconds": 2 },
+    { "id": "how-to", "label": "How-to", "summary": "One task in numbered steps, at calm pacing.", "seconds": null, "defaults": { "pacing": "calm", "callouts": "numbered-steps" } }
+  ],
+  "mods": [
+    {
+      "id": "look",
+      "label": "Look",
+      "options": [
+        { "id": "floating-desk", "label": "Floating desk", "preview": "The app's window floats on a calm ground, with room around it for captions." },
+        { "id": "full-bleed", "label": "Full-bleed app", "preview": "The app fills the frame; captions sit in clear space over it." },
+        { "id": "split-panel", "label": "Split caption panel", "preview": "The app on one side of the frame, the captions in a panel on the other.", "r2": true },
+        { "id": "device-frame", "label": "Device frame", "preview": "The app inside a laptop or phone frame.", "r2": true }
+      ]
+    },
+    {
+      "id": "ground",
+      "label": "Ground",
+      "options": [
+        { "id": "light", "label": "Light", "preview": "A light ground, tinted with the brand's colours." },
+        { "id": "deep", "label": "Deep brand", "preview": "A deep ground in the brand's main colour." }
+      ]
+    },
+    {
+      "id": "callouts",
+      "label": "Callouts",
+      "options": [
+        { "id": "focus-pop", "label": "Focus-pop with chip and leader", "preview": "The rest of the app blurs and dims, the target lifts in a card, and a caption chip points at its edge." },
+        { "id": "chip-leader", "label": "Chip and leader only", "preview": "A caption chip with a leader to the target; nothing blurs." },
+        { "id": "numbered-steps", "label": "Numbered steps", "preview": "Each step's target gets a numbered badge, with its caption beside it." },
+        { "id": "subtitle-bar", "label": "Subtitle bar", "preview": "Captions run in a bar along the bottom of the frame." }
+      ]
+    },
+    {
+      "id": "pointer",
+      "label": "Pointer",
+      "options": [
+        { "id": "cursor", "label": "Cursor with click ripple, pinned", "preview": "A cursor moves to each control, ripples on a click, and stays on its target while the camera moves." },
+        { "id": "none", "label": "None", "preview": "No cursor; each control shows its own pressed state." },
+        { "id": "touch", "label": "Touch taps", "preview": "A fingertip ring taps each control.", "r2": true }
+      ]
+    },
+    {
+      "id": "transitions",
+      "label": "Transitions",
+      "options": [
+        { "id": "glide", "label": "Glide between shots", "preview": "The camera glides from one shot to the next." },
+        { "id": "cut", "label": "Cut between shots", "preview": "Each shot cuts straight to the next." }
+      ]
+    },
+    {
+      "id": "pacing",
+      "label": "Pacing",
+      "options": [
+        { "id": "standard", "label": "Standard", "ms": 1400, "preview": "Each callout holds 1.4 s, and the camera glides 0.8 s between shots." },
+        { "id": "calm", "label": "Calm", "ms": 1600, "preview": "Each callout holds 1.6 s, and the camera glides 1 s between shots; the how-to default." },
+        { "id": "brisk", "label": "Brisk", "ms": 1200, "preview": "Each callout holds 1.2 s, and the camera glides 0.5 s between shots; the teaser and trailer default." }
+      ]
+    },
+    {
+      "id": "intro",
+      "label": "Intro",
+      "options": [
+        { "id": "boom", "label": "Boom", "preview": "The logo pops and the title lands on the beat, with one ring and a hit." },
+        { "id": "calm-reveal", "label": "Calm logo reveal", "preview": "The logo fades up, then the title under it." },
+        { "id": "splash", "label": "Splash into the app", "preview": "The logo opens straight into the first screen." }
+      ]
+    },
+    {
+      "id": "chip",
+      "label": "End card status chip",
+      "options": [
+        { "id": "none", "label": "None", "release": "released", "preview": "The end card has no status chip." },
+        { "id": "new", "label": "New", "release": "new", "preview": "A New chip, in the design system's info colours." },
+        { "id": "beta", "label": "Beta", "release": "beta", "preview": "A Beta chip, in the design system's info colours." },
+        { "id": "coming-soon", "label": "Coming soon", "release": "unreleased", "preview": "A Coming soon chip, in the design system's info colours." }
+      ]
+    },
+    {
+      "id": "demoNote",
+      "label": "Demo-data note",
+      "options": [
+        { "id": "on", "label": "On", "preview": "The end card says \"Shown with demo data\"." },
+        { "id": "off", "label": "Off", "preview": "The end card says nothing about the data." }
+      ]
+    },
+    {
+      "id": "sound",
+      "label": "Sound",
+      "options": [
+        { "id": "score", "label": "Score on the beat", "preview": "A score cut to the beats, with effects on clicks and pops." },
+        { "id": "silent", "label": "Silent", "preview": "No sound." }
+      ]
+    },
+    {
+      "id": "polish",
+      "label": "Product polish",
+      "options": [
+        { "id": "as-is", "label": "As is", "preview": "The app exactly as it is." },
+        { "id": "as-designed", "label": "As designed", "preview": "Listed fixes are applied in the film and handed to the app team as a list." }
+      ]
+    }
+  ],
+  "patterns": [
+    { "id": "column-sweep", "label": "Column sweep", "fits": "a table", "preview": "The focus sweeps across a table's columns, one at a time." },
+    { "id": "section-tour", "label": "Section tour", "fits": "a dashboard", "preview": "The camera visits a dashboard's sections in turn." },
+    { "id": "tab-tour", "label": "Tab tour", "fits": "a tab strip", "preview": "About 4 s on each tab, with its tab lit." },
+    { "id": "focused-typing", "label": "Focused typing", "fits": "a form or a text field", "preview": "The field being typed into is the focus, with the app's own focus outline." },
+    { "id": "dialog-steps", "label": "Dialog step-through", "fits": "a dialog or a drawer", "preview": "A dialog or drawer opens, and its parts are shown one at a time." },
+    { "id": "hand-off", "label": "Hand-off across screens", "fits": "a flow", "preview": "An action on one screen shows up on the next." },
+    { "id": "counters", "label": "Before and after counters", "fits": "a number that changes", "preview": "A number is shown before an action and after it." },
+    { "id": "row-pop-in", "label": "Row pop-in", "fits": "a list", "preview": "A new row pops into a list." },
+    { "id": "timeline-build", "label": "Timeline build", "fits": "a history or a timeline", "preview": "A timeline builds up one event at a time." }
+  ]
+}

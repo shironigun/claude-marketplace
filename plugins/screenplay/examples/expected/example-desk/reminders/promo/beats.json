@@ -1,0 +1,48 @@
+{
+  "personas": [{ "id": "P-01", "name": "Maya Okafor", "role": "Account manager" }],
+  "scenes": [
+    { "id": "S-01", "kind": "title", "text": "Reminders", "line": "Follow-ups slip when they live in inboxes", "ms": 3000 },
+    {
+      "id": "S-02",
+      "kind": "screen",
+      "screen": "SCR-01",
+      "state": "populated",
+      "persona": "P-01",
+      "pattern": "dialog-steps",
+      "beats": [
+        { "do": "hold", "target": "the Open queue", "ms": 3000, "caption": { "label": "Open", "value": "soonest due first", "truth": "T-08" } },
+        { "do": "point", "target": "Elena Ruiz's reminder", "ms": 1400 },
+        { "do": "click", "target": "Elena Ruiz's reminder", "action": "Details", "ms": 1200 },
+        { "do": "hold", "target": "the reminder drawer", "ms": 3000, "caption": { "label": "Details", "value": "subject, due date, owner, channel and status", "truth": "T-15" } },
+        { "do": "click", "target": "Send reminder", "action": "Send reminder", "ms": 1200 }
+      ]
+    },
+    {
+      "id": "S-03",
+      "kind": "screen",
+      "screen": "SCR-01",
+      "state": "populated",
+      "persona": "P-01",
+      "pattern": "focused-typing",
+      "beats": [
+        { "do": "type", "target": "the note", "text": "Follow up by phone on Thursday.", "ms": 3600, "caption": { "label": "Note", "value": "up to 280 characters", "truth": "T-06" } },
+        { "do": "click", "target": "Send", "ms": 1200 }
+      ]
+    },
+    {
+      "id": "S-04",
+      "kind": "screen",
+      "screen": "SCR-01",
+      "state": "populated",
+      "persona": "P-01",
+      "beats": [
+        { "do": "hold", "target": "the toast", "action": "Reminder sent to <customer>", "ms": 3000, "caption": { "label": "Toast", "value": "names the customer", "truth": "T-09" } },
+        { "do": "click", "target": "the Sent tab", "action": "Sent", "ms": 1200 },
+        { "do": "hold", "target": "the Sent list", "ms": 3000, "caption": { "label": "Sent", "value": "the reminders that went out", "truth": "T-08" } },
+        { "do": "click", "target": "the Notifications bell", "action": "Notifications", "ms": 1200 },
+        { "do": "hold", "target": "the notifications panel", "ms": 3000, "caption": { "label": "Notifications", "value": "one line for each reminder sent", "truth": "T-10" } }
+      ]
+    },
+    { "id": "S-05", "kind": "end", "text": "Reminders", "line": "Every follow-up, on time", "ms": 3000 }
+  ]
+}

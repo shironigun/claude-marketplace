@@ -1,0 +1,6 @@
+{
+  "rules": [
+    { "id": "H-01", "text": "Lifted cards keep 12 px padding.", "scope": "generic", "mods": { "pacing": "calm" } },
+    { "id": "H-02", "text": "The dialog's Cancel is an outlined danger button.", "scope": "product" }
+  ]
+}

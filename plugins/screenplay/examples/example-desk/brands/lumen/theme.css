@@ -1,0 +1,16 @@
+:root {
+  --brand-primary: #00796b;
+  --brand-info: #0288d1;
+  --brand-error: #d32f2f;
+  --brand-success: #388e3c;
+  --brand-background: #f3f7f6;
+  --brand-text: #1b2b28;
+  --brand-font: 'Lumen Sans', 'Trebuchet MS', Verdana, sans-serif;
+  --brand-title-weight: 700;
+}
+
+@font-face {
+  font-family: 'Lumen Sans';
+  src: local('Trebuchet MS'), local('Verdana');
+  font-weight: 400 700;
+}

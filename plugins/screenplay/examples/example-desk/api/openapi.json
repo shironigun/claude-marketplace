@@ -1,0 +1,61 @@
+{
+  "openapi": "3.0.3",
+  "info": { "title": "Example Desk API", "version": "1.0.0" },
+  "paths": {
+    "/api/session": { "get": { "summary": "The signed-in user and workspace", "responses": { "200": { "description": "Session" } } } },
+    "/api/dashboard": { "get": { "summary": "Counters for the dashboard", "responses": { "200": { "description": "Counters", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Dashboard" } } } } } } },
+    "/api/reminders": {
+      "get": {
+        "summary": "Reminders in one status, soonest first",
+        "parameters": [{ "name": "status", "in": "query", "schema": { "type": "string", "enum": ["open", "snoozed", "sent"] } }],
+        "responses": { "200": { "description": "Reminders", "content": { "application/json": { "schema": { "type": "array", "items": { "$ref": "#/components/schemas/Reminder" } } } } } }
+      }
+    },
+    "/api/reminders/{id}": {
+      "get": {
+        "summary": "One reminder",
+        "parameters": [{ "name": "id", "in": "path", "required": true, "schema": { "type": "string" } }],
+        "responses": { "200": { "description": "Reminder" }, "404": { "description": "No such reminder" } }
+      }
+    },
+    "/api/reminders/{id}/send": {
+      "post": {
+        "summary": "Mark a reminder sent, with a note",
+        "parameters": [{ "name": "id", "in": "path", "required": true, "schema": { "type": "string" } }],
+        "requestBody": { "content": { "application/json": { "schema": { "type": "object", "properties": { "note": { "type": "string", "maxLength": 280 } } } } } },
+        "responses": { "200": { "description": "The sent reminder" }, "400": { "description": "The note is too long" } }
+      }
+    },
+    "/api/reminders/{id}/snooze": {
+      "post": {
+        "summary": "Snooze a reminder",
+        "parameters": [{ "name": "id", "in": "path", "required": true, "schema": { "type": "string" } }],
+        "responses": { "200": { "description": "The snoozed reminder" } }
+      }
+    },
+    "/api/notifications": { "get": { "summary": "Notifications, newest first", "responses": { "200": { "description": "Notifications" } } } },
+    "/api/customers": { "get": { "summary": "Customers, each with an open-reminder flag", "responses": { "200": { "description": "Customers" } } } }
+  },
+  "components": {
+    "schemas": {
+      "Reminder": {
+        "type": "object",
+        "required": ["id", "customerId", "customer", "subject", "due", "owner", "status", "channel"],
+        "properties": {
+          "id": { "type": "string" }, "customerId": { "type": "string" }, "customer": { "type": "string" },
+          "subject": { "type": "string" }, "due": { "type": "string", "format": "date" }, "owner": { "type": "string" },
+          "status": { "type": "string", "enum": ["open", "snoozed", "sent"] },
+          "channel": { "type": "string", "enum": ["email", "sms"] },
+          "sentAt": { "type": "string", "format": "date" }, "note": { "type": "string" }
+        }
+      },
+      "Dashboard": {
+        "type": "object",
+        "properties": {
+          "open": { "type": "integer" }, "dueToday": { "type": "integer" }, "sentThisWeek": { "type": "integer" },
+          "avgResponseHours": { "type": "number", "nullable": true }
+        }
+      }
+    }
+  }
+}

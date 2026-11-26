@@ -19,6 +19,7 @@ const CATEGORY = {
   documentation: { label: 'Documentation' },
   design: { label: 'Design' },
   career: { label: 'Career' },
+  media: { label: 'Video' },
 };
 
 export const PLUGINS = [
@@ -91,6 +92,13 @@ export const PLUGINS = [
     detail: 'Reads your exports, certificates and AI chats, keeps a sourced fact ledger, then drafts every section.',
     steps: ['Gather', 'Fact ledger', 'Interview', 'Draft', 'Check', 'You paste'],
     stats: ['1 skill', '2 offline scripts', 'No login'],
+  },
+  {
+    name: 'screenplay', color: '#e879f9', short: 'Films of your web app', category: 'media', icon: 'Movie', neutral: true,
+    tagline: 'Films of your web app, made from its own code',
+    detail: 'Promos, walkthroughs and how-tos rebuilt from the code with demo data, one film per brand, every frame checked.',
+    steps: ['Brand', 'Map', 'Story', 'Screens', 'Build', 'Check'],
+    stats: ['3 skills', '5 agents', '9 commands'],
   },
 ];
 
@@ -206,7 +214,7 @@ function map() {
     { title: 'Test it', cat: 'testing', note: 'Write cases, automate them, run them', items: ['qa-engineering', 'qa-toolkit', 'api-testing', 'ui-testing'] },
     { title: 'Track it', cat: 'bug-tracking', note: 'File what broke, in house style', items: ['bug-suite'] },
     { title: 'Ship it', cat: 'release-management', note: 'Tell customers what changed', items: ['release-notes-suite'] },
-    { title: 'Design & explain', cat: 'documentation', note: 'Screens, pages and guides', items: ['design-intelligence', 'feature-explainer', 'how-to-guides'] },
+    { title: 'Design & explain', cat: 'documentation', note: 'Screens, pages, guides and films', items: ['design-intelligence', 'feature-explainer', 'how-to-guides', 'screenplay'] },
     { title: 'Show it', cat: 'career', note: 'Your own work, on your profile', items: ['standout'] },
   ];
   // Lanes keep a fixed width so the longest plugin name fits; the picture widens as lanes are added.
@@ -337,6 +345,13 @@ const USECASES = {
     rows: [['done', 'Read your LinkedIn export, 3 certificates, 2 chat exports'], ['done', 'Fact ledger: 21 facts, each with its source'], ['done', 'Interview: 6 gaps closed in 2 rounds'],
       ['wait', 'You approved the facts before any drafting'], ['done', 'Headline, About, 3 roles, Featured, Projects, Skills'], ['fail', 'Check: "35%" is unconfirmed, so it stays out']],
     why: ['Every claim has a source', 'Numbers traced, never invented', 'You paste; it never logs in'],
+  },
+  'screenplay': {
+    ask: 'Make a promo of the reminders feature.', command: '/screenplay:new reminders promo',
+    title: 'Reminders promo · 2 brands · 36 s', kind: 'steps',
+    rows: [['done', 'Brand profile: 2 brands, logos and palette confirmed'], ['done', 'Mapped the screens and traced them to the backend'], ['done', 'Story: 5 scenes, every caption traced to the code'],
+      ['done', 'You approved the storyboard; screens rebuilt, demo data'], ['done', 'Every frame checked; 3 reviewers pass the cut'], ['wait', 'First cut ready: your comments fix the source']],
+    why: ['The app never runs', 'Demo data only, never yours', 'One film per brand'],
   },
 };
 const STATUS = { done: ['#16a34a', 'CheckCircle'], wait: ['#d97706', 'Lock'], fail: ['#dc2626', 'BugReport'] };
@@ -600,6 +615,19 @@ function diagram(p) {
       out.push(`<text x="610" y="560" font-size="14" fill="#aab4cf">Only CONFIRMED, public-safe facts reach the profile. It never logs in to LinkedIn.</text>`);
       key();
     },
+    'screenplay': () => {
+      tag(64, 146, 'THE APP\'S CODE, READ-ONLY');
+      const src = [['Brand', 'logos, colours, fonts'], ['Screens', 'states and actions'], ['Backend', 'what it really does']].map(([t, s], i) => node(64, 160 + i * 120, 220, 100, t, s));
+      const ledger = node(330, 300, 180, 110, 'Truth ledger', 'every claim cited', { accent: true });
+      arrow(bracket(300, src, false), ledger);
+      const story = node(560, 300, 180, 110, 'Storyboard', 'demo data, your mods');
+      const films = node(790, 300, 180, 110, 'Films', 'one per brand', { accent: true });
+      const checks = node(1030, 300, 186, 110, 'Checks', 'every frame, 3 reviewers');
+      arrow(ledger, story); arrow(story, films, { gate: true }); arrow(films, checks);
+      tag(560, 470, 'YOUR COMMENTS FIX THE SOURCE; THE FILMS REBUILD');
+      tag(330, 146, 'THE APP NEVER RUNS: ITS SCREENS ARE REBUILT FROM CODE');
+      key();
+    },
   };
   draw[p.name]();
   const subs = {
@@ -613,6 +641,7 @@ function diagram(p) {
     'how-to-guides': 'Facts from the source, written to a standard, built in your brand, with gaps sent back to product.',
     'design-intelligence': 'Your design system in, compliant MUI out, reviewed until it passes.',
     'standout': 'Facts first: every claim sourced and approved before drafting, every number traced before you paste.',
+    'screenplay': 'The code in, films out: every caption traced to what the app really does, every frame checked.',
   };
   const W = 1280, H = 620;
   return svg(W, H, `How ${p.name} works`, `${frame(`d-${p.name}`, W, H, c, 26)}
