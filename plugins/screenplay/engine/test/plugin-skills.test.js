@@ -31,7 +31,7 @@ test('plugin skills: brand-profile, app-map and app-film, with their playbooks, 
     const all = [fm.body, ...books].join('\n');
     for (const r of references) assert.ok(fm.body.includes(`references/${r}`), `${skill} points to references/${r}`);
     for (const scout of scouts) {
-      assert.ok(all.includes(`\`${scout}\``) && all.includes(`screenplay:${scout}`), `${skill} dispatches ${scout}`);
+      assert.ok(all.includes(`\`screenplay:${scout}\``), `${skill} dispatches ${scout}`);
       assert.ok(fs.existsSync(path.join(AGENTS_DIR, `${scout}.md`)), scout);
     }
   }

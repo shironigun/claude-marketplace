@@ -25,3 +25,20 @@ test('cli: a command module that fails to load is an internal error (exit 3), no
   assert.equal(r.status, 3);
   assert.equal(r.stderr, 'sp help: internal error: broken\n');
 });
+
+test('cli: an asynchronous command that rejects with a check error exits 1, and one that resolves exits 0', () => {
+  const engine = path.join(tempDir(), 'engine');
+  for (const dir of ['lib', 'catalog', 'schemas']) fs.cpSync(path.join(path.dirname(SP), dir), path.join(engine, dir), { recursive: true });
+  fs.copyFileSync(SP, path.join(engine, 'sp.js'));
+  const stub = (name, run) => fs.writeFileSync(path.join(engine, 'lib', 'cmd', `${name}.js`), `const { checkError } = require('../errors');
+module.exports = { name: '${name}', usage: '${name}', summary: 's', flags: {}, run: () => ${run} };
+`);
+  stub('zzfail', "Promise.reject(checkError('the stand-in failed'))");
+  stub('zzok', "Promise.resolve({ text: 'fine' })");
+  const bad = spawnSync(process.execPath, [path.join(engine, 'sp.js'), 'zzfail'], { encoding: 'utf8' });
+  assert.equal(bad.status, 1);
+  assert.equal(bad.stderr, 'sp zzfail: the stand-in failed\n');
+  const good = spawnSync(process.execPath, [path.join(engine, 'sp.js'), 'zzok'], { encoding: 'utf8' });
+  assert.equal(good.status, 0);
+  assert.equal(good.stdout, 'fine\n');
+});

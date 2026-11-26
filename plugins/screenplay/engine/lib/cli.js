@@ -56,7 +56,7 @@ function main(argv, io) {
       return result.exitCode || 0;
     };
     const result = cmd.run(ctx, args);
-    if (result && typeof result.then === 'function') return result.then((r) => finish(r || {}), fail);
+    if (result && typeof result.then === 'function') return result.then((r) => finish(r || {})).catch(fail);
     return finish(result || {});
   } catch (e) {
     return fail(e);

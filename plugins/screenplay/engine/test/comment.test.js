@@ -1,7 +1,7 @@
 'use strict';
 const test = require('node:test');
 const assert = require('node:assert/strict');
-const { parseAnchor, momentAt, pickAt } = require('../lib/comment');
+const { parseAnchor, momentAt, pickAt, anchorCrop } = require('../lib/comment');
 
 test('comment: an anchor in each spelling a reviewer\'s comment carries, in seconds and stage pixels', () => {
   assert.deepEqual(parseAnchor('Location: 0:12\nAnchor detail: at 12.4 s, the point at x 42.29% y 40.74% of the frame'), { t: 12.4, x: 812, y: 440 });
@@ -43,4 +43,10 @@ test('comment: the scene, beat and moment at a time, and the element at a point 
   assert.deepEqual(pickAt(m, 200, 150).hooks, ['S-02.1']);
   assert.deepEqual(pickAt(m, 1100, 520), { kind: 'chip', box: { x: 1000, y: 500, w: 300, h: 60 } });
   assert.equal(pickAt(m, 1800, 1000), null);
+});
+
+test('comment: the crop round an anchor stays inside the stage, a box at its edge included', () => {
+  assert.deepEqual(anchorCrop({ t: 1, x: 1500.5, y: 100, w: 419.5, h: 200 }), { x: 1501, y: 100, w: 419, h: 200 });
+  assert.deepEqual(anchorCrop({ t: 1, x: -4, y: 1070, w: 30, h: 40 }), { x: 0, y: 1070, w: 30, h: 10 });
+  assert.deepEqual(anchorCrop({ t: 1, x: 1900, y: 20 }), { x: 1280, y: 0, w: 640, h: 360 });
 });

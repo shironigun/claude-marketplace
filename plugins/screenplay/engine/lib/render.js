@@ -68,15 +68,15 @@ async function still(session, t, scale = 1) {
   return png(await session.page.evaluate(([time, s]) => window.__animation.frame(time, { scale: s }), [t, scale]));
 }
 
-// What the player plays (spec 5.13's timing check): its length and its scenes' starts, the score's events and the
-// sounds it lacks, and the lines the film logged that were not plain logs (a font it could not load, a throw).
 // The player's own log so far (spec 5.13): every line but plain `log` ones, each cut to 600 characters. The film's code
 // writes some of these lines, so a reader takes them as data.
 async function playerLog(session) {
   const log = await session.page.evaluate(() => window.__animation.consoleLog());
-  return log.filter((l) => l.level !== 'log').map((l) => ({ level: String(l.level), text: String(l.text).slice(0, 600) }));
+  return log.filter((l) => l.level !== 'log').map((l) => ({ level: String(l.level), text: String(l.text).replace(/\s+/g, ' ').trim().slice(0, 600) }));
 }
 
+// What the player plays (spec 5.13's timing check): its length and its scenes' starts, the score's events and the
+// sounds it lacks, and the lines the film logged that were not plain logs (a font it could not load, a throw).
 async function played(session, meta) {
   const r = await session.page.evaluate(async () => {
     const a = window.__animation;

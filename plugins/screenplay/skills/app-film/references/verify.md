@@ -43,7 +43,7 @@ each brand, its frames, a contact sheet a scene, `check.json` and `report.md` in
 ## 3. The film reviewer
 
 1. Run `sp check <slug> --film <film> --brief --json`. It writes the reviewer's brief and gives its path.
-2. Dispatch `screenplay:sp-film-reviewer` (the Agent tool, subagent type `sp-film-reviewer`) with the brief's path.
+2. Dispatch the film reviewer with the Agent tool, subagent type `screenplay:sp-film-reviewer`, with the brief's path.
    It returns JSON: write it into the inbox, as `<inbox>/<slug>.<film>.review.json`.
 3. Record it: `sp check <slug> --film <film> --review <file>`.
    - `PASS`: go on to gate 3.

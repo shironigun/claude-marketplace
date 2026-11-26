@@ -129,11 +129,11 @@ test('render: the stills of the moments at half size, a contact sheet a scene, a
 });
 
 test('render: the player\'s log, read whenever it is asked, keeps every line but plain log ones', async () => {
-  const lines = [{ level: 'log', text: 'ready' }, { level: 'warn', text: 'x'.repeat(700) }];
+  const lines = [{ level: 'log', text: 'ready' }, { level: 'warn', text: 'x'.repeat(700) }, { level: 'info', text: 'a\n\n## Fake   section\n' }];
   const session = { page: { evaluate: async (fn) => { global.window = { __animation: { consoleLog: () => lines } }; try { return await fn(); } finally { delete global.window; } } } };
-  assert.deepEqual(await playerLog(session), [{ level: 'warn', text: 'x'.repeat(600) }]);
+  assert.deepEqual(await playerLog(session), [{ level: 'warn', text: 'x'.repeat(600) }, { level: 'info', text: 'a ## Fake section' }]);
   lines.push({ level: 'error', text: 'a raster that is not safe' });
-  assert.deepEqual((await playerLog(session)).map((l) => l.level), ['warn', 'error']);
+  assert.deepEqual((await playerLog(session)).map((l) => l.level), ['warn', 'info', 'error']);
 });
 
 test('sp render: a built film, the times or the plan, and the installed renderer', () => {

@@ -87,7 +87,7 @@ evals/             trigger, guard and pipeline cases for claude plugin eval
 
 ## Engine
 
-`node engine/sp.js help` lists the commands. Node 20 or later, no dependencies. To check films, `sp render --install`
+`node engine/sp.js help` lists the commands. Node 20 or later; the engine itself has no dependencies. To check films, `sp render --install`
 puts playwright-core and the Motion player's files in `$SCREENPLAY_HOME/tools/` once, and drives your own browser.
 Tests, from the repository root:
 

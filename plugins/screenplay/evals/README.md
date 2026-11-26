@@ -1,7 +1,7 @@
 # screenplay: eval suite
 
 Behavioural evals for the plugin (spec 11.3), run with **`claude plugin eval`**. Each case is a folder with a
-`prompt.md` (the user's message) and one grader in `graders/`. A run writes `evals/results/<timestamp>/`, which is
+`prompt.md` (the user's message) and its graders in `graders/` (one for a trigger or guard case, two for the pipeline). A run writes `evals/results/<timestamp>/`, which is
 git-ignored. The engine's tests (`engine/test/plugin-evals.test.js`) keep these cases consistent with the skills.
 
 The trigger and guard cases of the three skills run with read-only tools. The pipeline case runs the whole workflow

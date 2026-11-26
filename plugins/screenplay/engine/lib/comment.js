@@ -70,4 +70,17 @@ function pickAt(m, x, y) {
   return smallest ? { kind: 'target', hooks: smallest.hooks, box: smallest.box } : null;
 }
 
-module.exports = { parseAnchor, momentAt, pickAt };
+// The crop round a comment's anchor, on the 1920 x 1080 stage: its box, kept inside the stage, or 640 x 360 round
+// its point.
+function anchorCrop(a) {
+  if (a.w !== undefined) {
+    const x = Math.min(Math.max(Math.round(a.x), 0), 1919);
+    const y = Math.min(Math.max(Math.round(a.y), 0), 1079);
+    return { x, y, w: Math.max(1, Math.min(Math.round(a.w), 1920 - x)), h: Math.max(1, Math.min(Math.round(a.h), 1080 - y)) };
+  }
+  const x = Math.round(Math.min(Math.max(a.x - 320, 0), 1920 - 640));
+  const y = Math.round(Math.min(Math.max(a.y - 180, 0), 1080 - 360));
+  return { x, y, w: 640, h: 360 };
+}
+
+module.exports = { parseAnchor, momentAt, pickAt, anchorCrop };

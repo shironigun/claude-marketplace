@@ -7,7 +7,7 @@ const { loadFilm } = require('../film');
 const { builtDocs } = require('../stage');
 const { installTools, readyTools } = require('../tools');
 const { playerFiles, openPlayer, loadFilm: loadInPlayer, measure, writeStills } = require('../render');
-const { parseAnchor, momentAt, pickAt } = require('../comment');
+const { parseAnchor, momentAt, pickAt, anchorCrop } = require('../comment');
 const { readTextFile } = require('../args');
 const { framePlan } = require('../verify');
 
@@ -26,14 +26,6 @@ function cropBox(text) {
     throw usageError('--crop takes x,y,w,h in whole pixels inside the 1920 by 1080 stage');
   }
   return { x, y, w, h };
-}
-
-// The part of the frame round a comment's point, 640 by 360, or its own box, inside the stage.
-function aroundAnchor(a) {
-  if (a.w !== undefined) return cropBox([a.x, a.y, a.w, a.h].map(Math.round).join(','));
-  const x = Math.round(Math.min(Math.max(a.x - 320, 0), 1920 - 640));
-  const y = Math.round(Math.min(Math.max(a.y - 180, 0), 1080 - 360));
-  return { x, y, w: 640, h: 360 };
 }
 
 module.exports = {
@@ -72,7 +64,7 @@ module.exports = {
     else if (args.flags.plan) moments = framePlan(film).map((p) => ({ t: p.t, label: `${p.t.toFixed(3)} s  ${p.scene}${p.hook ? ` ${p.hook}` : ''}  ${p.kind}`, scene: p.scene }));
     else moments = times(args.flags.at, film.film.length).map((t) => ({ t, label: `${t.toFixed(3)} s`, scene: null }));
     const point = anchor && anchor.x !== undefined;
-    const box = args.flags.crop ? cropBox(args.flags.crop) : point ? aroundAnchor(anchor) : null;
+    const box = args.flags.crop ? cropBox(args.flags.crop) : point ? anchorCrop(anchor) : null;
     const tools = readyTools(ctx.home);
     // playwright-core lives in the tools folder, installed on first use.
     const { chromium } = require(tools.playwrightDir);
@@ -86,7 +78,7 @@ module.exports = {
         // What the comment points at: the element at its point (a box's middle), in the frame measured at its time.
         if (point) {
           const at = anchor.w !== undefined ? [anchor.x + anchor.w / 2, anchor.y + anchor.h / 2] : [anchor.x, anchor.y];
-          const m = await measure(session, anchor.t);
+          const m = await measure(session, anchor.t).catch(() => null);
           element = m ? pickAt(m, ...at) : null;
         }
         written = await writeStills(session, moments, dir, { sheets: args.flags.sheet, box });
